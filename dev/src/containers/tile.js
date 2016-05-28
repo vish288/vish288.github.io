@@ -16,7 +16,7 @@ const brownTheme = getMuiTheme({
 export default class Tile extends React.Component {
     render() {
         const tile = this.props.tile;
-        return (<MuiThemeProvider muiTheme={brownTheme}>
+        return (<MuiThemeProvider muiTheme={brownTheme} className="col-xs-4">
             <Card>
                 <CardHeader
                     title={tile.name}
