@@ -1,8 +1,17 @@
 html {
-  font-family: 'Roboto', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
-  font-size: 13px;
-  line-height: 20px;
+    font-size: 13px;
+    line-height: 20px;
+}
+
+.input-group {
+    margin: 15px;
+}
+
+.input-group input {
+    width: 75%;
+    padding: 2px 0 2px 25px;
 }
