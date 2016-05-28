@@ -18,13 +18,14 @@ class SearchSort extends React.Component {
     };
 
     render() {
-        return (<div className="row input-group"><input
-            type="text"
-            className="form-control"
-            value={this.state.term}
-            placeholder="Search the repositories"
-            onChange={this.handleChange}
-        /></div>)
+        return (<div className="col-xs-12 input-group">
+            <input
+                type="text"
+                className="form-control"
+                value={this.state.term}
+                placeholder="Search the repositories"
+                onChange={this.handleChange}
+            /></div>)
     }
 }
 
