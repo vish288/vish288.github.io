@@ -7,6 +7,7 @@
   "scripts": {
     "start": "nodemon ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
+    "build": "webpack --config webpack-production.config.js --progress --colors",
     "test:watch": "npm run test -- --watch"
   },
   "author": "",
@@ -19,7 +20,7 @@
     "chai": "^3.5.0",
     "chai-jquery": "^2.0.0",
     "jquery": "^2.2.1",
-    "jsdom": "^8.1.0",
+    "jsdom": "9.2.0",
     "mocha": "^2.4.5",
     "react-addons-test-utils": "^0.14.7",
     "webpack": "^1.12.9",
@@ -28,14 +29,16 @@
   "dependencies": {
     "axios": "^0.11.1",
     "babel-preset-stage-1": "^6.1.18",
-    "jsdom": "^8.5.0",
-    "lodash": "^3.10.1",
-    "react": "^0.14.8",
-    "react-addons-test-utils": "^0.14.8",
-    "react-dom": "^0.14.8",
+    "jsdom": "^9.2.0",
+    "lodash": "^4.13.1",
+    "react": "^15.1.0",
+    "react-addons-test-utils": "^15.1.0",
+    "react-dom": "^15.1.0",
     "react-redux": "^4.0.0",
     "react-router": "^2.0.1",
+    "react-tap-event-plugin": "^1.0.0",
     "redux": "^3.0.4",
+    "transfer-webpack-plugin": "^0.1.4",
     "youtube-api-search": "0.0.5"
   }
 }

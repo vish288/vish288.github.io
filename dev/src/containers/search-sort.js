@@ -14,7 +14,7 @@ class SearchSort extends React.Component {
 
     handleChange(e) {
         this.setState({term: e.target.value});
-        return this.props.searchTermChanged({repo: this.props.tiles, term: e.target.value});
+        return this.props.searchTermChanged(e.target.value);
     };
 
     render() {
@@ -27,9 +27,9 @@ class SearchSort extends React.Component {
     }
 }
 
-function mapStateToProps({tiles}) {
+function mapStateToProps(state) {
     "use strict";
-    return {tiles};
+    return {tiles: state.tiles, term: state.term};
 }
 
 function mapDispatchToProps(dispatch) {
