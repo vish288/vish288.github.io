@@ -11,6 +11,7 @@ export default ({dispatch}) => next => action => {
     }
     //promise resolved
     action.payload.then(response => {
+        //const payload = _.assign({term: ''}, {repo: response.data});
         const newAction = _.assign(action, {payload: response.data});
         return dispatch(newAction);
     })

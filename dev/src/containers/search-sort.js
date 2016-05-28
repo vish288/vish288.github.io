@@ -18,8 +18,9 @@ class SearchSort extends React.Component {
     };
 
     render() {
-        return (<div><input
+        return (<div className="row input-group"><input
             type="text"
+            className="form-control"
             value={this.state.term}
             placeholder="Search the repositories"
             onChange={this.handleChange}
@@ -29,7 +30,7 @@ class SearchSort extends React.Component {
 
 function mapStateToProps(state) {
     "use strict";
-    return {tiles: state.tiles, term: state.term};
+    return {tiles: state.tiles, term: state.searchTerm};
 }
 
 function mapDispatchToProps(dispatch) {
