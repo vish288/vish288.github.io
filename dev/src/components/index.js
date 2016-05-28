@@ -18,9 +18,11 @@ export default class App extends Component {
 
     render() {
         return (
-            <div>
+            <div className="row">
                 <SearchSort/>
-                <Tiles/>
+                <div className="col-xs-12">
+                    <Tiles/>
+                </div>
             </div>
         )
     }
