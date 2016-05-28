@@ -1,9 +1,5 @@
 const webpack = require("webpack");
 
-const BABEL_QUERY = {
-    presets: ['react', 'es2015']
-};
-
 module.exports = {
     entry: [
         './src'
@@ -11,13 +7,12 @@ module.exports = {
     output: {
         path: __dirname,
         publicPath: '/',
-        filename: 'bundle.js'
+        filename: 'app.js'
     },
     module: {
         loaders: [{
             exclude: /node_modules/,
-            loader: 'babel',
-            query: BABEL_QUERY
+            loader: 'babel'
         }]
     },
     plugins: [
