@@ -28,7 +28,7 @@ export default class App extends Component {
                         <Tiles/>
                     </div>
                 </div>
-                <footer>
+                <footer style={{position:'fixed', height:50, bottom:0, left:0, right:0, marginTop : 20}}>
                     Visweshwaran™
                 </footer>
             </section>
