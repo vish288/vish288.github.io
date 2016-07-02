@@ -18,12 +18,20 @@ export default class App extends Component {
 
     render() {
         return (
-            <div className="row">
-                <SearchSort/>
-                <div className="col-xs-12">
-                    <Tiles/>
+            <section>
+                <header
+                    style={{position:'fixed', height:50, top:0, left:0, right:0, marginBottom : 20}}>
+                </header>
+                <div className="row" style={{marginTop:60}}>
+                    <SearchSort/>
+                    <div className="col-xs-12">
+                        <Tiles/>
+                    </div>
                 </div>
-            </div>
+                <footer>
+                    Visweshwaran™
+                </footer>
+            </section>
         )
     }
 }

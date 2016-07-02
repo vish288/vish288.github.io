@@ -20,8 +20,10 @@ export default class Tile extends React.Component {
             <Card>
                 <CardHeader
                     title={tile.name}
-                    subtitle="Subtitle"
+                    subtitle={tile.url}
+                    avatar={tile.owner.avatar_url}
                 />
+                <CardText>{}</CardText>
             </Card>
         </MuiThemeProvider>)
     }
