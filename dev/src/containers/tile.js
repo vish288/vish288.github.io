@@ -1,30 +1,23 @@
-/**
- * Created by vsury1 on 5/27/16.
- */
-import React from "react";
-import {brown600} from "material-ui/styles/colors";
-import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from "material-ui/Card";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import React from 'react'
+import { red } from '@material-ui/core/colors'
+import { Avatar, Card, CardHeader } from '@material-ui/core'
 
-const brownTheme = getMuiTheme({
-    palette: {
-        accentColor: brown600
-    }
-});
-
-export default class Tile extends React.Component {
-    render() {
-        const tile = this.props.tile;
-        return (<MuiThemeProvider muiTheme={brownTheme} className="col-xs-4">
-            <Card>
-                <CardHeader
-                    title={tile.name}
-                    subtitle={tile.url}
-                    avatar={tile.owner.avatar_url}
-                />
-                <CardText>{}</CardText>
-            </Card>
-        </MuiThemeProvider>)
-    }
+const Tile = ({ tile }) => {
+  return (<Card className="col-xs-4">
+    <CardHeader
+      title={tile.name}
+      subtitle={tile.url}
+      avatar={
+        <Avatar aria-label={tile.owner.login}
+                style={{ backgroundColor: red['500'] }}>
+          {tile.owner.login.substring(0, 1)}
+        </Avatar>
+      }
+      style={{
+        backgroundColor: red['2'],
+      }}
+    />
+  </Card>)
 }
+
+export default Tile
