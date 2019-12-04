@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ceee0063-b604-4e22-9fb4-d98fd728cbe5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vichu1988.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/npm-shrinkwrap.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/favicon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/manifest.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/robots.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/App.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/App.test.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/constants/config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/search-sort.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/containers/tiles.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/logo.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/reducers/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/serviceWorker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/main.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/.babelrc" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/npm-shrinkwrap.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/actions/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/components/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/App.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/constants/config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/containers/search-sort.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/containers/tile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/containers/tile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/containers/tiles.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/middleware/async.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/middleware/async.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/npm-debug.log" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/reducers/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/routes/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/www/css/main.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/src/www/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/webpack-prod.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev/webpack.config.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.html" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>tiles</find>
+      <find>wa</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectFrameBounds">
+    <option name="x" value="955" />
+    <option name="y" value="-1057" />
+    <option name="width" value="1920" />
+    <option name="height" value="1057" />
+  </component>
+  <component name="ProjectId" id="1UVpZUKQdEWMNhd84n7MHwJklNm" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="autoscrollFromSource" value="true" />
+    <option name="autoscrollToSource" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JavaScript" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public" />
+      <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/dev-cra/public" />
+    </key>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ceee0063-b604-4e22-9fb4-d98fd728cbe5" name="Default Changelist" comment="" />
+      <created>1553634150865</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1553634150865</updated>
+      <workItem from="1553634152408" duration="5495000" />
+      <workItem from="1575451680064" duration="2919000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="424" y="228" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1575453104467">
+      <screen x="0" y="23" width="1920" height="1088" />
+    </state>
+    <state x="424" y="228" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.23.1920.1088@0.23.1920.1088" timestamp="1575453104467" />
+    <state x="698" y="320" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1575456112613">
+      <screen x="0" y="23" width="1920" height="1088" />
+    </state>
+    <state x="698" y="320" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.23.1920.1088@0.23.1920.1088" timestamp="1575456112613" />
+    <state x="461" y="215" key="SettingsEditor" timestamp="1575452950670">
+      <screen x="0" y="23" width="1920" height="1088" />
+    </state>
+    <state x="461" y="215" key="SettingsEditor/0.23.1920.1088@0.23.1920.1088" timestamp="1575452950670" />
+    <state x="625" y="266" width="670" height="676" key="search.everywhere.popup" timestamp="1575456051172">
+      <screen x="0" y="23" width="1920" height="1088" />
+    </state>
+    <state x="625" y="266" width="670" height="676" key="search.everywhere.popup/0.23.1920.1088@0.23.1920.1088" timestamp="1575456051172" />
+  </component>
+</project>
