@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -78,7 +78,7 @@ export default function AdminUserManagement() {
 
       const userInfo: GitHubUserInfo = await response.json()
       setSearchResults([userInfo])
-    } catch (err) {
+    } catch {
       setError('Failed to search GitHub user')
       setSearchResults([])
     } finally {
@@ -116,7 +116,7 @@ export default function AdminUserManagement() {
     console.log('Updated allowed users:', newUsers)
   }
 
-  const handleSearch = (e: any) => {
+  const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
     searchGitHubUser(newUsername)
   }

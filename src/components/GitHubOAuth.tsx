@@ -57,11 +57,11 @@ export default function GitHubOAuth() {
             <div className='bg-blue-50 border border-blue-200 rounded-md p-4'>
               <h3 className='font-medium text-blue-800 mb-2'>How it works:</h3>
               <ul className='text-blue-700 text-sm space-y-1'>
-                <li>• Click "Sign in with GitHub"</li>
-                <li>• You'll be redirected to GitHub</li>
+                <li>• Click &quot;Sign in with GitHub&quot;</li>
+                <li>• You&apos;ll be redirected to GitHub</li>
                 <li>• Authorize the application</li>
                 <li>• Return here automatically</li>
-                <li>• Access granted if you're authorized</li>
+                <li>• Access granted if you&apos;re authorized</li>
               </ul>
             </div>
 
