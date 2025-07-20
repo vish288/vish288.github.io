@@ -53,7 +53,7 @@ class GratitudeService {
     } catch (error) {
       console.warn('Failed to fetch location info:', error)
     }
-    
+
     // Fallback: try to get just the IP from a simpler service
     try {
       const response = await fetch('https://api.ipify.org?format=json')
@@ -64,7 +64,7 @@ class GratitudeService {
     } catch (error) {
       console.warn('Failed to fetch IP info:', error)
     }
-    
+
     return {}
   }
 
@@ -76,7 +76,7 @@ class GratitudeService {
   async submitMessage(data: GratitudeMessage): Promise<GratitudeSubmissionResult> {
     // Get location information
     const locationInfo = await this.getLocationInfo()
-    
+
     if (!this.octokit) {
       // Fallback for development/demo without token
       console.log('GitHub token not configured. Message would be:', data, 'Location:', locationInfo)

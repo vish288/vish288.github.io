@@ -217,7 +217,8 @@ export default function Gratitude() {
           </div>
           <p className='text-xs text-muted-foreground'>
             Your message will be stored as a private GitHub issue, and I&apos;ll receive instant
-            notifications. Location and IP information are captured for security purposes. All data is handled with care and respect for your privacy.
+            notifications. Location and IP information are captured for security purposes. All data
+            is handled with care and respect for your privacy.
           </p>
         </div>
       </div>
