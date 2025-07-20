@@ -14,7 +14,7 @@ export default function UnauthorizedAccess() {
             </div>
             <CardTitle className='text-xl'>Access Restricted</CardTitle>
             <CardDescription>
-              Sorry, you don't have permission to access this admin area
+              Sorry, you don&apos;t have permission to access this admin area
             </CardDescription>
           </CardHeader>
           <CardContent className='space-y-6'>

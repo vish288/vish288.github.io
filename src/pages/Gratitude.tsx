@@ -9,7 +9,7 @@ import SimpleCaptcha from '@/components/SimpleCaptcha'
 import { gratitudeService } from '@/services/gratitudeService'
 import type { GratitudeMessage } from '@/services/gratitudeService'
 
-interface GratitudeForm extends GratitudeMessage {}
+type GratitudeForm = GratitudeMessage
 
 export default function Gratitude() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -72,7 +72,7 @@ export default function Gratitude() {
                     <span>Stored as GitHub Issue #{issueNumber}</span>
                   </div>
                   <p className='text-xs text-muted-foreground'>
-                    Your message is safely stored and I'll be notified immediately.
+                    Your message is safely stored and I&apos;ll be notified immediately.
                   </p>
                 </div>
               )}
@@ -216,7 +216,7 @@ export default function Gratitude() {
             <span>Messages are stored securely using GitHub Issues</span>
           </div>
           <p className='text-xs text-muted-foreground'>
-            Your message will be stored as a private GitHub issue, and I'll receive instant
+            Your message will be stored as a private GitHub issue, and I&apos;ll receive instant
             notifications. Location and IP information are captured for security purposes. All data is handled with care and respect for your privacy.
           </p>
         </div>
