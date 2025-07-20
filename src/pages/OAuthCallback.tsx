@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -12,11 +12,7 @@ export default function OAuthCallback() {
   const [error, setError] = useState<string | null>(null)
   const [user, setUser] = useState<GitHubUser | null>(null)
 
-  useEffect(() => {
-    handleOAuthCallback()
-  }, [])
-
-  const handleOAuthCallback = async () => {
+  const handleOAuthCallback = useCallback(async () => {
     try {
       const code = searchParams.get('code')
       const state = searchParams.get('state')
@@ -50,7 +46,11 @@ export default function OAuthCallback() {
       setError(err instanceof Error ? err.message : 'Authentication failed')
       setStatus('error')
     }
-  }
+  }, [searchParams, navigate])
+
+  useEffect(() => {
+    handleOAuthCallback()
+  }, [handleOAuthCallback])
 
   const handleRetry = () => {
     navigate('/admin/gratitude')
