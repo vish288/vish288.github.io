@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Github, Shield, AlertTriangle, ExternalLink } from 'lucide-react'
+import { Shield, AlertTriangle, ExternalLink } from 'lucide-react'
+import GitHubIcon from '@/components/icons/GitHubIcon'
 import { githubWebAuth } from '@/services/githubWebAuth'
+import { APP_STRINGS } from '@/constants/appStrings'
 
 export default function GitHubWebAuth() {
   const [error, setError] = useState<string | null>(null)
@@ -16,7 +18,7 @@ export default function GitHubWebAuth() {
       githubWebAuth.initiateAuth()
       // This will redirect to GitHub, so we won't reach here
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to initiate GitHub authentication')
+      setError(err instanceof Error ? err.message : APP_STRINGS.ERROR_GITHUB_AUTH)
       setIsRedirecting(false)
     }
   }
@@ -29,10 +31,8 @@ export default function GitHubWebAuth() {
             <div className='flex justify-center mb-4'>
               <Shield className='h-12 w-12 text-primary' />
             </div>
-            <CardTitle className='text-xl'>Admin Access Required</CardTitle>
-            <CardDescription>
-              Sign in with your GitHub account to access the admin dashboard
-            </CardDescription>
+            <CardTitle className='text-xl'>{APP_STRINGS.ADMIN_ACCESS_TITLE}</CardTitle>
+            <CardDescription>{APP_STRINGS.ADMIN_ACCESS_SUBTITLE}</CardDescription>
           </CardHeader>
           <CardContent className='space-y-6'>
             {error && (
@@ -50,33 +50,22 @@ export default function GitHubWebAuth() {
               className='w-full bg-gray-900 hover:bg-gray-800 text-white'
               size='lg'
             >
-              <Github className='h-5 w-5 mr-3' />
+              <GitHubIcon className='h-5 w-5 mr-3' />
               {isRedirecting ? (
                 <>
                   <ExternalLink className='h-4 w-4 mr-2' />
-                  Redirecting to GitHub...
+                  {APP_STRINGS.LOADING_REDIRECTING}
                 </>
               ) : (
-                'Sign in with GitHub'
+                `Sign in with ${APP_STRINGS.BTN_GITHUB}`
               )}
             </Button>
 
-            <div className='bg-blue-50 border border-blue-200 rounded-md p-4'>
-              <h3 className='font-medium text-blue-800 mb-2'>Secure OAuth Flow:</h3>
-              <ul className='text-blue-700 text-sm space-y-1'>
-                <li>• Standard GitHub OAuth authorization</li>
-                <li>• Redirect to GitHub for authentication</li>
-                <li>• Authorize the &quot;Gratitude Dashboard&quot; app</li>
-                <li>• Automatic return to your dashboard</li>
-                <li>• Access granted to authorized users only</li>
-              </ul>
-            </div>
-
             <div className='text-center'>
               <p className='text-xs text-muted-foreground'>
-                Only authorized GitHub users can access this dashboard.
+                Only authorized users can access this dashboard.
                 <br />
-                You&apos;ll be redirected to GitHub for secure authentication.
+                You&apos;ll be redirected for secure authentication.
               </p>
             </div>
           </CardContent>
