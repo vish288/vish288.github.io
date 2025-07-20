@@ -1,28 +1,91 @@
 {
-  "name": "dev-cra",
-  "version": "0.1.0",
+  "name": "vish288-personal-website",
+  "version": "2.0.0",
+  "description": "Personal website of Visweshwaran S - Full Stack Developer",
   "private": true,
+  "type": "module",
+  "keywords": [
+    "portfolio",
+    "personal-website",
+    "react",
+    "typescript",
+    "vite",
+    "mui"
+  ],
+  "author": "Visweshwaran S <visweshwaran.s@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://vish288.github.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vish288/vish288.github.io.git"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "dependencies": {
-    "@material-ui/core": "^4.7.1",
-    "axios": "^0.19.0",
-    "lodash": "^4.17.15",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-redux": "^7.1.3",
-    "react-router": "^5.1.2",
-    "react-scripts": "3.2.0",
-    "redux": "^4.0.4",
-    "typescript": "^3.7.3"
+    "@emotion/react": "^11.13.5",
+    "@emotion/styled": "^11.13.5",
+    "@mui/icons-material": "^6.3.0",
+    "@mui/material": "^6.3.0",
+    "@reduxjs/toolkit": "^2.5.0",
+    "axios": "^1.10.0",
+    "lodash-es": "^4.17.21",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-redux": "^9.1.2",
+    "react-router-dom": "^7.1.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^22.10.2",
+    "@types/react": "^18.3.17",
+    "@types/react-dom": "^18.3.5",
+    "@typescript-eslint/eslint-plugin": "^8.19.0",
+    "@typescript-eslint/parser": "^8.19.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.17.0",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "globals": "^16.3.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
+    "prettier": "^3.4.2",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.7",
+    "vite-plugin-pwa": "^0.21.2",
+    "vitest": "^2.1.9"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build && mv build docs",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "clean": "rimraf build *.log *.bak"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "build:github": "tsc && vite build --base=/",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint src --ext ts,tsx --fix",
+    "lint:check": "eslint src --ext ts,tsx",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\" \"*.{ts,tsx,json,md}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\" \"*.{ts,tsx,json,md}\"",
+    "typecheck": "tsc --noEmit",
+    "clean": "rimraf dist *.log *.tgz",
+    "prepare": "husky",
+    "deploy": "npm run build:github && mv dist docs",
+    "deploy:preview": "npm run build && npm run preview"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   },
   "browserslist": {
     "production": [
