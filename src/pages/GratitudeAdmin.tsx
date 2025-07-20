@@ -222,7 +222,7 @@ export default function GratitudeAdmin() {
                   <div className='text-center'>
                     <div className='text-2xl font-bold text-purple-600'>
                       <a
-                        href='https://github.com/vish288/vish288.github.io/issues?q=label%3Agratitude'
+                        href='https://github.com/vish288/gratitude-messages/issues'
                         target='_blank'
                         rel='noopener noreferrer'
                         className='hover:underline flex items-center justify-center gap-1'

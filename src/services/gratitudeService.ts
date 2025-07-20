@@ -22,7 +22,7 @@ interface GratitudeSubmissionResult {
 
 // GitHub configuration
 const GITHUB_OWNER = import.meta.env.VITE_GITHUB_OWNER || 'vish288'
-const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO || 'vish288.github.io'
+const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO || 'gratitude-messages'
 const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN
 
 class GratitudeService {
@@ -34,6 +34,53 @@ class GratitudeService {
         auth: GITHUB_TOKEN,
       })
     }
+  }
+
+  // Categorize message content and return appropriate labels
+  private categorizeMessage(message: string): string[] {
+    const lowerMessage = message.toLowerCase()
+    const labels = ['gratitude'] // Base label for all messages
+    
+    // Sentiment-based labels
+    if (lowerMessage.includes('thank') || lowerMessage.includes('grateful') || lowerMessage.includes('appreciate')) {
+      labels.push('thankful')
+    }
+    
+    if (lowerMessage.includes('love') || lowerMessage.includes('amazing') || lowerMessage.includes('awesome') || lowerMessage.includes('great')) {
+      labels.push('positive')
+    }
+    
+    if (lowerMessage.includes('help') || lowerMessage.includes('support') || lowerMessage.includes('assist')) {
+      labels.push('help-related')
+    }
+    
+    // Content-based labels
+    if (lowerMessage.includes('website') || lowerMessage.includes('site') || lowerMessage.includes('ui') || lowerMessage.includes('design')) {
+      labels.push('website-feedback')
+    }
+    
+    if (lowerMessage.includes('code') || lowerMessage.includes('programming') || lowerMessage.includes('development')) {
+      labels.push('code-related')
+    }
+    
+    if (lowerMessage.includes('project') || lowerMessage.includes('work') || lowerMessage.includes('portfolio')) {
+      labels.push('project-feedback')
+    }
+    
+    // Feedback type labels
+    if (lowerMessage.includes('suggest') || lowerMessage.includes('improve') || lowerMessage.includes('feature')) {
+      labels.push('suggestion')
+    }
+    
+    if (lowerMessage.includes('bug') || lowerMessage.includes('issue') || lowerMessage.includes('problem') || lowerMessage.includes('error')) {
+      labels.push('bug-report')
+    }
+    
+    if (lowerMessage.includes('question') || lowerMessage.includes('how') || lowerMessage.includes('?')) {
+      labels.push('question')
+    }
+    
+    return labels
   }
 
   // Get location information from IP geolocation service
@@ -87,13 +134,16 @@ class GratitudeService {
     }
 
     try {
+      // Categorize the message to generate appropriate labels
+      const messageLabels = this.categorizeMessage(data.message)
+      
       // Create GitHub issue with the gratitude message
       const response = await this.octokit.rest.issues.create({
         owner: GITHUB_OWNER,
         repo: GITHUB_REPO,
         title: `Gratitude from ${data.name}`,
         body: this.formatIssueBody(data, locationInfo),
-        labels: ['gratitude', 'message'],
+        labels: [...messageLabels, 'message'],
       })
 
       return {
