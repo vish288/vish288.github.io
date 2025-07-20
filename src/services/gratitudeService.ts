@@ -355,7 +355,6 @@ ${!locationInfo.ip ? '- **Location:** Unable to determine location information' 
 
   async getAllIssues(limit: number = 50) {
     if (!this.octokit) {
-      console.warn('GitHub API not configured. Please check environment variables.')
       return []
     }
 
@@ -380,7 +379,7 @@ ${!locationInfo.ip ? '- **Location:** Unable to determine location information' 
           .filter((label): label is string => !!label),
       }))
     } catch (error) {
-      console.error('Failed to fetch all issues:', error)
+      console.error('Failed to fetch issues:', error)
       return []
     }
   }
