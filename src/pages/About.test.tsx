@@ -77,14 +77,6 @@ describe('About Page', () => {
     expect(githubLink).toHaveAttribute('target', '_blank')
   })
 
-  it.skip('shows placeholder buttons for future features', async () => {
-    await act(async () => {
-      render(<About />)
-    })
-
-    expect(screen.getByText(/linkedin \\(coming soon\\)/i)).toBeInTheDocument()
-    expect(screen.getByText(/contact \\(coming soon\\)/i)).toBeInTheDocument()
-  })
 
   it('displays future enhancement note', async () => {
     await act(async () => {
