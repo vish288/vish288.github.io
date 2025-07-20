@@ -110,16 +110,16 @@ export default function GratitudeAdmin() {
 
   const extractLocationFromBody = (body: string | null | undefined): string => {
     if (!body) return 'N/A'
-    
+
     const ipMatch = body.match(/\*\*IP Address:\*\* (.+?)(?:\n|$)/)
     const countryMatch = body.match(/\*\*Country:\*\* (.+?)(?:\n|$)/)
     const cityMatch = body.match(/\*\*City:\*\* (.+?)(?:\n|$)/)
-    
+
     const parts = []
     if (cityMatch) parts.push(cityMatch[1])
     if (countryMatch) parts.push(countryMatch[1])
     if (ipMatch) parts.push(`(${ipMatch[1]})`)
-    
+
     return parts.length > 0 ? parts.join(', ') : 'N/A'
   }
 

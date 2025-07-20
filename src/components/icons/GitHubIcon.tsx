@@ -6,6 +6,6 @@ interface GitHubIconProps {
   size?: number
 }
 
-export default function GitHubIcon({ className = "h-4 w-4", size }: GitHubIconProps) {
+export default function GitHubIcon({ className = 'h-4 w-4', size }: GitHubIconProps) {
   return <SimpleIcon icon={siGithub} className={className} size={size} />
 }
