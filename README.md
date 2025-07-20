@@ -212,7 +212,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **Visweshwaran S**
 - Website: [https://vish288.github.io](https://vish288.github.io)
 - GitHub: [@vish288](https://github.com/vish288)
-- Email: visweshwaran.s@gmail.com
 
 ## 🙏 Acknowledgments
 
