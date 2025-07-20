@@ -135,14 +135,14 @@ class GitHubOAuthProperService {
       }
 
       return storedUser
-    } catch (error) {
+    } catch {
       this.clearUser()
       return null
     }
   }
 
   // Make API calls using YOUR token (not user's token)
-  async makeApiCall(endpoint: string, options: RequestInit = {}) {
+  async makeApiCall(endpoint: string, options: any = {}) {
     return fetch(`https://api.github.com${endpoint}`, {
       ...options,
       headers: {
