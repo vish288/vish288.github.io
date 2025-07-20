@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Github, Heart, User } from 'lucide-react'
+import { Heart, User } from 'lucide-react'
+import GitHubIcon from '@/components/icons/GitHubIcon'
 import { cn } from '@/lib/utils'
 import Repositories from '@/pages/Repositories'
 import About from '@/pages/About'
@@ -10,13 +11,15 @@ import AdminUserManagement from '@/pages/AdminUserManagement'
 import UnauthorizedAccess from '@/pages/UnauthorizedAccess'
 import OAuthCallback from '@/pages/OAuthCallback'
 import AdminToast from '@/components/AdminToast'
+import ThemeToggle from '@/components/ThemeToggle'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 import './index.css'
 
 function Navigation() {
   const location = useLocation()
 
   const navItems = [
-    { path: '/', label: 'Repositories', icon: Github },
+    { path: '/', label: 'Repositories', icon: GitHubIcon },
     { path: '/about', label: 'About', icon: User },
     { path: '/gratitude', label: 'Gratitude', icon: Heart },
   ]
@@ -54,6 +57,7 @@ function Navigation() {
                 </Link>
               </Button>
             ))}
+            <ThemeToggle />
           </div>
         </div>
       </div>
@@ -73,7 +77,7 @@ function Footer() {
             rel='noopener noreferrer'
             className='text-muted-foreground hover:text-foreground transition-colors'
           >
-            <Github className='h-4 w-4' />
+            <GitHubIcon className='h-4 w-4' />
           </a>
         </div>
       </div>
@@ -106,9 +110,11 @@ function AppContent() {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <AppContent />
+      </Router>
+    </ThemeProvider>
   )
 }
 
