@@ -2,7 +2,16 @@ import { useState, useEffect, useMemo } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Github, ExternalLink, Star, GitFork, Calendar, Filter, SortAsc, SortDesc } from 'lucide-react'
+import {
+  Github,
+  ExternalLink,
+  Star,
+  GitFork,
+  Calendar,
+  Filter,
+  SortAsc,
+  SortDesc,
+} from 'lucide-react'
 
 interface Repository {
   id: number
