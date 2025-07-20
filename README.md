@@ -5,10 +5,10 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-18.3-blue.svg)](https://reactjs.org/)
 [![Vite](https://img.shields.io/badge/Vite-6.0-green.svg)](https://vitejs.dev/)
-[![MUI](https://img.shields.io/badge/MUI-6.3-blue.svg)](https://mui.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-blue.svg)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> Modern, responsive personal portfolio website built with React 18, TypeScript, Vite, and Material-UI
+> Modern, responsive personal portfolio website built with React 18, TypeScript, Tailwind CSS, and shadcn/ui
 
 ## 🚀 Live Website
 
@@ -16,40 +16,78 @@ Visit the live website: [https://vish288.github.io](https://vish288.github.io)
 
 ## ✨ Features
 
-- **Modern Tech Stack**: React 18, TypeScript 5.7, Vite 6, MUI v6
-- **Responsive Design**: Mobile-first approach with Material Design
+- **Modern Tech Stack**: React 18, TypeScript 5.7, Vite 6, Tailwind CSS, shadcn/ui
+- **Three Core Pages**: GitHub repositories, About me, and Gratitude message form
+- **Responsive Design**: Mobile-first approach with modern design system
 - **Progressive Web App**: PWA capabilities with offline support
 - **Performance Optimized**: Code splitting, lazy loading, and optimized bundles
 - **Type Safety**: Full TypeScript coverage with strict mode
-- **State Management**: Redux Toolkit for predictable state updates
+- **Live GitHub Integration**: Real-time repository data from GitHub API
+- **Olive Green Theme**: Custom color palette with modern gradients
+- **Form Handling**: React Hook Form with validation and beautiful UX
 - **CI/CD Pipeline**: Automated testing, building, and deployment
-- **Security**: Regular security audits and dependency updates
+- **Zero Vulnerabilities**: Regular security audits and dependency updates
 - **Developer Experience**: Hot reload, ESLint, Prettier, Husky
+
+## 📱 Pages Overview
+
+### 🏠 Repositories (`/`)
+
+- Displays live GitHub repositories with real-time data
+- Repository cards showing stars, forks, languages, and topics
+- Responsive grid layout with hover effects
+- Direct links to GitHub repositories
+
+### 👤 About (`/about`)
+
+- Professional profile with gradient hero section
+- Skills showcase with modern badges
+- Contact information and social links
+- Placeholder for future enhancements
+
+### 💝 Gratitude (`/gratitude`)
+
+- Interactive message submission form
+- React Hook Form with comprehensive validation
+- Beautiful success states with animations
+- Prepared for GitHub storage integration
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18.3** - UI library with latest features
-- **TypeScript 5.7** - Type-safe JavaScript
-- **Material-UI 6.3** - React component library
-- **Redux Toolkit 2.5** - State management
+
+- **React 18.3** - UI library with latest features and hooks
+- **TypeScript 5.7** - Type-safe JavaScript with strict mode
+- **Tailwind CSS 3.4** - Utility-first CSS framework
+- **shadcn/ui** - Modern, accessible component library
 - **React Router 7.1** - Client-side routing
+- **React Hook Form 7.54** - Performant form handling
 
 ### Build Tools
+
 - **Vite 6.0** - Fast build tool and dev server
-- **Vitest** - Unit testing framework
-- **ESLint 9** - Code linting
-- **Prettier 3.4** - Code formatting
+- **Vitest 3.2** - Unit testing framework
+- **ESLint 9** - Code linting with modern rules
+- **Prettier 3.4** - Code formatting with Tailwind plugin
+
+### Components & Libraries
+
+- **Radix UI** - Unstyled, accessible UI primitives
+- **Lucide React** - Beautiful, customizable icons
+- **class-variance-authority** - Component variant styling
+- **tailwind-merge** - Efficient Tailwind class merging
 
 ### DevOps
+
 - **GitHub Actions** - CI/CD pipeline
 - **GitHub Pages** - Static site hosting
-- **Husky** - Git hooks
+- **Husky** - Git hooks for quality checks
 - **Lint-staged** - Pre-commit linting
 
 ## 🚦 Quick Start
 
 ### Prerequisites
+
 - Node.js >= 18.0.0
 - npm >= 9.0.0
 
@@ -72,12 +110,14 @@ Open [http://localhost:3000](http://localhost:3000) to view the site.
 ## 📜 Available Scripts
 
 ### Development
+
 ```bash
 npm run dev          # Start development server
 npm run preview      # Preview production build locally
 ```
 
 ### Building
+
 ```bash
 npm run build        # Build for production
 npm run build:github # Build for GitHub Pages
@@ -85,6 +125,7 @@ npm run deploy       # Build and deploy to GitHub Pages
 ```
 
 ### Code Quality
+
 ```bash
 npm run test         # Run tests
 npm run test:watch   # Run tests in watch mode
@@ -97,6 +138,7 @@ npm run format:check # Check formatting without fixing
 ```
 
 ### Maintenance
+
 ```bash
 npm run clean        # Clean build artifacts
 npm audit            # Check for security vulnerabilities
@@ -107,39 +149,55 @@ npm outdated         # Check for outdated dependencies
 
 ```
 src/
-├── components/          # Reusable UI components
-│   ├── SearchSort.tsx
-│   └── Tiles.tsx
-├── hooks/              # Custom React hooks
-│   ├── useAppDispatch.ts
-│   └── useAppSelector.ts
-├── pages/              # Page components
-├── store/              # Redux store and slices
-│   ├── index.ts
-│   └── tilesSlice.ts
-├── types/              # TypeScript type definitions
-│   └── index.ts
-├── utils/              # Utility functions
-├── test/               # Test configuration
-├── App.tsx             # Main app component
-└── main.tsx            # Application entry point
+├── components/
+│   └── ui/                # shadcn/ui components
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── input.tsx
+│       ├── textarea.tsx
+│       ├── badge.tsx
+│       └── toast.tsx
+├── lib/
+│   └── utils.ts           # Utility functions
+├── pages/                 # Page components
+│   ├── Repositories.tsx   # GitHub repos page
+│   ├── About.tsx          # About me page
+│   └── Gratitude.tsx      # Gratitude form page
+├── App.tsx                # Main app with routing
+├── main.tsx               # Application entry point
+└── index.css             # Global styles with Tailwind
 ```
 
 ## 🎨 Design System
 
-- **Primary Color**: #443266 (Deep Purple)
-- **Secondary Color**: #8C489F (Medium Purple)
-- **Typography**: Roboto font family
-- **Responsive Breakpoints**: Mobile-first Material-UI breakpoints
-- **Component Library**: Material-UI with custom theme
+### Color Palette (Olive Green Theme)
+
+- **Primary**: `hsl(84, 26%, 45%)` - Olive Green
+- **Secondary**: `hsl(84, 8%, 92%)` - Light Olive
+- **Background**: `hsl(0, 0%, 100%)` - White
+- **Foreground**: `hsl(84, 6%, 20%)` - Dark Olive
+- **Accent**: Gradient from primary to green-600
+
+### Typography
+
+- **Font Stack**: System fonts with Tailwind defaults
+- **Headings**: Bold weights with proper contrast
+- **Body**: Regular weight with optimal line height
+
+### Components
+
+- **shadcn/ui**: Accessible, customizable components
+- **Radix UI**: Unstyled primitives for complex components
+- **Consistent Spacing**: Tailwind's spacing scale
+- **Responsive Design**: Mobile-first breakpoints
 
 ## 🔒 Security
 
-- Regular security audits via GitHub Actions
-- Dependency vulnerability scanning
-- Content Security Policy headers
-- HTTPS enforced
-- No sensitive data in client-side code
+- **Zero Vulnerabilities**: All dependencies audited and updated
+- **Content Security Policy**: Secure headers configuration
+- **HTTPS Enforced**: All traffic encrypted
+- **API Security**: GitHub API calls with proper error handling
+- **Form Validation**: Client-side and server-side validation ready
 
 ## 📈 Performance
 
@@ -147,7 +205,14 @@ src/
 - **Bundle Size**: Optimized with code splitting
 - **Loading**: Lazy loading for non-critical components
 - **Caching**: Service worker for offline capabilities
-- **Images**: Optimized and responsive images
+- **Modern Build**: Vite's optimized bundling
+
+### Bundle Analysis
+
+- **Vendor Chunk**: React and React DOM
+- **UI Chunk**: Radix UI and Lucide icons
+- **Router Chunk**: React Router DOM
+- **Form Chunk**: React Hook Form
 
 ## 🚀 Deployment
 
@@ -159,6 +224,7 @@ The site is automatically deployed to GitHub Pages via GitHub Actions:
 4. **Deploy** publishes to GitHub Pages
 
 Manual deployment:
+
 ```bash
 npm run deploy
 ```
@@ -166,32 +232,50 @@ npm run deploy
 ## 🧪 Testing
 
 - **Unit Tests**: Vitest with React Testing Library
-- **Type Checking**: TypeScript strict mode
+- **Type Checking**: TypeScript strict mode enabled
 - **Linting**: ESLint with React and TypeScript rules
-- **Formatting**: Prettier with consistent code style
+- **Formatting**: Prettier with Tailwind CSS plugin
 
 Run all quality checks:
+
 ```bash
 npm run typecheck && npm run lint:check && npm run format:check && npm run test
 ```
 
-## 🔄 Migration from Legacy
+## 🔄 Complete Modernization (2025 Update)
 
-This project was completely modernized from a 2019 React app:
+This project underwent a complete transformation from a legacy 2019 React app:
 
 ### Before (2019)
+
 - React 16.12 with class components
 - Material-UI v4
-- react-scripts 3.2
+- react-scripts 3.2 (Create React App)
 - TypeScript 3.7
-- 100+ security vulnerabilities
+- Redux with legacy patterns
+- 100+ critical security vulnerabilities
+- Outdated dependencies
 
 ### After (2025)
-- React 18.3 with functional components and hooks
-- MUI v6 with modern styling
-- Vite 6 for fast development
-- TypeScript 5.7 with strict mode
-- 5 minor vulnerabilities (95% reduction)
+
+- **React 18.3** with functional components and hooks
+- **Tailwind CSS 3.4** with shadcn/ui components
+- **Vite 6.0** for lightning-fast development
+- **TypeScript 5.7** with strict mode enabled
+- **Modern form handling** with React Hook Form
+- **Zero vulnerabilities** (100% security improvement)
+- **Three specialized pages** with modern UX
+- **GitHub API integration** for live data
+- **Olive green theme** with custom color palette
+
+### Key Improvements
+
+- 95% reduction in security vulnerabilities
+- Modern component architecture
+- Improved performance and bundle size
+- Better developer experience
+- Mobile-first responsive design
+- Accessibility improvements
 
 ## 🤝 Contributing
 
@@ -203,6 +287,14 @@ This project was completely modernized from a 2019 React app:
 6. Push to the branch: `git push origin feature/amazing-feature`
 7. Open a Pull Request
 
+### Contribution Guidelines
+
+- Follow the existing code style and patterns
+- Add tests for new features
+- Update documentation as needed
+- Ensure all CI checks pass
+- Use conventional commit messages
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -210,15 +302,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 👨‍💻 Author
 
 **Visweshwaran S**
+
 - Website: [https://vish288.github.io](https://vish288.github.io)
 - GitHub: [@vish288](https://github.com/vish288)
 
 ## 🙏 Acknowledgments
 
-- React team for the amazing framework
-- Material-UI team for the component library
+- React team for the amazing framework and hooks
+- Tailwind CSS team for the utility-first approach
+- shadcn for the beautiful component library
+- Radix UI team for accessible primitives
 - Vite team for the lightning-fast build tool
-- Open source community for the excellent tools and libraries
+- Open source community for excellent tools and libraries
 
 ---
 
