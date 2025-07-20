@@ -22,7 +22,7 @@ interface GratitudeSubmissionResult {
 
 // GitHub configuration
 const GITHUB_OWNER = import.meta.env.VITE_GITHUB_OWNER || 'vish288'
-const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO || 'gratitude-messages'
+const GITHUB_REPO = import.meta.env.VITE_GITHUB_REPO || 'vish288.github.io'
 const GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN
 
 class GratitudeService {
