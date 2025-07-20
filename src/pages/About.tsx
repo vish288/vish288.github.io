@@ -27,7 +27,7 @@ export default function About() {
       <div className='max-w-4xl mx-auto'>
         {/* Hero Section */}
         <div className='text-center mb-12'>
-          <h1 className='text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-green-600 bg-clip-text text-transparent'>
+          <h1 className='text-5xl font-bold mb-4 bg-gradient-to-r from-primary to-emerald-600 bg-clip-text text-transparent'>
             Visweshwaran S
           </h1>
           <p className='text-xl text-muted-foreground mb-6'>
