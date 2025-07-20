@@ -3,19 +3,20 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Heart, Send, CheckCircle } from 'lucide-react'
+import { Heart, Send, CheckCircle, Github } from 'lucide-react'
 import { useForm } from 'react-hook-form'
+import SimpleCaptcha from '@/components/SimpleCaptcha'
+import { gratitudeService } from '@/services/gratitudeService'
+import type { GratitudeMessage } from '@/services/gratitudeService'
 
-interface GratitudeForm {
-  name: string
-  email: string
-  message: string
-}
+interface GratitudeForm extends GratitudeMessage {}
 
 export default function Gratitude() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [captchaValid, setCaptchaValid] = useState(false)
+  const [issueNumber, setIssueNumber] = useState<number | null>(null)
 
   const {
     register,
@@ -25,20 +26,28 @@ export default function Gratitude() {
   } = useForm<GratitudeForm>()
 
   const onSubmit = async (data: GratitudeForm) => {
+    if (!captchaValid) {
+      setError('Please complete the security check first.')
+      return
+    }
+
     setIsSubmitting(true)
     setError(null)
 
     try {
-      // TODO: Implement GitHub storage for gratitude messages
-      // For now, we'll simulate the submission
-      await new Promise(resolve => setTimeout(resolve, 2000))
+      const result = await gratitudeService.submitMessage(data)
 
-      console.log('Gratitude message:', data)
-
-      setIsSubmitted(true)
-      reset()
-    } catch {
+      if (result.success) {
+        setIssueNumber(result.issueNumber || null)
+        setIsSubmitted(true)
+        reset()
+        setCaptchaValid(false) // Reset captcha for next submission
+      } else {
+        setError(result.error || 'Failed to submit your message. Please try again.')
+      }
+    } catch (err) {
       setError('Failed to submit your message. Please try again.')
+      console.error('Submission error:', err)
     } finally {
       setIsSubmitting(false)
     }
@@ -52,10 +61,30 @@ export default function Gratitude() {
             <CardContent className='pt-8 pb-8'>
               <CheckCircle className='h-16 w-16 text-green-500 mx-auto mb-4' />
               <h2 className='text-2xl font-bold mb-2'>Thank You!</h2>
-              <p className='text-muted-foreground mb-6'>
-                Your gratitude message has been received. It means a lot to me!
+              <p className='text-muted-foreground mb-4'>
+                Your gratitude message has been received and stored securely. It means a lot to me!
               </p>
-              <Button onClick={() => setIsSubmitted(false)}>Send Another Message</Button>
+
+              {issueNumber && (
+                <div className='bg-secondary p-4 rounded-lg mb-6'>
+                  <div className='flex items-center justify-center gap-2 text-sm text-muted-foreground mb-2'>
+                    <Github className='h-4 w-4' />
+                    <span>Stored as GitHub Issue #{issueNumber}</span>
+                  </div>
+                  <p className='text-xs text-muted-foreground'>
+                    Your message is safely stored and I'll be notified immediately.
+                  </p>
+                </div>
+              )}
+
+              <Button
+                onClick={() => {
+                  setIsSubmitted(false)
+                  setIssueNumber(null)
+                }}
+              >
+                Send Another Message
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -149,13 +178,21 @@ export default function Gratitude() {
                 )}
               </div>
 
+              {/* CAPTCHA */}
+              <SimpleCaptcha onVerify={setCaptchaValid} isValid={captchaValid} />
+
               {error && (
                 <div className='bg-red-50 border border-red-200 rounded-md p-3'>
                   <p className='text-red-800 text-sm'>{error}</p>
                 </div>
               )}
 
-              <Button type='submit' disabled={isSubmitting} className='w-full' size='lg'>
+              <Button
+                type='submit'
+                disabled={isSubmitting || !captchaValid}
+                className='w-full'
+                size='lg'
+              >
                 {isSubmitting ? (
                   <>
                     <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2'></div>
@@ -173,10 +210,14 @@ export default function Gratitude() {
         </Card>
 
         {/* Info */}
-        <div className='mt-8 text-center'>
-          <p className='text-sm text-muted-foreground'>
-            Your messages are stored securely and handled with care. Thank you for taking the time
-            to share your thoughts!
+        <div className='mt-8 text-center space-y-2'>
+          <div className='flex items-center justify-center gap-2 text-sm text-muted-foreground'>
+            <Github className='h-4 w-4' />
+            <span>Messages are stored securely using GitHub Issues</span>
+          </div>
+          <p className='text-xs text-muted-foreground'>
+            Your message will be stored as a private GitHub issue, and I'll receive instant
+            notifications. Location and IP information are captured for security purposes. All data is handled with care and respect for your privacy.
           </p>
         </div>
       </div>
