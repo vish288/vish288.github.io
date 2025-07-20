@@ -36,15 +36,15 @@ describe('Gratitude Page', () => {
   // Helper function to complete the security captcha
   const completeCaptcha = async (user: any) => {
     const captchaInput = screen.getByLabelText(/security check/i)
-    
+
     // Find the math problem - look for pattern like "5 + 3 = ?" or "8 - 2 = ?" or "4 × 3 = ?"
     const mathElement = screen.getByText(/\d+\s*[+\-×]\s*\d+\s*=\s*\?/)
     const mathText = mathElement.textContent
-    
+
     if (mathText) {
       // Parse different types of math operations
       let answer = 0
-      
+
       // Addition
       let match = mathText.match(/(\d+)\s*\+\s*(\d+)/)
       if (match) {
@@ -62,7 +62,7 @@ describe('Gratitude Page', () => {
           }
         }
       }
-      
+
       if (answer !== 0) {
         await user.type(captchaInput, answer.toString())
       }
