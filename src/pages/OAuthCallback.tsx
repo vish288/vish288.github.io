@@ -31,6 +31,13 @@ export default function OAuthCallback() {
       const authenticatedUser = await githubWebAuth.handleCallback(code, state)
 
       if (authenticatedUser) {
+        // Check if user is authorized
+        if (!githubWebAuth.isUserAuthorized(authenticatedUser.login)) {
+          // User authenticated successfully but not authorized
+          navigate('/unauthorized')
+          return
+        }
+
         setUser(authenticatedUser)
         setStatus('success')
 

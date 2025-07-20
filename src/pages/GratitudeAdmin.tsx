@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Github, Calendar, ExternalLink, RefreshCw, Eye, EyeOff } from 'lucide-react'
 import { gratitudeService } from '@/services/gratitudeService'
-import { githubWebAuth, type GitHubUser, ALLOWED_USERS } from '@/services/githubWebAuth'
+import { githubWebAuth, type GitHubUser } from '@/services/githubWebAuth'
 import AdminNavigation from '@/components/AdminNavigation'
 import AdminToast from '@/components/AdminToast'
 import GitHubWebAuth from '@/components/GitHubWebAuth'
@@ -31,7 +31,7 @@ export default function GratitudeAdmin() {
     setAuthLoading(true)
     try {
       const currentUser = await githubWebAuth.getCurrentUser()
-      if (currentUser && !ALLOWED_USERS.includes(currentUser.login)) {
+      if (currentUser && !githubWebAuth.isUserAuthorized(currentUser.login)) {
         // User is authenticated but not authorized
         navigate('/unauthorized')
         return
@@ -93,32 +93,29 @@ export default function GratitudeAdmin() {
   const extractEmailFromBody = (body: string | null | undefined): string => {
     if (!body) return 'N/A'
     const emailMatch = body.match(/\*\*Email:\*\* (.+?)(?:\s|\n)/)
-    return emailMatch ? emailMatch[1]! : 'N/A'
+    return emailMatch?.[1] ?? 'N/A'
   }
 
   const extractMessageFromBody = (body: string | null | undefined): string => {
     if (!body) return 'N/A'
-    const messageStart = body.indexOf('### Message\n\n')
-    const messageEnd = body.indexOf('\n\n---', messageStart)
-    if (messageStart !== -1) {
-      const start = messageStart + 13 // Length of "### Message\n\n"
-      const end = messageEnd !== -1 ? messageEnd : body.length
-      return body.substring(start, end).trim()
-    }
-    return 'N/A'
+    const messageMatch = body.match(/### Message\n\n([\s\S]*?)(?:\n\n---|$)/)
+    return messageMatch?.[1]?.trim() ?? 'N/A'
   }
 
   const extractLocationFromBody = (body: string | null | undefined): string => {
     if (!body) return 'N/A'
 
+    const locationMatches = body.match(/\*\*(?:IP Address|Country|City):\*\* (.+?)(?:\n|$)/g)
+    if (!locationMatches) return 'N/A'
+
+    const parts: string[] = []
     const ipMatch = body.match(/\*\*IP Address:\*\* (.+?)(?:\n|$)/)
     const countryMatch = body.match(/\*\*Country:\*\* (.+?)(?:\n|$)/)
     const cityMatch = body.match(/\*\*City:\*\* (.+?)(?:\n|$)/)
 
-    const parts = []
-    if (cityMatch) parts.push(cityMatch[1])
-    if (countryMatch) parts.push(countryMatch[1])
-    if (ipMatch) parts.push(`(${ipMatch[1]})`)
+    if (cityMatch?.[1]) parts.push(cityMatch[1])
+    if (countryMatch?.[1]) parts.push(countryMatch[1])
+    if (ipMatch?.[1]) parts.push(`(${ipMatch[1]})`)
 
     return parts.length > 0 ? parts.join(', ') : 'N/A'
   }
@@ -222,7 +219,7 @@ export default function GratitudeAdmin() {
                   <div className='text-center'>
                     <div className='text-2xl font-bold text-purple-600'>
                       <a
-                        href='https://github.com/vish288/gratitude-messages/issues'
+                        href={`https://github.com/${import.meta.env.VITE_GITHUB_OWNER || 'vish288'}/${import.meta.env.VITE_GITHUB_REPO || 'gratitude-messages'}/issues`}
                         target='_blank'
                         rel='noopener noreferrer'
                         className='hover:underline flex items-center justify-center gap-1'

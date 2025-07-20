@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Users, Plus, X, Search, RefreshCw, AlertTriangle } from 'lucide-react'
-import { githubWebAuth, type GitHubUser, ALLOWED_USERS } from '@/services/githubWebAuth'
+import { Users, Plus, X, Search, RefreshCw } from 'lucide-react'
+import { githubWebAuth, type GitHubUser } from '@/services/githubWebAuth'
 import AdminNavigation from '@/components/AdminNavigation'
 import AdminToast from '@/components/AdminToast'
 import GitHubWebAuth from '@/components/GitHubWebAuth'
@@ -21,7 +21,7 @@ interface GitHubUserInfo {
 }
 
 export default function AdminUserManagement() {
-  const [allowedUsers, setAllowedUsers] = useState<string[]>([...ALLOWED_USERS])
+  const [allowedUsers, setAllowedUsers] = useState<string[]>([])
   const [newUsername, setNewUsername] = useState('')
   const [searchResults, setSearchResults] = useState<GitHubUserInfo[]>([])
   const [loading, setLoading] = useState(false)
@@ -34,12 +34,14 @@ export default function AdminUserManagement() {
     setAuthLoading(true)
     try {
       const currentUser = await githubWebAuth.getCurrentUser()
-      if (currentUser && !ALLOWED_USERS.includes(currentUser.login)) {
+      if (currentUser && !githubWebAuth.isUserAuthorized(currentUser.login)) {
         // User is authenticated but not authorized
         navigate('/unauthorized')
         return
       }
       setUser(currentUser)
+      // Load allowed users from service
+      setAllowedUsers(githubWebAuth.getAllowedUsers())
     } catch {
       setError('Authentication failed')
     } finally {
@@ -265,17 +267,24 @@ export default function AdminUserManagement() {
             </CardContent>
           </Card>
 
-          {/* Warning */}
-          <Card className='border-amber-200 bg-amber-50'>
+          {/* Configuration Info */}
+          <Card className='border-blue-200 bg-blue-50'>
             <CardContent className='pt-6'>
               <div className='flex items-start gap-3'>
-                <AlertTriangle className='h-5 w-5 text-amber-600 mt-0.5' />
+                <Users className='h-5 w-5 text-blue-600 mt-0.5' />
                 <div className='text-sm'>
-                  <p className='font-medium text-amber-800 mb-1'>Important Note</p>
-                  <p className='text-amber-700'>
-                    Changes made here are currently for demonstration purposes. In a production
-                    environment, these changes would be persisted to your configuration system or
-                    backend service. The current implementation only updates the local state.
+                  <p className='font-medium text-blue-800 mb-2'>Environment Configuration</p>
+                  <p className='text-blue-700 mb-2'>
+                    Authorized users are configured via the{' '}
+                    <code className='bg-blue-100 px-1 rounded'>VITE_GITHUB_ALLOWED_USERS</code>{' '}
+                    environment variable.
+                  </p>
+                  <p className='text-blue-700 mb-2'>
+                    <strong>Format:</strong> Comma-separated GitHub usernames (e.g.,
+                    &quot;user1,user2,user3&quot;)
+                  </p>
+                  <p className='text-blue-700'>
+                    <strong>Current users:</strong> {githubWebAuth.getAllowedUsers().join(', ')}
                   </p>
                 </div>
               </div>
