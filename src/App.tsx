@@ -1,74 +1,112 @@
-import { useEffect } from 'react'
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material'
-import { Box, Container, AppBar, Toolbar, Typography, Paper } from '@mui/material'
-import { Provider } from 'react-redux'
-import { store } from './store'
-import SearchSort from './components/SearchSort'
-import Tiles from './components/Tiles'
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
+import { Button } from '@/components/ui/button'
+import { Github, Heart, User } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import Repositories from '@/pages/Repositories'
+import About from '@/pages/About'
+import Gratitude from '@/pages/Gratitude'
+import './index.css'
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#443266',
-    },
-    secondary: {
-      main: '#8C489F',
-    },
-    background: {
-      default: '#f5f5f5',
-    },
-  },
-  typography: {
-    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-  },
-})
+function Navigation() {
+  const location = useLocation()
 
-function App() {
-  useEffect(() => {
-    // Initialize app data
-    console.log('App initialized')
-  }, [])
+  const navItems = [
+    { path: '/', label: 'Repositories', icon: Github },
+    { path: '/about', label: 'About', icon: User },
+    { path: '/gratitude', label: 'Gratitude', icon: Heart },
+  ]
 
   return (
-    <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Box sx={{ flexGrow: 1, minHeight: '100vh' }}>
-          <AppBar position="static" color="primary">
-            <Toolbar>
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                Visweshwaran S - Portfolio
-              </Typography>
-            </Toolbar>
-          </AppBar>
+    <nav className='border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
+      <div className='container mx-auto px-4'>
+        <div className='flex h-16 items-center justify-between'>
+          {/* Logo */}
+          <Link to='/' className='flex items-center space-x-2'>
+            <div className='h-8 w-8 rounded-full bg-gradient-to-r from-primary to-green-600 flex items-center justify-center'>
+              <span className='text-white font-bold text-sm'>VS</span>
+            </div>
+            <span className='font-bold text-xl'>Visweshwaran S</span>
+          </Link>
 
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 8 }}>
-            <SearchSort />
-            <Paper elevation={1} sx={{ p: 2, mt: 2 }}>
-              <Tiles />
-            </Paper>
-          </Container>
+          {/* Navigation Links */}
+          <div className='flex items-center space-x-1'>
+            {navItems.map(({ path, label, icon: Icon }) => (
+              <Button
+                key={path}
+                variant={location.pathname === path ? 'default' : 'ghost'}
+                size='sm'
+                asChild
+              >
+                <Link
+                  to={path}
+                  className={cn(
+                    'flex items-center space-x-2',
+                    location.pathname === path && 'bg-primary text-primary-foreground'
+                  )}
+                >
+                  <Icon className='h-4 w-4' />
+                  <span className='hidden sm:inline'>{label}</span>
+                </Link>
+              </Button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </nav>
+  )
+}
 
-          <Box
-            component="footer"
-            sx={{
-              position: 'fixed',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              bgcolor: 'secondary.main',
-              color: 'white',
-              p: 2,
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Typography variant="body2">© 2025 Visweshwaran S</Typography>
-          </Box>
-        </Box>
-      </ThemeProvider>
-    </Provider>
+function Footer() {
+  return (
+    <footer className='border-t bg-background'>
+      <div className='container mx-auto px-4 py-8'>
+        <div className='flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0'>
+          <div className='text-center md:text-left'>
+            <p className='text-sm text-muted-foreground'>
+              © 2025 Visweshwaran S. Built with React, TypeScript, and Tailwind CSS.
+            </p>
+          </div>
+          <div className='flex items-center space-x-4'>
+            <Button variant='ghost' size='sm' asChild>
+              <a
+                href='https://github.com/vish288'
+                target='_blank'
+                rel='noopener noreferrer'
+                className='text-muted-foreground hover:text-foreground'
+              >
+                <Github className='h-4 w-4' />
+              </a>
+            </Button>
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
+}
+
+function AppContent() {
+  return (
+    <div className='min-h-screen flex flex-col'>
+      <Navigation />
+
+      <main className='flex-1'>
+        <Routes>
+          <Route path='/' element={<Repositories />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/gratitude' element={<Gratitude />} />
+        </Routes>
+      </main>
+
+      <Footer />
+    </div>
+  )
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   )
 }
 
