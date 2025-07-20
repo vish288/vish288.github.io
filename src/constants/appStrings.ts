@@ -70,12 +70,14 @@ export const APP_STRINGS = {
   // Admin
   ADMIN_ACCESS_TITLE: 'Admin Access Required',
   ADMIN_ACCESS_SUBTITLE: 'Sign in with your GitHub account to access the admin dashboard',
-  ADMIN_UNAUTHORIZED_TITLE: 'Access Restricted',
-  ADMIN_UNAUTHORIZED_SUBTITLE: "Sorry, you don't have permission to access this admin area",
-  ADMIN_NEED_ACCESS_TITLE: 'Need Access?',
+  ADMIN_UNAUTHORIZED_TITLE: 'Oops! You Found My Secret Lair! 🕵️‍♂️',
+  ADMIN_UNAUTHORIZED_SUBTITLE:
+    "Looks like you're trying to peek behind the curtain! Nice try, but this area is VIP only.",
+  ADMIN_NEED_ACCESS_TITLE: 'Want to Join the Cool Kids Club? 😎',
   ADMIN_NEED_ACCESS_MESSAGE:
-    'If you believe you should have access to this admin dashboard, please reach out politely and explain why you need access. Access is restricted to authorized users only.',
-  ADMIN_MONITORING_MESSAGE: 'This area is monitored. Unauthorized access attempts are logged.',
+    "If you think you belong in here (and you're not just randomly clicking buttons), drop me a message explaining why you deserve admin superpowers. Fair warning: 'I promise I won't break anything' isn't very convincing! 😄",
+  ADMIN_MONITORING_MESSAGE:
+    '👀 Big Brother is watching... just kidding! But seriously, access attempts are logged.',
 
   // Loading States
   LOADING_REPOSITORIES: 'Loading repositories...',

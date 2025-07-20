@@ -3,7 +3,7 @@
 
 const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID
 const YOUR_GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN // Your token for API calls
-const ALLOWED_USERS = ['vish288'] // Configure allowed GitHub usernames
+const ALLOWED_USERS = [''] // Configure allowed GitHub usernames
 
 export interface GitHubUser {
   login: string
