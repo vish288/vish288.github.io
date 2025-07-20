@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -66,7 +66,7 @@ export default function AdminAuth({ onAuthenticated }: AdminAuthProps) {
                   disabled={loading}
                 />
                 <p className='text-xs text-muted-foreground mt-1'>
-                  We'll verify you're in the authorized users list
+                  We&apos;ll verify you&apos;re in the authorized users list
                 </p>
               </div>
 
@@ -97,7 +97,7 @@ export default function AdminAuth({ onAuthenticated }: AdminAuthProps) {
                 <br />
                 • Enter your GitHub username
                 <br />
-                • We verify you're authorized
+                • We verify you&apos;re authorized
                 <br />
                 • No tokens or passwords needed
                 <br />• Access granted instantly
