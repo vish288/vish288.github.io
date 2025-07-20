@@ -73,7 +73,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:github": "tsc && vite build --base=/",
+    "build:github": "tsc && vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
