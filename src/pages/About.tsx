@@ -1,9 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Github, Linkedin, Mail, MapPin } from 'lucide-react'
+import { Github, Linkedin, Mail, MapPin, Code2 } from 'lucide-react'
+import SimpleWordCloud from '@/components/SimpleWordCloud'
+import { useGitHubRepositories } from '@/hooks/useGitHubRepositories'
 
 export default function About() {
+  const { repositories, loading, error } = useGitHubRepositories()
+
   const skills = [
     'React',
     'TypeScript',
@@ -61,20 +65,48 @@ export default function About() {
           </CardContent>
         </Card>
 
-        {/* Skills */}
+        {/* Skills Word Cloud */}
         <Card className='mb-8'>
           <CardHeader>
-            <CardTitle>Skills & Technologies</CardTitle>
-            <CardDescription>Technologies I work with regularly</CardDescription>
+            <CardTitle className='flex items-center gap-2'>
+              <Code2 className='h-5 w-5' />
+              Skills & Technologies
+            </CardTitle>
+            <CardDescription>
+              Dynamic visualization based on my GitHub repositories and their languages
+            </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className='flex flex-wrap gap-2'>
-              {skills.map(skill => (
-                <Badge key={skill} variant='secondary' className='text-sm'>
-                  {skill}
-                </Badge>
-              ))}
-            </div>
+            {loading && (
+              <div className='flex items-center justify-center h-64'>
+                <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+                <span className='ml-2 text-muted-foreground'>Loading repositories...</span>
+              </div>
+            )}
+
+            {error && (
+              <div className='text-center py-8'>
+                <p className='text-red-500 mb-4'>Failed to load repository data</p>
+                <div className='flex flex-wrap gap-2 justify-center'>
+                  {skills.map(skill => (
+                    <Badge key={skill} variant='secondary' className='text-sm'>
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {!loading && !error && repositories.length > 0 && (
+              <div className='space-y-4'>
+                <SimpleWordCloud repositories={repositories} />
+                <div className='text-center'>
+                  <p className='text-sm text-muted-foreground'>
+                    Word cloud generated from {repositories.length} repositories
+                  </p>
+                </div>
+              </div>
+            )}
           </CardContent>
         </Card>
 

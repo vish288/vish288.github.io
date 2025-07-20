@@ -1,8 +1,17 @@
 import { render, screen } from '@testing-library/react'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import About from './About'
 
+// Mock fetch
+const mockFetch = vi.fn()
+global.fetch = mockFetch
+
 describe('About Page', () => {
+  beforeEach(() => {
+    mockFetch.mockClear()
+    mockFetch.mockRejectedValue(new Error('Test error'))
+  })
+
   it('renders the main heading', () => {
     render(<About />)
 
