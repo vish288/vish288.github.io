@@ -5,6 +5,11 @@ import { cn } from '@/lib/utils'
 import Repositories from '@/pages/Repositories'
 import About from '@/pages/About'
 import Gratitude from '@/pages/Gratitude'
+import GratitudeAdmin from '@/pages/GratitudeAdmin'
+import AdminUserManagement from '@/pages/AdminUserManagement'
+import UnauthorizedAccess from '@/pages/UnauthorizedAccess'
+import OAuthCallback from '@/pages/OAuthCallback'
+import AdminToast from '@/components/AdminToast'
 import './index.css'
 
 function Navigation() {
@@ -59,25 +64,17 @@ function Navigation() {
 function Footer() {
   return (
     <footer className='border-t bg-background'>
-      <div className='container mx-auto px-4 py-8'>
-        <div className='flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0'>
-          <div className='text-center md:text-left'>
-            <p className='text-sm text-muted-foreground'>
-              © 2025 Visweshwaran S. Built with React, TypeScript, and Tailwind CSS.
-            </p>
-          </div>
-          <div className='flex items-center space-x-4'>
-            <Button variant='ghost' size='sm' asChild>
-              <a
-                href='https://github.com/vish288'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='text-muted-foreground hover:text-foreground'
-              >
-                <Github className='h-4 w-4' />
-              </a>
-            </Button>
-          </div>
+      <div className='container mx-auto px-4 py-6'>
+        <div className='flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0'>
+          <p className='text-xs text-muted-foreground'>© 2025 Visweshwaran S.</p>
+          <a
+            href='https://github.com/vish288'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-muted-foreground hover:text-foreground transition-colors'
+          >
+            <Github className='h-4 w-4' />
+          </a>
         </div>
       </div>
     </footer>
@@ -88,12 +85,17 @@ function AppContent() {
   return (
     <div className='min-h-screen flex flex-col'>
       <Navigation />
+      <AdminToast user={null} showToast={false} />
 
       <main className='flex-1'>
         <Routes>
           <Route path='/' element={<Repositories />} />
           <Route path='/about' element={<About />} />
           <Route path='/gratitude' element={<Gratitude />} />
+          <Route path='/admin/gratitude' element={<GratitudeAdmin />} />
+          <Route path='/admin/users' element={<AdminUserManagement />} />
+          <Route path='/admin/callback' element={<OAuthCallback />} />
+          <Route path='/unauthorized' element={<UnauthorizedAccess />} />
         </Routes>
       </main>
 
