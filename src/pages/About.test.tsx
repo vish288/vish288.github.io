@@ -77,7 +77,6 @@ describe('About Page', () => {
     expect(githubLink).toHaveAttribute('target', '_blank')
   })
 
-
   it('displays future enhancement note', async () => {
     await act(async () => {
       render(<About />)
