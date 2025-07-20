@@ -170,13 +170,13 @@ src/
 
 ## 🎨 Design System
 
-### Color Palette (Olive Green Theme)
+### Color Palette (Cool Professional Green Theme)
 
-- **Primary**: `hsl(84, 26%, 45%)` - Olive Green
-- **Secondary**: `hsl(84, 8%, 92%)` - Light Olive
+- **Primary**: `hsl(150, 20%, 40%)` - Cool Forest Green
+- **Secondary**: `hsl(150, 6%, 95%)` - Light Cool Gray
 - **Background**: `hsl(0, 0%, 100%)` - White
-- **Foreground**: `hsl(84, 6%, 20%)` - Dark Olive
-- **Accent**: Gradient from primary to green-600
+- **Foreground**: `hsl(150, 8%, 25%)` - Dark Cool Gray
+- **Accent**: Gradient from primary to emerald-600
 
 ### Typography
 
