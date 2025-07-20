@@ -55,8 +55,8 @@ export default function UnauthorizedAccess() {
               <CheckCircle className='h-16 w-16 text-green-500 mx-auto mb-4' />
               <h2 className='text-2xl font-bold mb-2'>Request Submitted! 🎉</h2>
               <p className='text-muted-foreground mb-6'>
-                Your admin access request has been submitted and I&apos;ll review it soon. Thanks for
-                explaining why you need access!
+                Your admin access request has been submitted and I&apos;ll review it soon. Thanks
+                for explaining why you need access!
               </p>
 
               <div className='space-y-3'>
