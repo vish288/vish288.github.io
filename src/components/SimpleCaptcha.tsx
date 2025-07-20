@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { APP_STRINGS } from '@/constants/appStrings'
 
 interface SimpleCaptchaProps {
   onVerify: (isValid: boolean) => void
@@ -60,7 +61,7 @@ export default function SimpleCaptcha({ onVerify, isValid }: SimpleCaptchaProps)
   return (
     <div className='space-y-3'>
       <label htmlFor='captcha' className='block text-sm font-medium'>
-        Security Check <span className='text-red-500'>*</span>
+        {APP_STRINGS.SECURITY_CHECK_LABEL} <span className='text-red-500'>*</span>
       </label>
 
       <div className='flex items-center gap-2'>

@@ -64,7 +64,7 @@ describe('About Page', () => {
     expect(screen.getByText(/passionate full-stack developer/i)).toBeInTheDocument()
   })
 
-  it('shows contact section with GitHub link', async () => {
+  it('shows contact section with GitHub and LinkedIn links', async () => {
     await act(async () => {
       render(<About />)
     })
@@ -75,14 +75,14 @@ describe('About Page', () => {
     expect(githubLink).toBeInTheDocument()
     expect(githubLink).toHaveAttribute('href', 'https://github.com/vish288')
     expect(githubLink).toHaveAttribute('target', '_blank')
-  })
 
-  it('displays future enhancement note', async () => {
-    await act(async () => {
-      render(<About />)
-    })
-
-    expect(screen.getByText(/this page will be enhanced/i)).toBeInTheDocument()
+    const linkedinLink = screen.getByRole('link', { name: /linkedin/i })
+    expect(linkedinLink).toBeInTheDocument()
+    expect(linkedinLink).toHaveAttribute(
+      'href',
+      'https://www.linkedin.com/in/suryanarayananvisweshwaran/'
+    )
+    expect(linkedinLink).toHaveAttribute('target', '_blank')
   })
 
   it('uses proper semantic structure', async () => {

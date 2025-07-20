@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import { Button } from '@/components/ui/button'
 import { Heart, User } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
+import SentimentRoller from '@/components/SentimentRoller'
 import { cn } from '@/lib/utils'
 import Repositories from '@/pages/Repositories'
 import About from '@/pages/About'
@@ -13,15 +14,16 @@ import OAuthCallback from '@/pages/OAuthCallback'
 import AdminToast from '@/components/AdminToast'
 import ThemeToggle from '@/components/ThemeToggle'
 import { ThemeProvider } from '@/contexts/ThemeContext'
+import { APP_STRINGS } from '@/constants/appStrings'
 import './index.css'
 
 function Navigation() {
   const location = useLocation()
 
   const navItems = [
-    { path: '/', label: 'Repositories', icon: GitHubIcon },
-    { path: '/about', label: 'About', icon: User },
-    { path: '/gratitude', label: 'Gratitude', icon: Heart },
+    { path: '/', label: APP_STRINGS.NAV_ABOUT, icon: User },
+    { path: '/repositories', label: APP_STRINGS.NAV_REPOSITORIES, icon: GitHubIcon },
+    { path: '/gratitude', label: APP_STRINGS.NAV_GRATITUDE, icon: Heart },
   ]
 
   return (
@@ -33,7 +35,7 @@ function Navigation() {
             <div className='h-8 w-8 rounded-full bg-gradient-to-r from-primary to-emerald-600 flex items-center justify-center'>
               <span className='text-white font-bold text-sm'>VS</span>
             </div>
-            <span className='font-bold text-xl'>Visweshwaran S</span>
+            <span className='font-bold text-xl'>{APP_STRINGS.FULL_NAME}</span>
           </Link>
 
           {/* Navigation Links */}
@@ -52,8 +54,15 @@ function Navigation() {
                     location.pathname === path && 'bg-primary text-primary-foreground'
                   )}
                 >
-                  <Icon className='h-4 w-4' />
-                  <span className='hidden sm:inline'>{label}</span>
+                  {path === '/gratitude' ? (
+                    <SentimentRoller className='text-sm hidden sm:flex' interval={4000} />
+                  ) : (
+                    <>
+                      <Icon className='h-4 w-4' />
+                      <span className='hidden sm:inline'>{label}</span>
+                    </>
+                  )}
+                  {path === '/gratitude' && <Heart className='h-4 w-4 sm:hidden' />}
                 </Link>
               </Button>
             ))}
@@ -70,9 +79,9 @@ function Footer() {
     <footer className='border-t bg-background'>
       <div className='container mx-auto px-4 py-6'>
         <div className='flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0'>
-          <p className='text-xs text-muted-foreground'>© 2025 Visweshwaran S.</p>
+          <p className='text-xs text-muted-foreground'>© 2025 {APP_STRINGS.FULL_NAME}.</p>
           <a
-            href='https://github.com/vish288'
+            href={APP_STRINGS.GITHUB_URL}
             target='_blank'
             rel='noopener noreferrer'
             className='text-muted-foreground hover:text-foreground transition-colors'
@@ -93,8 +102,8 @@ function AppContent() {
 
       <main className='flex-1'>
         <Routes>
-          <Route path='/' element={<Repositories />} />
-          <Route path='/about' element={<About />} />
+          <Route path='/' element={<About />} />
+          <Route path='/repositories' element={<Repositories />} />
           <Route path='/gratitude' element={<Gratitude />} />
           <Route path='/admin/gratitude' element={<GratitudeAdmin />} />
           <Route path='/admin/users' element={<AdminUserManagement />} />

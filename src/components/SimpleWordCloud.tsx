@@ -62,23 +62,24 @@ const TOPIC_SKILLS: Record<string, { skills: string[]; category: string }> = {
 }
 
 const CATEGORY_COLORS = {
-  frontend: 'text-emerald-500',
-  backend: 'text-blue-500',
-  systems: 'text-red-500',
-  devops: 'text-orange-500',
-  cloud: 'text-purple-500',
-  data: 'text-cyan-500',
-  tools: 'text-gray-500',
+  frontend: 'text-emerald-600 dark:text-emerald-400',
+  backend: 'text-blue-600 dark:text-blue-400',
+  systems: 'text-red-600 dark:text-red-400',
+  devops: 'text-orange-600 dark:text-orange-400',
+  cloud: 'text-purple-600 dark:text-purple-400',
+  data: 'text-cyan-600 dark:text-cyan-400',
+  tools: 'text-gray-600 dark:text-gray-400',
 }
 
 const CATEGORY_BG_COLORS = {
-  frontend: 'bg-emerald-50 hover:bg-emerald-100',
-  backend: 'bg-blue-50 hover:bg-blue-100',
-  systems: 'bg-red-50 hover:bg-red-100',
-  devops: 'bg-orange-50 hover:bg-orange-100',
-  cloud: 'bg-purple-50 hover:bg-purple-100',
-  data: 'bg-cyan-50 hover:bg-cyan-100',
-  tools: 'bg-gray-50 hover:bg-gray-100',
+  frontend:
+    'bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:hover:bg-emerald-800/30',
+  backend: 'bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-800/30',
+  systems: 'bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-800/30',
+  devops: 'bg-orange-50 hover:bg-orange-100 dark:bg-orange-900/20 dark:hover:bg-orange-800/30',
+  cloud: 'bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-800/30',
+  data: 'bg-cyan-50 hover:bg-cyan-100 dark:bg-cyan-900/20 dark:hover:bg-cyan-800/30',
+  tools: 'bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/30 dark:hover:bg-gray-700/50',
 }
 
 export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) {
@@ -150,7 +151,7 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
   return (
     <div className='w-full'>
       {/* Word Cloud Container */}
-      <div className='flex flex-wrap items-center justify-center gap-2 p-6 min-h-64 bg-gradient-to-br from-background to-secondary/20 rounded-lg'>
+      <div className='flex flex-wrap items-center justify-center gap-2 p-6 min-h-64 bg-gradient-to-br from-background to-secondary/20 dark:from-background dark:to-secondary/10 rounded-lg'>
         {skillsData.map(({ skill, count, category }) => (
           <span
             key={skill}
@@ -170,19 +171,34 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
 
       {/* Legend */}
       <div className='mt-4 flex flex-wrap gap-4 justify-center text-xs'>
-        {Object.entries(CATEGORY_COLORS).map(([category, colorClass]) => (
-          <div key={category} className='flex items-center gap-1'>
-            <div className={`w-3 h-3 rounded-full ${colorClass.replace('text-', 'bg-')}`} />
-            <span className='capitalize text-muted-foreground'>{category}</span>
-          </div>
-        ))}
-      </div>
-
-      {/* Stats */}
-      <div className='mt-4 text-center text-sm text-muted-foreground'>
-        <p>
-          Showing {skillsData.length} skills from {repositories.length} repositories
-        </p>
+        <div className='flex items-center gap-1'>
+          <div className='w-3 h-3 rounded-full bg-emerald-500' />
+          <span className='capitalize text-muted-foreground'>frontend</span>
+        </div>
+        <div className='flex items-center gap-1'>
+          <div className='w-3 h-3 rounded-full bg-blue-500' />
+          <span className='capitalize text-muted-foreground'>backend</span>
+        </div>
+        <div className='flex items-center gap-1'>
+          <div className='w-3 h-3 rounded-full bg-red-500' />
+          <span className='capitalize text-muted-foreground'>systems</span>
+        </div>
+        <div className='flex items-center gap-1'>
+          <div className='w-3 h-3 rounded-full bg-orange-500' />
+          <span className='capitalize text-muted-foreground'>devops</span>
+        </div>
+        <div className='flex items-center gap-1'>
+          <div className='w-3 h-3 rounded-full bg-purple-500' />
+          <span className='capitalize text-muted-foreground'>cloud</span>
+        </div>
+        <div className='flex items-center gap-1'>
+          <div className='w-3 h-3 rounded-full bg-cyan-500' />
+          <span className='capitalize text-muted-foreground'>data</span>
+        </div>
+        <div className='flex items-center gap-1'>
+          <div className='w-3 h-3 rounded-full bg-gray-500' />
+          <span className='capitalize text-muted-foreground'>tools</span>
+        </div>
       </div>
     </div>
   )

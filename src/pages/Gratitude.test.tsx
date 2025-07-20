@@ -72,9 +72,9 @@ describe('Gratitude Page', () => {
     render(<Gratitude />)
 
     expect(
-      screen.getByRole('heading', { level: 1, name: /share your gratitude/i })
+      screen.getByRole('heading', { level: 1, name: /share your message/i })
     ).toBeInTheDocument()
-    expect(screen.getByText(/your kind words and feedback/i)).toBeInTheDocument()
+    expect(screen.getByText(/your thoughts, feedback, concerns, or gratitude/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /send message/i })).toBeInTheDocument()
   })
 
@@ -149,7 +149,9 @@ describe('Gratitude Page', () => {
     await waitFor(
       () => {
         expect(screen.getByText(/thank you!/i)).toBeInTheDocument()
-        expect(screen.getByText(/your gratitude message has been received/i)).toBeInTheDocument()
+        expect(
+          screen.getByText(/your message has been received and stored securely/i)
+        ).toBeInTheDocument()
       },
       { timeout: 3000 }
     )
