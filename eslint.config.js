@@ -14,7 +14,10 @@ export default [
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        ...globals.node
+      },
       parser: tsparser,
       parserOptions: {
         ecmaVersion: 'latest',
@@ -50,6 +53,25 @@ export default [
       '@typescript-eslint/no-explicit-any': 'warn',
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off'
+    }
+  },
+  {
+    files: ['**/*.test.{ts,tsx}', '**/test/**/*.{ts,tsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        vi: 'readonly',
+        describe: 'readonly',
+        it: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        global: 'readonly'
+      }
+    },
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off'
     }
   }
 ]
