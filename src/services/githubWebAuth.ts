@@ -1,7 +1,21 @@
 // GitHub Web Application Flow - proper OAuth for browsers
 const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID
 const YOUR_GITHUB_TOKEN = import.meta.env.VITE_GITHUB_TOKEN // Your token for API calls
-const ALLOWED_USERS = ['vish288'] // Configure allowed GitHub usernames
+
+// Parse allowed users from environment variable (comma-separated)
+const parseAllowedUsers = (): string[] => {
+  const envUsers = import.meta.env.VITE_GITHUB_ALLOWED_USERS
+  if (envUsers && typeof envUsers === 'string') {
+    return envUsers
+      .split(',')
+      .map(user => user.trim())
+      .filter(user => user.length > 0)
+  }
+  // Fallback to default admin user if env variable not set
+  return ['vish288']
+}
+
+const ALLOWED_USERS = parseAllowedUsers()
 
 export interface GitHubUser {
   login: string
@@ -75,6 +89,8 @@ class GitHubWebAuthService {
 
   // Verify user is in authorized list after OAuth completion
   private async verifyAuthorizedUser(): Promise<GitHubUser | null> {
+    console.log('Authorized users:', ALLOWED_USERS)
+
     // Since we can't get the actual user from the OAuth code without a backend,
     // we'll check if any of our authorized users recently authorized the app
     // This is a simplified approach - in production you'd have proper token exchange
@@ -90,19 +106,20 @@ class GitHubWebAuthService {
 
         if (response.ok) {
           const user: GitHubUser = await response.json()
+          console.log(`Verified user ${username}:`, user.login)
 
-          // In a real OAuth implementation, we'd verify this is the actual authenticated user
-          // For demo purposes, we'll authenticate the primary admin user
-          if (username === 'vish288') {
-            return user
-          }
+          // For demo purposes, authenticate the first valid authorized user
+          // In production, you'd verify this matches the actual OAuth user
+          return user
+        } else {
+          console.warn(`Failed to verify user ${username}: ${response.status}`)
         }
       } catch (error) {
         console.error(`Error verifying user ${username}:`, error)
       }
     }
 
-    throw new Error('No authorized users found. Please ensure you have admin access.')
+    throw new Error(`No authorized users found. Allowed users: ${ALLOWED_USERS.join(', ')}`)
   }
 
   // Check if current user is authenticated and authorized
@@ -170,7 +187,16 @@ class GitHubWebAuthService {
     this.clearAuth()
     window.location.href = '/'
   }
+
+  // Get list of allowed users for debugging/display
+  getAllowedUsers(): string[] {
+    return [...ALLOWED_USERS]
+  }
+
+  // Check if a user is authorized
+  isUserAuthorized(username: string): boolean {
+    return ALLOWED_USERS.includes(username)
+  }
 }
 
 export const githubWebAuth = new GitHubWebAuthService()
-export { ALLOWED_USERS }
