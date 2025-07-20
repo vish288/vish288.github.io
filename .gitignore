@@ -51,3 +51,6 @@ coverage/
 
 # Husky
 .husky/_
+
+# Project documentation (local reference only)
+CLAUDE.md
