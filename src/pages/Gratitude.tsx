@@ -3,11 +3,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Heart, Send, CheckCircle, Github } from 'lucide-react'
+import { Send, CheckCircle } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import SimpleCaptcha from '@/components/SimpleCaptcha'
+import SentimentRoller from '@/components/SentimentRoller'
 import { gratitudeService } from '@/services/gratitudeService'
 import type { GratitudeMessage } from '@/services/gratitudeService'
+import { APP_STRINGS } from '@/constants/appStrings'
 
 type GratitudeForm = GratitudeMessage
 
@@ -16,7 +18,6 @@ export default function Gratitude() {
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [captchaValid, setCaptchaValid] = useState(false)
-  const [issueNumber, setIssueNumber] = useState<number | null>(null)
 
   const {
     register,
@@ -27,7 +28,7 @@ export default function Gratitude() {
 
   const onSubmit = async (data: GratitudeForm) => {
     if (!captchaValid) {
-      setError('Please complete the security check first.')
+      setError(APP_STRINGS.CAPTCHA_REQUIRED_ERROR)
       return
     }
 
@@ -38,15 +39,14 @@ export default function Gratitude() {
       const result = await gratitudeService.submitMessage(data)
 
       if (result.success) {
-        setIssueNumber(result.issueNumber || null)
         setIsSubmitted(true)
         reset()
         setCaptchaValid(false) // Reset captcha for next submission
       } else {
-        setError(result.error || 'Failed to submit your message. Please try again.')
+        setError(result.error || APP_STRINGS.ERROR_SUBMISSION_FAILED)
       }
     } catch (err) {
-      setError('Failed to submit your message. Please try again.')
+      setError(APP_STRINGS.ERROR_SUBMISSION_FAILED)
       console.error('Submission error:', err)
     } finally {
       setIsSubmitting(false)
@@ -60,30 +60,15 @@ export default function Gratitude() {
           <Card className='text-center'>
             <CardContent className='pt-8 pb-8'>
               <CheckCircle className='h-16 w-16 text-green-500 mx-auto mb-4' />
-              <h2 className='text-2xl font-bold mb-2'>Thank You!</h2>
-              <p className='text-muted-foreground mb-4'>
-                Your gratitude message has been received and stored securely. It means a lot to me!
-              </p>
-
-              {issueNumber && (
-                <div className='bg-secondary p-4 rounded-lg mb-6'>
-                  <div className='flex items-center justify-center gap-2 text-sm text-muted-foreground mb-2'>
-                    <Github className='h-4 w-4' />
-                    <span>Stored as GitHub Issue #{issueNumber}</span>
-                  </div>
-                  <p className='text-xs text-muted-foreground'>
-                    Your message is safely stored and I&apos;ll be notified immediately.
-                  </p>
-                </div>
-              )}
+              <h2 className='text-2xl font-bold mb-2'>{APP_STRINGS.GRATITUDE_SUCCESS_TITLE}</h2>
+              <p className='text-muted-foreground mb-6'>{APP_STRINGS.GRATITUDE_SUCCESS_MESSAGE}</p>
 
               <Button
                 onClick={() => {
                   setIsSubmitted(false)
-                  setIssueNumber(null)
                 }}
               >
-                Send Another Message
+                {APP_STRINGS.BTN_SEND_ANOTHER}
               </Button>
             </CardContent>
           </Card>
@@ -97,35 +82,30 @@ export default function Gratitude() {
       <div className='max-w-2xl mx-auto'>
         {/* Header */}
         <div className='text-center mb-8'>
-          <div className='flex justify-center mb-4'>
-            <Heart className='h-12 w-12 text-red-500' />
+          <div className='flex justify-center mb-6'>
+            <SentimentRoller className='text-4xl font-bold' interval={2500} />
           </div>
-          <h1 className='text-4xl font-bold mb-4'>Share Your Gratitude</h1>
-          <p className='text-muted-foreground text-lg'>
-            Your kind words and feedback help me grow and improve. Share what you&apos;re grateful
-            for or any message you&apos;d like to send.
-          </p>
+          <h1 className='text-3xl font-bold mb-4'>{APP_STRINGS.GRATITUDE_PAGE_TITLE}</h1>
+          <p className='text-muted-foreground text-lg'>{APP_STRINGS.GRATITUDE_PAGE_DESCRIPTION}</p>
         </div>
 
         {/* Form */}
         <Card>
           <CardHeader>
-            <CardTitle>Send a Message</CardTitle>
-            <CardDescription>
-              Your message will be stored securely and reviewed with appreciation.
-            </CardDescription>
+            <CardTitle>{APP_STRINGS.GRATITUDE_FORM_TITLE}</CardTitle>
+            <CardDescription>{APP_STRINGS.GRATITUDE_FORM_SUBTITLE}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
               <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 <div>
                   <label htmlFor='name' className='block text-sm font-medium mb-2'>
-                    Name <span className='text-red-500'>*</span>
+                    {APP_STRINGS.FORM_NAME_LABEL} <span className='text-red-500'>*</span>
                   </label>
                   <Input
                     id='name'
                     placeholder='Your name'
-                    {...register('name', { required: 'Name is required' })}
+                    {...register('name', { required: APP_STRINGS.VALIDATION_NAME_REQUIRED })}
                     className={errors.name ? 'border-red-500' : ''}
                   />
                   {errors.name && (
@@ -135,17 +115,17 @@ export default function Gratitude() {
 
                 <div>
                   <label htmlFor='email' className='block text-sm font-medium mb-2'>
-                    Email <span className='text-red-500'>*</span>
+                    {APP_STRINGS.FORM_EMAIL_LABEL} <span className='text-red-500'>*</span>
                   </label>
                   <Input
                     id='email'
                     type='email'
                     placeholder='your.email@example.com'
                     {...register('email', {
-                      required: 'Email is required',
+                      required: APP_STRINGS.VALIDATION_EMAIL_REQUIRED,
                       pattern: {
                         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                        message: 'Invalid email address',
+                        message: APP_STRINGS.VALIDATION_EMAIL_INVALID,
                       },
                     })}
                     className={errors.email ? 'border-red-500' : ''}
@@ -158,17 +138,17 @@ export default function Gratitude() {
 
               <div>
                 <label htmlFor='message' className='block text-sm font-medium mb-2'>
-                  Your Message <span className='text-red-500'>*</span>
+                  {APP_STRINGS.FORM_MESSAGE_LABEL} <span className='text-red-500'>*</span>
                 </label>
                 <Textarea
                   id='message'
-                  placeholder="Share your thoughts, gratitude, feedback, or any message you'd like to send..."
+                  placeholder={APP_STRINGS.FORM_MESSAGE_PLACEHOLDER}
                   rows={6}
                   {...register('message', {
-                    required: 'Message is required',
+                    required: APP_STRINGS.VALIDATION_MESSAGE_REQUIRED,
                     minLength: {
                       value: 10,
-                      message: 'Message must be at least 10 characters long',
+                      message: APP_STRINGS.VALIDATION_MESSAGE_MIN_LENGTH,
                     },
                   })}
                   className={errors.message ? 'border-red-500' : ''}
@@ -196,31 +176,18 @@ export default function Gratitude() {
                 {isSubmitting ? (
                   <>
                     <div className='animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2'></div>
-                    Sending...
+                    {APP_STRINGS.LOADING_SENDING}
                   </>
                 ) : (
                   <>
                     <Send className='h-4 w-4 mr-2' />
-                    Send Message
+                    {APP_STRINGS.BTN_SEND_MESSAGE}
                   </>
                 )}
               </Button>
             </form>
           </CardContent>
         </Card>
-
-        {/* Info */}
-        <div className='mt-8 text-center space-y-2'>
-          <div className='flex items-center justify-center gap-2 text-sm text-muted-foreground'>
-            <Github className='h-4 w-4' />
-            <span>Messages are stored securely using GitHub Issues</span>
-          </div>
-          <p className='text-xs text-muted-foreground'>
-            Your message will be stored as a private GitHub issue, and I&apos;ll receive instant
-            notifications. Location and IP information are captured for security purposes. All data
-            is handled with care and respect for your privacy.
-          </p>
-        </div>
       </div>
     </div>
   )
