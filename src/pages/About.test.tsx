@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import About from './About'
 
@@ -33,16 +33,18 @@ describe('About Page', () => {
     expect(screen.getByText(/toronto, canada & india/i)).toBeInTheDocument()
   })
 
-  it('displays skills section', () => {
+  it('displays skills section', async () => {
     render(<About />)
 
     expect(screen.getByText(/skills & technologies/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/dynamic visualization based on my github repositories/i)
+    ).toBeInTheDocument()
 
-    // Check for some key skills
-    expect(screen.getByText('React')).toBeInTheDocument()
-    expect(screen.getByText('TypeScript')).toBeInTheDocument()
-    expect(screen.getByText('Node.js')).toBeInTheDocument()
-    expect(screen.getByText('Tailwind CSS')).toBeInTheDocument()
+    // Wait for error state to appear since fetch is mocked to fail
+    await waitFor(() => {
+      expect(screen.getByText(/failed to load repository data/i)).toBeInTheDocument()
+    })
   })
 
   it('renders about me section', () => {
@@ -86,5 +88,40 @@ describe('About Page', () => {
     // Should have multiple sections
     const headings = screen.getAllByRole('heading')
     expect(headings.length).toBeGreaterThan(1)
+  })
+
+  it('displays word cloud with successful repository fetch', async () => {
+    // Mock successful repository fetch
+    const mockRepos = [
+      {
+        id: 1,
+        name: 'test-repo',
+        description: 'A test repository',
+        html_url: 'https://github.com/vish288/test-repo',
+        language: 'TypeScript',
+        stargazers_count: 5,
+        forks_count: 1,
+        topics: ['react', 'typescript'],
+        updated_at: '2025-01-01T00:00:00Z',
+        created_at: '2024-01-01T00:00:00Z',
+        fork: false,
+        pushed_at: '2025-01-01T00:00:00Z',
+      },
+    ]
+
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockRepos,
+    })
+
+    render(<About />)
+
+    // Should initially show loading
+    expect(screen.getByText(/loading repositories/i)).toBeInTheDocument()
+
+    // Wait for word cloud to appear
+    await waitFor(() => {
+      expect(screen.getByText(/showing .* skills from .* repositories/i)).toBeInTheDocument()
+    })
   })
 })
