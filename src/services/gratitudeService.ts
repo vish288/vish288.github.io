@@ -40,46 +40,85 @@ class GratitudeService {
   private categorizeMessage(message: string): string[] {
     const lowerMessage = message.toLowerCase()
     const labels = ['gratitude'] // Base label for all messages
-    
+
     // Sentiment-based labels
-    if (lowerMessage.includes('thank') || lowerMessage.includes('grateful') || lowerMessage.includes('appreciate')) {
+    if (
+      lowerMessage.includes('thank') ||
+      lowerMessage.includes('grateful') ||
+      lowerMessage.includes('appreciate')
+    ) {
       labels.push('thankful')
     }
-    
-    if (lowerMessage.includes('love') || lowerMessage.includes('amazing') || lowerMessage.includes('awesome') || lowerMessage.includes('great')) {
+
+    if (
+      lowerMessage.includes('love') ||
+      lowerMessage.includes('amazing') ||
+      lowerMessage.includes('awesome') ||
+      lowerMessage.includes('great')
+    ) {
       labels.push('positive')
     }
-    
-    if (lowerMessage.includes('help') || lowerMessage.includes('support') || lowerMessage.includes('assist')) {
+
+    if (
+      lowerMessage.includes('help') ||
+      lowerMessage.includes('support') ||
+      lowerMessage.includes('assist')
+    ) {
       labels.push('help-related')
     }
-    
+
     // Content-based labels
-    if (lowerMessage.includes('website') || lowerMessage.includes('site') || lowerMessage.includes('ui') || lowerMessage.includes('design')) {
+    if (
+      lowerMessage.includes('website') ||
+      lowerMessage.includes('site') ||
+      lowerMessage.includes('ui') ||
+      lowerMessage.includes('design')
+    ) {
       labels.push('website-feedback')
     }
-    
-    if (lowerMessage.includes('code') || lowerMessage.includes('programming') || lowerMessage.includes('development')) {
+
+    if (
+      lowerMessage.includes('code') ||
+      lowerMessage.includes('programming') ||
+      lowerMessage.includes('development')
+    ) {
       labels.push('code-related')
     }
-    
-    if (lowerMessage.includes('project') || lowerMessage.includes('work') || lowerMessage.includes('portfolio')) {
+
+    if (
+      lowerMessage.includes('project') ||
+      lowerMessage.includes('work') ||
+      lowerMessage.includes('portfolio')
+    ) {
       labels.push('project-feedback')
     }
-    
+
     // Feedback type labels
-    if (lowerMessage.includes('suggest') || lowerMessage.includes('improve') || lowerMessage.includes('feature')) {
+    if (
+      lowerMessage.includes('suggest') ||
+      lowerMessage.includes('improve') ||
+      lowerMessage.includes('feature')
+    ) {
       labels.push('suggestion')
     }
-    
-    if (lowerMessage.includes('bug') || lowerMessage.includes('issue') || lowerMessage.includes('problem') || lowerMessage.includes('error')) {
+
+    if (
+      lowerMessage.includes('bug') ||
+      lowerMessage.includes('issue') ||
+      lowerMessage.includes('problem') ||
+      lowerMessage.includes('error')
+    ) {
       labels.push('bug-report')
     }
-    
-    if (lowerMessage.includes('question') || lowerMessage.includes('how') || lowerMessage.includes('?')) {
+
+    if (
+      lowerMessage.includes('question') ||
+      lowerMessage.includes('how') ||
+      lowerMessage.includes('?')
+    ) {
       labels.push('question')
     }
-    
+
     return labels
   }
 
@@ -136,7 +175,7 @@ class GratitudeService {
     try {
       // Categorize the message to generate appropriate labels
       const messageLabels = this.categorizeMessage(data.message)
-      
+
       // Create GitHub issue with the gratitude message
       const response = await this.octokit.rest.issues.create({
         owner: GITHUB_OWNER,
