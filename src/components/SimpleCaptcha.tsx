@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -17,7 +17,7 @@ export default function SimpleCaptcha({ onVerify, isValid }: SimpleCaptchaProps)
   const [challenge, setChallenge] = useState<MathChallenge>({ question: '', answer: 0 })
   const [userAnswer, setUserAnswer] = useState('')
 
-  const generateChallenge = () => {
+  const generateChallenge = useCallback(() => {
     // Generate simple addition/subtraction problems
     const operations = [
       () => {
@@ -42,11 +42,11 @@ export default function SimpleCaptcha({ onVerify, isValid }: SimpleCaptchaProps)
     setChallenge(newChallenge)
     setUserAnswer('')
     onVerify(false)
-  }
+  }, [onVerify])
 
   useEffect(() => {
     generateChallenge()
-  }, [])
+  }, [generateChallenge])
 
   useEffect(() => {
     const userNum = parseInt(userAnswer, 10)

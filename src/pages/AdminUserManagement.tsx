@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Users, Plus, X, Search, RefreshCw, AlertTriangle } from 'lucide-react'
 import { githubWebAuth, type GitHubUser, ALLOWED_USERS } from '@/services/githubWebAuth'
 import AdminNavigation from '@/components/AdminNavigation'
-import AdminToast, { toast } from '@/components/AdminToast'
+import AdminToast from '@/components/AdminToast'
 import GitHubWebAuth from '@/components/GitHubWebAuth'
 import { useNavigate } from 'react-router-dom'
 
@@ -30,12 +30,7 @@ export default function AdminUserManagement() {
   const [authLoading, setAuthLoading] = useState(true)
   const navigate = useNavigate()
 
-  // Check authentication on mount
-  useEffect(() => {
-    checkAuth()
-  }, [])
-
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     setAuthLoading(true)
     try {
       const currentUser = await githubWebAuth.getCurrentUser()
@@ -50,7 +45,12 @@ export default function AdminUserManagement() {
     } finally {
       setAuthLoading(false)
     }
-  }
+  }, [navigate])
+
+  // Check authentication on mount
+  useEffect(() => {
+    checkAuth()
+  }, [checkAuth])
 
   const handleAdminSignOut = () => {
     githubWebAuth.signOut()
@@ -88,7 +88,7 @@ export default function AdminUserManagement() {
 
   const addUser = (username: string) => {
     if (allowedUsers.includes(username)) {
-      toast.error(`${username} is already in the allowed users list`)
+      alert(`${username} is already in the allowed users list`)
       return
     }
 
@@ -96,7 +96,7 @@ export default function AdminUserManagement() {
     setAllowedUsers(newUsers)
     setNewUsername('')
     setSearchResults([])
-    toast.success(`Added ${username} to allowed users`)
+    alert(`Added ${username} to allowed users`)
 
     // In a real implementation, you'd update the backend/config here
     console.log('Updated allowed users:', newUsers)
@@ -104,13 +104,13 @@ export default function AdminUserManagement() {
 
   const removeUser = (username: string) => {
     if (username === 'vish288') {
-      toast.error('Cannot remove the primary admin user')
+      alert('Cannot remove the primary admin user')
       return
     }
 
     const newUsers = allowedUsers.filter(user => user !== username)
     setAllowedUsers(newUsers)
-    toast.success(`Removed ${username} from allowed users`)
+    alert(`Removed ${username} from allowed users`)
 
     // In a real implementation, you'd update the backend/config here
     console.log('Updated allowed users:', newUsers)

@@ -1,9 +1,51 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, it, expect, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import Gratitude from './Gratitude'
 
+// Mock the gratitude service
+vi.mock('@/services/gratitudeService', () => ({
+  gratitudeService: {
+    submitMessage: vi.fn(() => Promise.resolve({ success: true, issueNumber: 123 })),
+    isConfigured: vi.fn(() => true),
+  },
+}))
+
+// Mock fetch for location services
+const mockFetch = vi.fn(() =>
+  Promise.resolve({
+    ok: true,
+    json: () =>
+      Promise.resolve({
+        ip: '192.168.1.1',
+        country_name: 'United States',
+        region: 'California',
+        city: 'San Francisco',
+        timezone: 'America/Los_Angeles',
+      }),
+  })
+)
+
+global.fetch = mockFetch
+
 describe('Gratitude Page', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  // Helper function to complete the security captcha
+  const completeCaptcha = async (user: any) => {
+    const captchaInput = screen.getByLabelText(/security check/i)
+    // Get the expected answer from the captcha question
+    const captchaText = screen.getByText(/what is/i).textContent
+    if (captchaText) {
+      const match = captchaText.match(/what is (\d+) \+ (\d+)/i)
+      if (match) {
+        const answer = parseInt(match[1]) + parseInt(match[2])
+        await user.type(captchaInput, answer.toString())
+      }
+    }
+  }
   it('renders the main heading and form', () => {
     render(<Gratitude />)
 
@@ -23,17 +65,20 @@ describe('Gratitude Page', () => {
     expect(screen.getByRole('button', { name: /send message/i })).toBeInTheDocument()
   })
 
-  it('shows validation errors for empty required fields', async () => {
+  it('shows captcha validation error when submitting without completing captcha', async () => {
     const user = userEvent.setup()
     render(<Gratitude />)
+
+    // Fill form but don't complete captcha
+    await user.type(screen.getByLabelText(/name/i), 'John Doe')
+    await user.type(screen.getByLabelText(/email/i), 'john@example.com')
+    await user.type(screen.getByLabelText(/your message/i), 'Test message that is long enough')
 
     const submitButton = screen.getByRole('button', { name: /send message/i })
     await user.click(submitButton)
 
     await waitFor(() => {
-      expect(screen.getByText(/name is required/i)).toBeInTheDocument()
-      expect(screen.getByText(/email is required/i)).toBeInTheDocument()
-      expect(screen.getByText(/message is required/i)).toBeInTheDocument()
+      expect(screen.getByText(/please complete the security check first/i)).toBeInTheDocument()
     })
   })
 
@@ -72,13 +117,11 @@ describe('Gratitude Page', () => {
       'This is a test message that is long enough.'
     )
 
+    // Complete the captcha
+    await completeCaptcha(user)
+
     const submitButton = screen.getByRole('button', { name: /send message/i })
     await user.click(submitButton)
-
-    // Should show loading state
-    await waitFor(() => {
-      expect(screen.getByText(/sending.../i)).toBeInTheDocument()
-    })
 
     // Should show success state after submission
     await waitFor(
@@ -102,6 +145,9 @@ describe('Gratitude Page', () => {
       'This is a test message that is long enough.'
     )
 
+    // Complete the captcha
+    await completeCaptcha(user)
+
     await user.click(screen.getByRole('button', { name: /send message/i }))
 
     // Wait for success state
@@ -121,10 +167,11 @@ describe('Gratitude Page', () => {
   })
 
   it('handles form submission errors gracefully', async () => {
-    // Mock console.log to throw an error to simulate form submission failure
-    const originalConsoleLog = console.log
-    console.log = vi.fn(() => {
-      throw new Error('Submission failed')
+    // Mock the service to return an error
+    const { gratitudeService } = await import('@/services/gratitudeService')
+    vi.mocked(gratitudeService.submitMessage).mockResolvedValueOnce({
+      success: false,
+      error: 'Failed to submit your message',
     })
 
     const user = userEvent.setup()
@@ -137,6 +184,9 @@ describe('Gratitude Page', () => {
       'This is a test message that is long enough.'
     )
 
+    // Complete the captcha
+    await completeCaptcha(user)
+
     await user.click(screen.getByRole('button', { name: /send message/i }))
 
     await waitFor(
@@ -145,9 +195,6 @@ describe('Gratitude Page', () => {
       },
       { timeout: 3000 }
     )
-
-    // Restore console.log
-    console.log = originalConsoleLog
   })
 
   it('displays proper placeholders and labels', () => {

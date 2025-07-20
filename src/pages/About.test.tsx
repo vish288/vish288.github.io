@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import About from './About'
 
@@ -12,29 +12,37 @@ describe('About Page', () => {
     mockFetch.mockRejectedValue(new Error('Test error'))
   })
 
-  it('renders the main heading', () => {
-    render(<About />)
+  it('renders the main heading', async () => {
+    await act(async () => {
+      render(<About />)
+    })
 
     const heading = screen.getByRole('heading', { level: 1, name: /visweshwaran s/i })
     expect(heading).toBeInTheDocument()
   })
 
-  it('displays the professional tagline', () => {
-    render(<About />)
+  it('displays the professional tagline', async () => {
+    await act(async () => {
+      render(<About />)
+    })
 
     expect(screen.getByText(/full stack developer/i)).toBeInTheDocument()
     expect(screen.getByText(/open source enthusiast/i)).toBeInTheDocument()
     expect(screen.getByText(/problem solver/i)).toBeInTheDocument()
   })
 
-  it('shows location information', () => {
-    render(<About />)
+  it('shows location information', async () => {
+    await act(async () => {
+      render(<About />)
+    })
 
     expect(screen.getByText(/toronto, canada & india/i)).toBeInTheDocument()
   })
 
   it('displays skills section', async () => {
-    render(<About />)
+    await act(async () => {
+      render(<About />)
+    })
 
     expect(screen.getByText(/skills & technologies/i)).toBeInTheDocument()
     expect(
@@ -47,15 +55,19 @@ describe('About Page', () => {
     })
   })
 
-  it('renders about me section', () => {
-    render(<About />)
+  it('renders about me section', async () => {
+    await act(async () => {
+      render(<About />)
+    })
 
     expect(screen.getByText(/about me/i)).toBeInTheDocument()
     expect(screen.getByText(/passionate full-stack developer/i)).toBeInTheDocument()
   })
 
-  it('shows contact section with GitHub link', () => {
-    render(<About />)
+  it('shows contact section with GitHub link', async () => {
+    await act(async () => {
+      render(<About />)
+    })
 
     expect(screen.getByText(/let's connect/i)).toBeInTheDocument()
 
@@ -65,21 +77,27 @@ describe('About Page', () => {
     expect(githubLink).toHaveAttribute('target', '_blank')
   })
 
-  it('shows placeholder buttons for future features', () => {
-    render(<About />)
+  it('shows placeholder buttons for future features', async () => {
+    await act(async () => {
+      render(<About />)
+    })
 
-    expect(screen.getByText(/linkedin \(coming soon\)/i)).toBeInTheDocument()
-    expect(screen.getByText(/contact \(coming soon\)/i)).toBeInTheDocument()
+    expect(screen.getByText(/linkedin \\(coming soon\\)/i)).toBeInTheDocument()
+    expect(screen.getByText(/contact \\(coming soon\\)/i)).toBeInTheDocument()
   })
 
-  it('displays future enhancement note', () => {
-    render(<About />)
+  it('displays future enhancement note', async () => {
+    await act(async () => {
+      render(<About />)
+    })
 
     expect(screen.getByText(/this page will be enhanced/i)).toBeInTheDocument()
   })
 
-  it('uses proper semantic structure', () => {
-    render(<About />)
+  it('uses proper semantic structure', async () => {
+    await act(async () => {
+      render(<About />)
+    })
 
     // Check for proper heading hierarchy
     const h1 = screen.getByRole('heading', { level: 1 })
@@ -114,7 +132,9 @@ describe('About Page', () => {
       json: async () => mockRepos,
     })
 
-    render(<About />)
+    await act(async () => {
+      render(<About />)
+    })
 
     // Should initially show loading
     expect(screen.getByText(/loading repositories/i)).toBeInTheDocument()
