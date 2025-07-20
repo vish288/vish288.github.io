@@ -16,15 +16,19 @@ interface GratitudeMessage {
   body: string | null | undefined
   createdAt: string
   url: string
+  labels: string[]
 }
 
 export default function GratitudeAdmin() {
-  const [messages, setMessages] = useState<GratitudeMessage[]>([])
+  const [allMessages, setAllMessages] = useState<GratitudeMessage[]>([])
+  const [filteredMessages, setFilteredMessages] = useState<GratitudeMessage[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [user, setUser] = useState<GitHubUser | null>(null)
   const [authLoading, setAuthLoading] = useState(true)
   const [showMessages, setShowMessages] = useState(false)
+  const [selectedLabels, setSelectedLabels] = useState<string[]>([])
+  const [excludeAdminRequests, setExcludeAdminRequests] = useState(true)
   const navigate = useNavigate()
 
   const checkAuth = useCallback(async () => {
@@ -54,13 +58,7 @@ export default function GratitudeAdmin() {
     setUser(null)
   }
 
-  useEffect(() => {
-    if (user) {
-      loadMessages()
-    }
-  }, [user])
-
-  const loadMessages = async () => {
+  const loadMessages = useCallback(async () => {
     if (!gratitudeService.isConfigured()) {
       setError('GitHub API not configured. Please check environment variables.')
       return
@@ -70,14 +68,61 @@ export default function GratitudeAdmin() {
     setError(null)
 
     try {
-      const data = await gratitudeService.getMessages(20)
-      setMessages(data)
+      const data = await gratitudeService.getAllIssues(50)
+      setAllMessages(data)
+      applyFilters(data, selectedLabels, excludeAdminRequests)
     } catch (err) {
       setError('Failed to load messages')
       console.error('Error loading messages:', err)
     } finally {
       setLoading(false)
     }
+  }, [selectedLabels, excludeAdminRequests])
+
+  useEffect(() => {
+    if (user) {
+      loadMessages()
+    }
+  }, [user, loadMessages])
+
+  const applyFilters = (messages: GratitudeMessage[], labels: string[], excludeAdmin: boolean) => {
+    let filtered = [...messages]
+
+    // Filter out admin requests if enabled
+    if (excludeAdmin) {
+      filtered = filtered.filter(
+        msg => !msg.labels.includes('admin-request') && !msg.labels.includes('admin-access-request')
+      )
+    }
+
+    // Filter by selected labels if any
+    if (labels.length > 0) {
+      filtered = filtered.filter(msg => labels.some(label => msg.labels.includes(label)))
+    }
+
+    setFilteredMessages(filtered)
+  }
+
+  const getAllLabels = () => {
+    const labelSet = new Set<string>()
+    allMessages.forEach(msg => {
+      msg.labels.forEach(label => labelSet.add(label))
+    })
+    return Array.from(labelSet).sort()
+  }
+
+  const toggleLabel = (label: string) => {
+    const newLabels = selectedLabels.includes(label)
+      ? selectedLabels.filter(l => l !== label)
+      : [...selectedLabels, label]
+    setSelectedLabels(newLabels)
+    applyFilters(allMessages, newLabels, excludeAdminRequests)
+  }
+
+  const toggleExcludeAdmin = () => {
+    const newExclude = !excludeAdminRequests
+    setExcludeAdminRequests(newExclude)
+    applyFilters(allMessages, selectedLabels, newExclude)
   }
 
   const formatDate = (dateString: string) => {
@@ -192,29 +237,25 @@ export default function GratitudeAdmin() {
               <CardContent>
                 <div className='grid grid-cols-2 md:grid-cols-4 gap-4'>
                   <div className='text-center'>
-                    <div className='text-2xl font-bold text-primary'>{messages.length}</div>
-                    <div className='text-sm text-muted-foreground'>Total Messages</div>
+                    <div className='text-2xl font-bold text-primary'>{allMessages.length}</div>
+                    <div className='text-sm text-muted-foreground'>Total Issues</div>
+                  </div>
+                  <div className='text-center'>
+                    <div className='text-2xl font-bold text-blue-600'>
+                      {filteredMessages.length}
+                    </div>
+                    <div className='text-sm text-muted-foreground'>Filtered</div>
                   </div>
                   <div className='text-center'>
                     <div className='text-2xl font-bold text-green-600'>
                       {
-                        messages.filter(
+                        filteredMessages.filter(
                           m =>
                             new Date(m.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
                         ).length
                       }
                     </div>
                     <div className='text-sm text-muted-foreground'>This Week</div>
-                  </div>
-                  <div className='text-center'>
-                    <div className='text-2xl font-bold text-blue-600'>
-                      {
-                        messages.filter(
-                          m => new Date(m.createdAt) > new Date(Date.now() - 24 * 60 * 60 * 1000)
-                        ).length
-                      }
-                    </div>
-                    <div className='text-sm text-muted-foreground'>Today</div>
                   </div>
                   <div className='text-center'>
                     <div className='text-2xl font-bold text-purple-600'>
@@ -234,6 +275,43 @@ export default function GratitudeAdmin() {
               </CardContent>
             </Card>
 
+            {/* Filter Controls */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Filters</CardTitle>
+              </CardHeader>
+              <CardContent className='space-y-4'>
+                <div className='flex items-center gap-2'>
+                  <input
+                    type='checkbox'
+                    id='exclude-admin'
+                    checked={excludeAdminRequests}
+                    onChange={toggleExcludeAdmin}
+                    className='rounded'
+                  />
+                  <label htmlFor='exclude-admin' className='text-sm'>
+                    Exclude admin requests
+                  </label>
+                </div>
+
+                <div>
+                  <p className='text-sm font-medium mb-2'>Filter by labels:</p>
+                  <div className='flex flex-wrap gap-2'>
+                    {getAllLabels().map(label => (
+                      <Badge
+                        key={label}
+                        variant={selectedLabels.includes(label) ? 'default' : 'outline'}
+                        className='cursor-pointer'
+                        onClick={() => toggleLabel(label)}
+                      >
+                        {label}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             {showMessages && (
               <div className='space-y-4'>
                 {loading && (
@@ -243,16 +321,18 @@ export default function GratitudeAdmin() {
                   </div>
                 )}
 
-                {!loading && messages.length === 0 && (
+                {!loading && filteredMessages.length === 0 && (
                   <Card>
                     <CardContent className='text-center py-8'>
-                      <p className='text-muted-foreground'>No messages found</p>
+                      <p className='text-muted-foreground'>
+                        No messages found with current filters
+                      </p>
                     </CardContent>
                   </Card>
                 )}
 
                 {!loading &&
-                  messages.map(message => (
+                  filteredMessages.map(message => (
                     <Card key={message.id}>
                       <CardHeader>
                         <div className='flex items-start justify-between'>
@@ -264,6 +344,13 @@ export default function GratitudeAdmin() {
                                 {formatDate(message.createdAt)}
                               </div>
                               <Badge variant='outline'>#{message.id}</Badge>
+                              <div className='flex gap-1'>
+                                {message.labels.map(label => (
+                                  <Badge key={label} variant='secondary' className='text-xs'>
+                                    {label}
+                                  </Badge>
+                                ))}
+                              </div>
                             </div>
                           </div>
                           <Button variant='outline' size='sm' asChild>

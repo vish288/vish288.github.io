@@ -353,9 +353,8 @@ ${locationInfo.timezone ? `- **Timezone:** ${locationInfo.timezone}` : ''}
 ${!locationInfo.ip ? '- **Location:** Unable to determine location information' : ''}`
   }
 
-  async getMessages(limit: number = 10) {
+  async getAllIssues(limit: number = 50) {
     if (!this.octokit) {
-      // Service not configured with admin token
       console.warn('GitHub API not configured. Please check environment variables.')
       return []
     }
@@ -364,7 +363,6 @@ ${!locationInfo.ip ? '- **Location:** Unable to determine location information' 
       const response = await this.octokit.rest.issues.list({
         owner: GITHUB_OWNER,
         repo: GITHUB_REPO,
-        labels: 'gratitude',
         state: 'open',
         sort: 'created',
         direction: 'desc',
@@ -377,11 +375,19 @@ ${!locationInfo.ip ? '- **Location:** Unable to determine location information' 
         body: issue.body,
         createdAt: issue.created_at,
         url: issue.html_url,
+        labels: issue.labels
+          .map(label => (typeof label === 'string' ? label : label.name))
+          .filter((label): label is string => !!label),
       }))
     } catch (error) {
-      console.error('Failed to fetch gratitude messages:', error)
+      console.error('Failed to fetch all issues:', error)
       return []
     }
+  }
+
+  async getMessages(limit: number = 10) {
+    // Just return all issues - filtering will be done in the UI
+    return this.getAllIssues(limit)
   }
 }
 
