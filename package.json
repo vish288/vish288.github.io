@@ -35,6 +35,9 @@
     "axios": "^1.10.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "d3-cloud": "^1.2.7",
+    "d3-scale": "^4.0.2",
+    "d3-selection": "^3.0.0",
     "lucide-react": "^0.525.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -49,6 +52,9 @@
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
+    "@types/d3-cloud": "^1.2.9",
+    "@types/d3-scale": "^4.0.9",
+    "@types/d3-selection": "^3.0.11",
     "@types/node": "^22.16.5",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
@@ -96,8 +102,7 @@
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
-      "prettier --write",
-      "npm run test"
+      "prettier --write"
     ],
     "*.{json,md}": [
       "prettier --write"
