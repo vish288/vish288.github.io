@@ -162,7 +162,7 @@ describe('Gratitude Page', () => {
     render(<Gratitude />)
 
     const requiredIndicators = screen.getAllByText('*')
-    expect(requiredIndicators).toHaveLength(3) // Name, Email, Message
+    expect(requiredIndicators).toHaveLength(4) // Name, Email, Message, Security Check
   })
 
   it('includes accessibility features', () => {
