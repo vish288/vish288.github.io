@@ -52,5 +52,5 @@ coverage/
 # Husky
 .husky/_
 
-# Project documentation (local reference only)
-CLAUDE.md
+# Internal development documentation (local reference only)
+.internal-docs/
