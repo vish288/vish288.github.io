@@ -52,10 +52,8 @@ npm run typecheck  # Type checking
 
 ## 📚 Documentation
 
-- **[Setup Guide](SETUP_GRATITUDE.md)** - Environment setup and GitHub integration
-- **[OAuth Setup](COMPLETE_OAUTH_SETUP.md)** - GitHub OAuth configuration
-- **[Release Notes](RELEASE_NOTES_v2.1.0.md)** - Version 2.1.0 changes
-- **[CLAUDE.md](CLAUDE.md)** - Development context and patterns
+- **[Development Guide](docs/DEVELOPMENT.md)** - Setup, scripts, and development workflow
+- **[Architecture](docs/ARCHITECTURE.md)** - Tech stack, project structure, and design system
 
 ## 🤝 Contributing
 
