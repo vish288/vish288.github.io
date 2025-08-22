@@ -1,7 +1,7 @@
 {
   "name": "vish288-personal-website",
   "version": "2.4.0",
-  "description": "Personal website of Visweshwaran S - Full Stack Developer",
+  "description": "Personal website of Vish - Full Stack Developer",
   "private": true,
   "type": "module",
   "keywords": [
@@ -13,7 +13,7 @@
     "tailwind",
     "shadcn"
   ],
-  "author": "Visweshwaran S <visweshwaran.s@gmail.com>",
+  "author": "vish288 <vish288@users.noreply.github.com>",
   "license": "MIT",
   "homepage": "https://vish288.github.io",
   "repository": {
