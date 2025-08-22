@@ -6,7 +6,6 @@ node_modules/
 # Production builds
 dist/
 build/
-docs/
 
 # Environment variables
 .env
@@ -51,3 +50,6 @@ coverage/
 
 # Husky
 .husky/_
+
+# Internal development documentation (local reference only)
+.internal-docs/
