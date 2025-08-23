@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.6.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.5.0...vish288-personal-website-v2.6.0) (2025-08-23)
+
+
+### Features
+
+* update dependencies to latest versions ([#8](https://github.com/vish288/vish288.github.io/issues/8)) ([97f6eae](https://github.com/vish288/vish288.github.io/commit/97f6eae061e5af75b43e4d52e9e41c4925988904))
+
+
+### Bug Fixes
+
+* add pages and id-token permissions for deployment ([a2a6898](https://github.com/vish288/vish288.github.io/commit/a2a6898fb802dce3a6382177996a1c670ec5b7fc))
+
+
+### Maintenance
+
+* remove duplicate deploy workflow ([39f849d](https://github.com/vish288/vish288.github.io/commit/39f849d216e794fd4eb483b3926a7c0f09fdc583))
+
 ## [2.5.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.4.0...vish288-personal-website-v2.5.0) (2025-08-22)
 
 ### Features
