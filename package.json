@@ -22,8 +22,9 @@
   },
   "engines": {
     "node": ">=18.0.0",
-    "npm": ">=9.0.0"
+    "pnpm": ">=8.0.0"
   },
+  "packageManager": "pnpm@10.14.0",
   "dependencies": {
     "@octokit/rest": "^22.0.0",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -100,14 +101,14 @@
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist *.log *.tgz",
     "prepare": "husky",
-    "deploy": "npm run build:github && mv dist docs",
-    "deploy:preview": "npm run build && npm run preview"
+    "deploy": "pnpm run build:github && mv dist docs",
+    "deploy:preview": "pnpm run build && pnpm run preview"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write",
-      "npm run test"
+      "pnpm run test"
     ],
     "*.{json,md}": [
       "prettier --write"
