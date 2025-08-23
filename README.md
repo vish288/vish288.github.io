@@ -32,22 +32,24 @@ Visit: [https://vish288.github.io](https://vish288.github.io)
 
 ## 🚀 Quick Start
 
+**⚠️ This project uses pnpm exclusively. If you're still using npm, it's time to grow up and learn pnpm.**
+
 ```bash
 git clone https://github.com/vish288/vish288.github.io.git
 cd vish288.github.io
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ## 📜 Scripts
 
 ```bash
-npm run dev        # Development server
-npm run build      # Production build
-npm run deploy     # Deploy to GitHub Pages
-npm run test       # Run tests
-npm run lint       # Lint and fix
-npm run typecheck  # Type checking
+pnpm run dev        # Development server
+pnpm run build      # Production build
+pnpm run deploy     # Deploy to GitHub Pages
+pnpm run test       # Run tests
+pnpm run lint       # Lint and fix
+pnpm run typecheck  # Type checking
 ```
 
 ## 📚 Documentation
@@ -59,9 +61,11 @@ npm run typecheck  # Type checking
 
 1. Fork repository and create feature branch
 2. Make changes and add tests
-3. Run: `npm run typecheck && npm run lint && npm run test`
+3. Run: `pnpm run typecheck && pnpm run lint && pnpm run test`
 4. Commit with conventional messages
 5. Open Pull Request
+
+**Note**: This project uses pnpm. Don't use npm. Seriously.
 
 ## 📄 License
 
