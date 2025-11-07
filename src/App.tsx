@@ -32,7 +32,7 @@ function Navigation() {
         <div className='flex h-16 items-center justify-between'>
           {/* Logo */}
           <Link to='/' className='flex items-center space-x-2'>
-            <div className='h-8 w-8 rounded-full bg-gradient-to-r from-primary to-emerald-600 flex items-center justify-center'>
+            <div className='h-8 w-8 rounded-full bg-gradient-to-r from-primary via-accent to-secondary flex items-center justify-center'>
               <span className='text-white font-bold text-sm'>VS</span>
             </div>
             <span className='font-bold text-xl'>{APP_STRINGS.FULL_NAME}</span>

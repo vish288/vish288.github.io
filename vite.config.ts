@@ -15,8 +15,8 @@ export default defineConfig({
         name: 'Visweshwaran S - Personal Portfolio',
         short_name: 'Vish288',
         description: 'Personal website and portfolio of Visweshwaran S - Full Stack Developer',
-        theme_color: '#4a6b4a',
-        background_color: '#ffffff',
+        theme_color: '#56B4E9',
+        background_color: '#F7FAFC',
         display: 'standalone',
         icons: [
           {
