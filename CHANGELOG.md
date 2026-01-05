@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.6.0...vish288-personal-website-v2.6.1) (2026-01-05)
+
+
+### Bug Fixes
+
+* update security-settings ([edef6af](https://github.com/vish288/vish288.github.io/commit/edef6afa2b320980ad5b8d54483dcc20577b127a))
+
 ## [2.6.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.5.0...vish288-personal-website-v2.6.0) (2026-01-05)
 
 ### Features
