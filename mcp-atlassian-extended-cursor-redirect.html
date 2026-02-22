@@ -3,7 +3,26 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Connect Atlassian Extended to top MCP clients</title>
+    
+    <!-- SEO & Metadata -->
+    <title>Connect Atlassian Extended MCP Server | Installation Guide</title>
+    <meta name="description" content="One-click redirect and installation guide to connect the mcp-atlassian-extended MCP server to Cursor, VS Code, Claude Code, Windsurf, and IntelliJ. Supports Jira custom fields, agile boards, sprint capacity, Confluence calendars.">
+    <meta name="robots" content="index,follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Connect Atlassian Extended MCP Server">
+    <meta property="og:description" content="One-click redirect and installation guide to connect the mcp-atlassian-extended MCP server to your favorite AI coding clients.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vish288.github.io/mcp-atlassian-extended-cursor-redirect.html">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Connect Atlassian Extended MCP Server">
+    <meta name="twitter:description" content="Install the mcp-atlassian-extended MCP server in Cursor, VS Code, Claude Code, Windsurf, and IntelliJ.">
+    
+    <!-- Canonical Link -->
+    <link rel="canonical" href="https://vish288.github.io/mcp-atlassian-extended-cursor-redirect.html">
+    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         
@@ -28,14 +47,22 @@
             padding: 0;
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         
+        /* Header */
         .nav {
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 16px 32px;
             border-bottom: 1px solid var(--border-color);
+            background: #fff;
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
         
         .nav-logo {
@@ -44,12 +71,16 @@
             letter-spacing: -0.02em;
             text-decoration: none;
             color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
         
         .nav-links {
             display: flex;
             gap: 24px;
             font-size: 0.95rem;
+            align-items: center;
         }
         
         .nav-links a {
@@ -60,6 +91,11 @@
         
         .nav-links a:hover {
             color: var(--text-main);
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
         }
         
         .container {
@@ -95,6 +131,7 @@
             border-bottom: 1px solid var(--border-color);
         }
         
+        /* Grid & Cards */
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -195,6 +232,44 @@
             height: 16px;
         }
         
+        /* Footer */
+        .footer {
+            border-top: 1px solid var(--border-color);
+            padding: 48px 32px;
+            background: #fff;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+        
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--text-main);
+        }
+        
+        .footer-copy {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+        }
+        
         /* Modal */
         .modal-overlay {
             position: fixed;
@@ -284,91 +359,102 @@
 </head>
 <body>
 
-    <nav class="nav">
-        <a href="#" class="nav-logo">MCP Catalog</a>
+    <!-- Header -->
+    <header class="nav">
+        <a href="https://vish288.github.io/" class="nav-logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L22 7V17L12 22L2 17V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            MCP Catalog
+        </a>
         <div class="nav-links">
+            <select onchange="if(this.value) window.location.href=this.value" style="background:#fff;border:1px solid var(--border-color);color:var(--text-main);border-radius:6px;padding:6px 12px;font-size:0.95rem;cursor:pointer;outline:none;">
+                <option value="">Switch Server...</option>
+                <option value="/mcp-gitlab-cursor-redirect.html" >GitLab</option>
+                <option value="/mcp-atlassian-extended-cursor-redirect.html" selected>Atlassian Extended</option>
+            </select>
             <a href="https://github.com/vish288/mcp-atlassian-extended">GitHub</a>
             <a href="https://pypi.org/project/mcp-atlassian-extended">PyPI</a>
         </div>
-    </nav>
+    </header>
 
-    <div class="container">
-        <div class="hero">
-            <p style="color:var(--text-tertiary);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;font-size:0.85rem;">MCP Client Tools</p>
-            <h1>Connect Atlassian Extended to top MCP clients</h1>
-            <p>However you like to code, the <strong>mcp-atlassian-extended</strong> server adds Atlassian Extended context to your favorite agentic tools.</p>
-        </div>
-        
-        <h2 class="section-title">MCP clients</h2>
-        
-        <div class="grid">
-            <!-- VS Code -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 4.3l-10.7 10L3.9 11.4l-1.5 1.5 4.4 4.4L19 5.8 17.5 4.3z" fill="#0078D7"/><path d="M19 5.8l2.6 2.4-1.5 1.6-1.1-1-10.7 10 10.7 10 1.1-1 1.5 1.6-2.6 2.4L5.2 17.6l-3.8 3.5-1.5-1.5 5.3-5L0 9.6l1.5-1.5 3.8 3.5L19 5.8z" fill="#23A9F2"/></svg>
-                    </div>
-                    <h3 class="card-title">VS Code</h3>
-                </div>
-                <ul class="card-list">
-                    <li>Supports Jira custom fields, agile boards, sprint capacity, Confluence calendars</li>
-                    <li>Prompts for API tokens interactively</li>
-                </ul>
-                <a href="https://insiders.vscode.dev/redirect/mcp/install?name=mcp-atlassian-extended&inputs=%5B%7B%22id%22%3A%22jira-url%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22Jira%20URL%22%2C%22default%22%3A%22https%3A//your-company.atlassian.net%22%7D%2C%7B%22id%22%3A%22jira-username%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22Jira%20Username%20/%20Email%22%7D%2C%7B%22id%22%3A%22jira-api-token%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22Jira%20API%20Token%22%2C%22password%22%3Atrue%7D%5D&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-atlassian-extended%22%5D%2C%22env%22%3A%7B%22JIRA_URL%22%3A%22%24%7Binput%3Ajira-url%7D%22%2C%22JIRA_USERNAME%22%3A%22%24%7Binput%3Ajira-username%7D%22%2C%22JIRA_API_TOKEN%22%3A%22%24%7Binput%3Ajira-api-token%7D%22%7D%7D" class="card-action">
-                    Add MCP to VS Code 
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="hero">
+                <p style="color:var(--text-tertiary);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;font-size:0.85rem;">MCP Client Tools</p>
+                <h1>Connect Atlassian Extended to top MCP clients</h1>
+                <p>However you like to code, the <strong>mcp-atlassian-extended</strong> server adds Atlassian Extended context to your favorite agentic tools.</p>
             </div>
-
-            <!-- Cursor -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon" style="background:#000;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 15l10-10 4 14-4-2-4 4-6-16z" fill="#fff" stroke="#000" stroke-width="2" stroke-linejoin="round"/></svg>
+            
+            <h2 class="section-title">MCP clients</h2>
+            
+            <div class="grid">
+                <!-- VS Code -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 4.3l-10.7 10L3.9 11.4l-1.5 1.5 4.4 4.4L19 5.8 17.5 4.3z" fill="#0078D7"/><path d="M19 5.8l2.6 2.4-1.5 1.6-1.1-1-10.7 10 10.7 10 1.1-1 1.5 1.6-2.6 2.4L5.2 17.6l-3.8 3.5-1.5-1.5 5.3-5L0 9.6l1.5-1.5 3.8 3.5L19 5.8z" fill="#23A9F2"/></svg>
+                        </div>
+                        <h3 class="card-title">VS Code</h3>
                     </div>
-                    <h3 class="card-title">Cursor</h3>
+                    <ul class="card-list">
+                        <li>Supports Jira custom fields, agile boards, sprint capacity, Confluence calendars</li>
+                        <li>Prompts for API tokens interactively</li>
+                    </ul>
+                    <a href="https://insiders.vscode.dev/redirect/mcp/install?name=mcp-atlassian-extended&inputs=%5B%7B%22id%22%3A%22jira-url%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22Jira%20URL%22%2C%22default%22%3A%22https%3A//your-company.atlassian.net%22%7D%2C%7B%22id%22%3A%22jira-username%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22Jira%20Username%20/%20Email%22%7D%2C%7B%22id%22%3A%22jira-api-token%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22Jira%20API%20Token%22%2C%22password%22%3Atrue%7D%5D&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-atlassian-extended%22%5D%2C%22env%22%3A%7B%22JIRA_URL%22%3A%22%24%7Binput%3Ajira-url%7D%22%2C%22JIRA_USERNAME%22%3A%22%24%7Binput%3Ajira-username%7D%22%2C%22JIRA_API_TOKEN%22%3A%22%24%7Binput%3Ajira-api-token%7D%22%7D%7D" class="card-action">
+                        Add MCP to VS Code 
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
                 </div>
-                <ul class="card-list">
-                    <li>Supports Jira custom fields, agile boards, sprint capacity, Confluence calendars</li>
-                    <li>One-click auto-configuration</li>
-                </ul>
-                <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-atlassian-extended&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtYXRsYXNzaWFuLWV4dGVuZGVkIl0sImVudiI6eyJKSVJBX1VSTCI6Imh0dHBzOi8veW91ci1jb21wYW55LmF0bGFzc2lhbi5uZXQiLCJKSVJBX1VTRVJOQU1FIjoieW91ci5lbWFpbEBjb21wYW55LmNvbSIsIkpJUkFfQVBJX1RPS0VOIjoieW91ci10b2tlbiJ9fQ==" class="card-action">
-                    Add MCP to Cursor
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </a>
-            </div>
 
-            <!-- Claude Code -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon" style="background:#d97757;">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#fff"/></svg>
+                <!-- Cursor -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background:#000;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 15l10-10 4 14-4-2-4 4-6-16z" fill="#fff" stroke="#000" stroke-width="2" stroke-linejoin="round"/></svg>
+                        </div>
+                        <h3 class="card-title">Cursor</h3>
                     </div>
-                    <h3 class="card-title">Claude Code</h3>
+                    <ul class="card-list">
+                        <li>Supports Jira custom fields, agile boards, sprint capacity, Confluence calendars</li>
+                        <li>One-click auto-configuration</li>
+                    </ul>
+                    <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-atlassian-extended&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtYXRsYXNzaWFuLWV4dGVuZGVkIl0sImVudiI6eyJKSVJBX1VSTCI6Imh0dHBzOi8veW91ci1jb21wYW55LmF0bGFzc2lhbi5uZXQiLCJKSVJBX1VTRVJOQU1FIjoieW91ci5lbWFpbEBjb21wYW55LmNvbSIsIkpJUkFfQVBJX1RPS0VOIjoieW91ci10b2tlbiJ9fQ==" class="card-action">
+                        Add MCP to Cursor
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </a>
                 </div>
-                <ul class="card-list">
-                    <li>CLI agent for Claude 3.7 Sonnet</li>
-                    <li>Local server via `claude mcp add`</li>
-                </ul>
-                <button class="card-action" onclick="showModal('Atlassian Extended for Claude Code', 'claude mcp add atlassian-extended -- uvx mcp-atlassian-extended', 'Run this command in your terminal:')">
-                    View install guide
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-            </div>
 
-            <!-- Windsurf -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon" style="background:#0ea5e9;">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L2 12h3v8h14v-8h3L12 3z" fill="#fff"/></svg>
+                <!-- Claude Code -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background:#d97757;">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#fff"/></svg>
+                        </div>
+                        <h3 class="card-title">Claude Code</h3>
                     </div>
-                    <h3 class="card-title">Windsurf</h3>
+                    <ul class="card-list">
+                        <li>CLI agent for Claude 3.7 Sonnet</li>
+                        <li>Local server via `claude mcp add`</li>
+                    </ul>
+                    <button class="card-action" onclick="showModal('Atlassian Extended for Claude Code', 'claude mcp add atlassian-extended -- uvx mcp-atlassian-extended', 'Run this command in your terminal:')">
+                        View install guide
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
                 </div>
-                <ul class="card-list">
-                    <li>Supports Jira custom fields, agile boards, sprint capacity, Confluence calendars</li>
-                    <li>Update `mcp_config.json`</li>
-                </ul>
-                <button class="card-action" onclick="showModal('Atlassian Extended for Windsurf', `{
+
+                <!-- Windsurf -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background:#0ea5e9;">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L2 12h3v8h14v-8h3L12 3z" fill="#fff"/></svg>
+                        </div>
+                        <h3 class="card-title">Windsurf</h3>
+                    </div>
+                    <ul class="card-list">
+                        <li>Supports Jira custom fields, agile boards, sprint capacity, Confluence calendars</li>
+                        <li>Update `mcp_config.json`</li>
+                    </ul>
+                    <button class="card-action" onclick="showModal('Atlassian Extended for Windsurf', `{
   "mcpServers": {
     "atlassian-extended": {
       "command": "uvx",
@@ -384,24 +470,24 @@
     }
   }
 }`, 'Add this to ~/.codeium/windsurf/mcp_config.json:')">
-                    View install guide
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-            </div>
-
-            <!-- IntelliJ -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon" style="background:#000;">
-                        <span style="color:#fff;font-weight:bold;font-size:1.2rem;">IJ</span>
-                    </div>
-                    <h3 class="card-title">IntelliJ IDEA</h3>
+                        View install guide
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
                 </div>
-                <ul class="card-list">
-                    <li>Supports Jira custom fields, agile boards, sprint capacity, Confluence calendars</li>
-                    <li>Built-in MCP settings integration</li>
-                </ul>
-                <button class="card-action" onclick="showModal('Atlassian Extended for IntelliJ', `{
+
+                <!-- IntelliJ -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background:#000;">
+                            <span style="color:#fff;font-weight:bold;font-size:1.2rem;">IJ</span>
+                        </div>
+                        <h3 class="card-title">IntelliJ IDEA</h3>
+                    </div>
+                    <ul class="card-list">
+                        <li>Supports Jira custom fields, agile boards, sprint capacity, Confluence calendars</li>
+                        <li>Built-in MCP settings integration</li>
+                    </ul>
+                    <button class="card-action" onclick="showModal('Atlassian Extended for IntelliJ', `{
   "mcpServers": {
     "atlassian-extended": {
       "command": "uvx",
@@ -417,24 +503,24 @@
     }
   }
 }`, 'Add this to Settings | Tools | MCP Servers:')">
-                    View install guide
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
-            </div>
-
-            <!-- Claude Desktop -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon" style="background:#d97757;">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#fff"/></svg>
-                    </div>
-                    <h3 class="card-title">Claude Desktop</h3>
+                        View install guide
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
                 </div>
-                <ul class="card-list">
-                    <li>Supports Jira custom fields, agile boards, sprint capacity, Confluence calendars</li>
-                    <li>Update `claude_desktop_config.json`</li>
-                </ul>
-                <button class="card-action" onclick="showModal('Atlassian Extended for Claude', `{
+
+                <!-- Claude Desktop -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background:#d97757;">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#fff"/></svg>
+                        </div>
+                        <h3 class="card-title">Claude Desktop</h3>
+                    </div>
+                    <ul class="card-list">
+                        <li>Supports Jira custom fields, agile boards, sprint capacity, Confluence calendars</li>
+                        <li>Update `claude_desktop_config.json`</li>
+                    </ul>
+                    <button class="card-action" onclick="showModal('Atlassian Extended for Claude', `{
   "mcpServers": {
     "atlassian-extended": {
       "command": "uvx",
@@ -450,13 +536,28 @@
     }
   }
 }`, 'Add this to your Claude Desktop config file:')">
-                    View install guide
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-                </button>
+                        View install guide
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+                
             </div>
-            
         </div>
-    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-copy">
+                &copy; 2026 vish288. Open source under MIT License.
+            </div>
+            <div class="footer-links">
+                <a href="https://github.com/vish288/mcp-atlassian-extended">Repository</a>
+                <a href="https://github.com/vish288/mcp-atlassian-extended/issues">Report an issue</a>
+                <a href="https://pypi.org/project/mcp-atlassian-extended/">PyPI Package</a>
+            </div>
+        </div>
+    </footer>
 
     <!-- Modal -->
     <div id="modal-overlay" class="modal-overlay" onclick="if(event.target === this) closeModal()">
@@ -474,7 +575,12 @@
         </div>
     </div>
 
+    <!-- Background redirect for initial load (optional velvet-rope) -->
     <script>
+        // Only trigger automatic redirect if there's a specific hash or we want it by default
+        // The previous design auto-redirected. If we want to keep that:
+        // setTimeout(function(){ window.location.href = "cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-atlassian-extended&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtYXRsYXNzaWFuLWV4dGVuZGVkIl0sImVudiI6eyJKSVJBX1VSTCI6Imh0dHBzOi8veW91ci1jb21wYW55LmF0bGFzc2lhbi5uZXQiLCJKSVJBX1VTRVJOQU1FIjoieW91ci5lbWFpbEBjb21wYW55LmNvbSIsIkpJUkFfQVBJX1RPS0VOIjoieW91ci10b2tlbiJ9fQ=="; }, 500);
+
         const modalOverlay = document.getElementById('modal-overlay');
         const modalTitle = document.getElementById('modal-title');
         const modalDesc = document.getElementById('modal-desc');
