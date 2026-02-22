@@ -4,36 +4,52 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Install mcp-atlassian-extended in Cursor</title>
-    <meta name="description" content="One-click redirect page to install this MCP server in Cursor.">
+    <meta name="description" content="One-click redirect page to install mcp-atlassian-extended in Cursor.">
     <meta name="robots" content="index,follow">
     <meta property="og:title" content="Install mcp-atlassian-extended in Cursor">
-    <meta property="og:description" content="Open Cursor and install this MCP server in one click.">
+    <meta property="og:description" content="Open Cursor and install mcp-atlassian-extended in one click.">
     <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="canonical" href="https://vish288.github.io/mcp-atlassian-extended-cursor-redirect.html">
   </head>
-  <body style="margin:0;background:#0b1020;color:#e5e7eb;font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;">
-    <header style="border-bottom:1px solid rgba(148,163,184,.25);background:rgba(2,6,23,.7);backdrop-filter: blur(6px);">
-      <div style="max-width:860px;margin:0 auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;gap:16px;">
-        <div style="font-weight:600;letter-spacing:.2px;">Cursor MCP Gateway</div>
-        <nav style="display:flex;gap:14px;font-size:14px;">
-          <a href="/mcp-gitlab-cursor-redirect.html" style="color:#93c5fd;text-decoration:none;">Explore: mcp-gitlab</a>
-        </nav>
+  <body style="margin:0;min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(1200px 500px at 20% -5%,#1e293b 0%,#0f172a 45%,#020617 100%);color:#e2e8f0;font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;">
+    <header style="position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(148,163,184,.22);background:rgba(2,6,23,.68);backdrop-filter: blur(8px);">
+      <div style="max-width:980px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+        <div style="font-weight:700;letter-spacing:.2px;color:#f8fafc;">MCP Gateway</div>
+        <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#94a3b8;">
+          Servers
+          <select onchange="if(this.value) window.location.href=this.value" style="background:#0b1220;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:7px 10px;font-size:13px;">
+            <option value="">Select server</option>
+            <option value="/mcp-atlassian-extended-cursor-redirect.html" selected>mcp-atlassian-extended</option>
+            <option value="/mcp-gitlab-cursor-redirect.html">mcp-gitlab</option>
+            <option value="" disabled>More coming soon</option>
+          </select>
+        </label>
       </div>
     </header>
 
-    <main style="max-width:860px;margin:0 auto;padding:44px 20px;">
-      <section style="background:linear-gradient(180deg,rgba(30,41,59,.55),rgba(15,23,42,.55));border:1px solid rgba(148,163,184,.2);border-radius:16px;padding:28px;box-shadow:0 12px 28px rgba(0,0,0,.28);">
-        <p style="margin:0 0 8px;color:#93c5fd;font-size:13px;letter-spacing:.12em;text-transform:uppercase;">One-click install</p>
-        <h1 style="margin:0 0 10px;font-size:32px;line-height:1.2;color:#f8fafc;">Install mcp-atlassian-extended</h1>
-        <p style="margin:0 0 14px;color:#cbd5e1;">A polished handoff page for one-click Cursor installation.</p>
-        <p style="margin:0 0 24px;color:#94a3b8;font-style:italic;">Think of this page as the maître d'—it checks your reservation, then escorts your MCP to the right table.</p>
+    <main style="flex:1;display:flex;align-items:center;">
+      <section style="max-width:980px;width:100%;margin:0 auto;padding:30px 22px;">
+        <div style="border:1px solid rgba(148,163,184,.22);border-radius:16px;background:linear-gradient(180deg,rgba(15,23,42,.72),rgba(2,6,23,.74));box-shadow:0 18px 50px rgba(0,0,0,.35);padding:26px;">
+          <p style="margin:0 0 18px;color:#a5b4fc;font-size:13px;letter-spacing:.12em;text-transform:uppercase;">One-click install</p>
 
-        <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-atlassian-extended&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtYXRsYXNzaWFuLWV4dGVuZGVkIl0sImVudiI6eyJKSVJBX1VSTCI6Imh0dHBzOi8veW91ci1jb21wYW55LmF0bGFzc2lhbi5uZXQiLCJKSVJBX1VTRVJOQU1FIjoieW91ci5lbWFpbEBjb21wYW55LmNvbSIsIkpJUkFfQVBJX1RPS0VOIjoieW91ci10b2tlbiJ9fQ==" style="display:inline-block;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:600;">Install in Cursor</a>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;">
+            <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-atlassian-extended&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtYXRsYXNzaWFuLWV4dGVuZGVkIl0sImVudiI6eyJKSVJBX1VSTCI6Imh0dHBzOi8veW91ci1jb21wYW55LmF0bGFzc2lhbi5uZXQiLCJKSVJBX1VTRVJOQU1FIjoieW91ci5lbWFpbEBjb21wYW55LmNvbSIsIkpJUkFfQVBJX1RPS0VOIjoieW91ci10b2tlbiJ9fQ==" style="display:inline-flex;align-items:center;gap:8px;background:#111827;border:1px solid #374151;color:#fff;text-decoration:none;padding:11px 14px;border-radius:10px;font-weight:600;box-shadow:0 1px 0 rgba(255,255,255,.04) inset;">Install in Cursor</a>
+            <span style="display:inline-block;background:#1e293b;border:1px solid #475569;color:#bfdbfe;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:600;">mcp-atlassian-extended</span>
+          </div>
 
-        <p style="margin:16px 0 0;color:#94a3b8;font-size:14px;">If your browser blocks automatic app launch, use the button above.</p>
+          <p style="margin:16px 0 0;color:#94a3b8;">Velvet-rope update: this page checks the guest list, then fast-tracks your MCP straight to Cursor before anyone starts small talk.</p>
+          <p style="margin:10px 0 0;color:#64748b;font-size:14px;">If your browser blocks automatic app launch, click the install button above.</p>
+        </div>
       </section>
     </main>
+
+    <footer style="border-top:1px solid rgba(148,163,184,.2);padding:14px 22px;color:#64748b;font-size:13px;">
+      <div style="max-width:980px;margin:0 auto;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+        <span>vish288.github.io</span>
+        <span>MCP install gateway</span>
+      </div>
+    </footer>
 
     <script>setTimeout(function(){window.location.href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-atlassian-extended&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtYXRsYXNzaWFuLWV4dGVuZGVkIl0sImVudiI6eyJKSVJBX1VSTCI6Imh0dHBzOi8veW91ci1jb21wYW55LmF0bGFzc2lhbi5uZXQiLCJKSVJBX1VTRVJOQU1FIjoieW91ci5lbWFpbEBjb21wYW55LmNvbSIsIkpJUkFfQVBJX1RPS0VOIjoieW91ci10b2tlbiJ9fQ==";},180);</script>
   </body>
