@@ -1,56 +1,609 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Install mcp-gitlab in Cursor</title>
-    <meta name="description" content="One-click redirect page to install mcp-gitlab in Cursor.">
-    <meta name="robots" content="index,follow">
-    <meta property="og:title" content="Install mcp-gitlab in Cursor">
-    <meta property="og:description" content="Open Cursor and install mcp-gitlab in one click.">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <link rel="canonical" href="https://vish288.github.io/mcp-gitlab-cursor-redirect.html">
-  </head>
-  <body style="margin:0;min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(1200px 500px at 20% -5%,#1e293b 0%,#0f172a 45%,#020617 100%);color:#e2e8f0;font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;">
-    <header style="position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(148,163,184,.22);background:rgba(2,6,23,.68);backdrop-filter: blur(8px);">
-      <div style="max-width:980px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
-        <div style="font-weight:700;letter-spacing:.2px;color:#f8fafc;">MCP Gateway</div>
-        <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#94a3b8;">
-          Servers
-          <select onchange="if(this.value) window.location.href=this.value" style="background:#0b1220;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:7px 10px;font-size:13px;">
-            <option value="">Select server</option>
-            <option value="/mcp-gitlab-cursor-redirect.html" selected>mcp-gitlab</option>
-            <option value="/mcp-atlassian-extended-cursor-redirect.html">mcp-atlassian-extended</option>
-            <option value="" disabled>More coming soon</option>
-          </select>
-        </label>
-      </div>
-    </header>
-
-    <main style="flex:1;display:flex;align-items:center;">
-      <section style="max-width:980px;width:100%;margin:0 auto;padding:30px 22px;">
-        <div style="border:1px solid rgba(148,163,184,.22);border-radius:16px;background:linear-gradient(180deg,rgba(15,23,42,.72),rgba(2,6,23,.74));box-shadow:0 18px 50px rgba(0,0,0,.35);padding:26px;">
-          <p style="margin:0 0 18px;color:#a5b4fc;font-size:13px;letter-spacing:.12em;text-transform:uppercase;">One-click install</p>
-
-          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;">
-            <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-gitlab&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtZ2l0bGFiIl0sImVudiI6eyJHSVRMQUJfVVJMIjoiaHR0cHM6Ly9naXRsYWIuZXhhbXBsZS5jb20iLCJHSVRMQUJfVE9LRU4iOiJ5b3VyLXRva2VuIn19" style="display:inline-flex;align-items:center;gap:8px;background:#111827;border:1px solid #374151;color:#fff;text-decoration:none;padding:11px 14px;border-radius:10px;font-weight:600;box-shadow:0 1px 0 rgba(255,255,255,.04) inset;">Install in Cursor</a>
-            <span style="display:inline-block;background:#1e293b;border:1px solid #475569;color:#bfdbfe;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:600;">mcp-gitlab</span>
-          </div>
-
-          <p style="margin:16px 0 0;color:#94a3b8;">Velvet-rope update: this page checks the guest list, then fast-tracks your MCP straight to Cursor before anyone starts small talk.</p>
-          <p style="margin:10px 0 0;color:#64748b;font-size:14px;">If your browser blocks automatic app launch, click the install button above.</p>
+    <title>mcp-gitlab · PyPI / Cursor Install</title>
+    <style>
+        :root {
+            --pypi-blue: #006dad;
+            --pypi-light-blue: #2188db;
+            --pypi-dark-blue: #005082;
+            --pypi-text: #333333;
+            --pypi-bg: #ffffff;
+            --pypi-gray: #f2f2f2;
+            --pypi-border: #e5e5e5;
+            --cursor-bg: #111827;
+            --cursor-hover: #1f2937;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            color: var(--pypi-text);
+            background: var(--pypi-bg);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .banner {
+            background: var(--pypi-bg);
+            border-bottom: 1px solid var(--pypi-border);
+            padding: 20px 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--pypi-border);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .project-title {
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 700;
+        }
+        .project-version {
+            font-weight: 400;
+            color: #666;
+        }
+        .install-box {
+            background: var(--pypi-gray);
+            border: 1px solid var(--pypi-border);
+            border-radius: 4px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 300px;
+        }
+        .pip-command {
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            background: #fff;
+            border: 1px solid var(--pypi-border);
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .cursor-button {
+            background: var(--cursor-bg);
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        .cursor-button:hover {
+            background: var(--cursor-hover);
+        }
+        .main-layout {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+        }
+        .sidebar {
+            width: 250px;
+            flex-shrink: 0;
+        }
+        .content {
+            flex-grow: 1;
+            max-width: 700px;
+        }
+        .sidebar h3 {
+            border-bottom: 1px solid var(--pypi-border);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            color: var(--pypi-dark-blue);
+            font-size: 1.1rem;
+        }
+        .meta-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+            font-size: 0.9rem;
+        }
+        .meta-list li {
+            margin-bottom: 10px;
+        }
+        .meta-list a {
+            color: var(--pypi-blue);
+            text-decoration: none;
+        }
+        .meta-list a:hover {
+            text-decoration: underline;
+        }
+        .readme-content img {
+            max-width: 100%;
+        }
+        .readme-content pre {
+            background: #f8f9fa;
+            border: 1px solid #eaecf0;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
+        }
+        .readme-content code {
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
+        }
+        .readme-content pre code {
+            background: transparent;
+            padding: 0;
+        }
+        .readme-content table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .readme-content th, .readme-content td {
+            border: 1px solid var(--pypi-border);
+            padding: 8px 12px;
+            text-align: left;
+        }
+        .readme-content th {
+            background: #f8f9fa;
+        }
+        /* Redirect overlay */
+        #redirect-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: #2563eb;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            z-height: 1000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="redirect-overlay">Redirecting to Cursor... If nothing happens, click "Install in Cursor" below.</div>
+    <div class="banner">
+        <div class="container">
+            <h1 class="project-title">mcp-gitlab <span class="project-version">0.2.1</span></h1>
+            <p style="margin: 5px 0 0 0; color: #666; font-size: 1.1rem;">MCP server for GitLab API — projects, MRs, pipelines, CI/CD variables, approvals, and more</p>
         </div>
-      </section>
-    </main>
+    </div>
+    
+    <div class="container main-layout">
+        <div class="sidebar">
+            <div class="install-box">
+                <div>
+                    <div style="font-size:0.8rem; font-weight:bold; color:#666; margin-bottom:5px;">PIP INSTRUCTIONS</div>
+                    <div class="pip-command">pip install mcp-gitlab</div>
+                </div>
+                <div>
+                    <div style="font-size:0.8rem; font-weight:bold; color:#666; margin-bottom:5px;">CURSOR INSTRUCTIONS</div>
+                    <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-gitlab&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtZ2l0bGFiIl0sImVudiI6eyJHSVRMQUJfVVJMIjoiaHR0cHM6Ly9naXRsYWIuZXhhbXBsZS5jb20iLCJHSVRMQUJfVE9LRU4iOiJ5b3VyLXRva2VuIn19" class="cursor-button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M12 2L20 12M12 2L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Install in Cursor
+                    </a>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 30px;">Project links</h3>
+            <ul class="meta-list">
+                <li><a href="https://pypi.org/project/mcp-gitlab/">Homepage</a></li>
+                <li><a href="https://pypi.org/project/mcp-gitlab//issues">Issues</a></li>
+            </ul>
+            
+            <h3>Meta</h3>
+            <ul class="meta-list">
+                <li><strong>License:</strong> MIT</li>
+                <li><strong>Author:</strong> vish288</li>
+                <li><strong>Requires:</strong> Python &gt;=3.10</li>
+            </ul>
+        </div>
+        
+        <div class="content readme-content">
+            <h1>mcp-gitlab</h1>
+<p><a href="https://pypi.org/project/mcp-gitlab/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/mcp-gitlab" /></a>
+<a href="https://pypi.org/project/mcp-gitlab/"><img alt="PyPI downloads" src="https://img.shields.io/pypi/dm/mcp-gitlab" /></a>
+<a href="https://pypi.org/project/mcp-gitlab/"><img alt="Python" src="https://img.shields.io/pypi/pyversions/mcp-gitlab" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+<a href="https://github.com/vish288/mcp-gitlab/actions/workflows/tests.yml"><img alt="CI" src="https://github.com/vish288/mcp-gitlab/actions/workflows/tests.yml/badge.svg" /></a></p>
+<p><strong>mcp-gitlab</strong> is a <a href="https://modelcontextprotocol.io/">Model Context Protocol (MCP)</a> server for the GitLab REST API that provides <strong>76 tools</strong> for AI assistants to manage projects, merge requests, pipelines, CI/CD variables, approvals, issues, code reviews, and more. Works with Claude Desktop, Claude Code, Cursor, Windsurf, VS Code Copilot, and any MCP-compatible client.</p>
+<p>Built with <a href="https://github.com/jlowin/fastmcp">FastMCP</a>, <a href="https://www.python-httpx.org/">httpx</a>, and <a href="https://docs.pydantic.dev/">Pydantic</a>.</p>
+<h2>Quick Install</h2>
+<blockquote>
+<p>Prerequisite: Install <code>uv</code> first (required for all <code>uvx</code> install flows, including one-click Cursor/VS Code buttons). <a href="https://docs.astral.sh/uv/getting-started/installation/">Install uv</a>.</p>
+</blockquote>
+<h3>Cursor</h3>
+<p><a href="https://vish288.github.io/mcp-gitlab-cursor-redirect.html"><img alt="Install MCP Server" src="https://cursor.com/deeplink/mcp-install-dark.svg" /></a></p>
+<h3>Claude Code</h3>
+<pre><code class="language-bash">claude mcp add gitlab -- uvx mcp-gitlab
+</code></pre>
+<h3>VS Code</h3>
+<p><a href="https://insiders.vscode.dev/redirect/mcp/install?name=mcp-gitlab&amp;config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-gitlab%22%5D%2C%22env%22%3A%7B%22GITLAB_URL%22%3A%22%24%7Binput%3Agitlab-url%7D%22%2C%22GITLAB_TOKEN%22%3A%22%24%7Binput%3Agitlab-token%7D%22%7D%7D&amp;image=https://cdn.simpleicons.org/gitlab/FC6D26&amp;logo=https://cdn.simpleicons.org/gitlab/FC6D26"><img alt="Install in VS Code" src="https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&amp;logo=visualstudiocode&amp;logoColor=white" /></a> <a href="https://insiders.vscode.dev/redirect/mcp/install?name=mcp-gitlab&amp;config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-gitlab%22%5D%2C%22env%22%3A%7B%22GITLAB_URL%22%3A%22%24%7Binput%3Agitlab-url%7D%22%2C%22GITLAB_TOKEN%22%3A%22%24%7Binput%3Agitlab-token%7D%22%7D%7D&amp;quality=insiders&amp;image=https://cdn.simpleicons.org/gitlab/FC6D26&amp;logo=https://cdn.simpleicons.org/gitlab/FC6D26"><img alt="Install in VS Code Insiders" src="https://img.shields.io/badge/VS_Code_Insiders-Install_Server-24bfa5?style=flat-square&amp;logo=visualstudiocode&amp;logoColor=white" /></a></p>
+<h3>Windsurf &amp; IntelliJ</h3>
+<p><strong>Windsurf:</strong> Add to <code>~/.codeium/windsurf/mcp_config.json</code>
+<strong>IntelliJ:</strong> Add to <code>Settings | Tools | MCP Servers</code></p>
+<blockquote>
+<p><strong>Note:</strong> The actual server config starts at <code>gitlab</code> inside the <code>mcpServers</code> object.</p>
+</blockquote>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    ...
+    &quot;gitlab&quot;: {
+      &quot;command&quot;: &quot;uvx&quot;,
+      &quot;args&quot;: [&quot;mcp-gitlab&quot;],
+      &quot;env&quot;: {
+        &quot;GITLAB_URL&quot;: &quot;https://gitlab.example.com&quot;,
+        &quot;GITLAB_TOKEN&quot;: &quot;glpat-xxxxxxxxxxxxxxxxxxxx&quot;
+      }
+    },
+    ...
+  }
+}
+</code></pre>
+<h3>pip / uv</h3>
+<pre><code class="language-bash">uv pip install mcp-gitlab
+</code></pre>
+<h2>Configuration</h2>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GITLAB_URL</code></td>
+<td>Yes</td>
+<td>GitLab instance URL (e.g. <code>https://gitlab.example.com</code>)</td>
+</tr>
+<tr>
+<td><code>GITLAB_TOKEN</code></td>
+<td>Yes</td>
+<td>Authentication token (see below)</td>
+</tr>
+<tr>
+<td><code>GITLAB_READ_ONLY</code></td>
+<td>No</td>
+<td>Set to <code>true</code> to disable write operations</td>
+</tr>
+<tr>
+<td><code>GITLAB_TIMEOUT</code></td>
+<td>No</td>
+<td>Request timeout in seconds (default: 30)</td>
+</tr>
+<tr>
+<td><code>GITLAB_SSL_VERIFY</code></td>
+<td>No</td>
+<td>Set to <code>false</code> to skip SSL verification</td>
+</tr>
+</tbody>
+</table>
+<h3>Supported Token Types</h3>
+<p><code>GITLAB_TOKEN</code> (or <code>GITLAB_PAT</code>) accepts any of these:</p>
+<table>
+<thead>
+<tr>
+<th>Token Type</th>
+<th>Format</th>
+<th>Use Case</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Personal access token</td>
+<td><code>glpat-xxx</code></td>
+<td>User-level access with <code>api</code> scope</td>
+</tr>
+<tr>
+<td>OAuth2 token</td>
+<td><code>oauth-xxx</code></td>
+<td>OAuth app integrations</td>
+</tr>
+<tr>
+<td>CI job token</td>
+<td><code>$CI_JOB_TOKEN</code></td>
+<td>GitLab CI pipeline access</td>
+</tr>
+</tbody>
+</table>
+<h2>Compatibility</h2>
+<table>
+<thead>
+<tr>
+<th>Client</th>
+<th>Supported</th>
+<th>Install Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Desktop</td>
+<td>Yes</td>
+<td><code>claude_desktop_config.json</code></td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>Yes</td>
+<td><code>claude mcp add</code></td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td>Yes</td>
+<td>One-click deeplink or <code>.cursor/mcp.json</code></td>
+</tr>
+<tr>
+<td>VS Code Copilot</td>
+<td>Yes</td>
+<td>One-click deeplink or <code>.vscode/mcp.json</code></td>
+</tr>
+<tr>
+<td>Windsurf</td>
+<td>Yes</td>
+<td><code>~/.codeium/windsurf/mcp_config.json</code></td>
+</tr>
+<tr>
+<td>Any MCP client</td>
+<td>Yes</td>
+<td>stdio or HTTP transport</td>
+</tr>
+</tbody>
+</table>
+<h2>Tools (76)</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Count</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Projects</strong></td>
+<td>4</td>
+<td>get, create, delete, update merge settings</td>
+</tr>
+<tr>
+<td><strong>Project Approvals</strong></td>
+<td>10</td>
+<td>get/update config, CRUD approval rules (project + MR)</td>
+</tr>
+<tr>
+<td><strong>Groups</strong></td>
+<td>6</td>
+<td>list, get, share/unshare project, share/unshare group</td>
+</tr>
+<tr>
+<td><strong>Branches</strong></td>
+<td>3</td>
+<td>list, create, delete</td>
+</tr>
+<tr>
+<td><strong>Commits</strong></td>
+<td>4</td>
+<td>list, get (with diff), create, compare</td>
+</tr>
+<tr>
+<td><strong>Merge Requests</strong></td>
+<td>8</td>
+<td>list, get, create, update, merge, merge-sequence, rebase, changes</td>
+</tr>
+<tr>
+<td><strong>MR Notes</strong></td>
+<td>6</td>
+<td>list, add, delete, update, award emoji, remove emoji</td>
+</tr>
+<tr>
+<td><strong>MR Discussions</strong></td>
+<td>4</td>
+<td>list, create (inline + multi-line), reply, resolve</td>
+</tr>
+<tr>
+<td><strong>Pipelines</strong></td>
+<td>5</td>
+<td>list, get (with jobs), create, retry, cancel</td>
+</tr>
+<tr>
+<td><strong>Jobs</strong></td>
+<td>4</td>
+<td>retry, play, cancel, get log</td>
+</tr>
+<tr>
+<td><strong>Tags</strong></td>
+<td>4</td>
+<td>list, get, create, delete</td>
+</tr>
+<tr>
+<td><strong>Releases</strong></td>
+<td>5</td>
+<td>list, get, create, update, delete</td>
+</tr>
+<tr>
+<td><strong>CI/CD Variables</strong></td>
+<td>8</td>
+<td>CRUD for project variables, CRUD for group variables</td>
+</tr>
+<tr>
+<td><strong>Issues</strong></td>
+<td>5</td>
+<td>list, get, create, update, add comment</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary>Full tool reference (click to expand)</summary>
 
-    <footer style="border-top:1px solid rgba(148,163,184,.2);padding:14px 22px;color:#64748b;font-size:13px;">
-      <div style="max-width:980px;margin:0 auto;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-        <span>vish288.github.io</span>
-        <span>MCP install gateway</span>
-      </div>
-    </footer>
+### Projects
+| Tool | Description |
+|------|-------------|
+| `gitlab_get_project` | Get project details |
+| `gitlab_create_project` | Create a new project |
+| `gitlab_delete_project` | Delete a project |
+| `gitlab_update_project_merge_settings` | Update merge settings |
 
-    <script>setTimeout(function(){window.location.href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-gitlab&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtZ2l0bGFiIl0sImVudiI6eyJHSVRMQUJfVVJMIjoiaHR0cHM6Ly9naXRsYWIuZXhhbXBsZS5jb20iLCJHSVRMQUJfVE9LRU4iOiJ5b3VyLXRva2VuIn19";},180);</script>
-  </body>
+### Project Approvals
+| Tool | Description |
+|------|-------------|
+| `gitlab_get_project_approvals` | Get approval config |
+| `gitlab_update_project_approvals` | Update approval settings |
+| `gitlab_list_project_approval_rules` | List approval rules |
+| `gitlab_create_project_approval_rule` | Create approval rule |
+| `gitlab_update_project_approval_rule` | Update approval rule |
+| `gitlab_delete_project_approval_rule` | Delete approval rule |
+| `gitlab_list_mr_approval_rules` | List MR approval rules |
+| `gitlab_create_mr_approval_rule` | Create MR approval rule |
+| `gitlab_update_mr_approval_rule` | Update MR approval rule |
+| `gitlab_delete_mr_approval_rule` | Delete MR approval rule |
+
+### Groups
+| Tool | Description |
+|------|-------------|
+| `gitlab_list_groups` | List groups |
+| `gitlab_get_group` | Get group details |
+| `gitlab_share_project_with_group` | Share project with group |
+| `gitlab_unshare_project_with_group` | Unshare project from group |
+| `gitlab_share_group_with_group` | Share group with group |
+| `gitlab_unshare_group_with_group` | Unshare group from group |
+
+### Branches
+| Tool | Description |
+|------|-------------|
+| `gitlab_list_branches` | List branches |
+| `gitlab_create_branch` | Create a branch |
+| `gitlab_delete_branch` | Delete a branch |
+
+### Commits
+| Tool | Description |
+|------|-------------|
+| `gitlab_list_commits` | List commits |
+| `gitlab_get_commit` | Get commit (with optional diff) |
+| `gitlab_create_commit` | Create commit with file actions |
+| `gitlab_compare` | Compare branches/tags/commits |
+
+### Merge Requests
+| Tool | Description |
+|------|-------------|
+| `gitlab_list_mrs` | List merge requests |
+| `gitlab_get_mr` | Get MR details |
+| `gitlab_create_mr` | Create merge request |
+| `gitlab_update_mr` | Update merge request |
+| `gitlab_merge_mr` | Merge a merge request |
+| `gitlab_merge_mr_sequence` | Merge multiple MRs in order |
+| `gitlab_rebase_mr` | Rebase a merge request |
+| `gitlab_mr_changes` | Get MR file changes |
+
+### MR Notes
+| Tool | Description |
+|------|-------------|
+| `gitlab_list_mr_notes` | List MR comments |
+| `gitlab_add_mr_note` | Add comment to MR |
+| `gitlab_delete_mr_note` | Delete MR comment |
+| `gitlab_update_mr_note` | Update MR comment |
+| `gitlab_award_emoji` | Award emoji to note |
+| `gitlab_remove_emoji` | Remove emoji from note |
+
+### MR Discussions
+| Tool | Description |
+|------|-------------|
+| `gitlab_list_mr_discussions` | List discussions |
+| `gitlab_create_mr_discussion` | Create discussion (inline + multi-line) |
+| `gitlab_reply_to_discussion` | Reply to discussion |
+| `gitlab_resolve_discussion` | Resolve/unresolve discussion |
+
+### Pipelines
+| Tool | Description |
+|------|-------------|
+| `gitlab_list_pipelines` | List pipelines |
+| `gitlab_get_pipeline` | Get pipeline (with optional jobs) |
+| `gitlab_create_pipeline` | Trigger pipeline |
+| `gitlab_retry_pipeline` | Retry failed jobs |
+| `gitlab_cancel_pipeline` | Cancel pipeline |
+
+### Jobs
+| Tool | Description |
+|------|-------------|
+| `gitlab_retry_job` | Retry a job |
+| `gitlab_play_job` | Trigger manual job |
+| `gitlab_cancel_job` | Cancel a job |
+| `gitlab_get_job_log` | Get job log output |
+
+### Tags
+| Tool | Description |
+|------|-------------|
+| `gitlab_list_tags` | List tags |
+| `gitlab_get_tag` | Get tag details |
+| `gitlab_create_tag` | Create a tag |
+| `gitlab_delete_tag` | Delete a tag |
+
+### Releases
+| Tool | Description |
+|------|-------------|
+| `gitlab_list_releases` | List releases |
+| `gitlab_get_release` | Get release details |
+| `gitlab_create_release` | Create a release |
+| `gitlab_update_release` | Update a release |
+| `gitlab_delete_release` | Delete a release |
+
+### CI/CD Variables
+| Tool | Description |
+|------|-------------|
+| `gitlab_list_variables` | List project variables |
+| `gitlab_create_variable` | Create project variable |
+| `gitlab_update_variable` | Update project variable |
+| `gitlab_delete_variable` | Delete project variable |
+| `gitlab_list_group_variables` | List group variables |
+| `gitlab_create_group_variable` | Create group variable |
+| `gitlab_update_group_variable` | Update group variable |
+| `gitlab_delete_group_variable` | Delete group variable |
+
+### Issues
+| Tool | Description |
+|------|-------------|
+| `gitlab_list_issues` | List issues |
+| `gitlab_get_issue` | Get issue details |
+| `gitlab_create_issue` | Create an issue |
+| `gitlab_update_issue` | Update an issue |
+| `gitlab_add_issue_comment` | Add comment to issue |
+
+</details>
+
+<h2>Development</h2>
+<pre><code class="language-bash">git clone https://github.com/vish288/mcp-gitlab.git
+cd mcp-gitlab
+uv sync --all-extras
+
+uv run pytest --cov
+uv run ruff check .
+uv run ruff format --check .
+</code></pre>
+<h2>License</h2>
+<p>MIT</p>
+        </div>
+    </div>
+    
+    <script>
+        // Start the redirect
+        setTimeout(function(){
+            document.getElementById('redirect-overlay').style.display = 'block';
+            window.location.href = "cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-gitlab&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtZ2l0bGFiIl0sImVudiI6eyJHSVRMQUJfVVJMIjoiaHR0cHM6Ly9naXRsYWIuZXhhbXBsZS5jb20iLCJHSVRMQUJfVE9LRU4iOiJ5b3VyLXRva2VuIn19";
+            setTimeout(function(){
+                document.getElementById('redirect-overlay').style.display = 'none';
+            }, 3000);
+        }, 500);
+    </script>
+</body>
 </html>

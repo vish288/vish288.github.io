@@ -1,56 +1,557 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Install mcp-atlassian-extended in Cursor</title>
-    <meta name="description" content="One-click redirect page to install mcp-atlassian-extended in Cursor.">
-    <meta name="robots" content="index,follow">
-    <meta property="og:title" content="Install mcp-atlassian-extended in Cursor">
-    <meta property="og:description" content="Open Cursor and install mcp-atlassian-extended in one click.">
-    <meta property="og:type" content="website">
-    <meta name="twitter:card" content="summary_large_image">
-    <link rel="canonical" href="https://vish288.github.io/mcp-atlassian-extended-cursor-redirect.html">
-  </head>
-  <body style="margin:0;min-height:100vh;display:flex;flex-direction:column;background:radial-gradient(1200px 500px at 20% -5%,#1e293b 0%,#0f172a 45%,#020617 100%);color:#e2e8f0;font-family:Inter,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,sans-serif;">
-    <header style="position:sticky;top:0;z-index:10;border-bottom:1px solid rgba(148,163,184,.22);background:rgba(2,6,23,.68);backdrop-filter: blur(8px);">
-      <div style="max-width:980px;margin:0 auto;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;">
-        <div style="font-weight:700;letter-spacing:.2px;color:#f8fafc;">MCP Gateway</div>
-        <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:#94a3b8;">
-          Servers
-          <select onchange="if(this.value) window.location.href=this.value" style="background:#0b1220;border:1px solid #334155;color:#e2e8f0;border-radius:8px;padding:7px 10px;font-size:13px;">
-            <option value="">Select server</option>
-            <option value="/mcp-atlassian-extended-cursor-redirect.html" selected>mcp-atlassian-extended</option>
-            <option value="/mcp-gitlab-cursor-redirect.html">mcp-gitlab</option>
-            <option value="" disabled>More coming soon</option>
-          </select>
-        </label>
-      </div>
-    </header>
-
-    <main style="flex:1;display:flex;align-items:center;">
-      <section style="max-width:980px;width:100%;margin:0 auto;padding:30px 22px;">
-        <div style="border:1px solid rgba(148,163,184,.22);border-radius:16px;background:linear-gradient(180deg,rgba(15,23,42,.72),rgba(2,6,23,.74));box-shadow:0 18px 50px rgba(0,0,0,.35);padding:26px;">
-          <p style="margin:0 0 18px;color:#a5b4fc;font-size:13px;letter-spacing:.12em;text-transform:uppercase;">One-click install</p>
-
-          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;">
-            <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-atlassian-extended&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtYXRsYXNzaWFuLWV4dGVuZGVkIl0sImVudiI6eyJKSVJBX1VSTCI6Imh0dHBzOi8veW91ci1jb21wYW55LmF0bGFzc2lhbi5uZXQiLCJKSVJBX1VTRVJOQU1FIjoieW91ci5lbWFpbEBjb21wYW55LmNvbSIsIkpJUkFfQVBJX1RPS0VOIjoieW91ci10b2tlbiJ9fQ==" style="display:inline-flex;align-items:center;gap:8px;background:#111827;border:1px solid #374151;color:#fff;text-decoration:none;padding:11px 14px;border-radius:10px;font-weight:600;box-shadow:0 1px 0 rgba(255,255,255,.04) inset;">Install in Cursor</a>
-            <span style="display:inline-block;background:#1e293b;border:1px solid #475569;color:#bfdbfe;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:600;">mcp-atlassian-extended</span>
-          </div>
-
-          <p style="margin:16px 0 0;color:#94a3b8;">Velvet-rope update: this page checks the guest list, then fast-tracks your MCP straight to Cursor before anyone starts small talk.</p>
-          <p style="margin:10px 0 0;color:#64748b;font-size:14px;">If your browser blocks automatic app launch, click the install button above.</p>
+    <title>mcp-atlassian-extended · PyPI / Cursor Install</title>
+    <style>
+        :root {
+            --pypi-blue: #006dad;
+            --pypi-light-blue: #2188db;
+            --pypi-dark-blue: #005082;
+            --pypi-text: #333333;
+            --pypi-bg: #ffffff;
+            --pypi-gray: #f2f2f2;
+            --pypi-border: #e5e5e5;
+            --cursor-bg: #111827;
+            --cursor-hover: #1f2937;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            color: var(--pypi-text);
+            background: var(--pypi-bg);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .banner {
+            background: var(--pypi-bg);
+            border-bottom: 1px solid var(--pypi-border);
+            padding: 20px 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--pypi-border);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .project-title {
+            font-size: 2.5rem;
+            margin: 0;
+            font-weight: 700;
+        }
+        .project-version {
+            font-weight: 400;
+            color: #666;
+        }
+        .install-box {
+            background: var(--pypi-gray);
+            border: 1px solid var(--pypi-border);
+            border-radius: 4px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 300px;
+        }
+        .pip-command {
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            background: #fff;
+            border: 1px solid var(--pypi-border);
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        .cursor-button {
+            background: var(--cursor-bg);
+            color: white;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        .cursor-button:hover {
+            background: var(--cursor-hover);
+        }
+        .main-layout {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+        }
+        .sidebar {
+            width: 250px;
+            flex-shrink: 0;
+        }
+        .content {
+            flex-grow: 1;
+            max-width: 700px;
+        }
+        .sidebar h3 {
+            border-bottom: 1px solid var(--pypi-border);
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            color: var(--pypi-dark-blue);
+            font-size: 1.1rem;
+        }
+        .meta-list {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 30px 0;
+            font-size: 0.9rem;
+        }
+        .meta-list li {
+            margin-bottom: 10px;
+        }
+        .meta-list a {
+            color: var(--pypi-blue);
+            text-decoration: none;
+        }
+        .meta-list a:hover {
+            text-decoration: underline;
+        }
+        .readme-content img {
+            max-width: 100%;
+        }
+        .readme-content pre {
+            background: #f8f9fa;
+            border: 1px solid #eaecf0;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
+        }
+        .readme-content code {
+            background: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
+        }
+        .readme-content pre code {
+            background: transparent;
+            padding: 0;
+        }
+        .readme-content table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .readme-content th, .readme-content td {
+            border: 1px solid var(--pypi-border);
+            padding: 8px 12px;
+            text-align: left;
+        }
+        .readme-content th {
+            background: #f8f9fa;
+        }
+        /* Redirect overlay */
+        #redirect-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            background: #2563eb;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            z-height: 1000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="redirect-overlay">Redirecting to Cursor... If nothing happens, click "Install in Cursor" below.</div>
+    <div class="banner">
+        <div class="container">
+            <h1 class="project-title">mcp-atlassian-extended <span class="project-version">0.1.1</span></h1>
+            <p style="margin: 5px 0 0 0; color: #666; font-size: 1.1rem;">Extended MCP tools for Jira and Confluence — attachments, agile boards, sprints, calendars</p>
         </div>
-      </section>
-    </main>
+    </div>
+    
+    <div class="container main-layout">
+        <div class="sidebar">
+            <div class="install-box">
+                <div>
+                    <div style="font-size:0.8rem; font-weight:bold; color:#666; margin-bottom:5px;">PIP INSTRUCTIONS</div>
+                    <div class="pip-command">pip install mcp-atlassian-extended</div>
+                </div>
+                <div>
+                    <div style="font-size:0.8rem; font-weight:bold; color:#666; margin-bottom:5px;">CURSOR INSTRUCTIONS</div>
+                    <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-atlassian-extended&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtYXRsYXNzaWFuLWV4dGVuZGVkIl0sImVudiI6eyJKSVJBX1VSTCI6Imh0dHBzOi8veW91ci1jb21wYW55LmF0bGFzc2lhbi5uZXQiLCJKSVJBX1VTRVJOQU1FIjoieW91ci5lbWFpbEBjb21wYW55LmNvbSIsIkpJUkFfQVBJX1RPS0VOIjoieW91ci10b2tlbiJ9fQ==" class="cursor-button">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M12 2L20 12M12 2L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        Install in Cursor
+                    </a>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 30px;">Project links</h3>
+            <ul class="meta-list">
+                <li><a href="https://pypi.org/project/mcp-atlassian-extended/">Homepage</a></li>
+                <li><a href="https://pypi.org/project/mcp-atlassian-extended//issues">Issues</a></li>
+            </ul>
+            
+            <h3>Meta</h3>
+            <ul class="meta-list">
+                <li><strong>License:</strong> MIT</li>
+                <li><strong>Author:</strong> vish288</li>
+                <li><strong>Requires:</strong> Python &gt;=3.10</li>
+            </ul>
+        </div>
+        
+        <div class="content readme-content">
+            <h1>mcp-atlassian-extended</h1>
+<p><a href="https://pypi.org/project/mcp-atlassian-extended/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/mcp-atlassian-extended" /></a>
+<a href="https://pypi.org/project/mcp-atlassian-extended/"><img alt="PyPI downloads" src="https://img.shields.io/pypi/dm/mcp-atlassian-extended" /></a>
+<a href="https://pypi.org/project/mcp-atlassian-extended/"><img alt="Python" src="https://img.shields.io/pypi/pyversions/mcp-atlassian-extended" /></a>
+<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+<a href="https://github.com/vish288/mcp-atlassian-extended/actions/workflows/tests.yml"><img alt="CI" src="https://github.com/vish288/mcp-atlassian-extended/actions/workflows/tests.yml/badge.svg" /></a></p>
+<p><strong>mcp-atlassian-extended</strong> is a <a href="https://modelcontextprotocol.io/">Model Context Protocol (MCP)</a> server that extends <a href="https://github.com/sooperset/mcp-atlassian">mcp-atlassian</a> with <strong>23 additional tools</strong> for Jira and Confluence: issue creation with custom fields, issue links, attachments, agile boards, sprints, backlog management, user search, calendars, time-off tracking, and sprint capacity planning. Works with Claude Desktop, Claude Code, Cursor, Windsurf, VS Code Copilot, and any MCP-compatible client.</p>
+<p>Built with <a href="https://github.com/jlowin/fastmcp">FastMCP</a>, <a href="https://www.python-httpx.org/">httpx</a>, and <a href="https://docs.pydantic.dev/">Pydantic</a>.</p>
+<h2>Relationship to mcp-atlassian</h2>
+<p>This project runs alongside <a href="https://github.com/sooperset/mcp-atlassian">mcp-atlassian</a>, not as a replacement. Configure both servers:</p>
+<ul>
+<li><strong>mcp-atlassian</strong> handles: issues, search, transitions, comments, worklog, pages, Confluence search</li>
+<li><strong>mcp-atlassian-extended</strong> handles: attachments, agile, users, fields, calendars, time-off</li>
+</ul>
+<p>There is no tool overlap — this server only implements tools that mcp-atlassian lacks.</p>
+<h2>Quick Install</h2>
+<blockquote>
+<p>Prerequisite: Install <code>uv</code> first (required for all <code>uvx</code> install flows, including one-click Cursor/VS Code buttons). <a href="https://docs.astral.sh/uv/getting-started/installation/">Install uv</a>.</p>
+</blockquote>
+<h3>Cursor</h3>
+<p><a href="https://vish288.github.io/mcp-atlassian-extended-cursor-redirect.html"><img alt="Install MCP Server" src="https://cursor.com/deeplink/mcp-install-dark.svg" /></a></p>
+<h3>Claude Code</h3>
+<pre><code class="language-bash">claude mcp add atlassian-extended -- uvx mcp-atlassian-extended
+</code></pre>
+<h3>VS Code</h3>
+<p><a href="https://insiders.vscode.dev/redirect/mcp/install?name=mcp-atlassian-extended&amp;config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-atlassian-extended%22%5D%2C%22env%22%3A%7B%22JIRA_URL%22%3A%22%24%7Binput%3Ajira-url%7D%22%2C%22JIRA_USERNAME%22%3A%22%24%7Binput%3Ajira-username%7D%22%2C%22JIRA_API_TOKEN%22%3A%22%24%7Binput%3Ajira-api-token%7D%22%7D%7D&amp;image=https://cdn.simpleicons.org/atlassian/0052CC&amp;logo=https://cdn.simpleicons.org/atlassian/0052CC"><img alt="Install in VS Code" src="https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&amp;logo=visualstudiocode&amp;logoColor=white" /></a> <a href="https://insiders.vscode.dev/redirect/mcp/install?name=mcp-atlassian-extended&amp;config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-atlassian-extended%22%5D%2C%22env%22%3A%7B%22JIRA_URL%22%3A%22%24%7Binput%3Ajira-url%7D%22%2C%22JIRA_USERNAME%22%3A%22%24%7Binput%3Ajira-username%7D%22%2C%22JIRA_API_TOKEN%22%3A%22%24%7Binput%3Ajira-api-token%7D%22%7D%7D&amp;quality=insiders&amp;image=https://cdn.simpleicons.org/atlassian/0052CC&amp;logo=https://cdn.simpleicons.org/atlassian/0052CC"><img alt="Install in VS Code Insiders" src="https://img.shields.io/badge/VS_Code_Insiders-Install_Server-24bfa5?style=flat-square&amp;logo=visualstudiocode&amp;logoColor=white" /></a></p>
+<h3>Windsurf &amp; IntelliJ</h3>
+<p><strong>Windsurf:</strong> Add to <code>~/.codeium/windsurf/mcp_config.json</code>
+<strong>IntelliJ:</strong> Add to <code>Settings | Tools | MCP Servers</code></p>
+<blockquote>
+<p><strong>Note:</strong> The actual server config starts at <code>atlassian-extended</code> inside the <code>mcpServers</code> object.</p>
+</blockquote>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    ...
+    &quot;atlassian-extended&quot;: {
+      &quot;command&quot;: &quot;uvx&quot;,
+      &quot;args&quot;: [&quot;mcp-atlassian-extended&quot;],
+      &quot;env&quot;: {
+        &quot;JIRA_URL&quot;: &quot;https://your-company.atlassian.net&quot;,
+        &quot;JIRA_USERNAME&quot;: &quot;your.email@company.com&quot;,
+        &quot;JIRA_API_TOKEN&quot;: &quot;your_api_token&quot;,
+        &quot;CONFLUENCE_URL&quot;: &quot;https://your-company.atlassian.net/wiki&quot;,
+        &quot;CONFLUENCE_USERNAME&quot;: &quot;your.email@company.com&quot;,
+        &quot;CONFLUENCE_API_TOKEN&quot;: &quot;your_api_token&quot;
+      }
+    },
+    ...
+  }
+}
+</code></pre>
+<h3>pip / uv</h3>
+<pre><code class="language-bash">uv pip install mcp-atlassian-extended
+</code></pre>
+<h2>Configuration</h2>
+<h3>Jira Cloud (Basic Auth)</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JIRA_URL</code></td>
+<td>Yes</td>
+<td>Jira instance URL (e.g. <code>https://your-company.atlassian.net</code>)</td>
+</tr>
+<tr>
+<td><code>JIRA_USERNAME</code></td>
+<td>Yes</td>
+<td>Email address for Jira Cloud</td>
+</tr>
+<tr>
+<td><code>JIRA_API_TOKEN</code></td>
+<td>Yes</td>
+<td>API token from <a href="https://id.atlassian.com/manage-profile/security/api-tokens">id.atlassian.com/manage-profile/security/api-tokens</a></td>
+</tr>
+</tbody>
+</table>
+<h3>Jira Data Center / Self-Hosted (Bearer Token)</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JIRA_URL</code></td>
+<td>Yes</td>
+<td>Jira instance URL</td>
+</tr>
+<tr>
+<td><code>JIRA_PAT</code></td>
+<td>Yes</td>
+<td>Personal access token</td>
+</tr>
+</tbody>
+</table>
+<p>Also accepts: <code>JIRA_PERSONAL_TOKEN</code>, <code>JIRA_TOKEN</code></p>
+<h3>Confluence Cloud (Basic Auth)</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CONFLUENCE_URL</code></td>
+<td>Yes</td>
+<td>Confluence URL (e.g. <code>https://your-company.atlassian.net/wiki</code>)</td>
+</tr>
+<tr>
+<td><code>CONFLUENCE_USERNAME</code></td>
+<td>Yes</td>
+<td>Email address for Confluence Cloud</td>
+</tr>
+<tr>
+<td><code>CONFLUENCE_API_TOKEN</code></td>
+<td>Yes</td>
+<td>API token (same as Jira if same Atlassian account)</td>
+</tr>
+</tbody>
+</table>
+<h3>Confluence Data Center / Self-Hosted (Bearer Token)</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>CONFLUENCE_URL</code></td>
+<td>Yes</td>
+<td>Confluence instance URL</td>
+</tr>
+<tr>
+<td><code>CONFLUENCE_PAT</code></td>
+<td>Yes</td>
+<td>Personal access token</td>
+</tr>
+</tbody>
+</table>
+<p>Also accepts: <code>CONFLUENCE_PERSONAL_TOKEN</code>, <code>CONFLUENCE_TOKEN</code></p>
+<h3>Optional</h3>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ATLASSIAN_READ_ONLY</code></td>
+<td>Set to <code>true</code> to disable write operations</td>
+</tr>
+</tbody>
+</table>
+<h2>Compatibility</h2>
+<table>
+<thead>
+<tr>
+<th>Client</th>
+<th>Supported</th>
+<th>Install Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Claude Desktop</td>
+<td>Yes</td>
+<td><code>claude_desktop_config.json</code></td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>Yes</td>
+<td><code>claude mcp add</code></td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td>Yes</td>
+<td>One-click deeplink or <code>.cursor/mcp.json</code></td>
+</tr>
+<tr>
+<td>Windsurf</td>
+<td>Yes</td>
+<td><code>~/.codeium/windsurf/mcp_config.json</code></td>
+</tr>
+<tr>
+<td>VS Code Copilot</td>
+<td>Yes</td>
+<td><code>.vscode/mcp.json</code></td>
+</tr>
+<tr>
+<td>Any MCP client</td>
+<td>Yes</td>
+<td>stdio or HTTP transport</td>
+</tr>
+</tbody>
+</table>
+<h2>Tools (23)</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Count</th>
+<th>Tools</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Jira Issues</strong></td>
+<td>3</td>
+<td>create (with custom fields), update (with custom fields), create epic</td>
+</tr>
+<tr>
+<td><strong>Jira Links</strong></td>
+<td>2</td>
+<td>create link, delete link</td>
+</tr>
+<tr>
+<td><strong>Jira Attachments</strong></td>
+<td>4</td>
+<td>get, upload, download, delete</td>
+</tr>
+<tr>
+<td><strong>Jira Users</strong></td>
+<td>1</td>
+<td>search by name/email</td>
+</tr>
+<tr>
+<td><strong>Jira Metadata</strong></td>
+<td>3</td>
+<td>list projects, list fields, backlog</td>
+</tr>
+<tr>
+<td><strong>Jira Agile</strong></td>
+<td>4</td>
+<td>get board, board config, get sprint, move to sprint</td>
+</tr>
+<tr>
+<td><strong>Confluence Calendars</strong></td>
+<td>6</td>
+<td>list, search, time-off, who-is-out, person time-off, sprint capacity</td>
+</tr>
+</tbody>
+</table>
+<details>
+<summary>Full tool reference (click to expand)</summary>
 
-    <footer style="border-top:1px solid rgba(148,163,184,.2);padding:14px 22px;color:#64748b;font-size:13px;">
-      <div style="max-width:980px;margin:0 auto;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-        <span>vish288.github.io</span>
-        <span>MCP install gateway</span>
-      </div>
-    </footer>
+### Jira Issues
+| Tool | Description |
+|------|-------------|
+| `jira_create_issue` | Create issue with standard and custom fields |
+| `jira_update_issue` | Update issue fields and custom fields |
+| `jira_create_epic` | Create an epic (sets issue type automatically) |
 
-    <script>setTimeout(function(){window.location.href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-atlassian-extended&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtYXRsYXNzaWFuLWV4dGVuZGVkIl0sImVudiI6eyJKSVJBX1VSTCI6Imh0dHBzOi8veW91ci1jb21wYW55LmF0bGFzc2lhbi5uZXQiLCJKSVJBX1VTRVJOQU1FIjoieW91ci5lbWFpbEBjb21wYW55LmNvbSIsIkpJUkFfQVBJX1RPS0VOIjoieW91ci10b2tlbiJ9fQ==";},180);</script>
-  </body>
+### Jira Links
+| Tool | Description |
+|------|-------------|
+| `jira_create_link` | Create a link between two issues (Relates, Blocks, etc.) |
+| `jira_delete_link` | Delete an issue link by ID |
+
+### Jira Attachments
+| Tool | Description |
+|------|-------------|
+| `jira_get_attachments` | List attachments on an issue |
+| `jira_upload_attachment` | Upload file to issue |
+| `jira_download_attachment` | Download attachment to local file |
+| `jira_delete_attachment` | Delete an attachment |
+
+### Jira Users
+| Tool | Description |
+|------|-------------|
+| `jira_search_users` | Search users by name/email |
+
+### Jira Metadata
+| Tool | Description |
+|------|-------------|
+| `jira_list_projects` | List all accessible projects |
+| `jira_list_fields` | List fields (with search/custom filter) |
+| `jira_backlog` | Get backlog issues for a board |
+
+### Jira Agile
+| Tool | Description |
+|------|-------------|
+| `jira_get_board` | Get board details |
+| `jira_board_config` | Get board column configuration |
+| `jira_get_sprint` | Get sprint details |
+| `jira_move_to_sprint` | Move issues to a sprint |
+
+### Confluence Calendars
+| Tool | Description |
+|------|-------------|
+| `confluence_list_calendars` | List all calendars |
+| `confluence_search_calendars` | Search calendars by name/space |
+| `confluence_get_time_off` | Get time-off events for date range |
+| `confluence_who_is_out` | Check who is out on a date |
+| `confluence_get_person_time_off` | Get person's time-off events |
+| `confluence_sprint_capacity` | Calculate sprint capacity with time-off |
+
+</details>
+
+<h2>Attribution</h2>
+<p>Inspired by <a href="https://github.com/sooperset/mcp-atlassian">mcp-atlassian</a> by sooperset. Architecture and patterns follow similar conventions.</p>
+<h2>Development</h2>
+<pre><code class="language-bash">git clone https://github.com/vish288/mcp-atlassian-extended.git
+cd mcp-atlassian-extended
+uv sync --all-extras
+
+uv run pytest --cov
+uv run ruff check .
+uv run ruff format --check .
+</code></pre>
+<h2>License</h2>
+<p>MIT</p>
+        </div>
+    </div>
+    
+    <script>
+        // Start the redirect
+        setTimeout(function(){
+            document.getElementById('redirect-overlay').style.display = 'block';
+            window.location.href = "cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-atlassian-extended&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtYXRsYXNzaWFuLWV4dGVuZGVkIl0sImVudiI6eyJKSVJBX1VSTCI6Imh0dHBzOi8veW91ci1jb21wYW55LmF0bGFzc2lhbi5uZXQiLCJKSVJBX1VTRVJOQU1FIjoieW91ci5lbWFpbEBjb21wYW55LmNvbSIsIkpJUkFfQVBJX1RPS0VOIjoieW91ci10b2tlbiJ9fQ==";
+            setTimeout(function(){
+                document.getElementById('redirect-overlay').style.display = 'none';
+            }, 3000);
+        }, 500);
+    </script>
+</body>
 </html>
