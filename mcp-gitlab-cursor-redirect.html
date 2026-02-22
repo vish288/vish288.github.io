@@ -3,607 +3,507 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>mcp-gitlab · PyPI / Cursor Install</title>
+    <title>Connect GitLab to top MCP clients</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
         :root {
-            --pypi-blue: #006dad;
-            --pypi-light-blue: #2188db;
-            --pypi-dark-blue: #005082;
-            --pypi-text: #333333;
-            --pypi-bg: #ffffff;
-            --pypi-gray: #f2f2f2;
-            --pypi-border: #e5e5e5;
-            --cursor-bg: #111827;
-            --cursor-hover: #1f2937;
+            --bg-color: #ffffff;
+            --text-main: #000000;
+            --text-secondary: #555555;
+            --text-tertiary: #888888;
+            --border-color: #e5e5e5;
+            --hover-bg: #f5f5f5;
+            --link-color: #0d99ff;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-            color: var(--pypi-text);
-            background: var(--pypi-bg);
+            font-family: var(--font-family);
+            background: var(--bg-color);
+            color: var(--text-main);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
         }
-        .banner {
-            background: var(--pypi-bg);
-            border-bottom: 1px solid var(--pypi-border);
-            padding: 20px 0;
-        }
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .header {
+        
+        .nav {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--pypi-border);
-            padding-bottom: 20px;
-            margin-bottom: 20px;
+            justify-content: space-between;
+            padding: 16px 32px;
+            border-bottom: 1px solid var(--border-color);
         }
-        .project-title {
-            font-size: 2.5rem;
-            margin: 0;
+        
+        .nav-logo {
             font-weight: 700;
+            font-size: 1.25rem;
+            letter-spacing: -0.02em;
+            text-decoration: none;
+            color: var(--text-main);
         }
-        .project-version {
-            font-weight: 400;
-            color: #666;
+        
+        .nav-links {
+            display: flex;
+            gap: 24px;
+            font-size: 0.95rem;
         }
-        .install-box {
-            background: var(--pypi-gray);
-            border: 1px solid var(--pypi-border);
-            border-radius: 4px;
-            padding: 15px;
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 32px;
+        }
+        
+        .hero {
+            margin-bottom: 64px;
+            max-width: 700px;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin: 0 0 16px 0;
+            line-height: 1.1;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0 0 24px 0;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+        }
+        
+        .card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 32px 24px;
+            background: #fff;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: var(--card-shadow);
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            width: 300px;
         }
-        .pip-command {
-            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-            background: #fff;
-            border: 1px solid var(--pypi-border);
-            padding: 10px;
-            border-radius: 4px;
-            font-size: 0.9rem;
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
         }
-        .cursor-button {
-            background: var(--cursor-bg);
-            color: white;
-            text-decoration: none;
-            padding: 12px;
-            border-radius: 4px;
-            font-weight: 600;
-            text-align: center;
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            background: var(--hover-bg);
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            transition: background 0.2s;
+            padding: 8px;
+            box-sizing: border-box;
         }
-        .cursor-button:hover {
-            background: var(--cursor-hover);
+        
+        .card-icon img, .card-icon svg {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
-        .main-layout {
-            display: flex;
-            gap: 40px;
-            margin-top: 20px;
+        
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
         }
-        .sidebar {
-            width: 250px;
-            flex-shrink: 0;
-        }
-        .content {
-            flex-grow: 1;
-            max-width: 700px;
-        }
-        .sidebar h3 {
-            border-bottom: 1px solid var(--pypi-border);
-            padding-bottom: 5px;
-            margin-bottom: 15px;
-            color: var(--pypi-dark-blue);
-            font-size: 1.1rem;
-        }
-        .meta-list {
+        
+        .card-list {
             list-style: none;
             padding: 0;
-            margin: 0 0 30px 0;
-            font-size: 0.9rem;
+            margin: 0 0 32px 0;
+            flex-grow: 1;
         }
-        .meta-list li {
-            margin-bottom: 10px;
+        
+        .card-list li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
         }
-        .meta-list a {
-            color: var(--pypi-blue);
+        
+        .card-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--text-tertiary);
+            font-weight: bold;
+        }
+        
+        .card-action {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--link-color);
             text-decoration: none;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+            font-family: inherit;
         }
-        .meta-list a:hover {
+        
+        .card-action:hover {
             text-decoration: underline;
         }
-        .readme-content img {
-            max-width: 100%;
+        
+        .card-action svg {
+            margin-left: 6px;
+            width: 16px;
+            height: 16px;
         }
-        .readme-content pre {
-            background: #f8f9fa;
-            border: 1px solid #eaecf0;
-            padding: 15px;
-            border-radius: 4px;
-            overflow-x: auto;
-            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-            font-size: 0.9rem;
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.2s;
         }
-        .readme-content code {
-            background: #f8f9fa;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-            font-size: 0.9rem;
-        }
-        .readme-content pre code {
-            background: transparent;
-            padding: 0;
-        }
-        .readme-content table {
-            border-collapse: collapse;
+        
+        .modal {
+            background: #fff;
+            border-radius: 12px;
             width: 100%;
+            max-width: 600px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            transform: scale(0.95);
+            transition: transform 0.2s;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
         }
-        .readme-content th, .readme-content td {
-            border: 1px solid var(--pypi-border);
-            padding: 8px 12px;
-            text-align: left;
+        
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
         }
-        .readme-content th {
+        
+        .close-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-tertiary);
+        }
+        
+        .close-btn:hover {
+            color: var(--text-main);
+        }
+        
+        .code-block {
             background: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            white-space: pre;
+            margin-bottom: 24px;
+            color: #333;
         }
-        /* Redirect overlay */
-        #redirect-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            background: #2563eb;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            font-weight: bold;
-            z-height: 1000;
-            display: none;
+        
+        .copy-btn {
+            background: var(--text-main);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
+        
+        .copy-btn:hover {
+            background: #333;
+        }
+        
+        .copy-btn.copied {
+            background: #10b981;
+        }
+        
     </style>
 </head>
 <body>
-    <div id="redirect-overlay">Redirecting to Cursor... If nothing happens, click "Install in Cursor" below.</div>
-    <div class="banner">
-        <div class="container">
-            <h1 class="project-title">mcp-gitlab <span class="project-version">0.2.1</span></h1>
-            <p style="margin: 5px 0 0 0; color: #666; font-size: 1.1rem;">MCP server for GitLab API — projects, MRs, pipelines, CI/CD variables, approvals, and more</p>
+
+    <nav class="nav">
+        <a href="#" class="nav-logo">MCP Catalog</a>
+        <div class="nav-links">
+            <a href="https://github.com/vish288/mcp-gitlab">GitHub</a>
+            <a href="https://pypi.org/project/mcp-gitlab">PyPI</a>
         </div>
-    </div>
-    
-    <div class="container main-layout">
-        <div class="sidebar">
-            <div class="install-box">
-                <div>
-                    <div style="font-size:0.8rem; font-weight:bold; color:#666; margin-bottom:5px;">PIP INSTRUCTIONS</div>
-                    <div class="pip-command">pip install mcp-gitlab</div>
-                </div>
-                <div>
-                    <div style="font-size:0.8rem; font-weight:bold; color:#666; margin-bottom:5px;">CURSOR INSTRUCTIONS</div>
-                    <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-gitlab&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtZ2l0bGFiIl0sImVudiI6eyJHSVRMQUJfVVJMIjoiaHR0cHM6Ly9naXRsYWIuZXhhbXBsZS5jb20iLCJHSVRMQUJfVE9LRU4iOiJ5b3VyLXRva2VuIn19" class="cursor-button">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L12 22M12 2L20 12M12 2L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        Install in Cursor
-                    </a>
-                </div>
-            </div>
-            
-            <h3 style="margin-top: 30px;">Project links</h3>
-            <ul class="meta-list">
-                <li><a href="https://pypi.org/project/mcp-gitlab/">Homepage</a></li>
-                <li><a href="https://pypi.org/project/mcp-gitlab//issues">Issues</a></li>
-            </ul>
-            
-            <h3>Meta</h3>
-            <ul class="meta-list">
-                <li><strong>License:</strong> MIT</li>
-                <li><strong>Author:</strong> vish288</li>
-                <li><strong>Requires:</strong> Python &gt;=3.10</li>
-            </ul>
+    </nav>
+
+    <div class="container">
+        <div class="hero">
+            <p style="color:var(--text-tertiary);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:12px;font-size:0.85rem;">MCP Client Tools</p>
+            <h1>Connect GitLab to top MCP clients</h1>
+            <p>However you like to code, the <strong>mcp-gitlab</strong> server adds GitLab context to your favorite agentic tools.</p>
         </div>
         
-        <div class="content readme-content">
-            <h1>mcp-gitlab</h1>
-<p><a href="https://pypi.org/project/mcp-gitlab/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/mcp-gitlab" /></a>
-<a href="https://pypi.org/project/mcp-gitlab/"><img alt="PyPI downloads" src="https://img.shields.io/pypi/dm/mcp-gitlab" /></a>
-<a href="https://pypi.org/project/mcp-gitlab/"><img alt="Python" src="https://img.shields.io/pypi/pyversions/mcp-gitlab" /></a>
-<a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
-<a href="https://github.com/vish288/mcp-gitlab/actions/workflows/tests.yml"><img alt="CI" src="https://github.com/vish288/mcp-gitlab/actions/workflows/tests.yml/badge.svg" /></a></p>
-<p><strong>mcp-gitlab</strong> is a <a href="https://modelcontextprotocol.io/">Model Context Protocol (MCP)</a> server for the GitLab REST API that provides <strong>76 tools</strong> for AI assistants to manage projects, merge requests, pipelines, CI/CD variables, approvals, issues, code reviews, and more. Works with Claude Desktop, Claude Code, Cursor, Windsurf, VS Code Copilot, and any MCP-compatible client.</p>
-<p>Built with <a href="https://github.com/jlowin/fastmcp">FastMCP</a>, <a href="https://www.python-httpx.org/">httpx</a>, and <a href="https://docs.pydantic.dev/">Pydantic</a>.</p>
-<h2>Quick Install</h2>
-<blockquote>
-<p>Prerequisite: Install <code>uv</code> first (required for all <code>uvx</code> install flows, including one-click Cursor/VS Code buttons). <a href="https://docs.astral.sh/uv/getting-started/installation/">Install uv</a>.</p>
-</blockquote>
-<h3>Cursor</h3>
-<p><a href="https://vish288.github.io/mcp-gitlab-cursor-redirect.html"><img alt="Install MCP Server" src="https://cursor.com/deeplink/mcp-install-dark.svg" /></a></p>
-<h3>Claude Code</h3>
-<pre><code class="language-bash">claude mcp add gitlab -- uvx mcp-gitlab
-</code></pre>
-<h3>VS Code</h3>
-<p><a href="https://insiders.vscode.dev/redirect/mcp/install?name=mcp-gitlab&amp;config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-gitlab%22%5D%2C%22env%22%3A%7B%22GITLAB_URL%22%3A%22%24%7Binput%3Agitlab-url%7D%22%2C%22GITLAB_TOKEN%22%3A%22%24%7Binput%3Agitlab-token%7D%22%7D%7D&amp;image=https://cdn.simpleicons.org/gitlab/FC6D26&amp;logo=https://cdn.simpleicons.org/gitlab/FC6D26"><img alt="Install in VS Code" src="https://img.shields.io/badge/VS_Code-Install_Server-0098FF?style=flat-square&amp;logo=visualstudiocode&amp;logoColor=white" /></a> <a href="https://insiders.vscode.dev/redirect/mcp/install?name=mcp-gitlab&amp;config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-gitlab%22%5D%2C%22env%22%3A%7B%22GITLAB_URL%22%3A%22%24%7Binput%3Agitlab-url%7D%22%2C%22GITLAB_TOKEN%22%3A%22%24%7Binput%3Agitlab-token%7D%22%7D%7D&amp;quality=insiders&amp;image=https://cdn.simpleicons.org/gitlab/FC6D26&amp;logo=https://cdn.simpleicons.org/gitlab/FC6D26"><img alt="Install in VS Code Insiders" src="https://img.shields.io/badge/VS_Code_Insiders-Install_Server-24bfa5?style=flat-square&amp;logo=visualstudiocode&amp;logoColor=white" /></a></p>
-<h3>Windsurf &amp; IntelliJ</h3>
-<p><strong>Windsurf:</strong> Add to <code>~/.codeium/windsurf/mcp_config.json</code>
-<strong>IntelliJ:</strong> Add to <code>Settings | Tools | MCP Servers</code></p>
-<blockquote>
-<p><strong>Note:</strong> The actual server config starts at <code>gitlab</code> inside the <code>mcpServers</code> object.</p>
-</blockquote>
-<pre><code class="language-json">{
-  &quot;mcpServers&quot;: {
-    ...
-    &quot;gitlab&quot;: {
-      &quot;command&quot;: &quot;uvx&quot;,
-      &quot;args&quot;: [&quot;mcp-gitlab&quot;],
-      &quot;env&quot;: {
-        &quot;GITLAB_URL&quot;: &quot;https://gitlab.example.com&quot;,
-        &quot;GITLAB_TOKEN&quot;: &quot;glpat-xxxxxxxxxxxxxxxxxxxx&quot;
+        <h2 class="section-title">MCP clients</h2>
+        
+        <div class="grid">
+            <!-- VS Code -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 4.3l-10.7 10L3.9 11.4l-1.5 1.5 4.4 4.4L19 5.8 17.5 4.3z" fill="#0078D7"/><path d="M19 5.8l2.6 2.4-1.5 1.6-1.1-1-10.7 10 10.7 10 1.1-1 1.5 1.6-2.6 2.4L5.2 17.6l-3.8 3.5-1.5-1.5 5.3-5L0 9.6l1.5-1.5 3.8 3.5L19 5.8z" fill="#23A9F2"/></svg>
+                    </div>
+                    <h3 class="card-title">VS Code</h3>
+                </div>
+                <ul class="card-list">
+                    <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues</li>
+                    <li>Prompts for API tokens interactively</li>
+                </ul>
+                <a href="https://insiders.vscode.dev/redirect/mcp/install?name=mcp-gitlab&inputs=%5B%7B%22id%22%3A%22gitlab-url%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22GitLab%20URL%22%2C%22default%22%3A%22https%3A%2F%2Fgitlab.example.com%22%7D%2C%7B%22id%22%3A%22gitlab-token%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22GitLab%20Personal%20Access%20Token%22%2C%22password%22%3Atrue%7D%5D&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-gitlab%22%5D%2C%22env%22%3A%7B%22GITLAB_URL%22%3A%22%24%7Binput%3Agitlab-url%7D%22%2C%22GITLAB_TOKEN%22%3A%22%24%7Binput%3Agitlab-token%7D%22%7D%7D" class="card-action">
+                    Add MCP to VS Code 
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+
+            <!-- Cursor -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background:#000;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 15l10-10 4 14-4-2-4 4-6-16z" fill="#fff" stroke="#000" stroke-width="2" stroke-linejoin="round"/></svg>
+                    </div>
+                    <h3 class="card-title">Cursor</h3>
+                </div>
+                <ul class="card-list">
+                    <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues</li>
+                    <li>One-click auto-configuration</li>
+                </ul>
+                <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-gitlab&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtZ2l0bGFiIl0sImVudiI6eyJHSVRMQUJfVVJMIjoiaHR0cHM6Ly9naXRsYWIuZXhhbXBsZS5jb20iLCJHSVRMQUJfVE9LRU4iOiJ5b3VyLXRva2VuIn19" class="card-action">
+                    Add MCP to Cursor
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+            </div>
+
+            <!-- Claude Code -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background:#d97757;">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#fff"/></svg>
+                    </div>
+                    <h3 class="card-title">Claude Code</h3>
+                </div>
+                <ul class="card-list">
+                    <li>CLI agent for Claude 3.7 Sonnet</li>
+                    <li>Local server via `claude mcp add`</li>
+                </ul>
+                <button class="card-action" onclick="showModal('GitLab for Claude Code', 'claude mcp add gitlab -- uvx mcp-gitlab', 'Run this command in your terminal:')">
+                    View install guide
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+
+            <!-- Windsurf -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background:#0ea5e9;">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L2 12h3v8h14v-8h3L12 3z" fill="#fff"/></svg>
+                    </div>
+                    <h3 class="card-title">Windsurf</h3>
+                </div>
+                <ul class="card-list">
+                    <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues</li>
+                    <li>Update `mcp_config.json`</li>
+                </ul>
+                <button class="card-action" onclick="showModal('GitLab for Windsurf', `{
+  "mcpServers": {
+    "gitlab": {
+      "command": "uvx",
+      "args": ["mcp-gitlab"],
+      "env": {
+        "GITLAB_URL": "https://gitlab.example.com",
+        "GITLAB_TOKEN": "glpat-xxxxxxxxxxxxxxxxxxxx"
       }
-    },
-    ...
+    }
   }
-}
-</code></pre>
-<h3>pip / uv</h3>
-<pre><code class="language-bash">uv pip install mcp-gitlab
-</code></pre>
-<h2>Configuration</h2>
-<table>
-<thead>
-<tr>
-<th>Variable</th>
-<th>Required</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>GITLAB_URL</code></td>
-<td>Yes</td>
-<td>GitLab instance URL (e.g. <code>https://gitlab.example.com</code>)</td>
-</tr>
-<tr>
-<td><code>GITLAB_TOKEN</code></td>
-<td>Yes</td>
-<td>Authentication token (see below)</td>
-</tr>
-<tr>
-<td><code>GITLAB_READ_ONLY</code></td>
-<td>No</td>
-<td>Set to <code>true</code> to disable write operations</td>
-</tr>
-<tr>
-<td><code>GITLAB_TIMEOUT</code></td>
-<td>No</td>
-<td>Request timeout in seconds (default: 30)</td>
-</tr>
-<tr>
-<td><code>GITLAB_SSL_VERIFY</code></td>
-<td>No</td>
-<td>Set to <code>false</code> to skip SSL verification</td>
-</tr>
-</tbody>
-</table>
-<h3>Supported Token Types</h3>
-<p><code>GITLAB_TOKEN</code> (or <code>GITLAB_PAT</code>) accepts any of these:</p>
-<table>
-<thead>
-<tr>
-<th>Token Type</th>
-<th>Format</th>
-<th>Use Case</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Personal access token</td>
-<td><code>glpat-xxx</code></td>
-<td>User-level access with <code>api</code> scope</td>
-</tr>
-<tr>
-<td>OAuth2 token</td>
-<td><code>oauth-xxx</code></td>
-<td>OAuth app integrations</td>
-</tr>
-<tr>
-<td>CI job token</td>
-<td><code>$CI_JOB_TOKEN</code></td>
-<td>GitLab CI pipeline access</td>
-</tr>
-</tbody>
-</table>
-<h2>Compatibility</h2>
-<table>
-<thead>
-<tr>
-<th>Client</th>
-<th>Supported</th>
-<th>Install Method</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Claude Desktop</td>
-<td>Yes</td>
-<td><code>claude_desktop_config.json</code></td>
-</tr>
-<tr>
-<td>Claude Code</td>
-<td>Yes</td>
-<td><code>claude mcp add</code></td>
-</tr>
-<tr>
-<td>Cursor</td>
-<td>Yes</td>
-<td>One-click deeplink or <code>.cursor/mcp.json</code></td>
-</tr>
-<tr>
-<td>VS Code Copilot</td>
-<td>Yes</td>
-<td>One-click deeplink or <code>.vscode/mcp.json</code></td>
-</tr>
-<tr>
-<td>Windsurf</td>
-<td>Yes</td>
-<td><code>~/.codeium/windsurf/mcp_config.json</code></td>
-</tr>
-<tr>
-<td>Any MCP client</td>
-<td>Yes</td>
-<td>stdio or HTTP transport</td>
-</tr>
-</tbody>
-</table>
-<h2>Tools (76)</h2>
-<table>
-<thead>
-<tr>
-<th>Category</th>
-<th>Count</th>
-<th>Tools</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Projects</strong></td>
-<td>4</td>
-<td>get, create, delete, update merge settings</td>
-</tr>
-<tr>
-<td><strong>Project Approvals</strong></td>
-<td>10</td>
-<td>get/update config, CRUD approval rules (project + MR)</td>
-</tr>
-<tr>
-<td><strong>Groups</strong></td>
-<td>6</td>
-<td>list, get, share/unshare project, share/unshare group</td>
-</tr>
-<tr>
-<td><strong>Branches</strong></td>
-<td>3</td>
-<td>list, create, delete</td>
-</tr>
-<tr>
-<td><strong>Commits</strong></td>
-<td>4</td>
-<td>list, get (with diff), create, compare</td>
-</tr>
-<tr>
-<td><strong>Merge Requests</strong></td>
-<td>8</td>
-<td>list, get, create, update, merge, merge-sequence, rebase, changes</td>
-</tr>
-<tr>
-<td><strong>MR Notes</strong></td>
-<td>6</td>
-<td>list, add, delete, update, award emoji, remove emoji</td>
-</tr>
-<tr>
-<td><strong>MR Discussions</strong></td>
-<td>4</td>
-<td>list, create (inline + multi-line), reply, resolve</td>
-</tr>
-<tr>
-<td><strong>Pipelines</strong></td>
-<td>5</td>
-<td>list, get (with jobs), create, retry, cancel</td>
-</tr>
-<tr>
-<td><strong>Jobs</strong></td>
-<td>4</td>
-<td>retry, play, cancel, get log</td>
-</tr>
-<tr>
-<td><strong>Tags</strong></td>
-<td>4</td>
-<td>list, get, create, delete</td>
-</tr>
-<tr>
-<td><strong>Releases</strong></td>
-<td>5</td>
-<td>list, get, create, update, delete</td>
-</tr>
-<tr>
-<td><strong>CI/CD Variables</strong></td>
-<td>8</td>
-<td>CRUD for project variables, CRUD for group variables</td>
-</tr>
-<tr>
-<td><strong>Issues</strong></td>
-<td>5</td>
-<td>list, get, create, update, add comment</td>
-</tr>
-</tbody>
-</table>
-<details>
-<summary>Full tool reference (click to expand)</summary>
+}`, 'Add this to ~/.codeium/windsurf/mcp_config.json:')">
+                    View install guide
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
 
-### Projects
-| Tool | Description |
-|------|-------------|
-| `gitlab_get_project` | Get project details |
-| `gitlab_create_project` | Create a new project |
-| `gitlab_delete_project` | Delete a project |
-| `gitlab_update_project_merge_settings` | Update merge settings |
+            <!-- IntelliJ -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background:#000;">
+                        <span style="color:#fff;font-weight:bold;font-size:1.2rem;">IJ</span>
+                    </div>
+                    <h3 class="card-title">IntelliJ IDEA</h3>
+                </div>
+                <ul class="card-list">
+                    <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues</li>
+                    <li>Built-in MCP settings integration</li>
+                </ul>
+                <button class="card-action" onclick="showModal('GitLab for IntelliJ', `{
+  "mcpServers": {
+    "gitlab": {
+      "command": "uvx",
+      "args": ["mcp-gitlab"],
+      "env": {
+        "GITLAB_URL": "https://gitlab.example.com",
+        "GITLAB_TOKEN": "glpat-xxxxxxxxxxxxxxxxxxxx"
+      }
+    }
+  }
+}`, 'Add this to Settings | Tools | MCP Servers:')">
+                    View install guide
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
 
-### Project Approvals
-| Tool | Description |
-|------|-------------|
-| `gitlab_get_project_approvals` | Get approval config |
-| `gitlab_update_project_approvals` | Update approval settings |
-| `gitlab_list_project_approval_rules` | List approval rules |
-| `gitlab_create_project_approval_rule` | Create approval rule |
-| `gitlab_update_project_approval_rule` | Update approval rule |
-| `gitlab_delete_project_approval_rule` | Delete approval rule |
-| `gitlab_list_mr_approval_rules` | List MR approval rules |
-| `gitlab_create_mr_approval_rule` | Create MR approval rule |
-| `gitlab_update_mr_approval_rule` | Update MR approval rule |
-| `gitlab_delete_mr_approval_rule` | Delete MR approval rule |
-
-### Groups
-| Tool | Description |
-|------|-------------|
-| `gitlab_list_groups` | List groups |
-| `gitlab_get_group` | Get group details |
-| `gitlab_share_project_with_group` | Share project with group |
-| `gitlab_unshare_project_with_group` | Unshare project from group |
-| `gitlab_share_group_with_group` | Share group with group |
-| `gitlab_unshare_group_with_group` | Unshare group from group |
-
-### Branches
-| Tool | Description |
-|------|-------------|
-| `gitlab_list_branches` | List branches |
-| `gitlab_create_branch` | Create a branch |
-| `gitlab_delete_branch` | Delete a branch |
-
-### Commits
-| Tool | Description |
-|------|-------------|
-| `gitlab_list_commits` | List commits |
-| `gitlab_get_commit` | Get commit (with optional diff) |
-| `gitlab_create_commit` | Create commit with file actions |
-| `gitlab_compare` | Compare branches/tags/commits |
-
-### Merge Requests
-| Tool | Description |
-|------|-------------|
-| `gitlab_list_mrs` | List merge requests |
-| `gitlab_get_mr` | Get MR details |
-| `gitlab_create_mr` | Create merge request |
-| `gitlab_update_mr` | Update merge request |
-| `gitlab_merge_mr` | Merge a merge request |
-| `gitlab_merge_mr_sequence` | Merge multiple MRs in order |
-| `gitlab_rebase_mr` | Rebase a merge request |
-| `gitlab_mr_changes` | Get MR file changes |
-
-### MR Notes
-| Tool | Description |
-|------|-------------|
-| `gitlab_list_mr_notes` | List MR comments |
-| `gitlab_add_mr_note` | Add comment to MR |
-| `gitlab_delete_mr_note` | Delete MR comment |
-| `gitlab_update_mr_note` | Update MR comment |
-| `gitlab_award_emoji` | Award emoji to note |
-| `gitlab_remove_emoji` | Remove emoji from note |
-
-### MR Discussions
-| Tool | Description |
-|------|-------------|
-| `gitlab_list_mr_discussions` | List discussions |
-| `gitlab_create_mr_discussion` | Create discussion (inline + multi-line) |
-| `gitlab_reply_to_discussion` | Reply to discussion |
-| `gitlab_resolve_discussion` | Resolve/unresolve discussion |
-
-### Pipelines
-| Tool | Description |
-|------|-------------|
-| `gitlab_list_pipelines` | List pipelines |
-| `gitlab_get_pipeline` | Get pipeline (with optional jobs) |
-| `gitlab_create_pipeline` | Trigger pipeline |
-| `gitlab_retry_pipeline` | Retry failed jobs |
-| `gitlab_cancel_pipeline` | Cancel pipeline |
-
-### Jobs
-| Tool | Description |
-|------|-------------|
-| `gitlab_retry_job` | Retry a job |
-| `gitlab_play_job` | Trigger manual job |
-| `gitlab_cancel_job` | Cancel a job |
-| `gitlab_get_job_log` | Get job log output |
-
-### Tags
-| Tool | Description |
-|------|-------------|
-| `gitlab_list_tags` | List tags |
-| `gitlab_get_tag` | Get tag details |
-| `gitlab_create_tag` | Create a tag |
-| `gitlab_delete_tag` | Delete a tag |
-
-### Releases
-| Tool | Description |
-|------|-------------|
-| `gitlab_list_releases` | List releases |
-| `gitlab_get_release` | Get release details |
-| `gitlab_create_release` | Create a release |
-| `gitlab_update_release` | Update a release |
-| `gitlab_delete_release` | Delete a release |
-
-### CI/CD Variables
-| Tool | Description |
-|------|-------------|
-| `gitlab_list_variables` | List project variables |
-| `gitlab_create_variable` | Create project variable |
-| `gitlab_update_variable` | Update project variable |
-| `gitlab_delete_variable` | Delete project variable |
-| `gitlab_list_group_variables` | List group variables |
-| `gitlab_create_group_variable` | Create group variable |
-| `gitlab_update_group_variable` | Update group variable |
-| `gitlab_delete_group_variable` | Delete group variable |
-
-### Issues
-| Tool | Description |
-|------|-------------|
-| `gitlab_list_issues` | List issues |
-| `gitlab_get_issue` | Get issue details |
-| `gitlab_create_issue` | Create an issue |
-| `gitlab_update_issue` | Update an issue |
-| `gitlab_add_issue_comment` | Add comment to issue |
-
-</details>
-
-<h2>Development</h2>
-<pre><code class="language-bash">git clone https://github.com/vish288/mcp-gitlab.git
-cd mcp-gitlab
-uv sync --all-extras
-
-uv run pytest --cov
-uv run ruff check .
-uv run ruff format --check .
-</code></pre>
-<h2>License</h2>
-<p>MIT</p>
+            <!-- Claude Desktop -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background:#d97757;">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#fff"/></svg>
+                    </div>
+                    <h3 class="card-title">Claude Desktop</h3>
+                </div>
+                <ul class="card-list">
+                    <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues</li>
+                    <li>Update `claude_desktop_config.json`</li>
+                </ul>
+                <button class="card-action" onclick="showModal('GitLab for Claude', `{
+  "mcpServers": {
+    "gitlab": {
+      "command": "uvx",
+      "args": ["mcp-gitlab"],
+      "env": {
+        "GITLAB_URL": "https://gitlab.example.com",
+        "GITLAB_TOKEN": "glpat-xxxxxxxxxxxxxxxxxxxx"
+      }
+    }
+  }
+}`, 'Add this to your Claude Desktop config file:')">
+                    View install guide
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+            
         </div>
     </div>
-    
+
+    <!-- Modal -->
+    <div id="modal-overlay" class="modal-overlay" onclick="if(event.target === this) closeModal()">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modal-title" class="modal-title">Install Guide</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <p id="modal-desc" style="color:var(--text-secondary);margin-bottom:12px;"></p>
+            <div id="modal-code" class="code-block"></div>
+            <button id="copy-btn" class="copy-btn" onclick="copyCode()">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy to clipboard
+            </button>
+        </div>
+    </div>
+
     <script>
-        // Start the redirect
-        setTimeout(function(){
-            document.getElementById('redirect-overlay').style.display = 'block';
-            window.location.href = "cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-gitlab&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtZ2l0bGFiIl0sImVudiI6eyJHSVRMQUJfVVJMIjoiaHR0cHM6Ly9naXRsYWIuZXhhbXBsZS5jb20iLCJHSVRMQUJfVE9LRU4iOiJ5b3VyLXRva2VuIn19";
-            setTimeout(function(){
-                document.getElementById('redirect-overlay').style.display = 'none';
-            }, 3000);
-        }, 500);
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDesc = document.getElementById('modal-desc');
+        const modalCode = document.getElementById('modal-code');
+        const copyBtn = document.getElementById('copy-btn');
+        let currentCode = '';
+
+        function showModal(title, code, desc) {
+            modalTitle.innerText = title;
+            modalDesc.innerText = desc;
+            modalCode.innerText = code;
+            currentCode = code;
+            
+            copyBtn.classList.remove('copied');
+            copyBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy to clipboard';
+            
+            modalOverlay.style.display = 'flex';
+            setTimeout(() => {
+                modalOverlay.style.opacity = '1';
+                modalOverlay.querySelector('.modal').style.transform = 'scale(1)';
+            }, 10);
+        }
+
+        function closeModal() {
+            modalOverlay.style.opacity = '0';
+            modalOverlay.querySelector('.modal').style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                modalOverlay.style.display = 'none';
+            }, 200);
+        }
+
+        function copyCode() {
+            navigator.clipboard.writeText(currentCode).then(() => {
+                copyBtn.classList.add('copied');
+                copyBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Copied!';
+                setTimeout(() => {
+                    copyBtn.classList.remove('copied');
+                    copyBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy to clipboard';
+                }, 2000);
+            });
+        }
     </script>
 </body>
 </html>
