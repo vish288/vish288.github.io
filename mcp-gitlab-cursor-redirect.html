@@ -6,7 +6,7 @@
     
     <!-- SEO & Metadata -->
     <title>Connect GitLab MCP Server | Installation Guide</title>
-    <meta name="description" content="One-click redirect and installation guide to connect the mcp-gitlab MCP server to Cursor, VS Code, Claude Code, Windsurf, and IntelliJ. Supports projects, MRs, pipelines, CI/CD variables, approvals, issues.">
+    <meta name="description" content="One-click redirect and installation guide to connect the mcp-gitlab MCP server to Cursor, VS Code, Claude Code, Windsurf, and IntelliJ. Supports projects, MRs, pipelines, CI/CD variables, approvals, issues, code reviews, and more.">
     <meta name="robots" content="index,follow">
     
     <!-- Open Graph -->
@@ -173,7 +173,7 @@
             box-sizing: border-box;
         }
         
-        .card-icon img, .card-icon svg {
+        .card-icon img {
             width: 100%;
             height: 100%;
             object-fit: contain;
@@ -362,7 +362,7 @@
     <!-- Header -->
     <header class="nav">
         <a href="https://vish288.github.io/" class="nav-logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L22 7V17L12 22L2 17V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            <img src="https://cdn.simpleicons.org/modelcontextprotocol/000000" alt="MCP Logo" width="24" height="24" />
             MCP Catalog
         </a>
         <div class="nav-links">
@@ -372,7 +372,7 @@
                 <option value="/mcp-atlassian-extended-cursor-redirect.html" >Atlassian Extended</option>
             </select>
             <a href="https://github.com/vish288/mcp-gitlab">GitHub</a>
-            <a href="https://pypi.org/project/mcp-gitlab">PyPI</a>
+            <a href="https://pypi.org/project/mcp-gitlab/">PyPI</a>
         </div>
     </header>
 
@@ -392,12 +392,12 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 4.3l-10.7 10L3.9 11.4l-1.5 1.5 4.4 4.4L19 5.8 17.5 4.3z" fill="#0078D7"/><path d="M19 5.8l2.6 2.4-1.5 1.6-1.1-1-10.7 10 10.7 10 1.1-1 1.5 1.6-2.6 2.4L5.2 17.6l-3.8 3.5-1.5-1.5 5.3-5L0 9.6l1.5-1.5 3.8 3.5L19 5.8z" fill="#23A9F2"/></svg>
+                            <img src="https://cdn.simpleicons.org/visualstudiocode/007ACC" alt="VS Code" />
                         </div>
                         <h3 class="card-title">VS Code</h3>
                     </div>
                     <ul class="card-list">
-                        <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues</li>
+                        <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues, code reviews, and more</li>
                         <li>Prompts for API tokens interactively</li>
                     </ul>
                     <a href="https://insiders.vscode.dev/redirect/mcp/install?name=mcp-gitlab&inputs=%5B%7B%22id%22%3A%22gitlab-url%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22GitLab%20URL%22%2C%22default%22%3A%22https%3A%2F%2Fgitlab.example.com%22%7D%2C%7B%22id%22%3A%22gitlab-token%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22GitLab%20Personal%20Access%20Token%22%2C%22password%22%3Atrue%7D%5D&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-gitlab%22%5D%2C%22env%22%3A%7B%22GITLAB_URL%22%3A%22%24%7Binput%3Agitlab-url%7D%22%2C%22GITLAB_TOKEN%22%3A%22%24%7Binput%3Agitlab-token%7D%22%7D%7D" class="card-action">
@@ -410,15 +410,15 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon" style="background:#000;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 15l10-10 4 14-4-2-4 4-6-16z" fill="#fff" stroke="#000" stroke-width="2" stroke-linejoin="round"/></svg>
+                            <img src="https://cdn.simpleicons.org/cursor/ffffff" alt="Cursor" />
                         </div>
                         <h3 class="card-title">Cursor</h3>
                     </div>
                     <ul class="card-list">
-                        <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues</li>
+                        <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues, code reviews, and more</li>
                         <li>One-click auto-configuration</li>
                     </ul>
-                    <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-gitlab&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtZ2l0bGFiIl0sImVudiI6eyJHSVRMQUJfVVJMIjoiaHR0cHM6Ly9naXRsYWIuZXhhbXBsZS5jb20iLCJHSVRMQUJfVE9LRU4iOiJ5b3VyLXRva2VuIn19" class="card-action">
+                    <a href="cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-gitlab&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtZ2l0bGFiIl0sImVudiI6eyJHSVRMQUJfVVJMIjoiaHR0cHM6Ly9naXRsYWIuZXhhbXBsZS5jb20iLCJHSVRMQUJfVE9LRU4iOiJnbHBhdC14eHh4eHh4eHh4eHh4eHh4eHh4eCJ9fQ==" class="card-action">
                         Add MCP to Cursor
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </a>
@@ -428,7 +428,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon" style="background:#d97757;">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#fff"/></svg>
+                            <img src="https://cdn.simpleicons.org/claude/ffffff" alt="Claude Code" />
                         </div>
                         <h3 class="card-title">Claude Code</h3>
                     </div>
@@ -446,12 +446,12 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon" style="background:#0ea5e9;">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3L2 12h3v8h14v-8h3L12 3z" fill="#fff"/></svg>
+                            <img src="https://cdn.simpleicons.org/windsurf/ffffff" alt="Windsurf" />
                         </div>
                         <h3 class="card-title">Windsurf</h3>
                     </div>
                     <ul class="card-list">
-                        <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues</li>
+                        <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues, code reviews, and more</li>
                         <li>Update `mcp_config.json`</li>
                     </ul>
                     <button class="card-action" onclick="showModal('GitLab for Windsurf', `{
@@ -475,12 +475,12 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon" style="background:#000;">
-                            <span style="color:#fff;font-weight:bold;font-size:1.2rem;">IJ</span>
+                            <img src="https://cdn.simpleicons.org/intellijidea/ffffff" alt="IntelliJ IDEA" />
                         </div>
                         <h3 class="card-title">IntelliJ IDEA</h3>
                     </div>
                     <ul class="card-list">
-                        <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues</li>
+                        <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues, code reviews, and more</li>
                         <li>Built-in MCP settings integration</li>
                     </ul>
                     <button class="card-action" onclick="showModal('GitLab for IntelliJ', `{
@@ -504,12 +504,12 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon" style="background:#d97757;">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm0-4h-2V7h2v6zm4 4h-2v-2h2v2zm0-4h-2V7h2v6z" fill="#fff"/></svg>
+                            <img src="https://cdn.simpleicons.org/claude/ffffff" alt="Claude Desktop" />
                         </div>
                         <h3 class="card-title">Claude Desktop</h3>
                     </div>
                     <ul class="card-list">
-                        <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues</li>
+                        <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues, code reviews, and more</li>
                         <li>Update `claude_desktop_config.json`</li>
                     </ul>
                     <button class="card-action" onclick="showModal('GitLab for Claude', `{
@@ -565,10 +565,6 @@
 
     <!-- Background redirect for initial load (optional velvet-rope) -->
     <script>
-        // Only trigger automatic redirect if there's a specific hash or we want it by default
-        // The previous design auto-redirected. If we want to keep that:
-        // setTimeout(function(){ window.location.href = "cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-gitlab&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtZ2l0bGFiIl0sImVudiI6eyJHSVRMQUJfVVJMIjoiaHR0cHM6Ly9naXRsYWIuZXhhbXBsZS5jb20iLCJHSVRMQUJfVE9LRU4iOiJ5b3VyLXRva2VuIn19"; }, 500);
-
         const modalOverlay = document.getElementById('modal-overlay');
         const modalTitle = document.getElementById('modal-title');
         const modalDesc = document.getElementById('modal-desc');
