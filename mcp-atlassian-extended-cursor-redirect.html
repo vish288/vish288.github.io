@@ -441,7 +441,7 @@
                         <li>CLI agent for Claude 3.7 Sonnet</li>
                         <li>Local server via `claude mcp add`</li>
                     </ul>
-                    <button class="card-action" onclick="showModal('Atlassian Extended for Claude Code', 'claude mcp add atlassian-extended -- uvx mcp-atlassian-extended', 'Run this command in your terminal:')">
+                    <button class="card-action" onclick="showModal('Atlassian Extended for Claude Code', decodeURIComponent('claude%20mcp%20add%20atlassian-extended%20--%20uvx%20mcp-atlassian-extended'), 'Run this command in your terminal:')">
                         View install guide
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
@@ -459,22 +459,7 @@
                         <li>Supports Jira custom fields, issue links, attachments, agile boards, sprints, backlog, users, Confluence calendars, time-off tracking, and sprint capacity</li>
                         <li>Update `mcp_config.json`</li>
                     </ul>
-                    <button class="card-action" onclick="showModal('Atlassian Extended for Windsurf', `{
-  "mcpServers": {
-    "atlassian-extended": {
-      "command": "uvx",
-      "args": ["mcp-atlassian-extended"],
-      "env": {
-        "JIRA_URL": "https://your-company.atlassian.net",
-        "JIRA_USERNAME": "your.email@company.com",
-        "JIRA_API_TOKEN": "your_api_token",
-        "CONFLUENCE_URL": "https://your-company.atlassian.net/wiki",
-        "CONFLUENCE_USERNAME": "your.email@company.com",
-        "CONFLUENCE_API_TOKEN": "your_api_token"
-      }
-    }
-  }
-}`, 'Add this to ~/.codeium/windsurf/mcp_config.json:')">
+                    <button class="card-action" onclick="showModal('Atlassian Extended for Windsurf', decodeURIComponent('%7B%0A%20%20%22mcpServers%22%3A%20%7B%0A%20%20%20%20%22atlassian-extended%22%3A%20%7B%0A%20%20%20%20%20%20%22command%22%3A%20%22uvx%22%2C%0A%20%20%20%20%20%20%22args%22%3A%20%5B%22mcp-atlassian-extended%22%5D%2C%0A%20%20%20%20%20%20%22env%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%22JIRA_URL%22%3A%20%22https%3A//your-company.atlassian.net%22%2C%0A%20%20%20%20%20%20%20%20%22JIRA_USERNAME%22%3A%20%22your.email%40company.com%22%2C%0A%20%20%20%20%20%20%20%20%22JIRA_API_TOKEN%22%3A%20%22your_api_token%22%2C%0A%20%20%20%20%20%20%20%20%22CONFLUENCE_URL%22%3A%20%22https%3A//your-company.atlassian.net/wiki%22%2C%0A%20%20%20%20%20%20%20%20%22CONFLUENCE_USERNAME%22%3A%20%22your.email%40company.com%22%2C%0A%20%20%20%20%20%20%20%20%22CONFLUENCE_API_TOKEN%22%3A%20%22your_api_token%22%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D'), 'Add this to ~/.codeium/windsurf/mcp_config.json:')">
                         View install guide
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
@@ -492,22 +477,7 @@
                         <li>Supports Jira custom fields, issue links, attachments, agile boards, sprints, backlog, users, Confluence calendars, time-off tracking, and sprint capacity</li>
                         <li>Built-in MCP settings integration</li>
                     </ul>
-                    <button class="card-action" onclick="showModal('Atlassian Extended for IntelliJ', `{
-  "mcpServers": {
-    "atlassian-extended": {
-      "command": "uvx",
-      "args": ["mcp-atlassian-extended"],
-      "env": {
-        "JIRA_URL": "https://your-company.atlassian.net",
-        "JIRA_USERNAME": "your.email@company.com",
-        "JIRA_API_TOKEN": "your_api_token",
-        "CONFLUENCE_URL": "https://your-company.atlassian.net/wiki",
-        "CONFLUENCE_USERNAME": "your.email@company.com",
-        "CONFLUENCE_API_TOKEN": "your_api_token"
-      }
-    }
-  }
-}`, 'Add this to Settings | Tools | MCP Servers:')">
+                    <button class="card-action" onclick="showModal('Atlassian Extended for IntelliJ', decodeURIComponent('%7B%0A%20%20%22mcpServers%22%3A%20%7B%0A%20%20%20%20%22atlassian-extended%22%3A%20%7B%0A%20%20%20%20%20%20%22command%22%3A%20%22uvx%22%2C%0A%20%20%20%20%20%20%22args%22%3A%20%5B%22mcp-atlassian-extended%22%5D%2C%0A%20%20%20%20%20%20%22env%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%22JIRA_URL%22%3A%20%22https%3A//your-company.atlassian.net%22%2C%0A%20%20%20%20%20%20%20%20%22JIRA_USERNAME%22%3A%20%22your.email%40company.com%22%2C%0A%20%20%20%20%20%20%20%20%22JIRA_API_TOKEN%22%3A%20%22your_api_token%22%2C%0A%20%20%20%20%20%20%20%20%22CONFLUENCE_URL%22%3A%20%22https%3A//your-company.atlassian.net/wiki%22%2C%0A%20%20%20%20%20%20%20%20%22CONFLUENCE_USERNAME%22%3A%20%22your.email%40company.com%22%2C%0A%20%20%20%20%20%20%20%20%22CONFLUENCE_API_TOKEN%22%3A%20%22your_api_token%22%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D'), 'Add this to Settings | Tools | MCP Servers:')">
                         View install guide
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
@@ -517,30 +487,15 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon" style="background:#d97757;">
-                            <img src="https://cdn.simpleicons.org/claude/ffffff" alt="Claude Desktop" />
+                            <img src="https://cdn.simpleicons.org/claude/ffffff" alt="Claude" />
                         </div>
-                        <h3 class="card-title">Claude Desktop</h3>
+                        <h3 class="card-title">Claude</h3>
                     </div>
                     <ul class="card-list">
                         <li>Supports Jira custom fields, issue links, attachments, agile boards, sprints, backlog, users, Confluence calendars, time-off tracking, and sprint capacity</li>
-                        <li>Update `claude_desktop_config.json`</li>
+                        <li>Supports direct addition of MCP via app UI</li>
                     </ul>
-                    <button class="card-action" onclick="showModal('Atlassian Extended for Claude', `{
-  "mcpServers": {
-    "atlassian-extended": {
-      "command": "uvx",
-      "args": ["mcp-atlassian-extended"],
-      "env": {
-        "JIRA_URL": "https://your-company.atlassian.net",
-        "JIRA_USERNAME": "your.email@company.com",
-        "JIRA_API_TOKEN": "your_api_token",
-        "CONFLUENCE_URL": "https://your-company.atlassian.net/wiki",
-        "CONFLUENCE_USERNAME": "your.email@company.com",
-        "CONFLUENCE_API_TOKEN": "your_api_token"
-      }
-    }
-  }
-}`, 'Add this to your Claude Desktop config file:')">
+                    <button class="card-action" onclick="showModal('Atlassian Extended for Claude', decodeURIComponent('%7B%0A%20%20%22mcpServers%22%3A%20%7B%0A%20%20%20%20%22atlassian-extended%22%3A%20%7B%0A%20%20%20%20%20%20%22command%22%3A%20%22uvx%22%2C%0A%20%20%20%20%20%20%22args%22%3A%20%5B%22mcp-atlassian-extended%22%5D%2C%0A%20%20%20%20%20%20%22env%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%22JIRA_URL%22%3A%20%22https%3A//your-company.atlassian.net%22%2C%0A%20%20%20%20%20%20%20%20%22JIRA_USERNAME%22%3A%20%22your.email%40company.com%22%2C%0A%20%20%20%20%20%20%20%20%22JIRA_API_TOKEN%22%3A%20%22your_api_token%22%2C%0A%20%20%20%20%20%20%20%20%22CONFLUENCE_URL%22%3A%20%22https%3A//your-company.atlassian.net/wiki%22%2C%0A%20%20%20%20%20%20%20%20%22CONFLUENCE_USERNAME%22%3A%20%22your.email%40company.com%22%2C%0A%20%20%20%20%20%20%20%20%22CONFLUENCE_API_TOKEN%22%3A%20%22your_api_token%22%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D'), 'Configure via Settings -> MCP Servers, or config file:')">
                         View install guide
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>

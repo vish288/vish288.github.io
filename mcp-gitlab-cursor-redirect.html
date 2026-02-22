@@ -441,7 +441,7 @@
                         <li>CLI agent for Claude 3.7 Sonnet</li>
                         <li>Local server via `claude mcp add`</li>
                     </ul>
-                    <button class="card-action" onclick="showModal('GitLab for Claude Code', 'claude mcp add gitlab -- uvx mcp-gitlab', 'Run this command in your terminal:')">
+                    <button class="card-action" onclick="showModal('GitLab for Claude Code', decodeURIComponent('claude%20mcp%20add%20gitlab%20--%20uvx%20mcp-gitlab'), 'Run this command in your terminal:')">
                         View install guide
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
@@ -459,18 +459,7 @@
                         <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues, code reviews, and more</li>
                         <li>Update `mcp_config.json`</li>
                     </ul>
-                    <button class="card-action" onclick="showModal('GitLab for Windsurf', `{
-  "mcpServers": {
-    "gitlab": {
-      "command": "uvx",
-      "args": ["mcp-gitlab"],
-      "env": {
-        "GITLAB_URL": "https://gitlab.example.com",
-        "GITLAB_TOKEN": "glpat-xxxxxxxxxxxxxxxxxxxx"
-      }
-    }
-  }
-}`, 'Add this to ~/.codeium/windsurf/mcp_config.json:')">
+                    <button class="card-action" onclick="showModal('GitLab for Windsurf', decodeURIComponent('%7B%0A%20%20%22mcpServers%22%3A%20%7B%0A%20%20%20%20%22gitlab%22%3A%20%7B%0A%20%20%20%20%20%20%22command%22%3A%20%22uvx%22%2C%0A%20%20%20%20%20%20%22args%22%3A%20%5B%22mcp-gitlab%22%5D%2C%0A%20%20%20%20%20%20%22env%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%22GITLAB_URL%22%3A%20%22https%3A//gitlab.example.com%22%2C%0A%20%20%20%20%20%20%20%20%22GITLAB_TOKEN%22%3A%20%22glpat-xxxxxxxxxxxxxxxxxxxx%22%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D'), 'Add this to ~/.codeium/windsurf/mcp_config.json:')">
                         View install guide
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
@@ -488,18 +477,7 @@
                         <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues, code reviews, and more</li>
                         <li>Built-in MCP settings integration</li>
                     </ul>
-                    <button class="card-action" onclick="showModal('GitLab for IntelliJ', `{
-  "mcpServers": {
-    "gitlab": {
-      "command": "uvx",
-      "args": ["mcp-gitlab"],
-      "env": {
-        "GITLAB_URL": "https://gitlab.example.com",
-        "GITLAB_TOKEN": "glpat-xxxxxxxxxxxxxxxxxxxx"
-      }
-    }
-  }
-}`, 'Add this to Settings | Tools | MCP Servers:')">
+                    <button class="card-action" onclick="showModal('GitLab for IntelliJ', decodeURIComponent('%7B%0A%20%20%22mcpServers%22%3A%20%7B%0A%20%20%20%20%22gitlab%22%3A%20%7B%0A%20%20%20%20%20%20%22command%22%3A%20%22uvx%22%2C%0A%20%20%20%20%20%20%22args%22%3A%20%5B%22mcp-gitlab%22%5D%2C%0A%20%20%20%20%20%20%22env%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%22GITLAB_URL%22%3A%20%22https%3A//gitlab.example.com%22%2C%0A%20%20%20%20%20%20%20%20%22GITLAB_TOKEN%22%3A%20%22glpat-xxxxxxxxxxxxxxxxxxxx%22%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D'), 'Add this to Settings | Tools | MCP Servers:')">
                         View install guide
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
@@ -509,26 +487,15 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="card-icon" style="background:#d97757;">
-                            <img src="https://cdn.simpleicons.org/claude/ffffff" alt="Claude Desktop" />
+                            <img src="https://cdn.simpleicons.org/claude/ffffff" alt="Claude" />
                         </div>
-                        <h3 class="card-title">Claude Desktop</h3>
+                        <h3 class="card-title">Claude</h3>
                     </div>
                     <ul class="card-list">
                         <li>Supports projects, MRs, pipelines, CI/CD variables, approvals, issues, code reviews, and more</li>
-                        <li>Update `claude_desktop_config.json`</li>
+                        <li>Supports direct addition of MCP via app UI</li>
                     </ul>
-                    <button class="card-action" onclick="showModal('GitLab for Claude', `{
-  "mcpServers": {
-    "gitlab": {
-      "command": "uvx",
-      "args": ["mcp-gitlab"],
-      "env": {
-        "GITLAB_URL": "https://gitlab.example.com",
-        "GITLAB_TOKEN": "glpat-xxxxxxxxxxxxxxxxxxxx"
-      }
-    }
-  }
-}`, 'Add this to your Claude Desktop config file:')">
+                    <button class="card-action" onclick="showModal('GitLab for Claude', decodeURIComponent('%7B%0A%20%20%22mcpServers%22%3A%20%7B%0A%20%20%20%20%22gitlab%22%3A%20%7B%0A%20%20%20%20%20%20%22command%22%3A%20%22uvx%22%2C%0A%20%20%20%20%20%20%22args%22%3A%20%5B%22mcp-gitlab%22%5D%2C%0A%20%20%20%20%20%20%22env%22%3A%20%7B%0A%20%20%20%20%20%20%20%20%22GITLAB_URL%22%3A%20%22https%3A//gitlab.example.com%22%2C%0A%20%20%20%20%20%20%20%20%22GITLAB_TOKEN%22%3A%20%22glpat-xxxxxxxxxxxxxxxxxxxx%22%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D'), 'Configure via Settings -> MCP Servers, or config file:')">
                         View install guide
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
