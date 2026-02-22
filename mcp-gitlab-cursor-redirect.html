@@ -7,18 +7,23 @@
     <!-- SEO & Metadata -->
     <title>GitLab MCP Server | Installation Gateway</title>
     <meta name="description" content="One-click redirect and installation guide to connect the mcp-gitlab MCP server to Cursor, VS Code, Claude Code, Windsurf, and IntelliJ. Supports projects, MRs, pipelines, CI/CD variables, approvals, issues, code reviews, and more.">
-    <meta name="robots" content="index,follow">
+    <meta name="keywords" content="MCP, Model Context Protocol, GitLab, mcp-gitlab, AI, Claude, Cursor, VS Code, Windsurf, IntelliJ, AI coding assistants">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="author" content="vish288">
     
     <!-- Open Graph -->
     <meta property="og:title" content="GitLab MCP Server | Installation Gateway">
     <meta property="og:description" content="One-click redirect and installation guide to connect the mcp-gitlab MCP server to your favorite AI coding clients.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://vish288.github.io/mcp-gitlab-cursor-redirect.html">
+    <meta property="og:site_name" content="MCP Catalog">
+    <meta property="og:image" content="https://vish288.github.io/mcp-catalog-og-image.png">
     
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="GitLab MCP Server | Installation Gateway">
     <meta name="twitter:description" content="Install the mcp-gitlab MCP server in Cursor, VS Code, Claude Code, Windsurf, and IntelliJ.">
+    <meta name="twitter:image" content="https://vish288.github.io/mcp-catalog-og-image.png">
     
     <!-- Canonical Link -->
     <link rel="canonical" href="https://vish288.github.io/mcp-gitlab-cursor-redirect.html">
@@ -563,8 +568,23 @@
         </div>
     </div>
 
-    <!-- Background redirect for initial load (optional velvet-rope) -->
+    <!-- Background redirect for initial load based on query params -->
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const installTarget = urlParams.get('install');
+            
+            if (installTarget === 'cursor') {
+                // Custom protocol doesn't navigate away, keeping the gateway open behind it
+                setTimeout(() => { window.location.href = "cursor://anysphere.cursor-deeplink/mcp/install?name=mcp-gitlab&config=eyJjb21tYW5kIjoidXZ4IiwiYXJncyI6WyJtY3AtZ2l0bGFiIl0sImVudiI6eyJHSVRMQUJfVVJMIjoiaHR0cHM6Ly9naXRsYWIuZXhhbXBsZS5jb20iLCJHSVRMQUJfVE9LRU4iOiJnbHBhdC14eHh4eHh4eHh4eHh4eHh4eHh4eCJ9fQ=="; }, 300);
+            } else if (installTarget === 'vscode') {
+                // Open VS Code web redirect in a new tab to keep the gateway open
+                setTimeout(() => { window.open("https://insiders.vscode.dev/redirect/mcp/install?name=mcp-gitlab&inputs=%5B%7B%22id%22%3A%22gitlab-url%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22GitLab%20URL%22%2C%22default%22%3A%22https%3A%2F%2Fgitlab.example.com%22%7D%2C%7B%22id%22%3A%22gitlab-token%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22GitLab%20Personal%20Access%20Token%22%2C%22password%22%3Atrue%7D%5D&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-gitlab%22%5D%2C%22env%22%3A%7B%22GITLAB_URL%22%3A%22%24%7Binput%3Agitlab-url%7D%22%2C%22GITLAB_TOKEN%22%3A%22%24%7Binput%3Agitlab-token%7D%22%7D%7D", "_blank"); }, 300);
+            } else if (installTarget === 'vscode-insiders') {
+                setTimeout(() => { window.open("https://insiders.vscode.dev/redirect/mcp/install?name=mcp-gitlab&inputs=%5B%7B%22id%22%3A%22gitlab-url%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22GitLab%20URL%22%2C%22default%22%3A%22https%3A%2F%2Fgitlab.example.com%22%7D%2C%7B%22id%22%3A%22gitlab-token%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22GitLab%20Personal%20Access%20Token%22%2C%22password%22%3Atrue%7D%5D&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22uvx%22%2C%22args%22%3A%5B%22mcp-gitlab%22%5D%2C%22env%22%3A%7B%22GITLAB_URL%22%3A%22%24%7Binput%3Agitlab-url%7D%22%2C%22GITLAB_TOKEN%22%3A%22%24%7Binput%3Agitlab-token%7D%22%7D%7D&quality=insiders", "_blank"); }, 300);
+            }
+        });
+
         const modalOverlay = document.getElementById('modal-overlay');
         const modalTitle = document.getElementById('modal-title');
         const modalDesc = document.getElementById('modal-desc');
