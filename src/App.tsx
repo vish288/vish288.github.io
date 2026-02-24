@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Heart, User } from 'lucide-react'
+import { Heart, User, Blocks } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
 import SentimentRoller from '@/components/SentimentRoller'
 import { cn } from '@/lib/utils'
@@ -20,9 +20,10 @@ import './index.css'
 function Navigation() {
   const location = useLocation()
 
-  const navItems = [
+  const navItems: { path: string; label: string; icon: typeof User; external?: boolean }[] = [
     { path: '/', label: APP_STRINGS.NAV_ABOUT, icon: User },
     { path: '/repositories', label: APP_STRINGS.NAV_REPOSITORIES, icon: GitHubIcon },
+    { path: '/mcp-install.html', label: APP_STRINGS.NAV_MCP, icon: Blocks, external: true },
     { path: '/gratitude', label: APP_STRINGS.NAV_GRATITUDE, icon: Heart },
   ]
 
@@ -40,30 +41,37 @@ function Navigation() {
 
           {/* Navigation Links */}
           <div className='flex items-center space-x-1'>
-            {navItems.map(({ path, label, icon: Icon }) => (
+            {navItems.map(({ path, label, icon: Icon, external }) => (
               <Button
                 key={path}
-                variant={location.pathname === path ? 'default' : 'ghost'}
+                variant={!external && location.pathname === path ? 'default' : 'ghost'}
                 size='sm'
                 asChild
               >
-                <Link
-                  to={path}
-                  className={cn(
-                    'flex items-center space-x-2',
-                    location.pathname === path && 'bg-primary text-primary-foreground'
-                  )}
-                >
-                  {path === '/gratitude' ? (
-                    <SentimentRoller className='text-sm hidden sm:flex' interval={4000} />
-                  ) : (
-                    <>
-                      <Icon className='h-4 w-4' />
-                      <span className='hidden sm:inline'>{label}</span>
-                    </>
-                  )}
-                  {path === '/gratitude' && <Heart className='h-4 w-4 sm:hidden' />}
-                </Link>
+                {external ? (
+                  <a href={path} className='flex items-center space-x-2'>
+                    <Icon className='h-4 w-4' />
+                    <span className='hidden sm:inline'>{label}</span>
+                  </a>
+                ) : (
+                  <Link
+                    to={path}
+                    className={cn(
+                      'flex items-center space-x-2',
+                      location.pathname === path && 'bg-primary text-primary-foreground'
+                    )}
+                  >
+                    {path === '/gratitude' ? (
+                      <SentimentRoller className='text-sm hidden sm:flex' interval={4000} />
+                    ) : (
+                      <>
+                        <Icon className='h-4 w-4' />
+                        <span className='hidden sm:inline'>{label}</span>
+                      </>
+                    )}
+                    {path === '/gratitude' && <Heart className='h-4 w-4 sm:hidden' />}
+                  </Link>
+                )}
               </Button>
             ))}
             <ThemeToggle />

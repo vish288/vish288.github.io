@@ -9,6 +9,7 @@ export const APP_STRINGS = {
   // Navigation
   NAV_ABOUT: 'About',
   NAV_REPOSITORIES: 'Repositories',
+  NAV_MCP: 'MCP Install',
   NAV_GRATITUDE: 'Gratitude',
 
   // About Page
