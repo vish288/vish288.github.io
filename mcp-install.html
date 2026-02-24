@@ -683,7 +683,7 @@
                     name: 'Claude Code',
                     icon: 'https://cdn.simpleicons.org/claude/ffffff',
                     iconBg: '#d97757',
-                    bullets: ['CLI agent for Claude 3.7 Sonnet', 'Local server via `claude mcp add`'],
+                    bullets: ['Terminal-based AI coding agent', 'Local server via `claude mcp add`'],
                     actionType: 'modal',
                     actionText: 'View install guide',
                     modalTitle: s.displayName + ' for Claude Code',
@@ -769,16 +769,12 @@
                 if (installTarget === 'cursor') {
                     setTimeout(function() { window.location.href = generateCursorDeeplink(serverKey); }, 300);
                 } else if (installTarget === 'vscode') {
-                    var vsInputs = encodeURIComponent(JSON.stringify(generateVSCodeInputs(serverKey)));
-                    var vsConfig = encodeURIComponent(JSON.stringify(generateVSCodeConfig(serverKey)));
                     setTimeout(function() {
-                        window.location.href = "vscode://mcp/install?name=" + SERVERS[serverKey].packageName + "&inputs=" + vsInputs + "&config=" + vsConfig;
+                        window.location.href = generateVSCodeDeeplink(serverKey, 'vscode');
                     }, 300);
                 } else if (installTarget === 'vscode-insiders') {
-                    var insInputs = encodeURIComponent(JSON.stringify(generateVSCodeInputs(serverKey)));
-                    var insConfig = encodeURIComponent(JSON.stringify(generateVSCodeConfig(serverKey)));
                     setTimeout(function() {
-                        window.location.href = "vscode-insiders://mcp/install?name=" + SERVERS[serverKey].packageName + "&inputs=" + insInputs + "&config=" + insConfig;
+                        window.location.href = generateVSCodeDeeplink(serverKey, 'vscode-insiders');
                     }, 300);
                 }
             } else {
