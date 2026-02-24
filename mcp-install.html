@@ -44,6 +44,10 @@
             --card-shadow-hover: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
 
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: var(--font-family);
             background: var(--bg-color);
@@ -68,6 +72,7 @@
             position: sticky;
             top: 0;
             z-index: 50;
+            flex-shrink: 0;
         }
 
         .nav-logo {
@@ -79,6 +84,12 @@
             display: flex;
             align-items: center;
             gap: 12px;
+        }
+
+        .nav-logo:focus-visible {
+            outline: 2px solid var(--link-color);
+            outline-offset: 4px;
+            border-radius: 4px;
         }
 
         .nav-links {
@@ -98,15 +109,53 @@
             color: var(--text-main);
         }
 
+        .nav-links a:focus-visible {
+            outline: 2px solid var(--link-color);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
+        /* Server switcher dropdown */
+        .server-switcher {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E") no-repeat right 12px center;
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 8px;
+            padding: 8px 36px 8px 14px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            font-family: var(--font-family);
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+            min-width: 160px;
+        }
+
+        .server-switcher:hover {
+            border-color: #ccc;
+        }
+
+        .server-switcher:focus-visible {
+            border-color: var(--link-color);
+            box-shadow: 0 0 0 3px rgba(13, 153, 255, 0.15);
+        }
+
         /* Main Content */
         .main-content {
             flex: 1;
+            display: flex;
+            flex-direction: column;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 80px 32px;
+            width: 100%;
+            flex: 1;
         }
 
         .hero {
@@ -175,7 +224,7 @@
             align-items: center;
             justify-content: center;
             padding: 8px;
-            box-sizing: border-box;
+            flex-shrink: 0;
         }
 
         .card-icon img {
@@ -213,6 +262,15 @@
             font-weight: bold;
         }
 
+        .card-list code {
+            font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.85em;
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #374151;
+        }
+
         .card-action {
             display: inline-flex;
             align-items: center;
@@ -231,6 +289,12 @@
             text-decoration: underline;
         }
 
+        .card-action:focus-visible {
+            outline: 2px solid var(--link-color);
+            outline-offset: 4px;
+            border-radius: 4px;
+        }
+
         .card-action svg {
             margin-left: 6px;
             width: 16px;
@@ -242,7 +306,7 @@
             border-top: 1px solid var(--border-color);
             padding: 48px 32px;
             background: #fff;
-            margin-top: auto;
+            flex-shrink: 0;
         }
 
         .footer-content {
@@ -270,6 +334,12 @@
             color: var(--text-main);
         }
 
+        .footer-links a:focus-visible {
+            outline: 2px solid var(--link-color);
+            outline-offset: 2px;
+            border-radius: 4px;
+        }
+
         .footer-copy {
             color: var(--text-tertiary);
             font-size: 0.9rem;
@@ -286,6 +356,7 @@
             z-index: 100;
             opacity: 0;
             transition: opacity 0.2s;
+            padding: 24px;
         }
 
         .modal {
@@ -297,6 +368,8 @@
             box-shadow: 0 20px 60px rgba(0,0,0,0.15);
             transform: scale(0.95);
             transition: transform 0.2s;
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         .modal-header {
@@ -318,10 +391,19 @@
             cursor: pointer;
             font-size: 1.5rem;
             color: var(--text-tertiary);
+            padding: 4px 8px;
+            border-radius: 6px;
+            line-height: 1;
         }
 
         .close-btn:hover {
             color: var(--text-main);
+            background: var(--hover-bg);
+        }
+
+        .close-btn:focus-visible {
+            outline: 2px solid var(--link-color);
+            outline-offset: 2px;
         }
 
         .code-block {
@@ -356,6 +438,11 @@
             background: #333;
         }
 
+        .copy-btn:focus-visible {
+            outline: 2px solid var(--link-color);
+            outline-offset: 2px;
+        }
+
         .copy-btn.copied {
             background: #10b981;
         }
@@ -366,6 +453,83 @@
             font-size: 0.95rem;
             margin: 0 0 24px 0;
             flex-grow: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav {
+                padding: 12px 16px;
+                gap: 12px;
+            }
+
+            .nav-logo {
+                font-size: 1.1rem;
+            }
+
+            .nav-links {
+                gap: 12px;
+            }
+
+            .container {
+                padding: 40px 16px;
+            }
+
+            .hero {
+                margin-bottom: 32px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .card {
+                padding: 24px 20px;
+            }
+
+            .footer {
+                padding: 32px 16px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .modal {
+                padding: 24px;
+                margin: 0;
+            }
+
+            .server-switcher {
+                min-width: 120px;
+                font-size: 0.85rem;
+                padding: 6px 32px 6px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav {
+                flex-wrap: wrap;
+            }
+
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .code-block {
+                font-size: 0.8rem;
+                padding: 12px;
+            }
         }
 
     </style>
@@ -413,7 +577,7 @@
         <div class="modal">
             <div class="modal-header">
                 <h3 id="modal-title" class="modal-title">Install Guide</h3>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
+                <button class="close-btn" onclick="closeModal()" aria-label="Close">&times;</button>
             </div>
             <p id="modal-desc" style="color:var(--text-secondary);margin-bottom:12px;"></p>
             <div id="modal-code" class="code-block"></div>
@@ -553,6 +717,9 @@
         const copyBtn = document.getElementById('copy-btn');
         let currentCode = '';
 
+        // Store modal data for client cards (avoids inline onclick escaping issues)
+        let clientModalData = [];
+
         function showModal(title, code, desc) {
             modalTitle.innerText = title;
             modalDesc.innerText = desc;
@@ -565,6 +732,11 @@
                 modalOverlay.style.opacity = '1';
                 modalOverlay.querySelector('.modal').style.transform = 'scale(1)';
             }, 10);
+        }
+
+        function showClientModal(index) {
+            var data = clientModalData[index];
+            if (data) showModal(data.title, data.code, data.desc);
         }
 
         function closeModal() {
@@ -584,6 +756,12 @@
             });
         }
 
+        // ── Helpers ─────────────────────────────────────────────────────
+
+        function formatBullet(text) {
+            return text.replace(/`([^`]+)`/g, '<code>$1</code>');
+        }
+
         // ── Rendering ─────────────────────────────────────────────────────
 
         function renderServerPicker() {
@@ -594,7 +772,10 @@
                 var card = document.createElement('div');
                 card.className = 'card';
                 card.style.cursor = 'pointer';
+                card.setAttribute('role', 'link');
+                card.setAttribute('tabindex', '0');
                 card.onclick = (function(k) { return function() { window.location.search = '?server=' + k; }; })(key);
+                card.onkeydown = (function(k) { return function(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); window.location.search = '?server=' + k; } }; })(key);
                 card.innerHTML =
                     '<div class="card-header">' +
                         '<div class="card-icon"><img src="https://cdn.simpleicons.org/modelcontextprotocol/000000" alt="' + s.displayName + '" /></div>' +
@@ -636,15 +817,14 @@
                 'Installation Gateway to connect the <strong>' + s.packageName + '</strong> server to your favorite agentic tools.';
             document.getElementById('section-title').textContent = 'MCP clients';
 
-            // Nav links
+            // Nav links with styled dropdown
             var switchOptions = '';
             for (var key in SERVERS) {
                 var selected = key === serverKey ? ' selected' : '';
                 switchOptions += '<option value="?server=' + key + '"' + selected + '>' + SERVERS[key].displayName + '</option>';
             }
             document.getElementById('nav-links').innerHTML =
-                '<select onchange="if(this.value) window.location.search=this.value" style="background:#fff;border:1px solid var(--border-color);color:var(--text-main);border-radius:6px;padding:6px 12px;font-size:0.95rem;cursor:pointer;outline:none;">' +
-                    '<option value="">Switch Server...</option>' +
+                '<select class="server-switcher" onchange="if(this.value) window.location.search=this.value" aria-label="Switch MCP server">' +
                     switchOptions +
                 '</select>' +
                 '<a href="https://github.com/' + s.githubRepo + '">GitHub</a>' +
@@ -659,6 +839,9 @@
             // Client cards
             var grid = document.getElementById('content-grid');
             grid.innerHTML = '';
+
+            // Reset modal data array
+            clientModalData = [];
 
             var clients = [
                 {
@@ -683,7 +866,7 @@
                     name: 'Claude Code',
                     icon: 'https://cdn.simpleicons.org/claude/ffffff',
                     iconBg: '#d97757',
-                    bullets: ['Terminal-based AI coding agent', 'Local server via `claude mcp add`'],
+                    bullets: ['Terminal-based AI coding agent', 'Local server via <code>claude mcp add</code>'],
                     actionType: 'modal',
                     actionText: 'View install guide',
                     modalTitle: s.displayName + ' for Claude Code',
@@ -694,7 +877,7 @@
                     name: 'Windsurf',
                     icon: 'https://cdn.simpleicons.org/windsurf/000000',
                     iconBg: '',
-                    bullets: [s.description, 'Update `mcp_config.json`'],
+                    bullets: [s.description, 'Update <code>mcp_config.json</code>'],
                     actionType: 'modal',
                     actionText: 'View install guide',
                     modalTitle: s.displayName + ' for Windsurf',
@@ -713,18 +896,19 @@
                     modalDesc: 'Add this to Settings | Tools | MCP Servers:'
                 },
                 {
-                    name: 'Claude',
+                    name: 'Claude Desktop',
                     icon: 'https://cdn.simpleicons.org/claude/ffffff',
                     iconBg: '#d97757',
-                    bullets: [s.description, 'Supports direct addition of MCP via app UI'],
+                    bullets: [s.description, 'Configure via Settings or config file'],
                     actionType: 'modal',
                     actionText: 'View install guide',
-                    modalTitle: s.displayName + ' for Claude',
+                    modalTitle: s.displayName + ' for Claude Desktop',
                     modalCode: generateConfigJson(serverKey),
-                    modalDesc: 'Configure via Settings -> MCP Servers, or config file:'
+                    modalDesc: 'Add this to Settings > MCP Servers, or claude_desktop_config.json:'
                 }
             ];
 
+            var modalIndex = 0;
             clients.forEach(function(c) {
                 var card = document.createElement('div');
                 card.className = 'card';
@@ -736,10 +920,14 @@
                 if (c.actionType === 'link') {
                     actionHtml = '<a href="' + c.href + '" class="card-action">' + c.actionText + ' ' + ARROW_SVG + '</a>';
                 } else {
-                    actionHtml = '<button class="card-action" onclick="showModal(\'' +
-                        c.modalTitle.replace(/'/g, "\\'") + '\', ' +
-                        JSON.stringify(c.modalCode) + ', \'' +
-                        c.modalDesc.replace(/'/g, "\\'") + '\')">' +
+                    // Store modal data in array; reference by index to avoid inline escaping issues
+                    var idx = clientModalData.length;
+                    clientModalData.push({
+                        title: c.modalTitle,
+                        code: c.modalCode,
+                        desc: c.modalDesc
+                    });
+                    actionHtml = '<button class="card-action" onclick="showClientModal(' + idx + ')">' +
                         c.actionText + ' ' + ARROW_SVG + '</button>';
                 }
 
@@ -780,6 +968,13 @@
             } else {
                 renderServerPicker();
             }
+
+            // Close modal on Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modalOverlay.style.display === 'flex') {
+                    closeModal();
+                }
+            });
         });
     </script>
 </body>
