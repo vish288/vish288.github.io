@@ -11,6 +11,8 @@ import {
   Filter,
   SortAsc,
   SortDesc,
+  Blocks,
+  ArrowRight,
 } from 'lucide-react'
 
 interface Repository {
@@ -273,6 +275,30 @@ export default function Repositories() {
           </div>
         </div>
       </div>
+
+      {/* Featured: MCP Installation Gateway */}
+      <Card className='mb-8 border-primary/20 bg-gradient-to-r from-primary/5 to-transparent'>
+        <CardContent className='flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6'>
+          <div className='flex items-start gap-4'>
+            <div className='h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0'>
+              <Blocks className='h-5 w-5 text-primary' />
+            </div>
+            <div>
+              <h3 className='font-semibold text-lg mb-1'>MCP Installation Gateway</h3>
+              <p className='text-sm text-muted-foreground'>
+                One-click installation for MCP servers — connect GitLab, Atlassian, and Coda to VS
+                Code, Cursor, Claude, Windsurf, and IntelliJ.
+              </p>
+            </div>
+          </div>
+          <Button asChild className='flex-shrink-0'>
+            <a href='/mcp-install.html' className='flex items-center gap-2'>
+              Open Gateway
+              <ArrowRight className='h-4 w-4' />
+            </a>
+          </Button>
+        </CardContent>
+      </Card>
 
       {/* Repository Grid */}
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>

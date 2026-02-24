@@ -108,7 +108,7 @@
     "*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write",
-      "pnpm run test"
+      "vitest related --run"
     ],
     "*.{json,md}": [
       "prettier --write"
