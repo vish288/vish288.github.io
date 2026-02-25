@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import { RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -14,40 +14,37 @@ interface MathChallenge {
   answer: number
 }
 
+function createChallenge(): MathChallenge {
+  const operations = [
+    () => {
+      const a = Math.floor(Math.random() * 10) + 1
+      const b = Math.floor(Math.random() * 10) + 1
+      return { question: `${a} + ${b}`, answer: a + b }
+    },
+    () => {
+      const a = Math.floor(Math.random() * 15) + 5
+      const b = Math.floor(Math.random() * a) + 1
+      return { question: `${a} - ${b}`, answer: a - b }
+    },
+    () => {
+      const a = Math.floor(Math.random() * 5) + 2
+      const b = Math.floor(Math.random() * 5) + 2
+      return { question: `${a} × ${b}`, answer: a * b }
+    },
+  ]
+  const operation = operations[Math.floor(Math.random() * operations.length)]
+  return operation!()
+}
+
 export default function SimpleCaptcha({ onVerify, isValid }: SimpleCaptchaProps) {
-  const [challenge, setChallenge] = useState<MathChallenge>({ question: '', answer: 0 })
+  const [challenge, setChallenge] = useState<MathChallenge>(createChallenge)
   const [userAnswer, setUserAnswer] = useState('')
 
-  const generateChallenge = useCallback(() => {
-    // Generate simple addition/subtraction problems
-    const operations = [
-      () => {
-        const a = Math.floor(Math.random() * 10) + 1
-        const b = Math.floor(Math.random() * 10) + 1
-        return { question: `${a} + ${b}`, answer: a + b }
-      },
-      () => {
-        const a = Math.floor(Math.random() * 15) + 5
-        const b = Math.floor(Math.random() * a) + 1
-        return { question: `${a} - ${b}`, answer: a - b }
-      },
-      () => {
-        const a = Math.floor(Math.random() * 5) + 2
-        const b = Math.floor(Math.random() * 5) + 2
-        return { question: `${a} × ${b}`, answer: a * b }
-      },
-    ]
-
-    const operation = operations[Math.floor(Math.random() * operations.length)]
-    const newChallenge = operation!()
-    setChallenge(newChallenge)
+  const regenerate = () => {
+    setChallenge(createChallenge())
     setUserAnswer('')
     onVerify(false)
-  }, [onVerify])
-
-  useEffect(() => {
-    generateChallenge()
-  }, [generateChallenge])
+  }
 
   useEffect(() => {
     const userNum = parseInt(userAnswer, 10)
@@ -90,7 +87,7 @@ export default function SimpleCaptcha({ onVerify, isValid }: SimpleCaptchaProps)
           type='button'
           variant='outline'
           size='sm'
-          onClick={generateChallenge}
+          onClick={regenerate}
           className='p-2'
           title='Generate new challenge'
         >
