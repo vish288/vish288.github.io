@@ -126,7 +126,11 @@ const SERVERS: Record<string, ServerConfig> = {
   },
 }
 
-function getServer(serverKey: string): ServerConfig {
+function getServer(serverKey: string): ServerConfig | null {
+  return SERVERS[serverKey] ?? null
+}
+
+function getServerOrThrow(serverKey: string): ServerConfig {
   const s = SERVERS[serverKey]
   if (!s) throw new Error(`Unknown server: ${serverKey}`)
   return s
@@ -135,7 +139,7 @@ function getServer(serverKey: string): ServerConfig {
 // ── Deeplink Generators ─────────────────────────────────────────────
 
 function generateCursorDeeplink(serverKey: string): string {
-  const s = getServer(serverKey)
+  const s = getServerOrThrow(serverKey)
   const env: Record<string, string> = {}
   for (const [key, val] of Object.entries(s.envVars)) {
     env[key] = val.placeholder || val.default || ''
@@ -146,7 +150,7 @@ function generateCursorDeeplink(serverKey: string): string {
 }
 
 function generateVSCodeInputs(serverKey: string) {
-  const s = getServer(serverKey)
+  const s = getServerOrThrow(serverKey)
   const inputs: Record<string, unknown>[] = []
   for (const [key, val] of Object.entries(s.envVars)) {
     const id = key.toLowerCase().replace(/_/g, '-')
@@ -157,6 +161,7 @@ function generateVSCodeInputs(serverKey: string) {
     }
     if (val.default) input.default = val.default
     if (val.secret) {
+      // Split to avoid pre-commit hook pattern match on literal "password"
       const secretKey = ['pass', 'word'].join('')
       input[secretKey] = true
     }
@@ -166,7 +171,7 @@ function generateVSCodeInputs(serverKey: string) {
 }
 
 function generateVSCodeConfig(serverKey: string) {
-  const s = getServer(serverKey)
+  const s = getServerOrThrow(serverKey)
   const env: Record<string, string> = {}
   for (const key of Object.keys(s.envVars)) {
     const id = key.toLowerCase().replace(/_/g, '-')
@@ -178,7 +183,7 @@ function generateVSCodeConfig(serverKey: string) {
 function generateVSCodeDeeplink(serverKey: string, scheme: string): string {
   const inputs = encodeURIComponent(JSON.stringify(generateVSCodeInputs(serverKey)))
   const config = encodeURIComponent(JSON.stringify(generateVSCodeConfig(serverKey)))
-  const s = getServer(serverKey)
+  const s = getServerOrThrow(serverKey)
   if (scheme === 'vscode-insiders') {
     return `${scheme}://mcp/install?name=${s.packageName}&inputs=${inputs}&config=${config}`
   }
@@ -186,7 +191,7 @@ function generateVSCodeDeeplink(serverKey: string, scheme: string): string {
 }
 
 function generateConfigJson(serverKey: string): string {
-  const s = getServer(serverKey)
+  const s = getServerOrThrow(serverKey)
   const env: Record<string, string> = {}
   for (const [key, val] of Object.entries(s.envVars)) {
     env[key] = val.placeholder || val.default || ''
@@ -200,7 +205,7 @@ function generateConfigJson(serverKey: string): string {
 }
 
 function generateClaudeCommand(serverKey: string): string {
-  const s = getServer(serverKey)
+  const s = getServerOrThrow(serverKey)
   return `claude mcp add ${s.shortName} -- ${s.installCommand} ${s.packageName}`
 }
 
@@ -220,6 +225,7 @@ interface ClientCard {
 
 function getClientCards(serverKey: string): ClientCard[] {
   const s = getServer(serverKey)
+  if (!s) return []
   return [
     {
       name: 'VS Code',
@@ -281,6 +287,19 @@ function getClientCards(serverKey: string): ClientCard[] {
   ]
 }
 
+// ── Install target name mapping (URL param → client card name) ──────
+
+const INSTALL_CLIENT_MAP: Record<string, string> = {
+  cursor: 'Cursor',
+  vscode: 'VS Code',
+  'vscode-insiders': 'VS Code',
+  claude: 'Claude Code',
+  'claude-code': 'Claude Code',
+  'claude-desktop': 'Claude Desktop',
+  windsurf: 'Windsurf',
+  intellij: 'IntelliJ',
+}
+
 // ── Modal Component ─────────────────────────────────────────────────
 
 function InstallModal({
@@ -313,13 +332,18 @@ function InstallModal({
   return createPortal(
     <div
       className='fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm p-6'
+      role='dialog'
+      aria-modal='true'
+      aria-labelledby='install-modal-title'
       onClick={e => {
         if (e.target === e.currentTarget) onClose()
       }}
     >
       <div className='bg-background border rounded-xl w-full max-w-[600px] p-8 shadow-2xl max-h-[90vh] overflow-y-auto'>
         <div className='flex items-center justify-between mb-5'>
-          <h3 className='text-lg font-semibold'>{title}</h3>
+          <h3 id='install-modal-title' className='text-lg font-semibold'>
+            {title}
+          </h3>
           <Button variant='ghost' size='sm' onClick={onClose} aria-label='Close'>
             <X className='h-4 w-4' />
           </Button>
@@ -361,22 +385,10 @@ function ServerSection({
   const server = SERVERS[serverKey]
   const clients = useMemo(() => getClientCards(serverKey), [serverKey])
 
-  // Map install param to client name
-  const installClientMap: Record<string, string> = {
-    cursor: 'Cursor',
-    vscode: 'VS Code',
-    'vscode-insiders': 'VS Code',
-    claude: 'Claude Code',
-    'claude-code': 'Claude Code',
-    'claude-desktop': 'Claude Desktop',
-    windsurf: 'Windsurf',
-    intellij: 'IntelliJ',
-  }
-
   // Compute initial modal state from URL params
   const initialModal = useMemo(() => {
     if (!autoExpand || !installTarget) return null
-    const targetName = installClientMap[installTarget.toLowerCase()]
+    const targetName = INSTALL_CLIENT_MAP[installTarget.toLowerCase()]
     if (!targetName) return null
     const client = clients.find(c => c.name === targetName)
     if (!client || client.actionType !== 'modal') return null
@@ -385,8 +397,7 @@ function ServerSection({
       description: client.modalDesc!,
       code: client.modalCode!,
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoExpand, installTarget, serverKey])
+  }, [autoExpand, installTarget, serverKey, clients])
 
   const [modal, setModal] = useState<{
     title: string
@@ -398,7 +409,7 @@ function ServerSection({
   // Auto-redirect for link-based installs (cursor, vscode)
   useEffect(() => {
     if (!autoExpand || !installTarget) return
-    const targetName = installClientMap[installTarget.toLowerCase()]
+    const targetName = INSTALL_CLIENT_MAP[installTarget.toLowerCase()]
     if (!targetName) return
     const client = clients.find(c => c.name === targetName)
     if (!client || client.actionType !== 'link' || !client.href) return
@@ -407,8 +418,7 @@ function ServerSection({
       window.location.href = client.href!
     }, 400)
     return () => clearTimeout(timer)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [autoExpand, installTarget, serverKey])
+  }, [autoExpand, installTarget, serverKey, clients])
 
   if (!server) return null
 
@@ -418,6 +428,7 @@ function ServerSection({
       <button
         className='w-full flex items-center gap-4 p-5 text-left hover:bg-muted/30 transition-colors cursor-pointer bg-transparent border-none'
         onClick={() => setExpanded(!expanded)}
+        aria-expanded={expanded}
       >
         <div className='h-10 w-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0 p-2'>
           <img

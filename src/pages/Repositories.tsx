@@ -126,9 +126,12 @@ export default function Repositories() {
   }, [filter, sortBy, sortDirection])
 
   // Infinite scroll via IntersectionObserver
+  const totalCountRef = useRef(filteredAndSortedRepos.length)
+  totalCountRef.current = filteredAndSortedRepos.length
+
   const loadMore = useCallback(() => {
-    setVisibleCount(prev => Math.min(prev + PAGE_SIZE, filteredAndSortedRepos.length))
-  }, [filteredAndSortedRepos.length])
+    setVisibleCount(prev => Math.min(prev + PAGE_SIZE, totalCountRef.current))
+  }, [])
 
   useEffect(() => {
     const sentinel = sentinelRef.current
@@ -256,6 +259,7 @@ export default function Repositories() {
               <button
                 key={key}
                 onClick={() => setFilter(key)}
+                aria-pressed={filter === key}
                 className={`
                   px-3 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer
                   ${
@@ -285,6 +289,7 @@ export default function Repositories() {
               <button
                 key={key}
                 onClick={() => handleSort(key)}
+                aria-pressed={sortBy === key}
                 className={`
                   px-2.5 py-1 text-xs rounded-md transition-all flex items-center gap-1 cursor-pointer
                   ${
