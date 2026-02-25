@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
@@ -314,6 +314,7 @@ function InstallModal({
   onClose: () => void
 }) {
   const [copied, setCopied] = useState(false)
+  const closeRef = useRef<HTMLButtonElement>(null)
 
   const handleCopy = useCallback(async () => {
     await navigator.clipboard.writeText(code)
@@ -322,11 +323,21 @@ function InstallModal({
   }, [code])
 
   useEffect(() => {
+    // Focus close button on mount for keyboard accessibility
+    closeRef.current?.focus()
+
+    // Set inert on root to trap focus within modal
+    const root = document.getElementById('root')
+    if (root) root.setAttribute('inert', '')
+
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     }
     document.addEventListener('keydown', handleEscape)
-    return () => document.removeEventListener('keydown', handleEscape)
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+      if (root) root.removeAttribute('inert')
+    }
   }, [onClose])
 
   return createPortal(
@@ -344,7 +355,7 @@ function InstallModal({
           <h3 id='install-modal-title' className='text-lg font-semibold'>
             {title}
           </h3>
-          <Button variant='ghost' size='sm' onClick={onClose} aria-label='Close'>
+          <Button ref={closeRef} variant='ghost' size='sm' onClick={onClose} aria-label='Close'>
             <X className='h-4 w-4' />
           </Button>
         </div>

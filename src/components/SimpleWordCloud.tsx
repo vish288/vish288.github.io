@@ -151,8 +151,8 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
       {/* Word Cloud */}
       <div
         className='relative flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-6 py-10 min-h-72 rounded-2xl border border-border/40 bg-gradient-to-br from-background via-background to-muted/20'
-        role='img'
-        aria-label='Word cloud of skills and technologies extracted from GitHub repositories'
+        role='list'
+        aria-label='Skills and technologies extracted from GitHub repositories'
       >
         {skillsData.map(({ skill, count, category }) => {
           const normalized = count / maxCount
@@ -179,6 +179,8 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
             <span
               key={skill}
               className='inline-block leading-tight cursor-default select-none'
+              tabIndex={0}
+              role='listitem'
               style={{
                 fontSize: `${fontSize}rem`,
                 fontWeight,
@@ -193,6 +195,8 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
               title={`${skill}: ${count} points (${CATEGORY_LABELS[category] || category})`}
               onMouseEnter={() => setHoveredCategory(category)}
               onMouseLeave={() => setHoveredCategory(null)}
+              onFocus={() => setHoveredCategory(category)}
+              onBlur={() => setHoveredCategory(null)}
             >
               {skill}
             </span>
