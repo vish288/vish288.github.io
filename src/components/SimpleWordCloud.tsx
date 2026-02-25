@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useTheme } from '@/contexts/ThemeContext'
 
 interface Repository {
   language: string | null
@@ -61,14 +62,15 @@ const TOPIC_SKILLS: Record<string, { skills: string[]; category: string }> = {
   cli: { skills: ['CLI Tools', 'Command Line'], category: 'tools' },
 }
 
-const CATEGORY_COLORS: Record<string, string> = {
-  frontend: 'rgb(16 185 129)',
-  backend: 'rgb(59 130 246)',
-  systems: 'rgb(239 68 68)',
-  devops: 'rgb(249 115 22)',
-  cloud: 'rgb(168 85 247)',
-  data: 'rgb(6 182 212)',
-  tools: 'rgb(107 114 128)',
+// Light / dark color pairs per category
+const CATEGORY_COLORS: Record<string, { light: string; dark: string }> = {
+  frontend: { light: 'rgb(5 150 105)', dark: 'rgb(52 211 153)' },
+  backend: { light: 'rgb(37 99 235)', dark: 'rgb(96 165 250)' },
+  systems: { light: 'rgb(220 38 38)', dark: 'rgb(248 113 113)' },
+  devops: { light: 'rgb(234 88 12)', dark: 'rgb(251 146 60)' },
+  cloud: { light: 'rgb(147 51 234)', dark: 'rgb(192 132 252)' },
+  data: { light: 'rgb(8 145 178)', dark: 'rgb(34 211 238)' },
+  tools: { light: 'rgb(82 82 91)', dark: 'rgb(161 161 170)' },
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -94,6 +96,8 @@ function hashCode(str: string): number {
 
 export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) {
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
+  const { actualTheme } = useTheme()
+  const isDark = actualTheme === 'dark'
 
   const skillsData = useMemo(() => {
     const skillCounts = new Map<string, { count: number; category: string }>()
@@ -140,13 +144,13 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
   const maxCount = skillsData[0]?.count || 1
 
   // Rotation angles: mostly horizontal, occasional slight tilt
-  const ROTATIONS = [0, 0, 0, 0, 0, -8, 8, -4, 4, -12, 12]
+  const ROTATIONS = [0, 0, 0, 0, 0, -6, 6, -3, 3, -9, 9]
 
   return (
     <div className='w-full'>
       {/* Word Cloud */}
       <div
-        className='relative flex flex-wrap items-center justify-center gap-x-1 gap-y-0.5 px-4 py-8 min-h-72 rounded-xl bg-gradient-to-br from-background via-background to-secondary/10 dark:to-secondary/5'
+        className='relative flex flex-wrap items-center justify-center gap-x-2 gap-y-1 px-6 py-10 min-h-72 rounded-2xl border border-border/40 bg-gradient-to-br from-background via-background to-muted/20'
         role='img'
         aria-label='Word cloud of skills and technologies extracted from GitHub repositories'
       >
@@ -155,38 +159,36 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
           const hash = hashCode(skill)
           const rotation = ROTATIONS[hash % ROTATIONS.length]
 
-          // Size: 6 tiers from 0.8rem to 2.8rem
-          let fontSize: number
-          if (normalized > 0.85) fontSize = 2.8
-          else if (normalized > 0.65) fontSize = 2.2
-          else if (normalized > 0.45) fontSize = 1.7
-          else if (normalized > 0.3) fontSize = 1.35
-          else if (normalized > 0.15) fontSize = 1.05
-          else fontSize = 0.85
+          // Smooth continuous sizing with floor tiers
+          const fontSize = 0.8 + normalized * 2.2
 
-          // Weight
-          const fontWeight = normalized > 0.6 ? 700 : normalized > 0.3 ? 600 : 500
+          // Weight scales with size
+          const fontWeight = normalized > 0.6 ? 700 : normalized > 0.3 ? 600 : 400
 
-          // Opacity: high-count items are fully opaque, low-count fade slightly
-          const opacity = 0.55 + normalized * 0.45
+          // Opacity: high-count items fully opaque, low-count subtle
+          const opacity = 0.5 + normalized * 0.5
 
-          const color = CATEGORY_COLORS[category] || 'rgb(107 114 128)'
-          const isHighlighted = hoveredCategory === null || hoveredCategory === category
+          const colorPair = CATEGORY_COLORS[category] || {
+            light: 'rgb(82 82 91)',
+            dark: 'rgb(161 161 170)',
+          }
+          const color = isDark ? colorPair.dark : colorPair.light
           const dimmed = hoveredCategory !== null && hoveredCategory !== category
 
           return (
             <span
               key={skill}
-              className='inline-block leading-tight transition-all duration-300 cursor-default select-none'
+              className='inline-block leading-tight cursor-default select-none'
               style={{
                 fontSize: `${fontSize}rem`,
                 fontWeight,
                 color,
-                opacity: dimmed ? 0.12 : opacity,
-                transform: `rotate(${rotation}deg)${isHighlighted && !dimmed ? '' : ''}`,
-                padding: `${fontSize > 1.5 ? 4 : 2}px ${fontSize > 1.5 ? 8 : 4}px`,
-                letterSpacing: fontSize > 2 ? '-0.02em' : '0',
-                filter: dimmed ? 'grayscale(0.8)' : 'none',
+                opacity: dimmed ? 0.08 : opacity,
+                transform: `rotate(${rotation}deg) scale(${dimmed ? 0.95 : 1})`,
+                padding: `${fontSize > 1.8 ? 5 : 2}px ${fontSize > 1.8 ? 10 : 5}px`,
+                letterSpacing: fontSize > 2 ? '-0.03em' : '-0.01em',
+                filter: dimmed ? 'grayscale(0.9) blur(0.5px)' : 'none',
+                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
               }}
               title={`${skill}: ${count} points (${CATEGORY_LABELS[category] || category})`}
               onMouseEnter={() => setHoveredCategory(category)}
@@ -199,17 +201,23 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
       </div>
 
       {/* Legend */}
-      <div className='mt-4 flex flex-wrap gap-3 justify-center'>
+      <div className='mt-5 flex flex-wrap gap-4 justify-center'>
         {Object.entries(CATEGORY_LABELS).map(([key, label]) => {
-          const color = CATEGORY_COLORS[key]
+          const colorPair = CATEGORY_COLORS[key]
           const count = skillsData.filter(s => s.category === key).length
           if (count === 0) return null
+          const active = hoveredCategory === null || hoveredCategory === key
           return (
             <button
               key={key}
-              className='flex items-center gap-1.5 text-xs text-muted-foreground transition-opacity duration-200 hover:opacity-100 cursor-pointer bg-transparent border-none p-0'
+              className='flex items-center gap-1.5 text-xs transition-all duration-300 cursor-pointer bg-transparent border-none p-0'
               style={{
-                opacity: hoveredCategory === null || hoveredCategory === key ? 1 : 0.35,
+                opacity: active ? 1 : 0.3,
+                color: active
+                  ? isDark
+                    ? colorPair?.dark
+                    : colorPair?.light
+                  : 'hsl(var(--muted-foreground))',
               }}
               onMouseEnter={() => setHoveredCategory(key)}
               onMouseLeave={() => setHoveredCategory(null)}
@@ -217,11 +225,13 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
               onBlur={() => setHoveredCategory(null)}
             >
               <span
-                className='w-2.5 h-2.5 rounded-full inline-block'
-                style={{ backgroundColor: color }}
+                className='w-2 h-2 rounded-full inline-block'
+                style={{
+                  backgroundColor: isDark ? colorPair?.dark : colorPair?.light,
+                }}
               />
-              <span>{label}</span>
-              <span className='text-muted-foreground/60'>({count})</span>
+              <span className='font-medium'>{label}</span>
+              <span style={{ opacity: 0.6 }}>({count})</span>
             </button>
           )
         })}
