@@ -4,47 +4,47 @@
 
 ### Prerequisites
 
-- Node.js >= 18.0.0
-- npm >= 9.0.0
+- Node.js >= 20.0.0
+- pnpm >= 8.0.0
 
 ### Installation
 
 ```bash
 git clone https://github.com/vish288/vish288.github.io.git
 cd vish288.github.io
-npm install
-npm run dev
+pnpm install
+pnpm run dev
 ```
 
 ## Available Scripts
 
 ### Development
 ```bash
-npm run dev          # Start development server
-npm run preview      # Preview production build locally
+pnpm run dev          # Start development server
+pnpm run preview      # Preview production build locally
 ```
 
 ### Building
 ```bash
-npm run build        # Build for production
-npm run build:github # Build for GitHub Pages
-npm run deploy       # Build and deploy to GitHub Pages
+pnpm run build        # Build for production
+pnpm run build:github # Build for GitHub Pages
+pnpm run deploy       # Build and deploy to GitHub Pages
 ```
 
 ### Code Quality
 ```bash
-npm run test         # Run tests
-npm run test:watch   # Run tests in watch mode
-npm run typecheck    # Run TypeScript type checking
-npm run lint         # Run ESLint and fix issues
-npm run format       # Format code with Prettier
+pnpm run test         # Run tests
+pnpm run test:watch   # Run tests in watch mode
+pnpm run typecheck    # Run TypeScript type checking
+pnpm run lint         # Run ESLint and fix issues
+pnpm run format       # Format code with Prettier
 ```
 
 ### Maintenance
 ```bash
-npm run clean        # Clean build artifacts
-npm audit            # Check for security vulnerabilities
-npm outdated         # Check for outdated dependencies
+pnpm run clean        # Clean build artifacts
+pnpm audit            # Check for security vulnerabilities
+pnpm outdated         # Check for outdated dependencies
 ```
 
 ## Testing
@@ -52,13 +52,13 @@ npm outdated         # Check for outdated dependencies
 Run all quality checks:
 
 ```bash
-npm run typecheck && npm run lint:check && npm run format:check && npm run test
+pnpm run typecheck && pnpm run lint:check && pnpm run format:check && pnpm run test
 ```
 
 ## Contributing
 
 1. Fork repository and create feature branch
-2. Make changes and add tests  
+2. Make changes and add tests
 3. Run quality checks
 4. Commit with conventional messages
 5. Open Pull Request
