@@ -15,6 +15,26 @@ import {
 import GitHubIcon from '@/components/icons/GitHubIcon'
 import { APP_STRINGS } from '@/constants/appStrings'
 
+// Topics shown first on repo cards, in priority order
+const PRIORITY_TOPICS = [
+  'mcp',
+  'mcp-server',
+  'model-context-protocol',
+  'ai-agents',
+  'ai',
+  'llm',
+  'python',
+  'typescript',
+  'react',
+  'devops',
+]
+
+function prioritizeTopics(topics: string[]): string[] {
+  const prioritized = PRIORITY_TOPICS.filter(t => topics.includes(t))
+  const rest = topics.filter(t => !PRIORITY_TOPICS.includes(t))
+  return [...prioritized, ...rest]
+}
+
 interface Repository {
   id: number
   name: string
@@ -368,11 +388,13 @@ export default function Repositories() {
                 </span>
                 {repo.topics.length > 0 && (
                   <span className='hidden sm:flex gap-1'>
-                    {repo.topics.slice(0, 3).map(topic => (
-                      <Badge key={topic} variant='outline' className='text-[10px] px-1.5 py-0'>
-                        {topic}
-                      </Badge>
-                    ))}
+                    {prioritizeTopics(repo.topics)
+                      .slice(0, 4)
+                      .map(topic => (
+                        <Badge key={topic} variant='outline' className='text-[10px] px-1.5 py-0'>
+                          {topic}
+                        </Badge>
+                      ))}
                   </span>
                 )}
               </div>
