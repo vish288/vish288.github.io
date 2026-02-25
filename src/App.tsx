@@ -7,6 +7,7 @@ import SentimentRoller from '@/components/SentimentRoller'
 import { cn } from '@/lib/utils'
 import Repositories from '@/pages/Repositories'
 import About from '@/pages/About'
+import McpInstall from '@/pages/McpInstall'
 import Gratitude from '@/pages/Gratitude'
 import GratitudeAdmin from '@/pages/GratitudeAdmin'
 import AdminUserManagement from '@/pages/AdminUserManagement'
@@ -25,16 +26,15 @@ function Navigation() {
     path: string
     label: string
     icon: ComponentType<{ className?: string }>
-    external?: boolean
   }[] = [
     { path: '/', label: APP_STRINGS.NAV_ABOUT, icon: User },
     { path: '/repositories', label: APP_STRINGS.NAV_REPOSITORIES, icon: GitHubIcon },
-    { path: '/mcp-install.html', label: APP_STRINGS.NAV_MCP, icon: Blocks, external: true },
+    { path: '/mcp-install', label: 'MCP', icon: Blocks },
     { path: '/gratitude', label: APP_STRINGS.NAV_GRATITUDE, icon: Heart },
   ]
 
   return (
-    <nav className='border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
+    <nav className='border-b border-border/50 bg-background/80 backdrop-blur-lg supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50'>
       <div className='container mx-auto px-4'>
         <div className='flex h-16 items-center justify-between'>
           {/* Logo */}
@@ -47,37 +47,30 @@ function Navigation() {
 
           {/* Navigation Links */}
           <div className='flex items-center space-x-1'>
-            {navItems.map(({ path, label, icon: Icon, external }) => (
+            {navItems.map(({ path, label, icon: Icon }) => (
               <Button
                 key={path}
-                variant={!external && location.pathname === path ? 'default' : 'ghost'}
+                variant={location.pathname === path ? 'default' : 'ghost'}
                 size='sm'
                 asChild
               >
-                {external ? (
-                  <a href={path} className='flex items-center space-x-2'>
-                    <Icon className='h-4 w-4' />
-                    <span className='hidden sm:inline'>{label}</span>
-                  </a>
-                ) : (
-                  <Link
-                    to={path}
-                    className={cn(
-                      'flex items-center space-x-2',
-                      location.pathname === path && 'bg-primary text-primary-foreground'
-                    )}
-                  >
-                    {path === '/gratitude' ? (
-                      <SentimentRoller className='text-sm hidden sm:flex' interval={4000} />
-                    ) : (
-                      <>
-                        <Icon className='h-4 w-4' />
-                        <span className='hidden sm:inline'>{label}</span>
-                      </>
-                    )}
-                    {path === '/gratitude' && <Heart className='h-4 w-4 sm:hidden' />}
-                  </Link>
-                )}
+                <Link
+                  to={path}
+                  className={cn(
+                    'flex items-center space-x-2',
+                    location.pathname === path && 'bg-primary text-primary-foreground'
+                  )}
+                >
+                  {path === '/gratitude' ? (
+                    <SentimentRoller className='text-sm hidden sm:flex' interval={4000} />
+                  ) : (
+                    <>
+                      <Icon className='h-4 w-4' />
+                      <span className='hidden sm:inline'>{label}</span>
+                    </>
+                  )}
+                  {path === '/gratitude' && <Heart className='h-4 w-4 sm:hidden' />}
+                </Link>
               </Button>
             ))}
             <ThemeToggle />
@@ -90,7 +83,7 @@ function Navigation() {
 
 function Footer() {
   return (
-    <footer className='border-t bg-background'>
+    <footer className='border-t border-border/50 bg-background/80 backdrop-blur-sm'>
       <div className='container mx-auto px-4 py-6'>
         <div className='flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0'>
           <p className='text-xs text-muted-foreground'>
@@ -120,6 +113,7 @@ function AppContent() {
         <Routes>
           <Route path='/' element={<About />} />
           <Route path='/repositories' element={<Repositories />} />
+          <Route path='/mcp-install' element={<McpInstall />} />
           <Route path='/gratitude' element={<Gratitude />} />
           <Route path='/admin/gratitude' element={<GratitudeAdmin />} />
           <Route path='/admin/users' element={<AdminUserManagement />} />

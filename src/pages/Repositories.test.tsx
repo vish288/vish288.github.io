@@ -1,18 +1,36 @@
+import type { ReactElement } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import Repositories from './Repositories'
+
+function renderWithRouter(ui: ReactElement) {
+  return render(<MemoryRouter>{ui}</MemoryRouter>)
+}
 
 // Mock fetch
 const mockFetch = vi.fn()
 global.fetch = mockFetch
+
+// Mock IntersectionObserver
+const mockObserve = vi.fn()
+const mockDisconnect = vi.fn()
+vi.stubGlobal(
+  'IntersectionObserver',
+  vi.fn(() => ({
+    observe: mockObserve,
+    disconnect: mockDisconnect,
+    unobserve: vi.fn(),
+  }))
+)
 
 const mockRepositories = [
   {
     id: 1,
     name: 'test-repo-1',
     description: 'A test repository',
-    html_url: 'https://github.com/vish288/test-repo-1',
+    html_url: 'https://github.com/testuser/test-repo-1',
     language: 'TypeScript',
     stargazers_count: 10,
     forks_count: 2,
@@ -26,7 +44,7 @@ const mockRepositories = [
     id: 2,
     name: 'forked-repo',
     description: 'A forked repository',
-    html_url: 'https://github.com/vish288/forked-repo',
+    html_url: 'https://github.com/testuser/forked-repo',
     language: 'JavaScript',
     stargazers_count: 5,
     forks_count: 1,
@@ -50,10 +68,9 @@ describe('Repositories Page', () => {
   it('renders loading state initially', () => {
     mockFetch.mockImplementation(() => new Promise(() => {})) // Never resolves
 
-    render(<Repositories />)
+    renderWithRouter(<Repositories />)
 
     expect(screen.getByText(/loading repositories/i)).toBeInTheDocument()
-    // Check for spinner element directly
     const spinner = document.querySelector('.animate-spin')
     expect(spinner).toBeInTheDocument()
   })
@@ -64,7 +81,7 @@ describe('Repositories Page', () => {
       json: async () => mockRepositories,
     })
 
-    render(<Repositories />)
+    renderWithRouter(<Repositories />)
 
     await waitFor(() => {
       expect(screen.getByText('test-repo-1')).toBeInTheDocument()
@@ -75,28 +92,27 @@ describe('Repositories Page', () => {
     expect(screen.getByText('A forked repository')).toBeInTheDocument()
   })
 
-  it('shows statistics dashboard', async () => {
+  it('shows inline stats', async () => {
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => mockRepositories,
     })
 
-    render(<Repositories />)
+    renderWithRouter(<Repositories />)
 
     await waitFor(() => {
-      expect(screen.getByText('Total Repos')).toBeInTheDocument()
+      expect(screen.getByText('repos')).toBeInTheDocument()
     })
 
-    expect(screen.getByText('Total Repos')).toBeInTheDocument()
-    expect(screen.getByText('Original')).toBeInTheDocument()
-    expect(screen.getByText('Forked')).toBeInTheDocument()
-    expect(screen.getByText('Total Stars')).toBeInTheDocument()
+    expect(screen.getByText('stars')).toBeInTheDocument()
+    expect(screen.getByText('original')).toBeInTheDocument()
+    expect(screen.getByText('forked')).toBeInTheDocument()
   })
 
   it('handles API error gracefully', async () => {
     mockFetch.mockRejectedValueOnce(new Error('API Error'))
 
-    render(<Repositories />)
+    renderWithRouter(<Repositories />)
 
     await waitFor(() => {
       expect(screen.getByText(/error: api error/i)).toBeInTheDocument()
@@ -110,21 +126,22 @@ describe('Repositories Page', () => {
       json: async () => mockRepositories,
     })
 
-    render(<Repositories />)
+    renderWithRouter(<Repositories />)
 
-    // Wait for repositories to load
     await waitFor(() => {
       expect(screen.getByText('test-repo-1')).toBeInTheDocument()
     })
 
-    // Filter by original repos
-    await user.click(screen.getByRole('button', { name: /original \(1\)/i }))
+    // Filter by original repos — segmented control buttons
+    const originalBtn = screen.getByText('Original')
+    await user.click(originalBtn)
 
     expect(screen.getByText('test-repo-1')).toBeInTheDocument()
     expect(screen.queryByText('forked-repo')).not.toBeInTheDocument()
 
     // Filter by forked repos
-    await user.click(screen.getByRole('button', { name: /forked \(1\)/i }))
+    const forkedBtn = screen.getByText('Forked')
+    await user.click(forkedBtn)
 
     expect(screen.getByText('forked-repo')).toBeInTheDocument()
     expect(screen.queryByText('test-repo-1')).not.toBeInTheDocument()
@@ -137,19 +154,19 @@ describe('Repositories Page', () => {
       json: async () => mockRepositories,
     })
 
-    render(<Repositories />)
+    renderWithRouter(<Repositories />)
 
     await waitFor(() => {
       expect(screen.getByText('test-repo-1')).toBeInTheDocument()
     })
 
     // Test sorting by stars
-    await user.click(screen.getByRole('button', { name: /stars/i }))
+    await user.click(screen.getByText('Stars'))
 
     // Verify sort controls are present
-    expect(screen.getByRole('button', { name: /updated/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /created/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /name/i })).toBeInTheDocument()
+    expect(screen.getByText('Updated')).toBeInTheDocument()
+    expect(screen.getByText('Created')).toBeInTheDocument()
+    expect(screen.getByText('Name')).toBeInTheDocument()
   })
 
   it('displays repository information correctly', async () => {
@@ -158,7 +175,7 @@ describe('Repositories Page', () => {
       json: async () => mockRepositories,
     })
 
-    render(<Repositories />)
+    renderWithRouter(<Repositories />)
 
     await waitFor(() => {
       expect(screen.getByText('test-repo-1')).toBeInTheDocument()
@@ -167,9 +184,6 @@ describe('Repositories Page', () => {
     // Check repository details
     expect(screen.getByText('TypeScript')).toBeInTheDocument()
     expect(screen.getByText('react')).toBeInTheDocument()
-    // Stars and forks are shown - just verify some are present
-    const starElements = screen.getAllByText('10')
-    expect(starElements.length).toBeGreaterThan(0)
 
     // Check fork badge for forked repository
     expect(screen.getByText('Fork')).toBeInTheDocument()
@@ -181,28 +195,25 @@ describe('Repositories Page', () => {
       json: async () => mockRepositories,
     })
 
-    render(<Repositories />)
+    renderWithRouter(<Repositories />)
 
     await waitFor(() => {
       expect(screen.getByText('test-repo-1')).toBeInTheDocument()
     })
 
-    const repoLinks = screen.getAllByText(/view repository/i)
-    expect(repoLinks[0].closest('a')).toHaveAttribute(
-      'href',
-      'https://github.com/vish288/test-repo-1'
-    )
-    expect(repoLinks[0].closest('a')).toHaveAttribute('target', '_blank')
+    // Repo names are inside <a> tags that link to github
+    const repoLink = screen.getByText('test-repo-1').closest('a')
+    expect(repoLink).toHaveAttribute('href', 'https://github.com/testuser/test-repo-1')
+    expect(repoLink).toHaveAttribute('target', '_blank')
   })
 
   it('shows empty state when no repositories match filter', async () => {
-    const user = userEvent.setup()
     mockFetch.mockResolvedValueOnce({
       ok: true,
       json: async () => [],
     })
 
-    render(<Repositories />)
+    renderWithRouter(<Repositories />)
 
     await waitFor(() => {
       expect(screen.getByText(/no repositories found/i)).toBeInTheDocument()
