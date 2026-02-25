@@ -1,13 +1,24 @@
 # Development Guide
 
-## Quick Start
+## Tech Stack
 
-### Prerequisites
+| Layer | Tool | Version |
+|-------|------|---------|
+| Framework | React | 19 |
+| Language | TypeScript | 5.9 |
+| Bundler | Vite | 7 |
+| Styling | Tailwind CSS | 4 |
+| Components | shadcn/ui + Radix | — |
+| Testing | Vitest + Testing Library | 4 |
+| CI/CD | GitHub Actions | — |
+| Versioning | release-please | — |
+
+## Prerequisites
 
 - Node.js >= 20.0.0
 - pnpm >= 8.0.0
 
-### Installation
+## Setup
 
 ```bash
 git clone https://github.com/vish288/vish288.github.io.git
@@ -16,28 +27,35 @@ pnpm install
 pnpm run dev
 ```
 
-## Available Scripts
+## Scripts
 
 ### Development
 ```bash
-pnpm run dev          # Start development server
+pnpm run dev          # Start development server on port 3000
 pnpm run preview      # Preview production build locally
 ```
 
 ### Building
 ```bash
 pnpm run build        # Build for production
-pnpm run build:github # Build for GitHub Pages
-pnpm run deploy       # Build and deploy to GitHub Pages
+pnpm run build:github # Build for GitHub Pages (same as build)
+pnpm run deploy       # Build and move to docs/
+```
+
+### Testing
+```bash
+pnpm run test            # Run tests once
+pnpm run test:watch      # Run tests in watch mode
+pnpm run test:coverage   # Run tests with coverage report
 ```
 
 ### Code Quality
 ```bash
-pnpm run test         # Run tests
-pnpm run test:watch   # Run tests in watch mode
-pnpm run typecheck    # Run TypeScript type checking
-pnpm run lint         # Run ESLint and fix issues
-pnpm run format       # Format code with Prettier
+pnpm run typecheck    # TypeScript type checking
+pnpm run lint         # ESLint with auto-fix
+pnpm run lint:check   # ESLint without auto-fix
+pnpm run format       # Prettier format
+pnpm run format:check # Prettier check
 ```
 
 ### Maintenance
@@ -47,18 +65,26 @@ pnpm audit            # Check for security vulnerabilities
 pnpm outdated         # Check for outdated dependencies
 ```
 
-## Testing
-
-Run all quality checks:
+## Full Quality Check
 
 ```bash
 pnpm run typecheck && pnpm run lint:check && pnpm run format:check && pnpm run test
 ```
 
+## Release Process
+
+This repo uses [release-please](https://github.com/googleapis/release-please) with conventional commits:
+
+1. Push to `main` with conventional commit prefix (`feat:`, `fix:`, `chore:`, etc.)
+2. release-please auto-creates a release PR with version bump and changelog
+3. Merging the release PR triggers build + deploy to GitHub Pages
+
+Version bumps: `feat:` = minor, `fix:` = patch, `BREAKING CHANGE:` = major.
+
 ## Contributing
 
-1. Fork repository and create feature branch
+1. Fork repository and create a feature branch
 2. Make changes and add tests
-3. Run quality checks
-4. Commit with conventional messages
-5. Open Pull Request
+3. Run the full quality check above
+4. Commit with [conventional messages](https://www.conventionalcommits.org/)
+5. Open a Pull Request
