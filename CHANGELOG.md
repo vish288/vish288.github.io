@@ -2,10 +2,9 @@
 
 ## [2.7.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.7.0...vish288-personal-website-v2.7.1) (2026-02-25)
 
-
 ### Bug Fixes
 
-* prioritize strategic topics on repository cards ([46c604a](https://github.com/vish288/vish288.github.io/commit/46c604aed548f9dbfb4e5c294a8739242bb2df0a))
+- prioritize strategic topics on repository cards ([46c604a](https://github.com/vish288/vish288.github.io/commit/46c604aed548f9dbfb4e5c294a8739242bb2df0a))
 
 ## [2.7.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.6.0...vish288-personal-website-v2.7.0) (2026-02-25)
 
