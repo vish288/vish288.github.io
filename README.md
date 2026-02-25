@@ -2,13 +2,13 @@
 
 [![CI/CD Pipeline](https://github.com/vish288/vish288.github.io/actions/workflows/ci.yml/badge.svg)](https://github.com/vish288/vish288.github.io/actions/workflows/ci.yml)
 [![Security Audit](https://github.com/vish288/vish288.github.io/actions/workflows/security.yml/badge.svg)](https://github.com/vish288/vish288.github.io/actions/workflows/security.yml)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
-[![React](https://img.shields.io/badge/React-18.3-blue.svg)](https://reactjs.org/)
-[![Vite](https://img.shields.io/badge/Vite-6.0-green.svg)](https://vitejs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-blue.svg)](https://tailwindcss.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19-blue.svg)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-7-green.svg)](https://vitejs.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4-blue.svg)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> Personal portfolio website built with React 18, TypeScript, Tailwind CSS, and shadcn/ui
+> Personal portfolio website built with React 19, TypeScript, Tailwind CSS v4, and shadcn/ui
 
 ## 🚀 Live Website
 
@@ -16,8 +16,8 @@ Visit: [https://vish288.github.io](https://vish288.github.io)
 
 ## ✨ Features
 
-- **Tech Stack**: React 18, TypeScript 5.7, Vite 6, Tailwind CSS, shadcn/ui
-- **Pages**: GitHub repositories, About, Gratitude message form
+- **Tech Stack**: React 19, TypeScript 5.9, Vite 7, Tailwind CSS v4, shadcn/ui
+- **Pages**: About, Repositories, MCP Installation Gateway, Gratitude message form
 - **Design**: Mobile-first responsive with custom green theme
 - **Integration**: Live GitHub API data
 - **Admin Console**: OAuth-protected message management
@@ -26,9 +26,10 @@ Visit: [https://vish288.github.io](https://vish288.github.io)
 
 ## 📱 Pages
 
-- **Repositories (`/`)**: Live GitHub repository data with stars, forks, languages
-- **About (`/about`)**: Professional profile with skills and contact info
-- **Gratitude (`/gratitude`)**: Message submission form with validation
+- **About (`/`)**: Professional profile with skills word cloud, highlight cards, and connect links
+- **Repositories (`/repositories`)**: Live GitHub repository data with filters, sort, and infinite scroll
+- **MCP Install (`/mcp-install`)**: One-click installation gateway for MCP servers (GitLab, Atlassian, Coda)
+- **Gratitude (`/gratitude`)**: Message submission form with captcha and trust signals
 
 ## 🚀 Quick Start
 
