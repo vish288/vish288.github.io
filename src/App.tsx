@@ -13,7 +13,6 @@ import GratitudeAdmin from '@/pages/GratitudeAdmin'
 import AdminUserManagement from '@/pages/AdminUserManagement'
 import UnauthorizedAccess from '@/pages/UnauthorizedAccess'
 import OAuthCallback from '@/pages/OAuthCallback'
-import AdminToast from '@/components/AdminToast'
 import ThemeToggle from '@/components/ThemeToggle'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { APP_STRINGS } from '@/constants/appStrings'
@@ -107,7 +106,6 @@ function AppContent() {
   return (
     <div className='min-h-screen flex flex-col'>
       <Navigation />
-      <AdminToast user={null} showToast={false} />
 
       <main className='flex-1'>
         <Routes>
