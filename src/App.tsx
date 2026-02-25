@@ -1,3 +1,4 @@
+import type { ComponentType } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Heart, User, Blocks } from 'lucide-react'
@@ -20,7 +21,12 @@ import './index.css'
 function Navigation() {
   const location = useLocation()
 
-  const navItems: { path: string; label: string; icon: typeof User; external?: boolean }[] = [
+  const navItems: {
+    path: string
+    label: string
+    icon: ComponentType<{ className?: string }>
+    external?: boolean
+  }[] = [
     { path: '/', label: APP_STRINGS.NAV_ABOUT, icon: User },
     { path: '/repositories', label: APP_STRINGS.NAV_REPOSITORIES, icon: GitHubIcon },
     { path: '/mcp-install.html', label: APP_STRINGS.NAV_MCP, icon: Blocks, external: true },
@@ -36,7 +42,7 @@ function Navigation() {
             <div className='h-8 w-8 rounded-full bg-gradient-to-r from-primary to-emerald-600 flex items-center justify-center'>
               <span className='text-white font-bold text-sm'>VS</span>
             </div>
-            <span className='font-bold text-xl'>{APP_STRINGS.FULL_NAME}</span>
+            <span className='font-bold text-xl'>{APP_STRINGS.DISPLAY_NAME}</span>
           </Link>
 
           {/* Navigation Links */}
@@ -87,7 +93,9 @@ function Footer() {
     <footer className='border-t bg-background'>
       <div className='container mx-auto px-4 py-6'>
         <div className='flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0'>
-          <p className='text-xs text-muted-foreground'>© 2025 {APP_STRINGS.FULL_NAME}.</p>
+          <p className='text-xs text-muted-foreground'>
+            © {new Date().getFullYear()} {APP_STRINGS.DISPLAY_NAME}.
+          </p>
           <a
             href={APP_STRINGS.GITHUB_URL}
             target='_blank'

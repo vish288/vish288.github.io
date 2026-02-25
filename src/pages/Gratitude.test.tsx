@@ -43,7 +43,7 @@ describe('Gratitude Page', () => {
 
     if (mathText) {
       // Parse different types of math operations
-      let answer = 0
+      let answer: number | null = null
 
       // Addition
       let match = mathText.match(/(\d+)\s*\+\s*(\d+)/)
@@ -63,7 +63,7 @@ describe('Gratitude Page', () => {
         }
       }
 
-      if (answer !== 0) {
+      if (answer !== null) {
         await user.type(captchaInput, answer.toString())
       }
     }
