@@ -1,5 +1,6 @@
 export const APP_STRINGS = {
   // Personal Information
+  DISPLAY_NAME: 'Vish',
   FULL_NAME: 'Visweshwaran S',
   TAGLINE: 'Full Stack Developer | Open Source Enthusiast | Problem Solver',
   LOCATION: 'Toronto, Canada & India',

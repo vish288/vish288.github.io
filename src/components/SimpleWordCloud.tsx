@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 interface Repository {
   language: string | null
@@ -61,36 +61,46 @@ const TOPIC_SKILLS: Record<string, { skills: string[]; category: string }> = {
   cli: { skills: ['CLI Tools', 'Command Line'], category: 'tools' },
 }
 
-const CATEGORY_COLORS = {
-  frontend: 'text-emerald-600 dark:text-emerald-400',
-  backend: 'text-blue-600 dark:text-blue-400',
-  systems: 'text-red-600 dark:text-red-400',
-  devops: 'text-orange-600 dark:text-orange-400',
-  cloud: 'text-purple-600 dark:text-purple-400',
-  data: 'text-cyan-600 dark:text-cyan-400',
-  tools: 'text-gray-600 dark:text-gray-400',
+const CATEGORY_COLORS: Record<string, string> = {
+  frontend: 'rgb(16 185 129)',
+  backend: 'rgb(59 130 246)',
+  systems: 'rgb(239 68 68)',
+  devops: 'rgb(249 115 22)',
+  cloud: 'rgb(168 85 247)',
+  data: 'rgb(6 182 212)',
+  tools: 'rgb(107 114 128)',
 }
 
-const CATEGORY_BG_COLORS = {
-  frontend:
-    'bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:hover:bg-emerald-800/30',
-  backend: 'bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:hover:bg-blue-800/30',
-  systems: 'bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-800/30',
-  devops: 'bg-orange-50 hover:bg-orange-100 dark:bg-orange-900/20 dark:hover:bg-orange-800/30',
-  cloud: 'bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-800/30',
-  data: 'bg-cyan-50 hover:bg-cyan-100 dark:bg-cyan-900/20 dark:hover:bg-cyan-800/30',
-  tools: 'bg-gray-50 hover:bg-gray-100 dark:bg-gray-800/30 dark:hover:bg-gray-700/50',
+const CATEGORY_LABELS: Record<string, string> = {
+  frontend: 'Frontend',
+  backend: 'Backend',
+  systems: 'Systems',
+  devops: 'DevOps',
+  cloud: 'Cloud',
+  data: 'Data',
+  tools: 'Tools',
+}
+
+// Deterministic pseudo-random based on string hash
+function hashCode(str: string): number {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i)
+    hash = (hash << 5) - hash + char
+    hash |= 0
+  }
+  return Math.abs(hash)
 }
 
 export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) {
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null)
+
   const skillsData = useMemo(() => {
     const skillCounts = new Map<string, { count: number; category: string }>()
 
-    // Process repositories to extract skills
     repositories.forEach(repo => {
       const weight = Math.max(1, repo.stargazers_count || 1)
 
-      // Process languages
       if (repo.language && LANGUAGE_SKILLS[repo.language]) {
         const languageData = LANGUAGE_SKILLS[repo.language]
         if (languageData) {
@@ -102,7 +112,6 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
         }
       }
 
-      // Process topics
       repo.topics?.forEach(topic => {
         if (TOPIC_SKILLS[topic]) {
           const topicData = TOPIC_SKILLS[topic]
@@ -117,7 +126,6 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
       })
     })
 
-    // Convert to sorted array
     const skillsArray: SkillData[] = Array.from(skillCounts.entries()).map(
       ([skill, { count, category }]) => ({
         skill,
@@ -126,79 +134,97 @@ export default function SimpleWordCloud({ repositories }: SimpleWordCloudProps) 
       })
     )
 
-    // Sort by count (descending)
     return skillsArray.sort((a, b) => b.count - a.count)
   }, [repositories])
 
   const maxCount = skillsData[0]?.count || 1
 
-  const getFontSize = (count: number) => {
-    const normalized = count / maxCount
-    if (normalized > 0.8) return 'text-4xl'
-    if (normalized > 0.6) return 'text-3xl'
-    if (normalized > 0.4) return 'text-2xl'
-    if (normalized > 0.2) return 'text-xl'
-    return 'text-lg'
-  }
-
-  const getFontWeight = (count: number) => {
-    const normalized = count / maxCount
-    if (normalized > 0.7) return 'font-bold'
-    if (normalized > 0.4) return 'font-semibold'
-    return 'font-medium'
-  }
+  // Rotation angles: mostly horizontal, occasional slight tilt
+  const ROTATIONS = [0, 0, 0, 0, 0, -8, 8, -4, 4, -12, 12]
 
   return (
     <div className='w-full'>
-      {/* Word Cloud Container */}
-      <div className='flex flex-wrap items-center justify-center gap-2 p-6 min-h-64 bg-gradient-to-br from-background to-secondary/20 dark:from-background dark:to-secondary/10 rounded-lg'>
-        {skillsData.map(({ skill, count, category }) => (
-          <span
-            key={skill}
-            className={`
-              inline-block px-2 py-1 rounded-md transition-all duration-200 cursor-pointer
-              ${getFontSize(count)} ${getFontWeight(count)}
-              ${CATEGORY_COLORS[category as keyof typeof CATEGORY_COLORS] || 'text-gray-500'}
-              ${CATEGORY_BG_COLORS[category as keyof typeof CATEGORY_BG_COLORS] || 'bg-gray-50 hover:bg-gray-100'}
-              transform hover:scale-110 hover:shadow-sm
-            `}
-            title={`${skill} - ${count} ${count === 1 ? 'point' : 'points'} (${category})`}
-          >
-            {skill}
-          </span>
-        ))}
+      {/* Word Cloud */}
+      <div
+        className='relative flex flex-wrap items-center justify-center gap-x-1 gap-y-0.5 px-4 py-8 min-h-72 rounded-xl bg-gradient-to-br from-background via-background to-secondary/10 dark:to-secondary/5'
+        role='img'
+        aria-label='Word cloud of skills and technologies extracted from GitHub repositories'
+      >
+        {skillsData.map(({ skill, count, category }) => {
+          const normalized = count / maxCount
+          const hash = hashCode(skill)
+          const rotation = ROTATIONS[hash % ROTATIONS.length]
+
+          // Size: 6 tiers from 0.8rem to 2.8rem
+          let fontSize: number
+          if (normalized > 0.85) fontSize = 2.8
+          else if (normalized > 0.65) fontSize = 2.2
+          else if (normalized > 0.45) fontSize = 1.7
+          else if (normalized > 0.3) fontSize = 1.35
+          else if (normalized > 0.15) fontSize = 1.05
+          else fontSize = 0.85
+
+          // Weight
+          const fontWeight = normalized > 0.6 ? 700 : normalized > 0.3 ? 600 : 500
+
+          // Opacity: high-count items are fully opaque, low-count fade slightly
+          const opacity = 0.55 + normalized * 0.45
+
+          const color = CATEGORY_COLORS[category] || 'rgb(107 114 128)'
+          const isHighlighted = hoveredCategory === null || hoveredCategory === category
+          const dimmed = hoveredCategory !== null && hoveredCategory !== category
+
+          return (
+            <span
+              key={skill}
+              className='inline-block leading-tight transition-all duration-300 cursor-default select-none'
+              style={{
+                fontSize: `${fontSize}rem`,
+                fontWeight,
+                color,
+                opacity: dimmed ? 0.12 : opacity,
+                transform: `rotate(${rotation}deg)${isHighlighted && !dimmed ? '' : ''}`,
+                padding: `${fontSize > 1.5 ? 4 : 2}px ${fontSize > 1.5 ? 8 : 4}px`,
+                letterSpacing: fontSize > 2 ? '-0.02em' : '0',
+                filter: dimmed ? 'grayscale(0.8)' : 'none',
+              }}
+              title={`${skill}: ${count} points (${CATEGORY_LABELS[category] || category})`}
+              onMouseEnter={() => setHoveredCategory(category)}
+              onMouseLeave={() => setHoveredCategory(null)}
+            >
+              {skill}
+            </span>
+          )
+        })}
       </div>
 
       {/* Legend */}
-      <div className='mt-4 flex flex-wrap gap-4 justify-center text-xs'>
-        <div className='flex items-center gap-1'>
-          <div className='w-3 h-3 rounded-full bg-emerald-500' />
-          <span className='capitalize text-muted-foreground'>frontend</span>
-        </div>
-        <div className='flex items-center gap-1'>
-          <div className='w-3 h-3 rounded-full bg-blue-500' />
-          <span className='capitalize text-muted-foreground'>backend</span>
-        </div>
-        <div className='flex items-center gap-1'>
-          <div className='w-3 h-3 rounded-full bg-red-500' />
-          <span className='capitalize text-muted-foreground'>systems</span>
-        </div>
-        <div className='flex items-center gap-1'>
-          <div className='w-3 h-3 rounded-full bg-orange-500' />
-          <span className='capitalize text-muted-foreground'>devops</span>
-        </div>
-        <div className='flex items-center gap-1'>
-          <div className='w-3 h-3 rounded-full bg-purple-500' />
-          <span className='capitalize text-muted-foreground'>cloud</span>
-        </div>
-        <div className='flex items-center gap-1'>
-          <div className='w-3 h-3 rounded-full bg-cyan-500' />
-          <span className='capitalize text-muted-foreground'>data</span>
-        </div>
-        <div className='flex items-center gap-1'>
-          <div className='w-3 h-3 rounded-full bg-gray-500' />
-          <span className='capitalize text-muted-foreground'>tools</span>
-        </div>
+      <div className='mt-4 flex flex-wrap gap-3 justify-center'>
+        {Object.entries(CATEGORY_LABELS).map(([key, label]) => {
+          const color = CATEGORY_COLORS[key]
+          const count = skillsData.filter(s => s.category === key).length
+          if (count === 0) return null
+          return (
+            <button
+              key={key}
+              className='flex items-center gap-1.5 text-xs text-muted-foreground transition-opacity duration-200 hover:opacity-100 cursor-pointer bg-transparent border-none p-0'
+              style={{
+                opacity: hoveredCategory === null || hoveredCategory === key ? 1 : 0.35,
+              }}
+              onMouseEnter={() => setHoveredCategory(key)}
+              onMouseLeave={() => setHoveredCategory(null)}
+              onFocus={() => setHoveredCategory(key)}
+              onBlur={() => setHoveredCategory(null)}
+            >
+              <span
+                className='w-2.5 h-2.5 rounded-full inline-block'
+                style={{ backgroundColor: color }}
+              />
+              <span>{label}</span>
+              <span className='text-muted-foreground/60'>({count})</span>
+            </button>
+          )
+        })}
       </div>
     </div>
   )
