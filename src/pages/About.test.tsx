@@ -1,10 +1,19 @@
 import { render, screen, waitFor, act } from '@testing-library/react'
+import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import About from './About'
 
 // Mock fetch
 const mockFetch = vi.fn()
 global.fetch = mockFetch
+
+function renderAbout() {
+  return render(
+    <MemoryRouter>
+      <About />
+    </MemoryRouter>
+  )
+}
 
 describe('About Page', () => {
   beforeEach(() => {
@@ -14,7 +23,7 @@ describe('About Page', () => {
 
   it('renders the main heading', async () => {
     await act(async () => {
-      render(<About />)
+      renderAbout()
     })
 
     const heading = screen.getByRole('heading', { level: 1, name: /visweshwaran s/i })
@@ -23,7 +32,7 @@ describe('About Page', () => {
 
   it('displays the professional tagline', async () => {
     await act(async () => {
-      render(<About />)
+      renderAbout()
     })
 
     expect(screen.getByText(/full stack developer/i)).toBeInTheDocument()
@@ -33,43 +42,25 @@ describe('About Page', () => {
 
   it('shows location information', async () => {
     await act(async () => {
-      render(<About />)
+      renderAbout()
     })
 
     expect(screen.getByText(/toronto, canada & india/i)).toBeInTheDocument()
   })
 
-  it.skip('displays skills section', async () => {
+  it('renders about section with narrative', async () => {
     await act(async () => {
-      render(<About />)
+      renderAbout()
     })
 
-    expect(screen.getByText(/skills & technologies/i)).toBeInTheDocument()
-    expect(
-      screen.getByText(/dynamic visualization based on my github repositories/i)
-    ).toBeInTheDocument()
-
-    // Wait for error state to appear since fetch is mocked to fail
-    await waitFor(() => {
-      expect(screen.getByText(/failed to load repository data/i)).toBeInTheDocument()
-    })
-  })
-
-  it('renders about me section', async () => {
-    await act(async () => {
-      render(<About />)
-    })
-
-    expect(screen.getByText(/about me/i)).toBeInTheDocument()
     expect(screen.getByText(/passionate full-stack developer/i)).toBeInTheDocument()
+    expect(screen.getByText(/building software that solves real problems/i)).toBeInTheDocument()
   })
 
-  it('shows contact section with GitHub and LinkedIn links', async () => {
+  it('shows hero connect buttons with GitHub and LinkedIn links', async () => {
     await act(async () => {
-      render(<About />)
+      renderAbout()
     })
-
-    expect(screen.getByText(/let's connect/i)).toBeInTheDocument()
 
     const githubLink = screen.getByRole('link', { name: /github/i })
     expect(githubLink).toBeInTheDocument()
@@ -85,28 +76,35 @@ describe('About Page', () => {
     expect(linkedinLink).toHaveAttribute('target', '_blank')
   })
 
-  it('uses proper semantic structure', async () => {
+  it('shows highlight cards', async () => {
     await act(async () => {
-      render(<About />)
+      renderAbout()
     })
 
-    // Check for proper heading hierarchy
+    expect(screen.getByText('Open Source')).toBeInTheDocument()
+    expect(screen.getByText('Full Stack')).toBeInTheDocument()
+    expect(screen.getByText('Community')).toBeInTheDocument()
+  })
+
+  it('uses proper semantic structure', async () => {
+    await act(async () => {
+      renderAbout()
+    })
+
     const h1 = screen.getByRole('heading', { level: 1 })
     expect(h1).toBeInTheDocument()
 
-    // Should have multiple sections
     const headings = screen.getAllByRole('heading')
     expect(headings.length).toBeGreaterThan(1)
   })
 
   it.skip('displays word cloud with successful repository fetch', async () => {
-    // Mock successful repository fetch
     const mockRepos = [
       {
         id: 1,
         name: 'test-repo',
         description: 'A test repository',
-        html_url: 'https://github.com/vish288/test-repo',
+        html_url: 'https://github.com/testuser/test-repo',
         language: 'TypeScript',
         stargazers_count: 5,
         forks_count: 1,
@@ -124,13 +122,11 @@ describe('About Page', () => {
     })
 
     await act(async () => {
-      render(<About />)
+      renderAbout()
     })
 
-    // Should initially show loading
     expect(screen.getByText(/loading repositories/i)).toBeInTheDocument()
 
-    // Wait for word cloud to appear
     await waitFor(() => {
       expect(screen.getByText(/showing .* skills from .* repositories/i)).toBeInTheDocument()
     })
