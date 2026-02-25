@@ -168,8 +168,8 @@ export default function Gratitude() {
               <SimpleCaptcha onVerify={setCaptchaValid} isValid={captchaValid} />
 
               {error && (
-                <div className='rounded-lg border border-red-200 bg-red-50 dark:bg-red-950/20 dark:border-red-900/30 p-3'>
-                  <p className='text-red-800 dark:text-red-400 text-sm'>{error}</p>
+                <div className='rounded-lg border border-destructive/30 bg-destructive/5 p-3'>
+                  <p className='text-destructive text-sm'>{error}</p>
                 </div>
               )}
 

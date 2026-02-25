@@ -8,26 +8,26 @@ import SimpleWordCloud from '@/components/SimpleWordCloud'
 import { useGitHubRepositories } from '@/hooks/useGitHubRepositories'
 import { APP_STRINGS } from '@/constants/appStrings'
 
+const FALLBACK_SKILLS = [
+  'React',
+  'TypeScript',
+  'Node.js',
+  'Python',
+  'JavaScript',
+  'Next.js',
+  'Express.js',
+  'MongoDB',
+  'PostgreSQL',
+  'AWS',
+  'Docker',
+  'Git',
+  'REST APIs',
+  'GraphQL',
+  'Tailwind CSS',
+]
+
 export default function About() {
   const { repositories, loading, error } = useGitHubRepositories()
-
-  const skills = [
-    'React',
-    'TypeScript',
-    'Node.js',
-    'Python',
-    'JavaScript',
-    'Next.js',
-    'Express.js',
-    'MongoDB',
-    'PostgreSQL',
-    'AWS',
-    'Docker',
-    'Git',
-    'REST APIs',
-    'GraphQL',
-    'Tailwind CSS',
-  ]
 
   const totalStars = repositories.reduce((sum, r) => sum + (r.stargazers_count || 0), 0)
 
@@ -184,7 +184,7 @@ export default function About() {
                 <div className='text-center py-8'>
                   <p className='text-red-500 mb-4'>{APP_STRINGS.ERROR_REPOSITORY_LOAD}</p>
                   <div className='flex flex-wrap gap-2 justify-center'>
-                    {skills.map(skill => (
+                    {FALLBACK_SKILLS.map(skill => (
                       <Badge key={skill} variant='secondary' className='text-sm'>
                         {skill}
                       </Badge>
