@@ -209,6 +209,14 @@ function generateClaudeCommand(serverKey: string): string {
   return `claude mcp add ${s.shortName} -- ${s.installCommand} ${s.packageName}`
 }
 
+function generateGeminiCommand(serverKey: string): string {
+  const s = getServerOrThrow(serverKey)
+  const envFlags = Object.entries(s.envVars)
+    .map(([key, val]) => `-e ${key}=${val.placeholder || val.default || ''}`)
+    .join(' ')
+  return `gemini mcp add ${envFlags} ${s.shortName} ${s.installCommand} ${s.packageName}`
+}
+
 // ── Client Card Data ────────────────────────────────────────────────
 
 interface ClientCard {
@@ -284,6 +292,16 @@ function getClientCards(serverKey: string): ClientCard[] {
       modalCode: generateConfigJson(serverKey),
       modalDesc: 'Add this to Settings > MCP Servers, or claude_desktop_config.json:',
     },
+    {
+      name: 'Gemini CLI',
+      iconUrl: 'https://cdn.simpleicons.org/googlegemini/ffffff',
+      iconBg: '#4285F4',
+      actionType: 'modal',
+      actionText: 'Guide',
+      modalTitle: `${s.displayName} for Gemini CLI`,
+      modalCode: generateGeminiCommand(serverKey),
+      modalDesc: 'Run this command in your terminal:',
+    },
   ]
 }
 
@@ -298,6 +316,8 @@ const INSTALL_CLIENT_MAP: Record<string, string> = {
   'claude-desktop': 'Claude Desktop',
   windsurf: 'Windsurf',
   intellij: 'IntelliJ',
+  gemini: 'Gemini CLI',
+  'gemini-cli': 'Gemini CLI',
 }
 
 // ── Modal Component ─────────────────────────────────────────────────
@@ -415,7 +435,7 @@ function ServerSection({
     description: string
     code: string
   } | null>(initialModal)
-  const [expanded, setExpanded] = useState(autoExpand)
+  const [expanded, setExpanded] = useState(true)
 
   // Auto-redirect for link-based installs (cursor, vscode)
   useEffect(() => {
@@ -491,7 +511,7 @@ function ServerSection({
           </div>
 
           {/* Client grid — compact pills */}
-          <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2'>
+          <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2'>
             {clients.map(client => (
               <div key={client.name}>
                 {client.actionType === 'link' ? (
@@ -577,8 +597,8 @@ export default function McpInstall() {
           MCP Installation Gateway
         </h1>
         <p className='text-lg text-muted-foreground max-w-2xl'>
-          One-click installation for MCP servers. Connect to VS Code, Cursor, Claude, Windsurf, and
-          IntelliJ.
+          One-click installation for MCP servers. Connect to VS Code, Cursor, Claude, Windsurf,
+          IntelliJ, and Gemini CLI.
         </p>
       </section>
 
