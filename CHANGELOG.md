@@ -2,10 +2,9 @@
 
 ## [2.8.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.7.1...vish288-personal-website-v2.8.0) (2026-02-27)
 
-
 ### Features
 
-* add Gemini CLI client and expand all MCP servers by default ([#62](https://github.com/vish288/vish288.github.io/issues/62)) ([ef0710e](https://github.com/vish288/vish288.github.io/commit/ef0710eca2d79bfd9719f72aa11324c11e614820))
+- add Gemini CLI client and expand all MCP servers by default ([#62](https://github.com/vish288/vish288.github.io/issues/62)) ([ef0710e](https://github.com/vish288/vish288.github.io/commit/ef0710eca2d79bfd9719f72aa11324c11e614820))
 
 ## [2.7.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.7.0...vish288-personal-website-v2.7.1) (2026-02-25)
 
