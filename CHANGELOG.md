@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.8.2](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.1...vish288-personal-website-v2.8.2) (2026-03-03)
+
+
+### Bug Fixes
+
+* **deps:** override serialize-javascript to &gt;=7.0.3 (CVE fix) ([c9eb69b](https://github.com/vish288/vish288.github.io/commit/c9eb69b1b2cd1cbd892fc5f0815ce0ea4ab5569c))
+* format CHANGELOG.md for prettier ([0a7a411](https://github.com/vish288/vish288.github.io/commit/0a7a41191c4602d9a0d7444c8c9ddea4928afaca))
+
 ## [2.8.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.0...vish288-personal-website-v2.8.1) (2026-02-27)
 
 ### Tests
