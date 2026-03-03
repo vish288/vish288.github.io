@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.0...vish288-personal-website-v2.8.1) (2026-02-27)
+
+
+### Tests
+
+* add link integrity tests for MCP install page ([#64](https://github.com/vish288/vish288.github.io/issues/64)) ([ae5d5b4](https://github.com/vish288/vish288.github.io/commit/ae5d5b4926912ae4c8b87ca2eb1cc55597957b03))
+
 ## [2.8.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.7.1...vish288-personal-website-v2.8.0) (2026-02-27)
 
 ### Features
