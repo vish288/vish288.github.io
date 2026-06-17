@@ -1,18 +1,12 @@
 import type { ComponentType } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { Heart, User, Blocks } from 'lucide-react'
+import { User, Blocks } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
-import SentimentRoller from '@/components/SentimentRoller'
 import { cn } from '@/lib/utils'
 import Repositories from '@/pages/Repositories'
 import About from '@/pages/About'
 import McpInstall from '@/pages/McpInstall'
-import Gratitude from '@/pages/Gratitude'
-import GratitudeAdmin from '@/pages/GratitudeAdmin'
-import AdminUserManagement from '@/pages/AdminUserManagement'
-import UnauthorizedAccess from '@/pages/UnauthorizedAccess'
-import OAuthCallback from '@/pages/OAuthCallback'
 import ThemeToggle from '@/components/ThemeToggle'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { APP_STRINGS } from '@/constants/appStrings'
@@ -29,7 +23,6 @@ function Navigation() {
     { path: '/', label: APP_STRINGS.NAV_ABOUT, icon: User },
     { path: '/repositories', label: APP_STRINGS.NAV_REPOSITORIES, icon: GitHubIcon },
     { path: '/mcp-install', label: 'MCP', icon: Blocks },
-    { path: '/gratitude', label: APP_STRINGS.NAV_GRATITUDE, icon: Heart },
   ]
 
   return (
@@ -60,15 +53,8 @@ function Navigation() {
                     location.pathname === path && 'bg-primary text-primary-foreground'
                   )}
                 >
-                  {path === '/gratitude' ? (
-                    <SentimentRoller className='text-sm hidden sm:flex' interval={4000} />
-                  ) : (
-                    <>
-                      <Icon className='h-4 w-4' />
-                      <span className='hidden sm:inline'>{label}</span>
-                    </>
-                  )}
-                  {path === '/gratitude' && <Heart className='h-4 w-4 sm:hidden' />}
+                  <Icon className='h-4 w-4' />
+                  <span className='hidden sm:inline'>{label}</span>
                 </Link>
               </Button>
             ))}
@@ -112,11 +98,6 @@ function AppContent() {
           <Route path='/' element={<About />} />
           <Route path='/repositories' element={<Repositories />} />
           <Route path='/mcp-install' element={<McpInstall />} />
-          <Route path='/gratitude' element={<Gratitude />} />
-          <Route path='/admin/gratitude' element={<GratitudeAdmin />} />
-          <Route path='/admin/users' element={<AdminUserManagement />} />
-          <Route path='/admin/callback' element={<OAuthCallback />} />
-          <Route path='/unauthorized' element={<UnauthorizedAccess />} />
         </Routes>
       </main>
 

@@ -1,22 +1,11 @@
 # Development Guide
 
-## Tech Stack
-
-| Layer | Tool | Version |
-|-------|------|---------|
-| Framework | React | 19 |
-| Language | TypeScript | 5.9 |
-| Bundler | Vite | 7 |
-| Styling | Tailwind CSS | 4 |
-| Components | shadcn/ui + Radix | — |
-| Testing | Vitest + Testing Library | 4 |
-| CI/CD | GitHub Actions | — |
-| Versioning | release-please | — |
-
 ## Prerequisites
 
-- Node.js >= 20.0.0
-- pnpm >= 8.0.0
+- Node.js >= 24
+- pnpm >= 10 (this repo pins `packageManager: pnpm@10.14.0`)
+
+Both are managed via [mise](https://mise.jdx.dev/) if you have it installed.
 
 ## Setup
 
@@ -24,67 +13,65 @@
 git clone https://github.com/vish288/vish288.github.io.git
 cd vish288.github.io
 pnpm install
-pnpm run dev
+pnpm dev
 ```
+
+Dev server runs on http://localhost:3000.
 
 ## Scripts
 
-### Development
 ```bash
-pnpm run dev          # Start development server on port 3000
-pnpm run preview      # Preview production build locally
+pnpm dev               # Vite dev server
+pnpm build             # Production build → dist/
+pnpm build:github      # Same as build; preserved for clarity in the release workflow
+pnpm preview           # Serve dist/ locally for a smoke test
+
+pnpm test              # Vitest run
+pnpm test:watch        # Vitest watch
+pnpm test:coverage     # Vitest with v8 coverage
+
+pnpm typecheck         # tsc --noEmit
+pnpm lint              # eslint --fix
+pnpm lint:check        # eslint, no fix
+pnpm format            # prettier --write
+pnpm format:check      # prettier --check
+
+pnpm clean             # rm dist + logs
 ```
 
-### Building
-```bash
-pnpm run build        # Build for production
-pnpm run build:github # Build for GitHub Pages (same as build)
-pnpm run deploy       # Build and move to docs/
-```
-
-### Testing
-```bash
-pnpm run test            # Run tests once
-pnpm run test:watch      # Run tests in watch mode
-pnpm run test:coverage   # Run tests with coverage report
-```
-
-### Code Quality
-```bash
-pnpm run typecheck    # TypeScript type checking
-pnpm run lint         # ESLint with auto-fix
-pnpm run lint:check   # ESLint without auto-fix
-pnpm run format       # Prettier format
-pnpm run format:check # Prettier check
-```
-
-### Maintenance
-```bash
-pnpm run clean        # Clean build artifacts
-pnpm audit            # Check for security vulnerabilities
-pnpm outdated         # Check for outdated dependencies
-```
-
-## Full Quality Check
+Full pre-PR check:
 
 ```bash
-pnpm run typecheck && pnpm run lint:check && pnpm run format:check && pnpm run test
+pnpm typecheck && pnpm lint:check && pnpm format:check && pnpm test
 ```
 
-## Release Process
+## Release flow
 
-This repo uses [release-please](https://github.com/googleapis/release-please) with conventional commits:
+[release-please](https://github.com/googleapis/release-please) drives versioning off conventional commits on `main`:
 
-1. Push to `main` with conventional commit prefix (`feat:`, `fix:`, `chore:`, etc.)
-2. release-please auto-creates a release PR with version bump and changelog
-3. Merging the release PR triggers build + deploy to GitHub Pages
+- `feat:` → minor bump
+- `fix:` / `perf:` → patch bump
+- `BREAKING CHANGE:` footer → major bump
+- `chore:`, `docs:`, `ci:`, `build:`, `style:`, `refactor:`, `test:` → no version bump but recorded in CHANGELOG sections
 
-Version bumps: `feat:` = minor, `fix:` = patch, `BREAKING CHANGE:` = major.
+Workflow:
+
+1. Push a conventional-commit PR to `main`.
+2. The release-please workflow opens (or updates) a release PR titled `chore(main): release vish288-personal-website X.Y.Z`. A second job auto-formats CHANGELOG.md on that PR.
+3. Merging the release PR cuts the tag and triggers the build + deploy job, which uploads the Vite artifact to GitHub Pages.
+
+## Pages
+
+Pages source must be set to **GitHub Actions** (Settings → Pages → Source). With the legacy "Deploy from a branch" mode the artifact is ignored and Pages Jekyll-serves the raw source tree instead — see PR #121 history if this ever drifts.
+
+## Dependency hygiene
+
+- Dependabot is configured in `.github/dependabot.yml` to group npm minor/patch, npm major, and github-actions bumps into batched PRs (weekly).
+- All GitHub Actions are SHA-pinned (repo policy `sha_pinning_required: true`). When bumping, dereference tag → commit SHA and keep the `# vN.N.N` trailing comment.
 
 ## Contributing
 
-1. Fork repository and create a feature branch
-2. Make changes and add tests
-3. Run the full quality check above
-4. Commit with [conventional messages](https://www.conventionalcommits.org/)
-5. Open a Pull Request
+1. Branch from `main`.
+2. Make the change with tests.
+3. Run the full pre-PR check above.
+4. Conventional-commit message; open PR.
