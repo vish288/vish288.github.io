@@ -1,5 +1,12 @@
 import type { ComponentType } from 'react'
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+  useLocation,
+} from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { User, Blocks } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
@@ -98,6 +105,7 @@ function AppContent() {
           <Route path='/' element={<About />} />
           <Route path='/repositories' element={<Repositories />} />
           <Route path='/mcp-install' element={<McpInstall />} />
+          <Route path='*' element={<Navigate to='/' replace />} />
         </Routes>
       </main>
 
