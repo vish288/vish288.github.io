@@ -2,10 +2,9 @@
 
 ## [2.8.6](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.5...vish288-personal-website-v2.8.6) (2026-06-17)
 
-
 ### Bug Fixes
 
-* **vite:** convert manualChunks object to function for vite 8/rolldown ([c35c4ab](https://github.com/vish288/vish288.github.io/commit/c35c4ab379af5476166cdbee7d89b2e0dcba7491))
+- **vite:** convert manualChunks object to function for vite 8/rolldown ([c35c4ab](https://github.com/vish288/vish288.github.io/commit/c35c4ab379af5476166cdbee7d89b2e0dcba7491))
 
 ## [2.8.5](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.4...vish288-personal-website-v2.8.5) (2026-06-17)
 
