@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.9](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.8...vish288-personal-website-v2.8.9) (2026-06-17)
+
+
+### Bug Fixes
+
+* allow MCP page icon CDNs in CSP and add SPA catch-all route ([24ef415](https://github.com/vish288/vish288.github.io/commit/24ef4155c26c2652ca7d6ac4b3a6320c875027bd))
+
 ## [2.8.8](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.7...vish288-personal-website-v2.8.8) (2026-06-17)
 
 ### Bug Fixes
