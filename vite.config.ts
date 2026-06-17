@@ -44,11 +44,13 @@ export default defineConfig({
     assetsDir: 'assets',
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom'],
-          ui: ['@radix-ui/react-slot', '@radix-ui/react-toast', 'lucide-react'],
-          router: ['react-router-dom'],
-          form: ['react-hook-form'],
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react-router')) return 'router'
+            if (id.includes('react-hook-form')) return 'form'
+            if (id.includes('@radix-ui') || id.includes('lucide-react')) return 'ui'
+            if (id.includes('react-dom') || /[\\/]react[\\/]/.test(id)) return 'vendor'
+          }
         },
         assetFileNames: 'assets/[name]-[hash][extname]',
         chunkFileNames: 'assets/[name]-[hash].js',
