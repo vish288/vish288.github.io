@@ -43,6 +43,10 @@ export default defineConfig({
     sourcemap: false,
     assetsDir: 'assets',
     rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        notFound: path.resolve(__dirname, '404.html'),
+      },
       output: {
         manualChunks(id) {
           if (id.includes('node_modules')) {
