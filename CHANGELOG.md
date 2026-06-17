@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.8.8](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.7...vish288-personal-website-v2.8.8) (2026-06-17)
+
+
+### Bug Fixes
+
+* address react-hooks 7 violations and drop tsconfig baseUrl ([67da9ab](https://github.com/vish288/vish288.github.io/commit/67da9aba4aa27bcbd93d511646a40f9e9db9b5ee))
+
+
+### Code Refactoring
+
+* remove VITE_GITHUB_TOKEN surface — drop gratitude form and admin ([44544b1](https://github.com/vish288/vish288.github.io/commit/44544b164ba3ba5025fdf2ece808ecac18964fc6))
+
+
+### Maintenance
+
+* **security:** add CSP, promote 404 to Vite entry, extract SPA scripts to TS ([b918aff](https://github.com/vish288/vish288.github.io/commit/b918aff4e80c270f7bf156005944301babc4ab63))
+
 ## [2.8.7](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.6...vish288-personal-website-v2.8.7) (2026-06-17)
 
 ### Maintenance
