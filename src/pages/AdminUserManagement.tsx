@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -30,29 +30,28 @@ export default function AdminUserManagement() {
   const [authLoading, setAuthLoading] = useState(true)
   const navigate = useNavigate()
 
-  const checkAuth = useCallback(async () => {
-    setAuthLoading(true)
-    try {
-      const currentUser = await githubWebAuth.getCurrentUser()
-      if (currentUser && !githubWebAuth.isUserAuthorized(currentUser.login)) {
-        // User is authenticated but not authorized
-        navigate('/unauthorized')
-        return
+  useEffect(() => {
+    let cancelled = false
+    void (async () => {
+      try {
+        const currentUser = await githubWebAuth.getCurrentUser()
+        if (cancelled) return
+        if (currentUser && !githubWebAuth.isUserAuthorized(currentUser.login)) {
+          navigate('/unauthorized')
+          return
+        }
+        setUser(currentUser)
+        setAllowedUsers(githubWebAuth.getAllowedUsers())
+      } catch {
+        if (!cancelled) setError('Authentication failed')
+      } finally {
+        if (!cancelled) setAuthLoading(false)
       }
-      setUser(currentUser)
-      // Load allowed users from service
-      setAllowedUsers(githubWebAuth.getAllowedUsers())
-    } catch {
-      setError('Authentication failed')
-    } finally {
-      setAuthLoading(false)
+    })()
+    return () => {
+      cancelled = true
     }
   }, [navigate])
-
-  // Check authentication on mount
-  useEffect(() => {
-    checkAuth()
-  }, [checkAuth])
 
   const handleAdminSignOut = () => {
     githubWebAuth.signOut()

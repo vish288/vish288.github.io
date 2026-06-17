@@ -140,14 +140,22 @@ export default function Repositories() {
     })
   }, [repos, filter, sortBy, sortDirection])
 
-  // Reset visible count when filter/sort changes
-  useEffect(() => {
+  const handleFilterChange = useCallback((next: FilterOption) => {
+    setFilter(next)
     setVisibleCount(PAGE_SIZE)
-  }, [filter, sortBy, sortDirection])
+  }, [])
+
+  const handleSortChange = useCallback((nextSortBy: SortOption, nextDirection: SortDirection) => {
+    setSortBy(nextSortBy)
+    setSortDirection(nextDirection)
+    setVisibleCount(PAGE_SIZE)
+  }, [])
 
   // Infinite scroll via IntersectionObserver
   const totalCountRef = useRef(filteredAndSortedRepos.length)
-  totalCountRef.current = filteredAndSortedRepos.length
+  useEffect(() => {
+    totalCountRef.current = filteredAndSortedRepos.length
+  }, [filteredAndSortedRepos])
 
   const loadMore = useCallback(() => {
     setVisibleCount(prev => Math.min(prev + PAGE_SIZE, totalCountRef.current))
@@ -175,10 +183,10 @@ export default function Repositories() {
   const totalStars = repos.reduce((sum, repo) => sum + repo.stargazers_count, 0)
 
   const handleSort = (option: SortOption) => {
-    if (sortBy === option) setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
-    else {
-      setSortBy(option)
-      setSortDirection('desc')
+    if (sortBy === option) {
+      handleSortChange(option, sortDirection === 'asc' ? 'desc' : 'asc')
+    } else {
+      handleSortChange(option, 'desc')
     }
   }
 
@@ -278,7 +286,7 @@ export default function Repositories() {
             ).map(([key, label, count]) => (
               <button
                 key={key}
-                onClick={() => setFilter(key)}
+                onClick={() => handleFilterChange(key)}
                 aria-pressed={filter === key}
                 className={`
                   px-3 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer
