@@ -1,5 +1,24 @@
 # Changelog
 
+## [2.8.5](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.4...vish288-personal-website-v2.8.5) (2026-06-17)
+
+
+### Bug Fixes
+
+* pin lucide-react to 0.x, set ignoreDeprecations for TS 6 ([d99c37b](https://github.com/vish288/vish288.github.io/commit/d99c37bece9abd4b58c759fd2b3463520cb882d6))
+
+
+### Build System
+
+* **deps:** bump the actions group across 1 directory with 8 updates ([547a94d](https://github.com/vish288/vish288.github.io/commit/547a94db7da57e7f3365e103058f02307839b345))
+* **deps:** bump the npm-major group across 1 directory with 6 updates ([f32d97a](https://github.com/vish288/vish288.github.io/commit/f32d97a94efdd4c616566dd59d72e2deb9bd678b))
+* **deps:** bump the npm-minor-patch group across 1 directory with 25 updates ([f35c699](https://github.com/vish288/vish288.github.io/commit/f35c699a34033006b0834319ee42ed6312739ec9))
+
+
+### Maintenance
+
+* **eslint:** downgrade new react-hooks compiler rules to warn ([3ffebc1](https://github.com/vish288/vish288.github.io/commit/3ffebc199f99e0ffce5efa0abfa7b9bdac135e99))
+
 ## [2.8.4](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.3...vish288-personal-website-v2.8.4) (2026-06-17)
 
 ### CI/CD
