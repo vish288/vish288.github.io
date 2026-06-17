@@ -86,9 +86,7 @@
     "format:check": "prettier --check \"src/**/*.{ts,tsx}\" \"*.{ts,tsx,json,md}\"",
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist *.log *.tgz",
-    "prepare": "husky",
-    "deploy": "pnpm run build:github && mv dist docs",
-    "deploy:preview": "pnpm run build && pnpm run preview"
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
