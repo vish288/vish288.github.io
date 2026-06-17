@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.4](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.3...vish288-personal-website-v2.8.4) (2026-06-17)
+
+
+### CI/CD
+
+* bump upload-pages-artifact to v4 (pins upload-artifact internally) ([27c457f](https://github.com/vish288/vish288.github.io/commit/27c457fbf7b160e34ebf8fd88835cd42a91c7311))
+
 ## [2.8.3](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.2...vish288-personal-website-v2.8.3) (2026-06-17)
 
 ### CI/CD
