@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Mail, MapPin, Code2, ArrowRight, Globe, Users, Star, Briefcase } from 'lucide-react'
+import { MapPin, Code2, Globe, Users, Star, Briefcase } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
 import LinkedInIcon from '@/components/icons/LinkedInIcon'
 import SimpleWordCloud from '@/components/SimpleWordCloud'
@@ -80,13 +80,6 @@ export default function About() {
                 >
                   <LinkedInIcon className='h-4 w-4' />
                   LinkedIn
-                </a>
-              </Button>
-              <Button variant='ghost' asChild size='lg'>
-                <a href='/gratitude' className='flex items-center gap-2'>
-                  <Mail className='h-4 w-4' />
-                  {APP_STRINGS.BTN_SEND_MESSAGE}
-                  <ArrowRight className='h-3.5 w-3.5' />
                 </a>
               </Button>
             </div>
