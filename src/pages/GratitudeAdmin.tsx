@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -21,7 +21,6 @@ interface GratitudeMessage {
 
 export default function GratitudeAdmin() {
   const [allMessages, setAllMessages] = useState<GratitudeMessage[]>([])
-  const [filteredMessages, setFilteredMessages] = useState<GratitudeMessage[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [user, setUser] = useState<GitHubUser | null>(null)
@@ -31,77 +30,87 @@ export default function GratitudeAdmin() {
   const [excludeAdminRequests, setExcludeAdminRequests] = useState(true)
   const navigate = useNavigate()
 
-  const checkAuth = useCallback(async () => {
-    setAuthLoading(true)
-    try {
-      const currentUser = await githubWebAuth.getCurrentUser()
-      if (currentUser && !githubWebAuth.isUserAuthorized(currentUser.login)) {
-        // User is authenticated but not authorized
-        navigate('/unauthorized')
-        return
+  useEffect(() => {
+    let cancelled = false
+    void (async () => {
+      try {
+        const currentUser = await githubWebAuth.getCurrentUser()
+        if (cancelled) return
+        if (currentUser && !githubWebAuth.isUserAuthorized(currentUser.login)) {
+          navigate('/unauthorized')
+          return
+        }
+        setUser(currentUser)
+      } catch (err) {
+        if (cancelled) return
+        setError(err instanceof Error ? err.message : 'Authentication failed')
+      } finally {
+        if (!cancelled) setAuthLoading(false)
       }
-      setUser(currentUser)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Authentication failed')
-    } finally {
-      setAuthLoading(false)
+    })()
+    return () => {
+      cancelled = true
     }
   }, [navigate])
-
-  // Check authentication on mount
-  useEffect(() => {
-    checkAuth()
-  }, [checkAuth])
 
   const handleAdminSignOut = () => {
     githubWebAuth.signOut()
     setUser(null)
   }
 
-  const loadMessages = useCallback(async () => {
-    if (!gratitudeService.isConfigured()) {
-      setError('GitHub API not configured. Please check environment variables.')
-      return
-    }
-
-    setLoading(true)
-    setError(null)
-
-    try {
-      const data = await gratitudeService.getAllIssues(50)
-      setAllMessages(data)
-      applyFilters(data, selectedLabels, excludeAdminRequests)
-    } catch (err) {
-      setError('Failed to load messages')
-      console.error('Error loading messages:', err)
-    } finally {
-      setLoading(false)
-    }
-  }, [selectedLabels, excludeAdminRequests])
-
-  useEffect(() => {
-    if (user) {
-      loadMessages()
-    }
-  }, [user, loadMessages])
-
-  const applyFilters = (messages: GratitudeMessage[], labels: string[], excludeAdmin: boolean) => {
-    let filtered = [...messages]
-
-    // Filter out admin requests if enabled
-    if (excludeAdmin) {
+  const filteredMessages = useMemo(() => {
+    let filtered = allMessages
+    if (excludeAdminRequests) {
       filtered = filtered.filter(
         msg => !msg.labels.includes('admin-request') && !msg.labels.includes('admin-access-request')
       )
     }
-
-    // Filter by selected labels if any
-    if (labels.length > 0) {
-      filtered = filtered.filter(msg => labels.some(label => msg.labels.includes(label)))
+    if (selectedLabels.length > 0) {
+      filtered = filtered.filter(msg => selectedLabels.some(label => msg.labels.includes(label)))
     }
+    return filtered
+  }, [allMessages, selectedLabels, excludeAdminRequests])
 
-    setFilteredMessages(filtered)
-  }
+  const [loadCounter, setLoadCounter] = useState(0)
+
+  const configError = gratitudeService.isConfigured()
+    ? null
+    : 'GitHub API not configured. Please check environment variables.'
+  const displayError = error || configError
+
+  useEffect(() => {
+    if (!user || !gratitudeService.isConfigured()) return
+
+    let cancelled = false
+    void (async () => {
+      try {
+        const data = await gratitudeService.getAllIssues(50)
+        if (cancelled) return
+        setAllMessages(data)
+      } catch (err) {
+        if (cancelled) return
+        setError('Failed to load messages')
+        console.error('Error loading messages:', err)
+      } finally {
+        if (!cancelled) setLoading(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [user, loadCounter])
+
+  const reloadMessages = useCallback(() => {
+    setLoading(true)
+    setError(null)
+    setLoadCounter(n => n + 1)
+  }, [])
+
+  const [weekStart] = useState(() => Date.now() - 7 * 24 * 60 * 60 * 1000)
+  const messagesThisWeek = useMemo(
+    () => filteredMessages.filter(m => new Date(m.createdAt).getTime() > weekStart).length,
+    [filteredMessages, weekStart]
+  )
 
   const getAllLabels = () => {
     const labelSet = new Set<string>()
@@ -112,17 +121,13 @@ export default function GratitudeAdmin() {
   }
 
   const toggleLabel = (label: string) => {
-    const newLabels = selectedLabels.includes(label)
-      ? selectedLabels.filter(l => l !== label)
-      : [...selectedLabels, label]
-    setSelectedLabels(newLabels)
-    applyFilters(allMessages, newLabels, excludeAdminRequests)
+    setSelectedLabels(prev =>
+      prev.includes(label) ? prev.filter(l => l !== label) : [...prev, label]
+    )
   }
 
   const toggleExcludeAdmin = () => {
-    const newExclude = !excludeAdminRequests
-    setExcludeAdminRequests(newExclude)
-    applyFilters(allMessages, selectedLabels, newExclude)
+    setExcludeAdminRequests(prev => !prev)
   }
 
   const formatDate = (dateString: string) => {
@@ -216,16 +221,16 @@ export default function GratitudeAdmin() {
                 {showMessages ? <EyeOff className='h-4 w-4' /> : <Eye className='h-4 w-4' />}
                 {showMessages ? 'Hide' : 'Show'} Messages
               </Button>
-              <Button onClick={loadMessages} disabled={loading}>
+              <Button onClick={reloadMessages} disabled={loading}>
                 <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
                 Refresh
               </Button>
             </div>
           </div>
 
-          {error && (
+          {displayError && (
             <div className='bg-red-50 border border-red-200 rounded-md p-4 mb-6'>
-              <p className='text-red-800'>{error}</p>
+              <p className='text-red-800'>{displayError}</p>
             </div>
           )}
 
@@ -247,14 +252,7 @@ export default function GratitudeAdmin() {
                     <div className='text-sm text-muted-foreground'>Filtered</div>
                   </div>
                   <div className='text-center'>
-                    <div className='text-2xl font-bold text-green-600'>
-                      {
-                        filteredMessages.filter(
-                          m =>
-                            new Date(m.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
-                        ).length
-                      }
-                    </div>
+                    <div className='text-2xl font-bold text-green-600'>{messagesThisWeek}</div>
                     <div className='text-sm text-muted-foreground'>This Week</div>
                   </div>
                   <div className='text-center'>
