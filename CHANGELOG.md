@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.8.7](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.6...vish288-personal-website-v2.8.7) (2026-06-17)
+
+
+### Maintenance
+
+* move serialize-javascript override to pnpm-workspace.yaml ([1487df2](https://github.com/vish288/vish288.github.io/commit/1487df27923b64ddb27cecd92a2b4c2b9b126be2))
+
 ## [2.8.6](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.5...vish288-personal-website-v2.8.6) (2026-06-17)
 
 ### Bug Fixes
