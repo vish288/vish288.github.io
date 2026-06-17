@@ -2,17 +2,15 @@
 
 ## [2.8.3](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.2...vish288-personal-website-v2.8.3) (2026-06-17)
 
-
 ### CI/CD
 
-* format CHANGELOG in release PR, drop Node 20 ([8f5c4a9](https://github.com/vish288/vish288.github.io/commit/8f5c4a97ea90ef858c23d47fc563a17ad585318d))
-* group dependabot updates into batched PRs ([7792e28](https://github.com/vish288/vish288.github.io/commit/7792e2866ed0658b233189ace6229ff3ee96d2c7))
-* pin all actions to commit SHA per repo policy ([1ddc92e](https://github.com/vish288/vish288.github.io/commit/1ddc92ea9952a8b2267431728dfde2d0a6e35a5c))
-
+- format CHANGELOG in release PR, drop Node 20 ([8f5c4a9](https://github.com/vish288/vish288.github.io/commit/8f5c4a97ea90ef858c23d47fc563a17ad585318d))
+- group dependabot updates into batched PRs ([7792e28](https://github.com/vish288/vish288.github.io/commit/7792e2866ed0658b233189ace6229ff3ee96d2c7))
+- pin all actions to commit SHA per repo policy ([1ddc92e](https://github.com/vish288/vish288.github.io/commit/1ddc92ea9952a8b2267431728dfde2d0a6e35a5c))
 
 ### Maintenance
 
-* format CHANGELOG.md ([40349ff](https://github.com/vish288/vish288.github.io/commit/40349ffdf7966b6eac627ed06a3722c34d7e0ca8))
+- format CHANGELOG.md ([40349ff](https://github.com/vish288/vish288.github.io/commit/40349ffdf7966b6eac627ed06a3722c34d7e0ca8))
 
 ## [2.8.2](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.1...vish288-personal-website-v2.8.2) (2026-03-03)
 
