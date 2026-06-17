@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -12,52 +12,43 @@ export default function OAuthCallback() {
   const [error, setError] = useState<string | null>(null)
   const [user, setUser] = useState<GitHubUser | null>(null)
 
-  const handleOAuthCallback = useCallback(async () => {
-    try {
-      const code = searchParams.get('code')
-      const state = searchParams.get('state')
-      const errorParam = searchParams.get('error')
+  useEffect(() => {
+    let cancelled = false
+    let redirectTimer: ReturnType<typeof setTimeout> | undefined
+    void (async () => {
+      try {
+        const code = searchParams.get('code')
+        const state = searchParams.get('state')
+        const errorParam = searchParams.get('error')
 
-      // Check for OAuth errors
-      if (errorParam) {
-        throw new Error(`OAuth error: ${errorParam}`)
-      }
+        if (errorParam) throw new Error(`OAuth error: ${errorParam}`)
+        if (!code || !state) throw new Error('Missing OAuth parameters')
 
-      if (!code || !state) {
-        throw new Error('Missing OAuth parameters')
-      }
+        const authenticatedUser = await githubWebAuth.handleCallback(code, state)
+        if (cancelled) return
 
-      // Handle the OAuth callback
-      const authenticatedUser = await githubWebAuth.handleCallback(code, state)
+        if (!authenticatedUser) throw new Error('Authentication failed')
 
-      if (authenticatedUser) {
-        // Check if user is authorized
         if (!githubWebAuth.isUserAuthorized(authenticatedUser.login)) {
-          // User authenticated successfully but not authorized
           navigate('/unauthorized')
           return
         }
 
         setUser(authenticatedUser)
         setStatus('success')
-
-        // Redirect to admin dashboard after a brief delay
-        setTimeout(() => {
-          navigate('/admin/gratitude')
-        }, 2000)
-      } else {
-        throw new Error('Authentication failed')
+        redirectTimer = setTimeout(() => navigate('/admin/gratitude'), 2000)
+      } catch (err) {
+        if (cancelled) return
+        console.error('OAuth callback error:', err)
+        setError(err instanceof Error ? err.message : 'Authentication failed')
+        setStatus('error')
       }
-    } catch (err) {
-      console.error('OAuth callback error:', err)
-      setError(err instanceof Error ? err.message : 'Authentication failed')
-      setStatus('error')
+    })()
+    return () => {
+      cancelled = true
+      if (redirectTimer) clearTimeout(redirectTimer)
     }
   }, [searchParams, navigate])
-
-  useEffect(() => {
-    handleOAuthCallback()
-  }, [handleOAuthCallback])
 
   const handleRetry = () => {
     navigate('/admin/gratitude')
