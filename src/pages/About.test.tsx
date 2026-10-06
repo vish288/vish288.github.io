@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import About from './About'
 import { resetGitHubCache } from '../hooks/useGitHubRepositories'
+import { APP_STRINGS } from '../constants/appStrings'
 
 // Mock fetch
 const mockFetch = vi.fn()
@@ -57,7 +58,7 @@ describe('About Page', () => {
     })
 
     expect(screen.getByRole('heading', { level: 2, name: /what i do/i })).toBeInTheDocument()
-    expect(screen.getByText(/building software professionally since 2010/i)).toBeInTheDocument()
+    expect(screen.getByText(/i have built software since 2010/i)).toBeInTheDocument()
     expect(
       screen.getByText(/mcp servers for gitlab, atlassian, coda and argo cd/i)
     ).toBeInTheDocument()
@@ -198,5 +199,36 @@ describe('About Page', () => {
     await waitFor(() => {
       expect(screen.getByText(/showing .* skills from .* repositories/i)).toBeInTheDocument()
     })
+  })
+})
+
+describe('STE-100 sentence length', () => {
+  // One idea per sentence: every sentence stays within the STE descriptive ceiling.
+  const MAX_WORDS = 25
+
+  function sentences(text: string): string[] {
+    return text
+      .split(/[.!?](?:\s|$)/)
+      .map(s => s.trim())
+      .filter(Boolean)
+  }
+
+  function wordCount(sentence: string): number {
+    return sentence.split(/\s+/).filter(Boolean).length
+  }
+
+  const copy: [string, string][] = [
+    ['ABOUT_P1', APP_STRINGS.ABOUT_P1],
+    ['ABOUT_P2', APP_STRINGS.ABOUT_P2],
+    ['ABOUT_P3', APP_STRINGS.ABOUT_P3],
+    ...APP_STRINGS.EXPERIENCE.flatMap((entry, ei) =>
+      entry.bullets.map((b, bi): [string, string] => [`EXPERIENCE[${ei}].bullets[${bi}]`, b])
+    ),
+  ]
+
+  it.each(copy)('%s: every sentence is at most 25 words', (_label, text) => {
+    for (const sentence of sentences(text)) {
+      expect(wordCount(sentence)).toBeLessThanOrEqual(MAX_WORDS)
+    }
   })
 })
