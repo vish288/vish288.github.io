@@ -298,7 +298,7 @@ export default function Repositories() {
                 `}
               >
                 {label}
-                <span className='ml-1 text-muted-foreground/70'>{count}</span>
+                <span className='ml-1 text-muted-foreground'>{count}</span>
               </button>
             ))}
           </div>
@@ -391,9 +391,7 @@ export default function Repositories() {
                     <GitFork className='h-3 w-3' /> {repo.forks_count}
                   </span>
                 )}
-                <span className='text-muted-foreground/50'>
-                  Updated {new Date(repo.updated_at).toLocaleDateString()}
-                </span>
+                <span>Updated {new Date(repo.updated_at).toLocaleDateString()}</span>
                 {repo.topics.length > 0 && (
                   <span className='hidden sm:flex gap-1'>
                     {prioritizeTopics(repo.topics)
