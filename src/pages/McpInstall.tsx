@@ -133,6 +133,33 @@ const SERVERS: Record<string, ServerConfig> = {
       },
     },
   },
+  'mcp-argocd': {
+    displayName: 'Argo CD',
+    fullName: 'Argo CD MCP Server',
+    packageName: 'mcp-argocd',
+    shortName: 'argocd',
+    description:
+      'Supports application status, sync, rollback, drift detection, logs, and ApplicationSets',
+    githubRepo: `${ghUser()}/mcp-argocd`,
+    pypiPackage: 'mcp-argocd',
+    installCommand: 'uvx',
+    // Required vars only, matching the siblings; server.json also exposes the
+    // optional ARGOCD_READ_ONLY, which the generated configs omit.
+    envVars: {
+      ARGOCD_URL: {
+        description: 'Argo CD URL',
+        default: 'https://argocd.example.com',
+        secret: false,
+        placeholder: 'https://argocd.example.com',
+      },
+      ARGOCD_TOKEN: {
+        description: 'Argo CD API Token',
+        default: '',
+        secret: true,
+        placeholder: 'your_argocd_token',
+      },
+    },
+  },
 }
 
 function getServer(serverKey: string): ServerConfig | null {
