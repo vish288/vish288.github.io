@@ -1,7 +1,8 @@
+import { Link } from 'react-router-dom'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { MapPin, Code2, Globe, Users, Star, Briefcase } from 'lucide-react'
+import { MapPin, Code2, Star, Blocks, FolderGit2 } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
 import LinkedInIcon from '@/components/icons/LinkedInIcon'
 import SimpleWordCloud from '@/components/SimpleWordCloud'
@@ -10,6 +11,9 @@ import { APP_STRINGS } from '@/constants/appStrings'
 
 // Evidenced by PRODUCT.md positioning and this repo's own stack; no unverified claims.
 const FALLBACK_SKILLS = ['React', 'TypeScript', 'JavaScript', 'Node.js', 'Python']
+
+const HIGHLIGHT_TILE =
+  'rounded-xl border bg-muted/30 p-4 flex flex-col items-center text-center gap-2 transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
 
 function FallbackSkills() {
   return (
@@ -44,7 +48,7 @@ export default function About() {
               <span className='text-2xl font-bold text-primary-foreground tracking-tight'>VS</span>
             </div>
 
-            <h1 className='text-4xl sm:text-5xl md:text-6xl font-bold mb-3 bg-gradient-to-r from-primary via-emerald-500 to-teal-500 bg-clip-text text-transparent'>
+            <h1 className='text-4xl sm:text-5xl md:text-6xl font-bold mb-3 text-foreground'>
               {APP_STRINGS.FULL_NAME}
             </h1>
 
@@ -94,7 +98,7 @@ export default function About() {
                   About
                 </p>
                 <h2 className='text-2xl sm:text-3xl font-bold mb-4'>
-                  Building software that solves real problems
+                  Frontend engineering and the developer tools behind it
                 </h2>
               </div>
               <p className='text-muted-foreground leading-relaxed'>
@@ -105,41 +109,46 @@ export default function About() {
               </p>
             </div>
 
-            {/* Right: highlights (2/5) */}
+            {/* Right: highlights — each points at something verifiable */}
             <div className='md:col-span-2 grid grid-cols-2 gap-4'>
-              <div className='rounded-xl border bg-muted/30 p-4 flex flex-col items-center text-center gap-2'>
+              <Link to='/mcp-install' className={HIGHLIGHT_TILE}>
                 <div className='h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center'>
-                  <Globe className='h-5 w-5 text-primary' />
+                  <Blocks className='h-5 w-5 text-primary' />
                 </div>
-                <p className='font-semibold text-sm'>Open Source</p>
-                <p className='text-xs text-muted-foreground'>
-                  {owned.length > 0 ? `${owned.length} repos` : 'Contributor'}
+                <p className='font-semibold text-sm'>3 MCP servers</p>
+                <p className='text-xs text-muted-foreground'>GitLab · Atlassian · Coda</p>
+              </Link>
+
+              <Link to='/repositories' className={HIGHLIGHT_TILE}>
+                <div className='h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center'>
+                  <FolderGit2 className='h-5 w-5 text-primary' />
+                </div>
+                <p className='font-semibold text-sm'>
+                  {owned.length > 0 ? `${owned.length} repos` : 'Public repos'}
                 </p>
-              </div>
+                <p className='text-xs text-muted-foreground'>Open source on GitHub</p>
+              </Link>
 
-              <div className='rounded-xl border bg-muted/30 p-4 flex flex-col items-center text-center gap-2'>
+              <a
+                href={APP_STRINGS.GITHUB_URL}
+                target='_blank'
+                rel='noopener noreferrer'
+                className={HIGHLIGHT_TILE}
+              >
                 <div className='h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center'>
-                  <Briefcase className='h-5 w-5 text-primary' />
+                  <GitHubIcon className='h-5 w-5 text-primary' />
                 </div>
-                <p className='font-semibold text-sm'>Full Stack</p>
-                <p className='text-xs text-muted-foreground'>Frontend to infra</p>
-              </div>
-
-              <div className='rounded-xl border bg-muted/30 p-4 flex flex-col items-center text-center gap-2'>
-                <div className='h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center'>
-                  <Users className='h-5 w-5 text-primary' />
-                </div>
-                <p className='font-semibold text-sm'>Community</p>
-                <p className='text-xs text-muted-foreground'>Knowledge sharing</p>
-              </div>
+                <p className='font-semibold text-sm'>GitHub</p>
+                <p className='text-xs text-muted-foreground'>@vish288</p>
+              </a>
 
               {totalStars > 0 && (
                 <div className='rounded-xl border bg-muted/30 p-4 flex flex-col items-center text-center gap-2'>
                   <div className='h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center'>
                     <Star className='h-5 w-5 text-primary' />
                   </div>
-                  <p className='font-semibold text-sm'>{totalStars} Stars</p>
-                  <p className='text-xs text-muted-foreground'>Open source</p>
+                  <p className='font-semibold text-sm'>{totalStars} stars</p>
+                  <p className='text-xs text-muted-foreground'>Across public repos</p>
                 </div>
               )}
             </div>
