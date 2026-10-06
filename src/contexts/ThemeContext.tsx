@@ -12,6 +12,8 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
+    // SSR/prerender has no window or localStorage; default to system there.
+    if (typeof window === 'undefined') return 'system'
     // Check localStorage first, fallback to system preference
     const stored = localStorage.getItem('theme') as Theme
     if (stored && ['dark', 'light', 'system'].includes(stored)) {
