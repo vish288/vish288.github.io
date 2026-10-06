@@ -270,7 +270,7 @@ export default function Repositories() {
                 onClick={() => handleFilterChange(key)}
                 aria-pressed={filter === key}
                 className={`
-                  px-3 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer
+                  touch-target inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer
                   ${
                     filter === key
                       ? 'bg-background shadow-sm text-foreground'
@@ -300,7 +300,7 @@ export default function Repositories() {
                 onClick={() => handleSort(key)}
                 aria-pressed={sortBy === key}
                 className={`
-                  px-2.5 py-1 text-xs rounded-md transition-all flex items-center gap-1 cursor-pointer
+                  touch-target px-2.5 py-1 text-xs rounded-md transition-all flex items-center justify-center gap-1 cursor-pointer
                   ${
                     sortBy === key
                       ? 'bg-muted text-foreground font-medium'
