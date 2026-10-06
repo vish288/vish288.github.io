@@ -12,10 +12,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'vis-creates.png', 'icon-512.png'],
       manifest: {
-        name: 'Vish - Full Stack Developer',
+        name: 'Visweshwaran S — Senior Staff Engineer & Architect',
         short_name: 'Vish',
         description:
-          'Vish (Visweshwaran S) - Full Stack Developer. Open source MCP servers, React/TypeScript projects, and developer tools.',
+          'Senior Staff Engineer and architect in Toronto. Frontend platforms, cloud-native systems and LLM engineering tooling for enterprise health and commerce.',
         theme_color: '#4a6b4a',
         background_color: '#ffffff',
         display: 'standalone',
