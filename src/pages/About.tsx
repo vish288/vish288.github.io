@@ -8,23 +8,8 @@ import SimpleWordCloud from '@/components/SimpleWordCloud'
 import { useGitHubRepositories } from '@/hooks/useGitHubRepositories'
 import { APP_STRINGS } from '@/constants/appStrings'
 
-const FALLBACK_SKILLS = [
-  'React',
-  'TypeScript',
-  'Node.js',
-  'Python',
-  'JavaScript',
-  'Next.js',
-  'Express.js',
-  'MongoDB',
-  'PostgreSQL',
-  'AWS',
-  'Docker',
-  'Git',
-  'REST APIs',
-  'GraphQL',
-  'Tailwind CSS',
-]
+// Evidenced by PRODUCT.md positioning and this repo's own stack; no unverified claims.
+const FALLBACK_SKILLS = ['React', 'TypeScript', 'JavaScript', 'Node.js', 'Python']
 
 export default function About() {
   const { repositories, loading, error } = useGitHubRepositories()
@@ -152,16 +137,11 @@ export default function About() {
         <section className='mb-12'>
           <Card>
             <CardHeader>
-              <CardTitle
-                className='flex items-center gap-2'
-                title='Technologies and programming languages I use'
-              >
+              <CardTitle className='flex items-center gap-2'>
                 <Code2 className='h-5 w-5' />
                 {APP_STRINGS.SKILLS_TITLE}
               </CardTitle>
-              <CardDescription title='Visual representation of my technical expertise'>
-                {APP_STRINGS.SKILLS_SUBTITLE}
-              </CardDescription>
+              <CardDescription>{APP_STRINGS.SKILLS_SUBTITLE}</CardDescription>
             </CardHeader>
             <CardContent>
               {loading && (

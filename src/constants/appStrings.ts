@@ -38,8 +38,8 @@ export const APP_STRINGS = {
   LOADING_REPOSITORIES: 'Loading repositories...',
 
   // Accessibility
-  SKILLS_CLOUD_DESCRIPTION: 'Interactive word cloud showing programming languages and technologies',
-  REPOSITORY_COUNT_MESSAGE: 'Word cloud generated from {count} repositories',
+  SKILLS_CLOUD_DESCRIPTION: 'Languages and topics taken from public GitHub repositories',
+  REPOSITORY_COUNT_MESSAGE: 'Derived from {count} public repositories',
 } as const
 
 export type AppStringKey = keyof typeof APP_STRINGS
