@@ -11,6 +11,7 @@ import {
   Blocks,
   ArrowRight,
   ChevronDown,
+  Loader2,
 } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
 import { APP_STRINGS } from '@/constants/appStrings'
@@ -168,7 +169,7 @@ export default function Repositories() {
     return (
       <div className='container mx-auto px-4 py-20'>
         <div role='status' className='flex items-center justify-center gap-3'>
-          <div className='motion-safe:animate-spin motion-reduce:animate-pulse rounded-full h-8 w-8 border-b-2 border-primary' />
+          <Loader2 className='h-8 w-8 text-primary motion-safe:animate-spin' aria-hidden='true' />
           <span className='text-muted-foreground'>Loading repositories...</span>
         </div>
       </div>
@@ -270,7 +271,7 @@ export default function Repositories() {
                 onClick={() => handleFilterChange(key)}
                 aria-pressed={filter === key}
                 className={`
-                  touch-target inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer
+                  touch-target inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
                   ${
                     filter === key
                       ? 'bg-background shadow-sm text-foreground'
@@ -300,7 +301,7 @@ export default function Repositories() {
                 onClick={() => handleSort(key)}
                 aria-pressed={sortBy === key}
                 className={`
-                  touch-target px-2.5 py-1 text-xs rounded-md transition-all flex items-center justify-center gap-1 cursor-pointer
+                  touch-target px-2.5 py-1 text-xs rounded-md transition-all flex items-center justify-center gap-1 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
                   ${
                     sortBy === key
                       ? 'bg-muted text-foreground font-medium'
@@ -324,7 +325,7 @@ export default function Repositories() {
             href={repo.html_url}
             target='_blank'
             rel='noopener noreferrer'
-            className='group flex items-start gap-4 py-4 px-3 -mx-3 rounded-lg hover:bg-muted/50 transition-colors'
+            className='group flex items-start gap-4 py-4 px-3 -mx-3 rounded-lg hover:bg-muted/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
           >
             {/* Language dot */}
             <div className='mt-1.5 flex-shrink-0'>
@@ -395,7 +396,7 @@ export default function Repositories() {
         <div ref={sentinelRef} className='flex justify-center py-8'>
           <button
             onClick={loadMore}
-            className='flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer bg-transparent border-none'
+            className='flex items-center gap-2 rounded-md px-2 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer bg-transparent border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
           >
             <ChevronDown className='h-4 w-4' />
             Show more ({filteredAndSortedRepos.length - visibleCount} remaining)
