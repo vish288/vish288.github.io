@@ -73,6 +73,15 @@
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease,
       box-shadow 0.3s ease;
   }
+
+  /* Keep compact controls visually small on desktop, but give them a 44px
+     touch target on coarse pointers (WCAG 2.5.8). */
+  @media (pointer: coarse) {
+    .touch-target {
+      min-height: 44px;
+      min-width: 44px;
+    }
+  }
 }
 
 /* Card glass effect */

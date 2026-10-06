@@ -35,7 +35,7 @@ export default function ThemeToggle() {
       size='sm'
       onClick={toggleTheme}
       title={getTitle()}
-      className='h-8 w-8 p-0'
+      className='h-8 w-8 p-0 touch-target'
     >
       {getIcon()}
       <span className='sr-only'>Toggle theme</span>
