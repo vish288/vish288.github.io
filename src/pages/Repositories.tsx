@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
 import { APP_STRINGS } from '@/constants/appStrings'
+import { useGitHubRepositories } from '@/hooks/useGitHubRepositories'
 
 // Topics shown first on repo cards, in priority order
 const PRIORITY_TOPICS = [
@@ -33,21 +34,6 @@ function prioritizeTopics(topics: string[]): string[] {
   const prioritized = PRIORITY_TOPICS.filter(t => topics.includes(t))
   const rest = topics.filter(t => !PRIORITY_TOPICS.includes(t))
   return [...prioritized, ...rest]
-}
-
-interface Repository {
-  id: number
-  name: string
-  description: string | null
-  html_url: string
-  language: string | null
-  stargazers_count: number
-  forks_count: number
-  topics: string[]
-  updated_at: string
-  created_at: string
-  fork: boolean
-  pushed_at: string
 }
 
 type SortOption = 'name' | 'stars' | 'forks' | 'updated' | 'created'
@@ -76,33 +62,12 @@ const LANGUAGE_COLORS: Record<string, string> = {
 const PAGE_SIZE = 10
 
 export default function Repositories() {
-  const [repos, setRepos] = useState<Repository[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const { repositories: repos, loading, error, retry } = useGitHubRepositories()
   const [sortBy, setSortBy] = useState<SortOption>('updated')
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
   const [filter, setFilter] = useState<FilterOption>('all')
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const sentinelRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const fetchRepositories = async () => {
-      try {
-        const ghUser = APP_STRINGS.GITHUB_URL.split('/').pop()
-        const response = await fetch(
-          `https://api.github.com/users/${ghUser}/repos?sort=updated&per_page=100`
-        )
-        if (!response.ok) throw new Error('Failed to fetch repositories')
-        const data = await response.json()
-        setRepos(data)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred')
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchRepositories()
-  }, [])
 
   const filteredAndSortedRepos = useMemo(() => {
     let filtered = repos
@@ -202,8 +167,8 @@ export default function Repositories() {
   if (loading) {
     return (
       <div className='container mx-auto px-4 py-20'>
-        <div className='flex items-center justify-center gap-3'>
-          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+        <div role='status' className='flex items-center justify-center gap-3'>
+          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary' />
           <span className='text-muted-foreground'>Loading repositories...</span>
         </div>
       </div>
@@ -213,7 +178,23 @@ export default function Repositories() {
   if (error) {
     return (
       <div className='container mx-auto px-4 py-20 text-center'>
-        <p className='text-destructive'>Error: {error}</p>
+        <p className='text-muted-foreground mb-5'>
+          Couldn&apos;t load repositories from GitHub right now.
+        </p>
+        <div className='flex flex-wrap items-center justify-center gap-3'>
+          <Button onClick={retry}>Retry</Button>
+          <Button variant='outline' asChild>
+            <a
+              href={APP_STRINGS.GITHUB_URL}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='flex items-center gap-2'
+            >
+              <GitHubIcon className='h-4 w-4' />
+              View on GitHub
+            </a>
+          </Button>
+        </div>
       </div>
     )
   }
