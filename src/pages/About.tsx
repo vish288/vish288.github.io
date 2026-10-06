@@ -11,10 +11,23 @@ import { APP_STRINGS } from '@/constants/appStrings'
 // Evidenced by PRODUCT.md positioning and this repo's own stack; no unverified claims.
 const FALLBACK_SKILLS = ['React', 'TypeScript', 'JavaScript', 'Node.js', 'Python']
 
+function FallbackSkills() {
+  return (
+    <div className='flex flex-wrap gap-2 justify-center'>
+      {FALLBACK_SKILLS.map(skill => (
+        <Badge key={skill} variant='secondary' className='text-sm'>
+          {skill}
+        </Badge>
+      ))}
+    </div>
+  )
+}
+
 export default function About() {
   const { repositories, loading, error } = useGitHubRepositories()
 
-  const totalStars = repositories.reduce((sum, r) => sum + (r.stargazers_count || 0), 0)
+  const owned = repositories.filter(r => !r.fork)
+  const totalStars = owned.reduce((sum, r) => sum + (r.stargazers_count || 0), 0)
 
   return (
     <div className='container mx-auto px-4 py-8'>
@@ -100,7 +113,7 @@ export default function About() {
                 </div>
                 <p className='font-semibold text-sm'>Open Source</p>
                 <p className='text-xs text-muted-foreground'>
-                  {repositories.length > 0 ? `${repositories.length} repos` : 'Contributor'}
+                  {owned.length > 0 ? `${owned.length} repos` : 'Contributor'}
                 </p>
               </div>
 
@@ -145,40 +158,30 @@ export default function About() {
             </CardHeader>
             <CardContent>
               {loading && (
-                <div className='flex items-center justify-center h-64'>
-                  <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+                <div role='status' className='flex items-center justify-center h-64'>
+                  <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary' />
                   <span className='ml-2 text-muted-foreground'>
                     {APP_STRINGS.LOADING_REPOSITORIES}
                   </span>
                 </div>
               )}
 
-              {error && (
-                <div className='text-center py-8'>
-                  <p className='text-destructive mb-4'>{APP_STRINGS.ERROR_REPOSITORY_LOAD}</p>
-                  <div className='flex flex-wrap gap-2 justify-center'>
-                    {FALLBACK_SKILLS.map(skill => (
-                      <Badge key={skill} variant='secondary' className='text-sm'>
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
+              {/* API failure degrades quietly to an evidenced fallback — no alarm copy. */}
+              {!loading && error && <FallbackSkills />}
+
+              {!loading && !error && owned.length > 0 && (
+                <div className='space-y-4'>
+                  <SimpleWordCloud repositories={owned} />
+                  <p className='text-sm text-muted-foreground'>
+                    {APP_STRINGS.REPOSITORY_COUNT_MESSAGE.replace(
+                      '{count}',
+                      owned.length.toString()
+                    )}
+                  </p>
                 </div>
               )}
 
-              {!loading && !error && repositories.length > 0 && (
-                <div className='space-y-4'>
-                  <SimpleWordCloud repositories={repositories} />
-                  <div className='text-center'>
-                    <p className='text-sm text-muted-foreground'>
-                      {APP_STRINGS.REPOSITORY_COUNT_MESSAGE.replace(
-                        '{count}',
-                        repositories.length.toString()
-                      )}
-                    </p>
-                  </div>
-                </div>
-              )}
+              {!loading && !error && owned.length === 0 && <FallbackSkills />}
             </CardContent>
           </Card>
         </section>
