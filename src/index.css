@@ -4,13 +4,14 @@
 
 @layer base {
   :root {
+    color-scheme: light;
     --background: 0 0% 99%;
     --foreground: 220 15% 12%;
     --card: 0 0% 100%;
     --card-foreground: 220 15% 12%;
     --popover: 0 0% 100%;
     --popover-foreground: 220 15% 12%;
-    --primary: 152 56% 38%;
+    --primary: 152 56% 32%;
     --primary-foreground: 0 0% 99%;
     --secondary: 220 14% 96%;
     --secondary-foreground: 220 15% 12%;
@@ -22,11 +23,12 @@
     --destructive-foreground: 0 0% 99%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 152 56% 38%;
+    --ring: 152 56% 32%;
     --radius: 0.625rem;
   }
 
   .dark {
+    color-scheme: dark;
     --background: 224 20% 6%;
     --foreground: 210 20% 92%;
     --card: 224 18% 9%;
@@ -96,7 +98,7 @@
     inset: 0;
     z-index: -1;
     background:
-      radial-gradient(ellipse 80% 50% at 50% -20%, hsl(152 56% 38% / 0.04), transparent),
+      radial-gradient(ellipse 80% 50% at 50% -20%, hsl(152 56% 32% / 0.04), transparent),
       radial-gradient(ellipse 60% 40% at 100% 100%, hsl(220 60% 50% / 0.03), transparent);
     pointer-events: none;
   }

@@ -27,8 +27,8 @@ export default function About() {
           />
 
           <div className='relative text-center'>
-            <div className='mx-auto mb-6 h-20 w-20 rounded-full bg-gradient-to-br from-primary to-emerald-500 flex items-center justify-center shadow-lg shadow-primary/20'>
-              <span className='text-2xl font-bold text-white tracking-tight'>VS</span>
+            <div className='mx-auto mb-6 h-20 w-20 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/20'>
+              <span className='text-2xl font-bold text-primary-foreground tracking-tight'>VS</span>
             </div>
 
             <h1 className='text-4xl sm:text-5xl md:text-6xl font-bold mb-3 bg-gradient-to-r from-primary via-emerald-500 to-teal-500 bg-clip-text text-transparent'>
@@ -155,7 +155,7 @@ export default function About() {
 
               {error && (
                 <div className='text-center py-8'>
-                  <p className='text-red-500 mb-4'>{APP_STRINGS.ERROR_REPOSITORY_LOAD}</p>
+                  <p className='text-destructive mb-4'>{APP_STRINGS.ERROR_REPOSITORY_LOAD}</p>
                   <div className='flex flex-wrap gap-2 justify-center'>
                     {FALLBACK_SKILLS.map(skill => (
                       <Badge key={skill} variant='secondary' className='text-sm'>
