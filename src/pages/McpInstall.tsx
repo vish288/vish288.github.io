@@ -541,13 +541,13 @@ function ServerSection({
           </div>
 
           {/* Client grid — compact pills */}
-          <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-2'>
+          <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2'>
             {clients.map(client => (
               <div key={client.name}>
                 {client.actionType === 'link' ? (
                   <a
                     href={client.href}
-                    className='flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm hover:bg-muted/50 hover:border-primary/30 transition-all group'
+                    className='touch-target flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm hover:bg-muted/50 hover:border-primary/30 transition-all group'
                   >
                     <div
                       className={`h-6 w-6 rounded flex items-center justify-center flex-shrink-0 ${!client.iconBg ? 'bg-muted' : ''}`}
@@ -556,7 +556,7 @@ function ServerSection({
                       <img src={client.iconUrl} alt='' className='w-4 h-4 object-contain' />
                     </div>
                     <div className='min-w-0'>
-                      <span className='font-medium text-xs block truncate'>{client.name}</span>
+                      <span className='font-medium text-xs block'>{client.name}</span>
                       <span className='text-[10px] text-primary'>{client.actionText}</span>
                     </div>
                   </a>
@@ -569,7 +569,7 @@ function ServerSection({
                         code: client.modalCode!,
                       })
                     }
-                    className='flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm hover:bg-muted/50 hover:border-primary/30 transition-all group w-full text-left cursor-pointer bg-transparent'
+                    className='touch-target flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm hover:bg-muted/50 hover:border-primary/30 transition-all group w-full text-left cursor-pointer bg-transparent'
                   >
                     <div
                       className={`h-6 w-6 rounded flex items-center justify-center flex-shrink-0 ${!client.iconBg ? 'bg-muted' : ''}`}
@@ -578,7 +578,7 @@ function ServerSection({
                       <img src={client.iconUrl} alt='' className='w-4 h-4 object-contain' />
                     </div>
                     <div className='min-w-0'>
-                      <span className='font-medium text-xs block truncate'>{client.name}</span>
+                      <span className='font-medium text-xs block'>{client.name}</span>
                       <span className='text-[10px] text-primary'>{client.actionText}</span>
                     </div>
                   </button>
