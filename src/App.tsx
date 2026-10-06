@@ -17,6 +17,7 @@ import McpInstall from '@/pages/McpInstall'
 import ThemeToggle from '@/components/ThemeToggle'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { APP_STRINGS } from '@/constants/appStrings'
+import { ROUTE_META, DEFAULT_TITLE } from '@/constants/routeMeta'
 import './index.css'
 
 function Navigation() {
@@ -98,20 +99,15 @@ function Footer() {
   )
 }
 
-const ROUTE_TITLES: Record<string, string> = {
-  '/': `${APP_STRINGS.FULL_NAME} — ${APP_STRINGS.ROLE}`,
-  '/repositories': `Repositories — ${APP_STRINGS.FULL_NAME}`,
-  '/mcp-install': `MCP Install — ${APP_STRINGS.FULL_NAME}`,
-}
-
-function AppContent() {
+export function AppContent() {
   const location = useLocation()
   const mainRef = useRef<HTMLElement>(null)
   const mounted = useRef(false)
 
   useEffect(() => {
-    document.title =
-      ROUTE_TITLES[location.pathname] ?? `${APP_STRINGS.FULL_NAME} — ${APP_STRINGS.ROLE}`
+    // Titles come from the same ROUTE_META the prerender script writes into each
+    // static HTML head, so navigation and first paint stay consistent.
+    document.title = ROUTE_META[location.pathname]?.title ?? DEFAULT_TITLE
     // Move focus to the main region on navigation so keyboard and screen-reader
     // users land on the new content; skip the initial mount to avoid a focus jump.
     if (mounted.current) mainRef.current?.focus()
