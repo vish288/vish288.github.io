@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
-interface Repository {
+export interface Repository {
   id: number
   name: string
   description: string | null
@@ -19,45 +19,78 @@ interface GitHubApiResponse {
   repositories: Repository[]
   loading: boolean
   error: string | null
+  retry: () => void
+}
+
+// One fetch serves every route that needs the repo list (About + Repositories).
+// The result is cached at module scope; an in-flight request is shared so two
+// mounts never fire two requests.
+let cache: Repository[] | null = null
+let inflight: Promise<Repository[]> | null = null
+
+function load(username: string): Promise<Repository[]> {
+  if (cache) return Promise.resolve(cache)
+  if (!inflight) {
+    inflight = fetch(
+      `https://api.github.com/users/${username}/repos?per_page=100&sort=updated&type=owner`
+    )
+      .then(res => {
+        if (!res.ok) throw new Error(`GitHub API error: ${res.status}`)
+        return res.json() as Promise<Repository[]>
+      })
+      .then(data => {
+        cache = data
+        return data
+      })
+      .catch(err => {
+        inflight = null // allow a later retry
+        throw err
+      })
+  }
+  return inflight
+}
+
+/** Test seam: drop cached state between tests. */
+export function resetGitHubCache(): void {
+  cache = null
+  inflight = null
 }
 
 export function useGitHubRepositories(username: string = 'vish288'): GitHubApiResponse {
-  const [repositories, setRepositories] = useState<Repository[]>([])
-  const [loading, setLoading] = useState(true)
+  const [repositories, setRepositories] = useState<Repository[]>(cache ?? [])
+  const [loading, setLoading] = useState(cache === null)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    async function fetchRepositories() {
-      try {
-        setLoading(true)
-        setError(null)
-
-        const response = await fetch(
-          `https://api.github.com/users/${username}/repos?per_page=100&sort=updated&type=owner`
-        )
-
-        if (!response.ok) {
-          throw new Error(`GitHub API error: ${response.status}`)
+  const run = useCallback(() => {
+    let active = true
+    // No synchronous setState here — the effect only schedules async resolution.
+    load(username)
+      .then(data => {
+        if (active) {
+          setRepositories(data)
+          setLoading(false)
         }
-
-        const data: Repository[] = await response.json()
-
-        // Filter out forks and include only repositories with meaningful content
-        const filteredRepos = data.filter(
-          repo => !repo.fork && repo.language && repo.stargazers_count >= 0 // Include all repos, even with 0 stars
-        )
-
-        setRepositories(filteredRepos)
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch repositories')
-        console.error('Error fetching repositories:', err)
-      } finally {
-        setLoading(false)
-      }
+      })
+      .catch(err => {
+        if (active) {
+          setError(err instanceof Error ? err.message : 'Failed to fetch repositories')
+          setLoading(false)
+        }
+      })
+    return () => {
+      active = false
     }
-
-    fetchRepositories()
   }, [username])
 
-  return { repositories, loading, error }
+  useEffect(() => run(), [run])
+
+  const retry = useCallback(() => {
+    cache = null
+    inflight = null
+    setLoading(true)
+    setError(null)
+    run()
+  }, [run])
+
+  return { repositories, loading, error, retry }
 }

@@ -107,7 +107,9 @@ describe('McpInstall link integrity', () => {
   it('all icon images use valid CDN sources', () => {
     renderPage()
 
-    const allImages = screen.getAllByRole('img')
+    // Icons are decorative (alt=""), so they expose no img role; query the elements.
+    const allImages = Array.from(document.querySelectorAll('img'))
+    expect(allImages.length).toBeGreaterThan(0)
     for (const img of allImages) {
       const src = img.getAttribute('src')
       expect(src).toBeTruthy()
@@ -201,7 +203,8 @@ describe('McpInstall link integrity', () => {
 
     const modal = screen.getByRole('dialog')
     const pre = within(modal).getByText(/claude mcp add/)
-    expect(pre.textContent).toMatch(/^claude mcp add \S+ -- uvx mcp-\S+$/)
+    // `claude mcp add <short> -e KEY=value ... -- uvx <pkg>`
+    expect(pre.textContent).toMatch(/^claude mcp add \S+( -e \S+=\S*)+ -- uvx mcp-\S+$/)
   })
 
   it('Gemini CLI modal contains valid CLI command', async () => {

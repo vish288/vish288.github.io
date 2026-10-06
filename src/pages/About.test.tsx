@@ -2,6 +2,7 @@ import { render, screen, waitFor, act } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import About from './About'
+import { resetGitHubCache } from '../hooks/useGitHubRepositories'
 
 // Mock fetch
 const mockFetch = vi.fn()
@@ -19,6 +20,7 @@ describe('About Page', () => {
   beforeEach(() => {
     mockFetch.mockClear()
     mockFetch.mockRejectedValue(new Error('Test error'))
+    resetGitHubCache()
   })
 
   it('renders the main heading', async () => {
