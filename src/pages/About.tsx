@@ -27,6 +27,12 @@ function FallbackSkills() {
   )
 }
 
+function Eyebrow({ children }: { children: string }) {
+  return (
+    <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>{children}</p>
+  )
+}
+
 export default function About() {
   const { repositories, loading, error } = useGitHubRepositories()
 
@@ -52,7 +58,11 @@ export default function About() {
               {APP_STRINGS.FULL_NAME}
             </h1>
 
-            <p className='text-lg sm:text-xl text-muted-foreground mb-4 max-w-2xl mx-auto'>
+            <p className='text-xl sm:text-2xl font-semibold text-foreground mb-4'>
+              {APP_STRINGS.ROLE}
+            </p>
+
+            <p className='text-lg text-muted-foreground mb-4 max-w-2xl mx-auto leading-relaxed'>
               {APP_STRINGS.TAGLINE}
             </p>
 
@@ -84,6 +94,9 @@ export default function About() {
                   LinkedIn
                 </a>
               </Button>
+              <Button variant='ghost' asChild size='lg'>
+                <a href='#experience'>{APP_STRINGS.EXPERIENCE_CTA}</a>
+              </Button>
             </div>
           </div>
         </section>
@@ -94,19 +107,12 @@ export default function About() {
             {/* Left: narrative (3/5) */}
             <div className='md:col-span-3 space-y-5'>
               <div>
-                <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>
-                  About
-                </p>
-                <h2 className='text-2xl sm:text-3xl font-bold mb-4'>
-                  Frontend engineering and the developer tools behind it
-                </h2>
+                <Eyebrow>{APP_STRINGS.ABOUT_EYEBROW}</Eyebrow>
+                <h2 className='text-2xl sm:text-3xl font-bold'>{APP_STRINGS.ABOUT_HEADING}</h2>
               </div>
-              <p className='text-muted-foreground leading-relaxed'>
-                {APP_STRINGS.ABOUT_DESCRIPTION_1}
-              </p>
-              <p className='text-muted-foreground leading-relaxed'>
-                {APP_STRINGS.ABOUT_DESCRIPTION_2}
-              </p>
+              <p className='text-muted-foreground leading-relaxed'>{APP_STRINGS.ABOUT_P1}</p>
+              <p className='text-muted-foreground leading-relaxed'>{APP_STRINGS.ABOUT_P2}</p>
+              <p className='text-muted-foreground leading-relaxed'>{APP_STRINGS.ABOUT_P3}</p>
             </div>
 
             {/* Right: highlights — each points at something verifiable */}
@@ -155,7 +161,76 @@ export default function About() {
           </div>
         </section>
 
-        {/* Skills Word Cloud */}
+        {/* Capabilities */}
+        <section className='mb-16'>
+          <Eyebrow>{APP_STRINGS.CAPABILITIES_EYEBROW}</Eyebrow>
+          <h2 className='text-2xl sm:text-3xl font-bold mb-6'>
+            {APP_STRINGS.CAPABILITIES_HEADING}
+          </h2>
+          <dl className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+            {APP_STRINGS.CAPABILITIES.map(cap => (
+              <div key={cap.title} className='rounded-xl border bg-muted/30 p-5'>
+                <dt className='font-semibold text-foreground'>{cap.title}</dt>
+                <dd className='mt-1.5 text-sm text-muted-foreground leading-relaxed'>{cap.body}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        {/* Experience */}
+        <section id='experience' className='mb-16 scroll-mt-20'>
+          <Eyebrow>{APP_STRINGS.EXPERIENCE_EYEBROW}</Eyebrow>
+          <h2 className='text-2xl sm:text-3xl font-bold mb-8'>{APP_STRINGS.EXPERIENCE_HEADING}</h2>
+
+          <ol className='space-y-0'>
+            {APP_STRINGS.EXPERIENCE.map(entry => (
+              <li
+                key={entry.period + entry.roles[0]}
+                className='grid gap-2 border-t border-border/60 py-8 first:border-t-0 first:pt-0 md:grid-cols-[8rem_1fr] md:gap-8'
+              >
+                <p className='text-sm font-medium text-muted-foreground tabular-nums md:text-right'>
+                  {entry.period}
+                </p>
+                <div className='space-y-3'>
+                  <h3 className='font-semibold text-foreground'>
+                    {entry.roles.map((role, i) => (
+                      <span
+                        key={role}
+                        className={
+                          i === 0
+                            ? 'block'
+                            : 'block text-sm font-normal text-muted-foreground mt-0.5'
+                        }
+                      >
+                        {role}
+                      </span>
+                    ))}
+                  </h3>
+                  <p className='text-sm text-muted-foreground'>{entry.context}</p>
+                  <ul className='list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted-foreground marker:text-primary/60'>
+                    {entry.bullets.map(bullet => (
+                      <li key={bullet}>{bullet}</li>
+                    ))}
+                  </ul>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+          <div className='mt-8 flex flex-col gap-1 border-t border-border/60 pt-6 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between'>
+            <span>{APP_STRINGS.EXPERIENCE_EDUCATION}</span>
+            <a
+              href={APP_STRINGS.LINKEDIN_URL}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='font-medium text-primary underline-offset-4 hover:underline'
+            >
+              {APP_STRINGS.EXPERIENCE_LINK}
+            </a>
+          </div>
+        </section>
+
+        {/* Skills Word Cloud — from public repos */}
         <section className='mb-12'>
           <Card>
             <CardHeader>
