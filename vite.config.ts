@@ -10,7 +10,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'vis-creates.png'],
+      includeAssets: ['favicon.ico', 'vis-creates.png', 'icon-512.png'],
       manifest: {
         name: 'Vish - Full Stack Developer',
         short_name: 'Vish',
@@ -21,9 +21,10 @@ export default defineConfig({
         display: 'standalone',
         icons: [
           {
-            src: 'vis-creates.png',
+            src: 'icon-512.png',
             sizes: '512x512',
             type: 'image/png',
+            purpose: 'any',
           },
         ],
       },
@@ -51,7 +52,6 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             if (id.includes('react-router')) return 'router'
-            if (id.includes('react-hook-form')) return 'form'
             if (id.includes('@radix-ui') || id.includes('lucide-react')) return 'ui'
             if (id.includes('react-dom') || /[\\/]react[\\/]/.test(id)) return 'vendor'
           }

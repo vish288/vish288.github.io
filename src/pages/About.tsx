@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { MapPin, Code2, Star, Blocks, FolderGit2 } from 'lucide-react'
+import { MapPin, Code2, Star, Blocks, FolderGit2, Loader2 } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
 import LinkedInIcon from '@/components/icons/LinkedInIcon'
 import SimpleWordCloud from '@/components/SimpleWordCloud'
@@ -168,7 +168,10 @@ export default function About() {
             <CardContent>
               {loading && (
                 <div role='status' className='flex items-center justify-center h-64'>
-                  <div className='motion-safe:animate-spin motion-reduce:animate-pulse rounded-full h-8 w-8 border-b-2 border-primary' />
+                  <Loader2
+                    className='h-8 w-8 text-primary motion-safe:animate-spin'
+                    aria-hidden='true'
+                  />
                   <span className='ml-2 text-muted-foreground'>
                     {APP_STRINGS.LOADING_REPOSITORIES}
                   </span>

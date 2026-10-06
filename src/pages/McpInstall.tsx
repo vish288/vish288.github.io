@@ -1,8 +1,17 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useSearchParams } from 'react-router-dom'
+import {
+  siClaude,
+  siCursor,
+  siGooglegemini,
+  siIntellijidea,
+  siModelcontextprotocol,
+  siWindsurf,
+} from 'simple-icons'
 import { Button } from '@/components/ui/button'
 import { Copy, Check, X, ExternalLink, ChevronDown } from 'lucide-react'
+import SimpleIcon from '@/components/icons/SimpleIcon'
 import { APP_STRINGS } from '@/constants/appStrings'
 
 // ── Server Configuration ────────────────────────────────────────────
@@ -224,8 +233,9 @@ function generateGeminiCommand(serverKey: string): string {
 
 interface ClientCard {
   name: string
-  iconUrl: string
-  iconBg: string
+  // Bundled simple-icons glyph, or a remote URL for icons not in simple-icons.
+  icon?: { title: string; path: string }
+  iconUrl?: string
   actionType: 'link' | 'modal'
   actionText: string
   href?: string
@@ -240,25 +250,23 @@ function getClientCards(serverKey: string): ClientCard[] {
   return [
     {
       name: 'VS Code',
+      // VS Code is a Microsoft trademark and not in simple-icons; keep the SVG URL.
       iconUrl:
         'https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg',
-      iconBg: '',
       actionType: 'link',
       actionText: 'Install',
       href: generateVSCodeDeeplink(serverKey, 'vscode'),
     },
     {
       name: 'Cursor',
-      iconUrl: 'https://cdn.simpleicons.org/cursor/ffffff',
-      iconBg: '#000',
+      icon: siCursor,
       actionType: 'link',
       actionText: 'Install',
       href: generateCursorDeeplink(serverKey),
     },
     {
       name: 'Claude Code',
-      iconUrl: 'https://cdn.simpleicons.org/claude/ffffff',
-      iconBg: '#d97757',
+      icon: siClaude,
       actionType: 'modal',
       actionText: 'Guide',
       modalTitle: `${s.displayName} for Claude Code`,
@@ -267,8 +275,7 @@ function getClientCards(serverKey: string): ClientCard[] {
     },
     {
       name: 'Windsurf',
-      iconUrl: 'https://cdn.simpleicons.org/windsurf/000000',
-      iconBg: '',
+      icon: siWindsurf,
       actionType: 'modal',
       actionText: 'Guide',
       modalTitle: `${s.displayName} for Windsurf`,
@@ -277,8 +284,7 @@ function getClientCards(serverKey: string): ClientCard[] {
     },
     {
       name: 'IntelliJ',
-      iconUrl: 'https://cdn.simpleicons.org/intellijidea/ffffff',
-      iconBg: '#000',
+      icon: siIntellijidea,
       actionType: 'modal',
       actionText: 'Guide',
       modalTitle: `${s.displayName} for IntelliJ`,
@@ -287,8 +293,7 @@ function getClientCards(serverKey: string): ClientCard[] {
     },
     {
       name: 'Claude Desktop',
-      iconUrl: 'https://cdn.simpleicons.org/claude/ffffff',
-      iconBg: '#d97757',
+      icon: siClaude,
       actionType: 'modal',
       actionText: 'Guide',
       modalTitle: `${s.displayName} for Claude Desktop`,
@@ -297,8 +302,7 @@ function getClientCards(serverKey: string): ClientCard[] {
     },
     {
       name: 'Gemini CLI',
-      iconUrl: 'https://cdn.simpleicons.org/googlegemini/ffffff',
-      iconBg: '#4285F4',
+      icon: siGooglegemini,
       actionType: 'modal',
       actionText: 'Guide',
       modalTitle: `${s.displayName} for Gemini CLI`,
@@ -306,6 +310,23 @@ function getClientCards(serverKey: string): ClientCard[] {
       modalDesc: 'Run this command in your terminal:',
     },
   ]
+}
+
+// Icon tile: bundled glyph in theme-adaptive currentColor, or a remote image.
+// Decorative — the client name is always rendered alongside it.
+function ClientIcon({ card }: { card: ClientCard }) {
+  return (
+    <div
+      aria-hidden='true'
+      className='h-6 w-6 rounded bg-muted flex items-center justify-center flex-shrink-0 text-foreground'
+    >
+      {card.icon ? (
+        <SimpleIcon icon={card.icon} className='w-4 h-4' decorative />
+      ) : (
+        <img src={card.iconUrl} alt='' className='w-4 h-4 object-contain' />
+      )}
+    </div>
+  )
 }
 
 // ── Install target name mapping (URL param → client card name) ──────
@@ -486,16 +507,15 @@ function ServerSection({
       {/* Server header — always visible. Heading wraps the disclosure button. */}
       <h2>
         <button
-          className='w-full flex items-center gap-4 p-5 text-left hover:bg-muted/30 transition-colors cursor-pointer bg-transparent border-none'
+          className='w-full flex items-center gap-4 p-5 text-left hover:bg-muted/30 transition-colors cursor-pointer bg-transparent border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset'
           onClick={() => setExpanded(!expanded)}
           aria-expanded={expanded}
         >
-          <div className='h-10 w-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0 p-2'>
-            <img
-              src='https://cdn.simpleicons.org/modelcontextprotocol/000000'
-              alt=''
-              className='w-full h-full object-contain dark:invert'
-            />
+          <div
+            aria-hidden='true'
+            className='h-10 w-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0 text-foreground'
+          >
+            <SimpleIcon icon={siModelcontextprotocol} className='w-5 h-5' decorative />
           </div>
           <div className='flex-1 min-w-0'>
             <div className='flex items-center gap-2'>
@@ -547,14 +567,9 @@ function ServerSection({
                 {client.actionType === 'link' ? (
                   <a
                     href={client.href}
-                    className='touch-target flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm hover:bg-muted/50 hover:border-primary/30 transition-all group'
+                    className='touch-target flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm hover:bg-muted/50 hover:border-primary/30 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
                   >
-                    <div
-                      className={`h-6 w-6 rounded flex items-center justify-center flex-shrink-0 ${!client.iconBg ? 'bg-muted' : ''}`}
-                      style={client.iconBg ? { background: client.iconBg } : undefined}
-                    >
-                      <img src={client.iconUrl} alt='' className='w-4 h-4 object-contain' />
-                    </div>
+                    <ClientIcon card={client} />
                     <div className='min-w-0'>
                       <span className='font-medium text-xs block'>{client.name}</span>
                       <span className='text-[10px] text-primary'>{client.actionText}</span>
@@ -569,14 +584,9 @@ function ServerSection({
                         code: client.modalCode!,
                       })
                     }
-                    className='touch-target flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm hover:bg-muted/50 hover:border-primary/30 transition-all group w-full text-left cursor-pointer bg-transparent'
+                    className='touch-target flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm hover:bg-muted/50 hover:border-primary/30 transition-all group w-full text-left cursor-pointer bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
                   >
-                    <div
-                      className={`h-6 w-6 rounded flex items-center justify-center flex-shrink-0 ${!client.iconBg ? 'bg-muted' : ''}`}
-                      style={client.iconBg ? { background: client.iconBg } : undefined}
-                    >
-                      <img src={client.iconUrl} alt='' className='w-4 h-4 object-contain' />
-                    </div>
+                    <ClientIcon card={client} />
                     <div className='min-w-0'>
                       <span className='font-medium text-xs block'>{client.name}</span>
                       <span className='text-[10px] text-primary'>{client.actionText}</span>
