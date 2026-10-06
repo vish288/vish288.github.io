@@ -37,9 +37,7 @@ describe('About Page', () => {
       renderAbout()
     })
 
-    expect(screen.getByText(/full stack developer/i)).toBeInTheDocument()
-    expect(screen.getByText(/open source enthusiast/i)).toBeInTheDocument()
-    expect(screen.getByText(/problem solver/i)).toBeInTheDocument()
+    expect(screen.getByText(/i build react apps and mcp servers/i)).toBeInTheDocument()
   })
 
   it('shows location information', async () => {
@@ -55,8 +53,10 @@ describe('About Page', () => {
       renderAbout()
     })
 
-    expect(screen.getByText(/passionate full-stack developer/i)).toBeInTheDocument()
-    expect(screen.getByText(/building software that solves real problems/i)).toBeInTheDocument()
+    expect(screen.getByText(/react and typescript interfaces/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/frontend engineering and the developer tools behind it/i)
+    ).toBeInTheDocument()
   })
 
   it('shows hero connect buttons with GitHub and LinkedIn links', async () => {
@@ -64,10 +64,12 @@ describe('About Page', () => {
       renderAbout()
     })
 
-    const githubLink = screen.getByRole('link', { name: /github/i })
-    expect(githubLink).toBeInTheDocument()
-    expect(githubLink).toHaveAttribute('href', 'https://github.com/vish288')
-    expect(githubLink).toHaveAttribute('target', '_blank')
+    const githubLinks = screen.getAllByRole('link', { name: /github/i })
+    const heroGithub = githubLinks.find(
+      l => l.getAttribute('href') === 'https://github.com/vish288'
+    )
+    expect(heroGithub).toBeDefined()
+    expect(heroGithub).toHaveAttribute('target', '_blank')
 
     const linkedinLink = screen.getByRole('link', { name: /linkedin/i })
     expect(linkedinLink).toBeInTheDocument()
@@ -83,9 +85,12 @@ describe('About Page', () => {
       renderAbout()
     })
 
-    expect(screen.getByText('Open Source')).toBeInTheDocument()
-    expect(screen.getByText('Full Stack')).toBeInTheDocument()
-    expect(screen.getByText('Community')).toBeInTheDocument()
+    expect(screen.getByText('3 MCP servers')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /3 mcp servers/i })).toHaveAttribute(
+      'href',
+      '/mcp-install'
+    )
+    expect(screen.getByText('Public repos')).toBeInTheDocument()
   })
 
   it('uses proper semantic structure', async () => {
