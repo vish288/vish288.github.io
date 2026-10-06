@@ -32,12 +32,15 @@ describe('About Page', () => {
     expect(heading).toBeInTheDocument()
   })
 
-  it('displays the professional tagline', async () => {
+  it('displays the role line and tagline', async () => {
     await act(async () => {
       renderAbout()
     })
 
-    expect(screen.getByText(/i build react apps and mcp servers/i)).toBeInTheDocument()
+    expect(screen.getByText(/senior staff engineer & architect/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/i lead platform modernization for large enterprises/i)
+    ).toBeInTheDocument()
   })
 
   it('shows location information', async () => {
@@ -53,10 +56,66 @@ describe('About Page', () => {
       renderAbout()
     })
 
-    expect(screen.getByText(/react and typescript interfaces/i)).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: /what i do/i })).toBeInTheDocument()
+    expect(screen.getByText(/building software professionally since 2010/i)).toBeInTheDocument()
     expect(
-      screen.getByText(/frontend engineering and the developer tools behind it/i)
+      screen.getByText(/mcp servers for gitlab, atlassian, coda and argo cd/i)
     ).toBeInTheDocument()
+  })
+
+  it('renders the capabilities section', async () => {
+    await act(async () => {
+      renderAbout()
+    })
+
+    expect(
+      screen.getByRole('heading', { level: 2, name: /where i add the most/i })
+    ).toBeInTheDocument()
+    expect(screen.getByText('Frontend platforms')).toBeInTheDocument()
+    expect(screen.getByText('Engineering leadership')).toBeInTheDocument()
+  })
+
+  it('renders the experience section with one h3 per entry', async () => {
+    await act(async () => {
+      renderAbout()
+    })
+
+    expect(screen.getByRole('heading', { level: 2, name: /^career$/i })).toBeInTheDocument()
+
+    // Each experience entry contributes exactly one h3 (the Skills card adds one more).
+    expect(screen.getByText(/senior staff consultant/i)).toBeInTheDocument()
+    expect(screen.getByText(/ai \/ platform engineer/i)).toBeInTheDocument()
+    expect(
+      screen.getByText(/b\.e\. electronics and communication, anna university/i)
+    ).toBeInTheDocument()
+
+    const fullHistory = screen.getByRole('link', { name: /full history on linkedin/i })
+    expect(fullHistory).toHaveAttribute(
+      'href',
+      'https://www.linkedin.com/in/suryanarayananvisweshwaran/'
+    )
+  })
+
+  it('exposes experience entries as level-3 headings', async () => {
+    await act(async () => {
+      renderAbout()
+    })
+
+    const h3s = screen.getAllByRole('heading', { level: 3 })
+    // 4 experience entries + 1 Skills card title
+    expect(h3s.length).toBe(5)
+  })
+
+  it('names no employer or client', async () => {
+    await act(async () => {
+      renderAbout()
+    })
+
+    const banned = ['Loblaw', 'Shoppers', 'Publicis', 'Sapient', 'Virtusa', 'Infosys']
+    const text = document.body.textContent ?? ''
+    for (const name of banned) {
+      expect(text.toLowerCase()).not.toContain(name.toLowerCase())
+    }
   })
 
   it('shows hero connect buttons with GitHub and LinkedIn links', async () => {
@@ -71,13 +130,15 @@ describe('About Page', () => {
     expect(heroGithub).toBeDefined()
     expect(heroGithub).toHaveAttribute('target', '_blank')
 
-    const linkedinLink = screen.getByRole('link', { name: /linkedin/i })
-    expect(linkedinLink).toBeInTheDocument()
-    expect(linkedinLink).toHaveAttribute(
+    const linkedinLinks = screen.getAllByRole('link', { name: /linkedin/i })
+    const heroLinkedin = linkedinLinks.find(
+      l => l.getAttribute('target') === '_blank' && /^linkedin$/i.test(l.textContent?.trim() ?? '')
+    )
+    expect(heroLinkedin).toBeDefined()
+    expect(heroLinkedin).toHaveAttribute(
       'href',
       'https://www.linkedin.com/in/suryanarayananvisweshwaran/'
     )
-    expect(linkedinLink).toHaveAttribute('target', '_blank')
   })
 
   it('shows highlight cards', async () => {
