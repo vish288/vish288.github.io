@@ -21,7 +21,7 @@ Personal site for Visweshwaran S ("Vish"). It proves engineering depth with work
 Two claims, both backed by public work:
 
 1. Senior frontend / platform engineer: React, TypeScript, performance, infrastructure.
-2. Builder of developer tooling: the GitLab, Atlassian Extended and Coda MCP servers, published on PyPI and installable from this site.
+2. Builder of developer tooling: the GitLab, Atlassian Extended, Coda and Argo CD MCP servers, published on PyPI and installable from this site.
 
 The MCP servers are the evidence that sets this site apart from a generic "full stack developer" portfolio.
 
@@ -48,7 +48,7 @@ The MCP servers are the evidence that sets this site apart from a generic "full 
 ## Evidence on Hand
 
 - Public GitHub repositories and star counts (live via API).
-- Three MCP servers with PyPI packages: `mcp-gitlab`, `mcp-atlassian-extended`, `mcp-coda`.
+- Four MCP servers with PyPI packages: `mcp-gitlab`, `mcp-atlassian-extended`, `mcp-coda`, `mcp-argocd`.
 - Open Graph image: `public/vis-creates.png`.
 - Not on hand, so never fabricate: employers, job titles, years of experience, testimonials, metrics, client names. Ask before adding any.
 
