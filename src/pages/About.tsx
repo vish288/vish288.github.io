@@ -115,8 +115,8 @@ export default function About() {
                 <div className='h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center'>
                   <Blocks className='h-5 w-5 text-primary' />
                 </div>
-                <p className='font-semibold text-sm'>3 MCP servers</p>
-                <p className='text-xs text-muted-foreground'>GitLab · Atlassian · Coda</p>
+                <p className='font-semibold text-sm'>4 MCP servers</p>
+                <p className='text-xs text-muted-foreground'>GitLab · Atlassian · Coda · Argo CD</p>
               </Link>
 
               <Link to='/repositories' className={HIGHLIGHT_TILE}>

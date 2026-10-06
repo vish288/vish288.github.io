@@ -3,7 +3,7 @@ export const APP_STRINGS = {
   DISPLAY_NAME: 'Vish',
   FULL_NAME: 'Visweshwaran S',
   TAGLINE:
-    'Frontend & platform engineer. I build React apps and MCP servers for GitLab, Atlassian and Coda.',
+    'Frontend & platform engineer. I build React apps and MCP servers for GitLab, Atlassian, Coda and Argo CD.',
   LOCATION: 'Toronto, Canada & India',
   GITHUB_URL: 'https://github.com/vish288',
   LINKEDIN_URL: 'https://www.linkedin.com/in/suryanarayananvisweshwaran/',
@@ -19,7 +19,7 @@ export const APP_STRINGS = {
   ABOUT_DESCRIPTION_1:
     'I work across the frontend and the platform beneath it — building React and TypeScript interfaces and keeping them fast and reliable in production.',
   ABOUT_DESCRIPTION_2:
-    'I also ship open-source developer tooling: MCP servers for GitLab, Atlassian and Coda, published on PyPI and installable from this site. Based between Toronto and India.',
+    'I also ship open-source developer tooling: MCP servers for GitLab, Atlassian, Coda and Argo CD, published on PyPI and installable from this site. Based between Toronto and India.',
 
   SKILLS_TITLE: 'Skills & Technologies',
   SKILLS_SUBTITLE: 'Technologies I work with regularly',

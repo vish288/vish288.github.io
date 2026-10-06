@@ -85,8 +85,8 @@ describe('About Page', () => {
       renderAbout()
     })
 
-    expect(screen.getByText('3 MCP servers')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /3 mcp servers/i })).toHaveAttribute(
+    expect(screen.getByText('4 MCP servers')).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /4 mcp servers/i })).toHaveAttribute(
       'href',
       '/mcp-install'
     )
