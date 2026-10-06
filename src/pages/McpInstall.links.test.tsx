@@ -61,7 +61,7 @@ const EXPECTED_CLIENTS = [
 ]
 
 // Expected servers (kept in sync with SERVERS config)
-const EXPECTED_SERVERS = ['mcp-gitlab', 'mcp-atlassian-extended', 'mcp-coda']
+const EXPECTED_SERVERS = ['mcp-gitlab', 'mcp-atlassian-extended', 'mcp-coda', 'mcp-argocd']
 
 describe('McpInstall link integrity', () => {
   it('all <a> hrefs use allowed domains — no placeholder or dead URLs', () => {
@@ -265,6 +265,27 @@ describe('McpInstall link integrity', () => {
     })
 
     expect(githubHrefs).toEqual(pypiHrefs)
+  })
+
+  it('mcp-argocd exposes working Cursor and VS Code deep links', () => {
+    // The README links ?server=mcp-argocd&install=cursor|vscode; both redirect to
+    // the client card's deep link. Render with the param and verify the target href.
+    render(
+      <MemoryRouter initialEntries={['/mcp-install?server=mcp-argocd&install=cursor']}>
+        <McpInstall />
+      </MemoryRouter>
+    )
+
+    const section = screen
+      .getByText('Argo CD MCP Server')
+      .closest('.border.rounded-xl') as HTMLElement
+    const cursorHref = within(section).getByText('Cursor').closest('a')!.getAttribute('href')!
+    expect(cursorHref).toMatch(/^cursor:\/\/anysphere\.cursor-deeplink\/mcp\/install/)
+    expect(cursorHref).toContain('name=mcp-argocd')
+
+    const vscodeHref = within(section).getByText('VS Code').closest('a')!.getAttribute('href')!
+    expect(vscodeHref).toContain('name=mcp-argocd')
+    expect(vscodeHref).toContain('mcp/install')
   })
 
   it('client count label matches actual number of client cards', () => {
