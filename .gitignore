@@ -54,3 +54,4 @@ coverage/
 
 # Internal development documentation (local reference only)
 .internal-docs/
+.internal/
