@@ -5,20 +5,28 @@ interface SimpleIconProps {
   }
   className?: string
   size?: number | undefined
+  /** Hide from assistive tech and omit the title when an adjacent label names it. */
+  decorative?: boolean
 }
 
-export default function SimpleIcon({ icon, className = '', size = 24 }: SimpleIconProps) {
+export default function SimpleIcon({
+  icon,
+  className = '',
+  size = 24,
+  decorative = false,
+}: SimpleIconProps) {
   return (
     <svg
-      role='img'
+      role={decorative ? undefined : 'img'}
       viewBox='0 0 24 24'
       width={size}
       height={size}
       className={className}
       fill='currentColor'
-      aria-label={icon.title}
+      aria-label={decorative ? undefined : icon.title}
+      aria-hidden={decorative || undefined}
     >
-      <title>{icon.title}</title>
+      {!decorative && <title>{icon.title}</title>}
       <path d={icon.path} />
     </svg>
   )
