@@ -1,4 +1,4 @@
-import type { ComponentType } from 'react'
+import { useEffect, useRef, type ComponentType } from 'react'
 import {
   BrowserRouter as Router,
   Routes,
@@ -55,6 +55,8 @@ function Navigation() {
               >
                 <Link
                   to={path}
+                  aria-label={label}
+                  aria-current={location.pathname === path ? 'page' : undefined}
                   className={cn(
                     'flex items-center space-x-2',
                     location.pathname === path && 'bg-primary text-primary-foreground'
@@ -85,6 +87,7 @@ function Footer() {
             href={APP_STRINGS.GITHUB_URL}
             target='_blank'
             rel='noopener noreferrer'
+            aria-label='Vish on GitHub'
             className='text-muted-foreground hover:text-foreground transition-colors'
           >
             <GitHubIcon className='h-4 w-4' />
@@ -95,12 +98,36 @@ function Footer() {
   )
 }
 
+const ROUTE_TITLES: Record<string, string> = {
+  '/': `Vish — ${APP_STRINGS.FULL_NAME}`,
+  '/repositories': 'Repositories — Vish',
+  '/mcp-install': 'MCP Install — Vish',
+}
+
 function AppContent() {
+  const location = useLocation()
+  const mainRef = useRef<HTMLElement>(null)
+  const mounted = useRef(false)
+
+  useEffect(() => {
+    document.title = ROUTE_TITLES[location.pathname] ?? `Vish — ${APP_STRINGS.FULL_NAME}`
+    // Move focus to the main region on navigation so keyboard and screen-reader
+    // users land on the new content; skip the initial mount to avoid a focus jump.
+    if (mounted.current) mainRef.current?.focus()
+    else mounted.current = true
+  }, [location.pathname])
+
   return (
     <div className='min-h-screen flex flex-col'>
+      <a
+        href='#main-content'
+        className='sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-[100] focus:rounded-md focus:bg-background focus:px-4 focus:py-2 focus:shadow-md focus:ring-2 focus:ring-ring'
+      >
+        Skip to content
+      </a>
       <Navigation />
 
-      <main className='flex-1'>
+      <main id='main-content' ref={mainRef} tabIndex={-1} className='flex-1 outline-none'>
         <Routes>
           <Route path='/' element={<About />} />
           <Route path='/repositories' element={<Repositories />} />

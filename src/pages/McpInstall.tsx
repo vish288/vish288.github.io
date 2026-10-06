@@ -206,7 +206,10 @@ function generateConfigJson(serverKey: string): string {
 
 function generateClaudeCommand(serverKey: string): string {
   const s = getServerOrThrow(serverKey)
-  return `claude mcp add ${s.shortName} -- ${s.installCommand} ${s.packageName}`
+  const envFlags = Object.entries(s.envVars)
+    .map(([key, val]) => `-e ${key}=${val.placeholder || val.default || ''}`)
+    .join(' ')
+  return `claude mcp add ${s.shortName}${envFlags ? ` ${envFlags}` : ''} -- ${s.installCommand} ${s.packageName}`
 }
 
 function generateGeminiCommand(serverKey: string): string {
@@ -333,16 +336,24 @@ function InstallModal({
   code: string
   onClose: () => void
 }) {
-  const [copied, setCopied] = useState(false)
+  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle')
   const closeRef = useRef<HTMLButtonElement>(null)
 
   const handleCopy = useCallback(async () => {
-    await navigator.clipboard.writeText(code)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+    try {
+      await navigator.clipboard.writeText(code)
+      setCopyState('copied')
+      setTimeout(() => setCopyState('idle'), 2000)
+    } catch {
+      // Clipboard can be unavailable (insecure context, denied permission).
+      setCopyState('failed')
+    }
   }, [code])
 
   useEffect(() => {
+    // Return focus to whatever opened the modal when it closes.
+    const trigger = document.activeElement as HTMLElement | null
+
     // Focus close button on mount for keyboard accessibility
     closeRef.current?.focus()
 
@@ -357,6 +368,7 @@ function InstallModal({
     return () => {
       document.removeEventListener('keydown', handleEscape)
       if (root) root.removeAttribute('inert')
+      trigger?.focus()
     }
   }, [onClose])
 
@@ -372,9 +384,9 @@ function InstallModal({
     >
       <div className='bg-background border rounded-xl w-full max-w-[600px] p-8 shadow-2xl max-h-[90vh] overflow-y-auto'>
         <div className='flex items-center justify-between mb-5'>
-          <h3 id='install-modal-title' className='text-lg font-semibold'>
+          <h2 id='install-modal-title' className='text-lg font-semibold'>
             {title}
-          </h3>
+          </h2>
           <Button ref={closeRef} variant='ghost' size='sm' onClick={onClose} aria-label='Close'>
             <X className='h-4 w-4' />
           </Button>
@@ -383,11 +395,20 @@ function InstallModal({
         <pre className='bg-muted border rounded-lg p-4 text-sm font-mono overflow-x-auto whitespace-pre mb-6'>
           {code}
         </pre>
-        <Button onClick={handleCopy} className='gap-2'>
-          {copied ? (
+        <Button
+          onClick={handleCopy}
+          variant={copyState === 'failed' ? 'outline' : 'default'}
+          className='gap-2'
+        >
+          {copyState === 'copied' ? (
             <>
               <Check className='h-4 w-4' />
               Copied!
+            </>
+          ) : copyState === 'failed' ? (
+            <>
+              <Copy className='h-4 w-4' />
+              Copy failed — select the command above
             </>
           ) : (
             <>
@@ -396,6 +417,13 @@ function InstallModal({
             </>
           )}
         </Button>
+        <p aria-live='polite' className='sr-only'>
+          {copyState === 'copied'
+            ? 'Copied to clipboard'
+            : copyState === 'failed'
+              ? 'Copy failed. Select the command above and copy it manually.'
+              : ''}
+        </p>
       </div>
     </div>,
     document.body
@@ -428,7 +456,7 @@ function ServerSection({
       description: client.modalDesc!,
       code: client.modalCode!,
     }
-  }, [autoExpand, installTarget, serverKey, clients])
+  }, [autoExpand, installTarget, clients])
 
   const [modal, setModal] = useState<{
     title: string
@@ -449,43 +477,45 @@ function ServerSection({
       window.location.href = client.href!
     }, 400)
     return () => clearTimeout(timer)
-  }, [autoExpand, installTarget, serverKey, clients])
+  }, [autoExpand, installTarget, clients])
 
   if (!server) return null
 
   return (
     <div className='border rounded-xl overflow-hidden'>
-      {/* Server header — always visible */}
-      <button
-        className='w-full flex items-center gap-4 p-5 text-left hover:bg-muted/30 transition-colors cursor-pointer bg-transparent border-none'
-        onClick={() => setExpanded(!expanded)}
-        aria-expanded={expanded}
-      >
-        <div className='h-10 w-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0 p-2'>
-          <img
-            src='https://cdn.simpleicons.org/modelcontextprotocol/000000'
-            alt={server.displayName}
-            className='w-full h-full object-contain dark:invert'
-          />
-        </div>
-        <div className='flex-1 min-w-0'>
-          <div className='flex items-center gap-2'>
-            <h3 className='font-semibold'>{server.fullName}</h3>
-            <code className='text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded hidden sm:inline'>
-              {server.packageName}
-            </code>
+      {/* Server header — always visible. Heading wraps the disclosure button. */}
+      <h2>
+        <button
+          className='w-full flex items-center gap-4 p-5 text-left hover:bg-muted/30 transition-colors cursor-pointer bg-transparent border-none'
+          onClick={() => setExpanded(!expanded)}
+          aria-expanded={expanded}
+        >
+          <div className='h-10 w-10 rounded-lg bg-muted flex items-center justify-center flex-shrink-0 p-2'>
+            <img
+              src='https://cdn.simpleicons.org/modelcontextprotocol/000000'
+              alt=''
+              className='w-full h-full object-contain dark:invert'
+            />
           </div>
-          <p className='text-sm text-muted-foreground line-clamp-1'>{server.description}</p>
-        </div>
-        <div className='flex items-center gap-2 flex-shrink-0'>
-          <span className='text-xs text-muted-foreground hidden sm:inline'>
-            {clients.length} clients
-          </span>
-          <ChevronDown
-            className={`h-4 w-4 text-muted-foreground transition-transform ${expanded ? 'rotate-180' : ''}`}
-          />
-        </div>
-      </button>
+          <div className='flex-1 min-w-0'>
+            <div className='flex items-center gap-2'>
+              <span className='font-semibold'>{server.fullName}</span>
+              <code className='text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded hidden sm:inline'>
+                {server.packageName}
+              </code>
+            </div>
+            <p className='text-sm text-muted-foreground line-clamp-1'>{server.description}</p>
+          </div>
+          <div className='flex items-center gap-2 flex-shrink-0'>
+            <span className='text-xs text-muted-foreground hidden sm:inline'>
+              {clients.length} clients
+            </span>
+            <ChevronDown
+              className={`h-4 w-4 text-muted-foreground transition-transform ${expanded ? 'rotate-180' : ''}`}
+            />
+          </div>
+        </button>
+      </h2>
 
       {/* Expanded: client install options */}
       {expanded && (
@@ -523,11 +553,7 @@ function ServerSection({
                       className={`h-6 w-6 rounded flex items-center justify-center flex-shrink-0 ${!client.iconBg ? 'bg-muted' : ''}`}
                       style={client.iconBg ? { background: client.iconBg } : undefined}
                     >
-                      <img
-                        src={client.iconUrl}
-                        alt={client.name}
-                        className='w-4 h-4 object-contain'
-                      />
+                      <img src={client.iconUrl} alt='' className='w-4 h-4 object-contain' />
                     </div>
                     <div className='min-w-0'>
                       <span className='font-medium text-xs block truncate'>{client.name}</span>
@@ -549,11 +575,7 @@ function ServerSection({
                       className={`h-6 w-6 rounded flex items-center justify-center flex-shrink-0 ${!client.iconBg ? 'bg-muted' : ''}`}
                       style={client.iconBg ? { background: client.iconBg } : undefined}
                     >
-                      <img
-                        src={client.iconUrl}
-                        alt={client.name}
-                        className='w-4 h-4 object-contain'
-                      />
+                      <img src={client.iconUrl} alt='' className='w-4 h-4 object-contain' />
                     </div>
                     <div className='min-w-0'>
                       <span className='font-medium text-xs block truncate'>{client.name}</span>

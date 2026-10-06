@@ -4,6 +4,7 @@ import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import Repositories from './Repositories'
+import { resetGitHubCache } from '../hooks/useGitHubRepositories'
 
 function renderWithRouter(ui: ReactElement) {
   return render(<MemoryRouter>{ui}</MemoryRouter>)
@@ -59,6 +60,7 @@ const mockRepositories = [
 describe('Repositories Page', () => {
   beforeEach(() => {
     mockFetch.mockClear()
+    resetGitHubCache()
   })
 
   afterEach(() => {
@@ -109,14 +111,22 @@ describe('Repositories Page', () => {
     expect(screen.getByText('forked')).toBeInTheDocument()
   })
 
-  it('handles API error gracefully', async () => {
+  it('handles API error gracefully with a calm message and recovery actions', async () => {
     mockFetch.mockRejectedValueOnce(new Error('API Error'))
 
     renderWithRouter(<Repositories />)
 
     await waitFor(() => {
-      expect(screen.getByText(/error: api error/i)).toBeInTheDocument()
+      expect(screen.getByText(/couldn.t load repositories/i)).toBeInTheDocument()
     })
+
+    // No raw error string is shown to visitors.
+    expect(screen.queryByText(/api error/i)).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /retry/i })).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /view on github/i })).toHaveAttribute(
+      'href',
+      'https://github.com/vish288'
+    )
   })
 
   it('filters repositories by type', async () => {
