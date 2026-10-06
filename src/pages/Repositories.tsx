@@ -243,7 +243,7 @@ export default function Repositories() {
           <div>
             <p className='font-semibold text-sm'>MCP Installation Gateway</p>
             <p className='text-xs text-muted-foreground'>
-              One-click install for GitLab, Atlassian, and Coda MCP servers.
+              One-click install for GitLab, Atlassian, Coda, and Argo CD MCP servers.
             </p>
           </div>
         </div>

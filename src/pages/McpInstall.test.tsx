@@ -26,6 +26,7 @@ describe('McpInstall Page', () => {
     expect(screen.getByText('GitLab MCP Server')).toBeInTheDocument()
     expect(screen.getByText('Atlassian Extended MCP Server')).toBeInTheDocument()
     expect(screen.getByText('Coda MCP Server')).toBeInTheDocument()
+    expect(screen.getByText('Argo CD MCP Server')).toBeInTheDocument()
   })
 
   it('all accordions are expanded by default', () => {
@@ -210,7 +211,7 @@ describe('McpInstall Page', () => {
     renderMcpInstall()
 
     const clientCounts = screen.getAllByText('7 clients')
-    expect(clientCounts).toHaveLength(3)
+    expect(clientCounts).toHaveLength(4)
   })
 
   it('opens modal for Gemini CLI guide', async () => {
@@ -232,5 +233,6 @@ describe('McpInstall Page', () => {
     expect(screen.getByText('mcp-gitlab')).toBeInTheDocument()
     expect(screen.getByText('mcp-atlassian-extended')).toBeInTheDocument()
     expect(screen.getByText('mcp-coda')).toBeInTheDocument()
+    expect(screen.getByText('mcp-argocd')).toBeInTheDocument()
   })
 })
