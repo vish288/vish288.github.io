@@ -2,7 +2,8 @@ export const APP_STRINGS = {
   // Personal Information
   DISPLAY_NAME: 'Vish',
   FULL_NAME: 'Visweshwaran S',
-  TAGLINE: 'Full Stack Developer | Open Source Enthusiast | Problem Solver',
+  TAGLINE:
+    'Frontend & platform engineer. I build React apps and MCP servers for GitLab, Atlassian and Coda.',
   LOCATION: 'Toronto, Canada & India',
   GITHUB_URL: 'https://github.com/vish288',
   LINKEDIN_URL: 'https://www.linkedin.com/in/suryanarayananvisweshwaran/',
@@ -14,11 +15,11 @@ export const APP_STRINGS = {
 
   // About Page
   ABOUT_TITLE: 'About Me',
-  ABOUT_SUBTITLE: 'Passionate developer building innovative solutions',
+  ABOUT_SUBTITLE: 'Frontend and platform engineering, plus open-source developer tooling.',
   ABOUT_DESCRIPTION_1:
-    "I'm a passionate full-stack developer with a love for creating elegant solutions to complex problems. With experience in modern web technologies, I enjoy building applications that make a difference in people's lives.",
+    'I work across the frontend and the platform beneath it — building React and TypeScript interfaces and keeping them fast and reliable in production.',
   ABOUT_DESCRIPTION_2:
-    "When I'm not coding, you can find me exploring new technologies, contributing to open source projects, or sharing knowledge with the developer community. I believe in the power of collaboration and continuous learning.",
+    'I also ship open-source developer tooling: MCP servers for GitLab, Atlassian and Coda, published on PyPI and installable from this site. Based between Toronto and India.',
 
   SKILLS_TITLE: 'Skills & Technologies',
   SKILLS_SUBTITLE: 'Technologies I work with regularly',
