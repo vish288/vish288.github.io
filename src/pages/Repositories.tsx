@@ -166,9 +166,20 @@ export default function Repositories() {
   }
 
   if (loading) {
+    // Render the static hero so the h1 and description exist at first paint and
+    // in the prerendered HTML; the list area shows the loading indicator.
     return (
-      <div className='container mx-auto px-4 py-20'>
-        <div role='status' className='flex items-center justify-center gap-3'>
+      <div className='container mx-auto px-4 py-8 max-w-5xl'>
+        <section className='mb-10'>
+          <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>
+            Open Source
+          </p>
+          <h1 className='text-3xl sm:text-4xl font-bold tracking-tight mb-3'>Repositories</h1>
+          <p className='text-lg text-muted-foreground mb-6 max-w-2xl'>
+            Open source projects and contributions on GitHub.
+          </p>
+        </section>
+        <div role='status' className='flex items-center justify-center gap-3 py-16'>
           <Loader2 className='h-8 w-8 text-primary motion-safe:animate-spin' aria-hidden='true' />
           <span className='text-muted-foreground'>Loading repositories...</span>
         </div>
