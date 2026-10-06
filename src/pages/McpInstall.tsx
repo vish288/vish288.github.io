@@ -511,7 +511,7 @@ function ServerSection({
               {clients.length} clients
             </span>
             <ChevronDown
-              className={`h-4 w-4 text-muted-foreground transition-transform ${expanded ? 'rotate-180' : ''}`}
+              className={`h-4 w-4 text-muted-foreground motion-safe:transition-transform ${expanded ? 'rotate-180' : ''}`}
             />
           </div>
         </button>
