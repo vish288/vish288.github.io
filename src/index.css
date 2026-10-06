@@ -63,7 +63,13 @@
 
   body {
     @apply bg-background text-foreground;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Fade the theme switch only when the user allows motion. */
+  @media (prefers-reduced-motion: no-preference) {
+    body {
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
   }
 }
 

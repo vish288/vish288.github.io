@@ -168,7 +168,7 @@ export default function Repositories() {
     return (
       <div className='container mx-auto px-4 py-20'>
         <div role='status' className='flex items-center justify-center gap-3'>
-          <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary' />
+          <div className='motion-safe:animate-spin motion-reduce:animate-pulse rounded-full h-8 w-8 border-b-2 border-primary' />
           <span className='text-muted-foreground'>Loading repositories...</span>
         </div>
       </div>
