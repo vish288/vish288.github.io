@@ -99,9 +99,9 @@ function Footer() {
 }
 
 const ROUTE_TITLES: Record<string, string> = {
-  '/': `Vish — ${APP_STRINGS.FULL_NAME}`,
-  '/repositories': 'Repositories — Vish',
-  '/mcp-install': 'MCP Install — Vish',
+  '/': `${APP_STRINGS.FULL_NAME} — ${APP_STRINGS.ROLE}`,
+  '/repositories': `Repositories — ${APP_STRINGS.FULL_NAME}`,
+  '/mcp-install': `MCP Install — ${APP_STRINGS.FULL_NAME}`,
 }
 
 function AppContent() {
@@ -110,7 +110,8 @@ function AppContent() {
   const mounted = useRef(false)
 
   useEffect(() => {
-    document.title = ROUTE_TITLES[location.pathname] ?? `Vish — ${APP_STRINGS.FULL_NAME}`
+    document.title =
+      ROUTE_TITLES[location.pathname] ?? `${APP_STRINGS.FULL_NAME} — ${APP_STRINGS.ROLE}`
     // Move focus to the main region on navigation so keyboard and screen-reader
     // users land on the new content; skip the initial mount to avoid a focus jump.
     if (mounted.current) mainRef.current?.focus()
