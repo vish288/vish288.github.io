@@ -73,8 +73,7 @@ describe('Repositories Page', () => {
     renderWithRouter(<Repositories />)
 
     expect(screen.getByText(/loading repositories/i)).toBeInTheDocument()
-    const spinner = document.querySelector('.animate-spin')
-    expect(spinner).toBeInTheDocument()
+    expect(screen.getByRole('status')).toBeInTheDocument()
   })
 
   it('renders repositories after successful fetch', async () => {
