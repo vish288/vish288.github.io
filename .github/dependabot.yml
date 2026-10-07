@@ -13,6 +13,13 @@ updates:
       npm-major:
         update-types:
           - major
+    ignore:
+      # typescript-eslint 8.x (latest 8.71.1) peer-requires typescript <6.1.0;
+      # TS 7.x breaks lint/typecheck until typescript-eslint ships TS 7 support.
+      # https://github.com/typescript-eslint/typescript-eslint (peer: >=4.8.4 <6.1.0)
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
 
   - package-ecosystem: github-actions
     directory: /
