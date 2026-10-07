@@ -1,5 +1,47 @@
 # Changelog
 
+## [2.9.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.9...vish288-personal-website-v2.9.0) (2026-10-07)
+
+
+### Features
+
+* **about:** add capabilities and experience sections ([0c23232](https://github.com/vish288/vish288.github.io/commit/0c23232561b4f1c60b4c2666bab62c213138372a))
+* **mcp:** add mcp-argocd server everywhere the siblings appear ([a5638e8](https://github.com/vish288/vish288.github.io/commit/a5638e825aa8df8a48c069e25d473b03a0d4dbd5))
+* **seo:** prerender routes, structured data, sitemap and llms.txt ([56679fc](https://github.com/vish288/vish288.github.io/commit/56679fc027308bc52ca87253d512a3d6d50160dd))
+
+
+### Bug Fixes
+
+* **a11y:** 44px touch targets and full MCP client names on small screens ([82cc11b](https://github.com/vish288/vish288.github.io/commit/82cc11bac80a165a279dd78fe5403506c301931a))
+* **a11y:** harden navigation, data fetching, and the MCP install flow ([c73c880](https://github.com/vish288/vish288.github.io/commit/c73c8807338e81c99f4be2df93cb97b29c2af9bf))
+* **a11y:** honor prefers-reduced-motion ([ec4b629](https://github.com/vish288/vish288.github.io/commit/ec4b629c65611265f8ce39cd1441968c4b87a5fe))
+* **a11y:** meet WCAG AA contrast in the light theme ([1fa7ecf](https://github.com/vish288/vish288.github.io/commit/1fa7ecf7ba95a8a5c472d7e8559212e3fc88b7a8))
+
+
+### Documentation
+
+* add PRODUCT.md product context ([3db5d7c](https://github.com/vish288/vish288.github.io/commit/3db5d7ceff45da146c0d85937b76a16f2de8bc31))
+
+
+### Code Refactoring
+
+* **about:** derive skills from real repo data, not a fabricated map ([e03933e](https://github.com/vish288/vish288.github.io/commit/e03933e7c204837344e955fb618162686c64efe2))
+
+
+### Build System
+
+* **deps:** bump pnpm/action-setup ([de22a30](https://github.com/vish288/vish288.github.io/commit/de22a30a3be99234548b62346eb7fb8830199e3e))
+* **deps:** bump the actions group across 1 directory with 4 updates ([ab6759c](https://github.com/vish288/vish288.github.io/commit/ab6759cd6f24d58f0239e5a3b3cbc0489a48893d))
+* **deps:** bump the npm-minor-patch group across 1 directory with 25 updates ([63763e2](https://github.com/vish288/vish288.github.io/commit/63763e2a5dfdcb1cfae57673795f3fb4899e72cc))
+* **deps:** bump vite-plugin-pwa ([4e1dfd8](https://github.com/vish288/vish288.github.io/commit/4e1dfd8ac96532528237424ad44c1752f2a0b7a4))
+* **deps:** major upgrades and zero vulnerability alerts ([c685b01](https://github.com/vish288/vish288.github.io/commit/c685b0109b043a161e98c5187ced39abeccc7854))
+
+
+### Maintenance
+
+* ignore .internal/ ([bd1e019](https://github.com/vish288/vish288.github.io/commit/bd1e0193e8971dbb51862c847c16cba0ec8e8ec7))
+* remove dead code, bundle icons, fix PWA icon, polish focus states ([e6ab48a](https://github.com/vish288/vish288.github.io/commit/e6ab48a1825fe093685ffc1f274ac220c4c16c5b))
+
 ## [2.8.9](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.8...vish288-personal-website-v2.8.9) (2026-06-17)
 
 ### Bug Fixes
