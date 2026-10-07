@@ -2,10 +2,9 @@
 
 ## [2.9.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.9.0...vish288-personal-website-v2.9.1) (2026-10-07)
 
-
 ### Build System
 
-* **deps:** bump the npm-minor-patch group with 16 updates ([69a4b0e](https://github.com/vish288/vish288.github.io/commit/69a4b0e11c770cdbdd527f2760d568a5ed591c9d))
+- **deps:** bump the npm-minor-patch group with 16 updates ([69a4b0e](https://github.com/vish288/vish288.github.io/commit/69a4b0e11c770cdbdd527f2760d568a5ed591c9d))
 
 ## [2.9.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.9...vish288-personal-website-v2.9.0) (2026-10-07)
 
