@@ -3,4 +3,13 @@ onlyBuiltDependencies:
   - esbuild
 
 overrides:
-  serialize-javascript: '>=7.0.3'
+  # serialize-javascript <7.1.2 XSS (via vite-plugin-pwa>workbox-build>@rollup/plugin-terser); no direct bump reaches it
+  serialize-javascript: '^7.1.2'
+  # fast-uri <3.1.8 ReDoS (via vite-plugin-pwa>workbox-build>ajv)
+  fast-uri: '^3.1.8'
+  # source-map-js <1.2.2 ReDoS (via @tailwindcss/postcss and vite>postcss)
+  source-map-js: '^1.2.2'
+  # brace-expansion ReDoS — each installed major line patched separately
+  brace-expansion@1: '^1.1.21'
+  brace-expansion@2: '^2.1.7'
+  brace-expansion@5: '^5.0.12'
