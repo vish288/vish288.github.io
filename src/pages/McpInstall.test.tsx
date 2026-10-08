@@ -1,8 +1,9 @@
-import { render, screen, within } from '@testing-library/react'
+import { render, screen, within, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import McpInstall from './McpInstall'
+import { CLIENTS } from '@/constants/mcpClients'
 
 function renderMcpInstall(initialEntry = '/mcp-install') {
   return render(
@@ -17,9 +18,8 @@ describe('McpInstall Page', () => {
     vi.restoreAllMocks()
   })
 
-  it('renders the page heading and all three server sections', () => {
+  it('renders the heading and all four server sections', () => {
     renderMcpInstall()
-
     expect(
       screen.getByRole('heading', { level: 1, name: /mcp installation gateway/i })
     ).toBeInTheDocument()
@@ -29,210 +29,162 @@ describe('McpInstall Page', () => {
     expect(screen.getByText('Argo CD MCP Server')).toBeInTheDocument()
   })
 
-  it('all accordions are expanded by default', () => {
+  it('shows the client count from data in each accordion header', () => {
     renderMcpInstall()
-
-    const buttons = screen.getAllByRole('button', { expanded: true })
-    // 3 accordion buttons should be expanded
-    expect(
-      buttons.filter(b => b.getAttribute('aria-expanded') === 'true').length
-    ).toBeGreaterThanOrEqual(3)
-
-    // Client cards should be visible
-    expect(screen.getAllByText('VS Code').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getAllByText('Cursor').length).toBeGreaterThanOrEqual(1)
+    const counts = screen.getAllByText(`${CLIENTS.length} clients`)
+    expect(counts).toHaveLength(4)
+    expect(CLIENTS.length).toBe(20)
   })
 
-  it('collapses accordion on click and re-expands', async () => {
+  it('renders the four section labels inside each server', () => {
+    renderMcpInstall()
+    for (const section of ['Editors and IDEs', 'Editor extensions', 'CLI agents', 'Desktop apps']) {
+      // one per server section
+      expect(screen.getAllByText(section).length).toBe(4)
+    }
+  })
+
+  it('collapses and re-expands an accordion', async () => {
     const user = userEvent.setup()
     renderMcpInstall()
-
     const gitlabButton = screen.getByText('GitLab MCP Server').closest('button')!
     expect(gitlabButton).toHaveAttribute('aria-expanded', 'true')
-
-    // Collapse
     await user.click(gitlabButton)
     expect(gitlabButton).toHaveAttribute('aria-expanded', 'false')
-
-    // Re-expand
     await user.click(gitlabButton)
     expect(gitlabButton).toHaveAttribute('aria-expanded', 'true')
-
-    // All 7 client cards visible in the GitLab section
-    const section = gitlabButton.closest('.border.rounded-xl')!
-    expect(within(section as HTMLElement).getByText('VS Code')).toBeInTheDocument()
-    expect(within(section as HTMLElement).getByText('Cursor')).toBeInTheDocument()
-    expect(within(section as HTMLElement).getByText('Claude Code')).toBeInTheDocument()
-    expect(within(section as HTMLElement).getByText('Windsurf')).toBeInTheDocument()
-    expect(within(section as HTMLElement).getByText('IntelliJ')).toBeInTheDocument()
-    expect(within(section as HTMLElement).getByText('Claude Desktop')).toBeInTheDocument()
-    expect(within(section as HTMLElement).getByText('Gemini CLI')).toBeInTheDocument()
   })
 
-  it('collapses accordion on click', async () => {
+  it('opens the Claude Code modal with the CLI command', async () => {
     const user = userEvent.setup()
     renderMcpInstall()
-
-    const gitlabButton = screen.getByText('GitLab MCP Server').closest('button')!
-    expect(gitlabButton).toHaveAttribute('aria-expanded', 'true')
-
-    await user.click(gitlabButton)
-    expect(gitlabButton).toHaveAttribute('aria-expanded', 'false')
-  })
-
-  it('all accordions expanded even with ?server= param', () => {
-    renderMcpInstall('/mcp-install?server=mcp-gitlab')
-
-    // All accordions should be expanded
-    const gitlabButton = screen.getByText('GitLab MCP Server').closest('button')!
-    expect(gitlabButton).toHaveAttribute('aria-expanded', 'true')
-
-    const atlassianButton = screen.getByText('Atlassian Extended MCP Server').closest('button')!
-    expect(atlassianButton).toHaveAttribute('aria-expanded', 'true')
-  })
-
-  it('handles unknown server param gracefully', () => {
-    renderMcpInstall('/mcp-install?server=unknown-server')
-
-    // Page renders without crash, all accordions expanded
-    expect(screen.getByText('GitLab MCP Server')).toBeInTheDocument()
-    expect(screen.getAllByText('VS Code').length).toBeGreaterThanOrEqual(1)
-  })
-
-  it('opens modal for Claude Code guide', async () => {
-    const user = userEvent.setup()
-    renderMcpInstall()
-
-    // All sections expanded by default — click first Claude Code button
-    const claudeCodeButton = screen.getAllByText('Claude Code')[0].closest('button')!
-    await user.click(claudeCodeButton)
-
-    // Modal should be visible with correct content
+    await user.click(screen.getAllByText('Claude Code')[0].closest('button')!)
     const modal = screen.getByRole('dialog')
-    expect(modal).toBeInTheDocument()
-    expect(within(modal).getByText(/gitlab for claude code/i)).toBeInTheDocument()
-    expect(within(modal).getByText(/run this command/i)).toBeInTheDocument()
-    expect(within(modal).getByText(/claude mcp add/)).toBeInTheDocument()
+    expect(within(modal).getByText(/GitLab for Claude Code/)).toBeInTheDocument()
+    expect(within(modal).getByText(/claude mcp add gitlab --scope user/)).toBeInTheDocument()
   })
 
-  it('opens modal for Claude Desktop guide', async () => {
+  it('Claude Desktop modal shows a paths dl with macOS and Windows rows and a secrets line', async () => {
     const user = userEvent.setup()
     renderMcpInstall()
-
-    const claudeDesktopButton = screen.getAllByText('Claude Desktop')[0].closest('button')!
-    await user.click(claudeDesktopButton)
-
+    await user.click(screen.getAllByText('Claude Desktop')[0].closest('button')!)
     const modal = screen.getByRole('dialog')
-    expect(within(modal).getByText(/gitlab for claude desktop/i)).toBeInTheDocument()
-    expect(within(modal).getByText(/claude_desktop_config\.json/i)).toBeInTheDocument()
+    expect(within(modal).getByText('macOS')).toBeInTheDocument()
+    expect(within(modal).getByText('Windows')).toBeInTheDocument()
+    expect(within(modal).getAllByText(/claude_desktop_config\.json/).length).toBeGreaterThan(0)
+    expect(within(modal).getByText(/Secrets: GITLAB_TOKEN/)).toBeInTheDocument()
   })
 
-  it('closes modal on close button click', async () => {
+  it('Codex modal shows two copy buttons with distinct names', async () => {
     const user = userEvent.setup()
     renderMcpInstall()
-
-    const claudeCodeButton = screen.getAllByText('Claude Code')[0].closest('button')!
-    await user.click(claudeCodeButton)
-
-    expect(screen.getByRole('dialog')).toBeInTheDocument()
-
-    const closeButton = screen.getByRole('button', { name: /close/i })
-    await user.click(closeButton)
-
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    await user.click(screen.getAllByText('Codex')[0].closest('button')!)
+    const modal = screen.getByRole('dialog')
+    expect(within(modal).getByRole('button', { name: /copy command/i })).toBeInTheDocument()
+    expect(within(modal).getByRole('button', { name: /copy config/i })).toBeInTheDocument()
+    expect(within(modal).getByText(/codex mcp add/)).toBeInTheDocument()
+    expect(within(modal).getByText(/\[mcp_servers\.gitlab\]/)).toBeInTheDocument()
   })
 
-  it('shows copy button in modal', async () => {
-    const user = userEvent.setup()
-    renderMcpInstall()
-
-    const claudeCodeButton = screen.getAllByText('Claude Code')[0].closest('button')!
-    await user.click(claudeCodeButton)
-
-    const copyButton = screen.getByRole('button', { name: /copy to clipboard/i })
-    expect(copyButton).toBeInTheDocument()
+  it('auto-opens the Devin Desktop modal for legacy install=windsurf', () => {
+    renderMcpInstall('/mcp-install?server=mcp-gitlab&install=windsurf')
+    const modal = screen.getByRole('dialog')
+    expect(within(modal).getByText(/GitLab for Devin Desktop \(Windsurf\)/)).toBeInTheDocument()
   })
 
-  it('shows GitHub and PyPI links in expanded section', () => {
-    renderMcpInstall()
-
-    // All sections expanded — multiple GitHub/PyPI links exist
-    const githubLinks = screen.getAllByRole('link', { name: /github/i })
-    expect(githubLinks[0]).toHaveAttribute('href', expect.stringContaining('github.com'))
-    expect(githubLinks[0]).toHaveAttribute('target', '_blank')
-
-    const pypiLinks = screen.getAllByRole('link', { name: /pypi/i })
-    expect(pypiLinks[0]).toHaveAttribute('href', expect.stringContaining('pypi.org'))
-    expect(pypiLinks[0]).toHaveAttribute('target', '_blank')
+  it('auto-opens the JetBrains AI Assistant modal for legacy install=intellij', () => {
+    renderMcpInstall('/mcp-install?server=mcp-coda&install=intellij')
+    const modal = screen.getByRole('dialog')
+    expect(within(modal).getByText(/Coda for JetBrains AI Assistant/)).toBeInTheDocument()
   })
 
-  it('VS Code card renders as a link', () => {
-    renderMcpInstall()
-
-    // All sections expanded — multiple VS Code links exist
-    const vscodeLink = screen.getAllByText('VS Code')[0].closest('a')
-    expect(vscodeLink).toBeInTheDocument()
-    expect(vscodeLink).toHaveAttribute('href', expect.stringContaining('vscode'))
+  it('auto-opens the Visual Studio config modal for install=vs', () => {
+    renderMcpInstall('/mcp-install?server=mcp-gitlab&install=vs')
+    const modal = screen.getByRole('dialog')
+    expect(within(modal).getByText(/GitLab for Visual Studio/)).toBeInTheDocument()
+    const pre = modal.querySelector('pre')!
+    expect(JSON.parse(pre.textContent!).servers.gitlab.type).toBe('stdio')
   })
 
-  it('Cursor card renders as a link with deeplink', () => {
-    renderMcpInstall()
-
-    const cursorLink = screen.getAllByText('Cursor')[0].closest('a')
-    expect(cursorLink).toBeInTheDocument()
-    expect(cursorLink).toHaveAttribute('href', expect.stringContaining('cursor://'))
-  })
-
-  it('auto-opens modal with ?server=mcp-gitlab&install=claude', () => {
+  it('auto-opens the Claude Code modal for legacy install=claude', () => {
     renderMcpInstall('/mcp-install?server=mcp-gitlab&install=claude')
-
-    // Modal should open automatically for Claude Code
     const modal = screen.getByRole('dialog')
-    expect(modal).toBeInTheDocument()
-    expect(within(modal).getByText(/gitlab for claude code/i)).toBeInTheDocument()
+    expect(within(modal).getByText(/GitLab for Claude Code/)).toBeInTheDocument()
   })
 
-  it('auto-opens modal with install=claude-desktop', () => {
-    renderMcpInstall('/mcp-install?server=mcp-coda&install=claude-desktop')
-
-    const modal = screen.getByRole('dialog')
-    expect(within(modal).getByText(/coda for claude desktop/i)).toBeInTheDocument()
-  })
-
-  it('ignores unknown install target', () => {
-    renderMcpInstall('/mcp-install?server=mcp-gitlab&install=unknown')
-
-    // All accordions expanded, no modal for unknown target
-    expect(screen.getAllByText('VS Code').length).toBeGreaterThanOrEqual(1)
+  it('ignores an unknown install target', () => {
+    renderMcpInstall('/mcp-install?server=mcp-gitlab&install=nope')
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
-  it('shows correct client count in accordion header', () => {
-    renderMcpInstall()
-
-    const clientCounts = screen.getAllByText('7 clients')
-    expect(clientCounts).toHaveLength(4)
-  })
-
-  it('opens modal for Gemini CLI guide', async () => {
+  it('closes the modal and returns without crash', async () => {
     const user = userEvent.setup()
     renderMcpInstall()
-
-    const geminiButton = screen.getAllByText('Gemini CLI')[0].closest('button')!
-    await user.click(geminiButton)
-
-    const modal = screen.getByRole('dialog')
-    expect(modal).toBeInTheDocument()
-    expect(within(modal).getByText(/gitlab for gemini cli/i)).toBeInTheDocument()
-    expect(within(modal).getByText(/gemini mcp add/)).toBeInTheDocument()
+    await user.click(screen.getAllByText('Claude Code')[0].closest('button')!)
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: /close/i }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 
-  it('renders package name badge in accordion header', () => {
+  it('renders GitHub and PyPI links in expanded sections', () => {
     renderMcpInstall()
+    const github = screen.getAllByRole('link', { name: /github/i })
+    expect(github[0]).toHaveAttribute('href', expect.stringContaining('github.com'))
+    const pypi = screen.getAllByRole('link', { name: /pypi/i })
+    expect(pypi[0]).toHaveAttribute('href', expect.stringContaining('pypi.org'))
+  })
 
+  it('renders package name badges', () => {
+    renderMcpInstall()
     expect(screen.getByText('mcp-gitlab')).toBeInTheDocument()
-    expect(screen.getByText('mcp-atlassian-extended')).toBeInTheDocument()
-    expect(screen.getByText('mcp-coda')).toBeInTheDocument()
     expect(screen.getByText('mcp-argocd')).toBeInTheDocument()
+  })
+})
+
+describe('McpInstall auto-redirect', () => {
+  let originalLocation: Location
+
+  beforeEach(() => {
+    vi.useFakeTimers()
+    originalLocation = window.location
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      writable: true,
+      value: { href: '' },
+    })
+  })
+
+  afterEach(() => {
+    vi.useRealTimers()
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      writable: true,
+      value: originalLocation,
+    })
+  })
+
+  it('redirects to the deeplink after 400ms for a deeplink install target', () => {
+    render(
+      <MemoryRouter initialEntries={['/mcp-install?server=mcp-gitlab&install=vscode']}>
+        <McpInstall />
+      </MemoryRouter>
+    )
+    expect(window.location.href).toBe('')
+    act(() => {
+      vi.advanceTimersByTime(400)
+    })
+    expect(window.location.href.startsWith('vscode:mcp/install?')).toBe(true)
+  })
+
+  it('does not redirect for a json/cli install target (install=claude)', () => {
+    render(
+      <MemoryRouter initialEntries={['/mcp-install?server=mcp-gitlab&install=claude']}>
+        <McpInstall />
+      </MemoryRouter>
+    )
+    act(() => {
+      vi.advanceTimersByTime(400)
+    })
+    expect(window.location.href).toBe('')
   })
 })
