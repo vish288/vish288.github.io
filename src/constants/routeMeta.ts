@@ -9,9 +9,9 @@ export interface RouteMeta {
   description: string
 }
 
-const HOME_TITLE = `${APP_STRINGS.FULL_NAME} — ${APP_STRINGS.ROLE}`
+const HOME_TITLE = `${APP_STRINGS.FULL_NAME} — ${APP_STRINGS.ROLE}, Toronto`
 const HOME_DESCRIPTION =
-  'Senior Staff Engineer and architect in Toronto. Frontend platforms, cloud-native systems and LLM engineering tooling for enterprise health and commerce.'
+  'Senior Staff Engineer and architect in Toronto. Multi-tenant AI agent platforms, unified identity, micro-frontends and cloud-native delivery for enterprises.'
 
 export const ROUTE_META: Record<string, RouteMeta> = {
   '/': {
@@ -21,12 +21,12 @@ export const ROUTE_META: Record<string, RouteMeta> = {
   '/repositories': {
     title: `Repositories — ${APP_STRINGS.FULL_NAME}`,
     description:
-      'Open-source projects by Visweshwaran S, including MCP servers for GitLab, Atlassian, Coda and Argo CD.',
+      'Open-source projects by Visweshwaran S: Model Context Protocol (MCP) servers for GitLab, Atlassian, Coda and Argo CD, plus React and TypeScript tooling.',
   },
   '/mcp-install': {
     title: `MCP Install — ${APP_STRINGS.FULL_NAME}`,
     description:
-      'Install MCP servers for GitLab, Atlassian, Coda and Argo CD in VS Code, Cursor, Claude Code, Claude Desktop, Windsurf, IntelliJ and Gemini CLI.',
+      'Install the GitLab, Atlassian, Coda and Argo CD MCP servers in VS Code, Cursor, Claude Code, Claude Desktop, Windsurf, IntelliJ and Gemini CLI.',
   },
 }
 

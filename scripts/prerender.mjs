@@ -59,9 +59,9 @@ function applyMeta(template, { markup, title, description, canonical, ld }) {
   html = replaceMeta(html, 'property', 'og:url', canonical)
   html = replaceMeta(html, 'property', 'og:title', title)
   html = replaceMeta(html, 'property', 'og:description', description)
-  html = replaceMeta(html, 'property', 'twitter:url', canonical)
-  html = replaceMeta(html, 'property', 'twitter:title', title)
-  html = replaceMeta(html, 'property', 'twitter:description', description)
+  html = replaceMeta(html, 'name', 'twitter:url', canonical)
+  html = replaceMeta(html, 'name', 'twitter:title', title)
+  html = replaceMeta(html, 'name', 'twitter:description', description)
   const injected =
     `    <link rel="canonical" href="${escAttr(canonical)}" />\n` +
     `    <script type="application/ld+json">${ld}</script>\n`
@@ -71,9 +71,11 @@ function applyMeta(template, { markup, title, description, canonical, ld }) {
 // ── JSON-LD graph (generated from shared data) ──────────────────────
 // Every MCP repo was verified MIT (GitHub API license.spdx_id), so license is set for all.
 const KNOWS_ABOUT = [
-  'React', 'TypeScript', 'Next.js', 'Micro-frontends', 'Module federation', 'Kubernetes',
-  'Argo CD', 'Cloud-native architecture', 'Identity and access management',
-  'Multi-tenant architecture', 'LLM engineering', 'Model Context Protocol',
+  'Solutions architecture', 'Multi-tenant AI agent platforms', 'LLM engineering',
+  'Model Context Protocol', 'Identity and access management', 'Multi-tenant architecture',
+  'Kubernetes', 'Argo CD', 'GitOps', 'Cloud-native architecture', 'Google Cloud Platform',
+  'AWS', 'Microsoft Azure', 'Micro-frontends', 'Module federation', 'React', 'TypeScript',
+  'Next.js', 'Node.js', 'Java', 'Python', 'PostgreSQL', 'Web accessibility (WCAG)',
 ]
 const PERSON_ID = `${ORIGIN}/#person`
 
@@ -84,11 +86,23 @@ function graphFor(path, APP_STRINGS, SERVERS) {
     name: APP_STRINGS.FULL_NAME,
     alternateName: ['Vish', 'Visweshwaran Suryanarayanan'],
     jobTitle: 'Senior Staff Engineer & Architect',
+    description: APP_STRINGS.TAGLINE,
     url: `${ORIGIN}/`,
     image: `${ORIGIN}/vis-creates.png`,
     sameAs: [APP_STRINGS.GITHUB_URL, APP_STRINGS.LINKEDIN_URL],
     address: { '@type': 'PostalAddress', addressLocality: 'Toronto', addressCountry: 'CA' },
-    alumniOf: { '@type': 'CollegeOrUniversity', name: 'Anna University' },
+    hasOccupation: {
+      '@type': 'Occupation',
+      name: 'Senior Staff Software Engineer',
+      occupationLocation: { '@type': 'City', name: 'Toronto' },
+      skills:
+        'Solutions architecture, multi-tenant AI agent platforms, identity and access management, Kubernetes, GitOps, micro-frontends, React, TypeScript, Node.js, Java, Python',
+    },
+    alumniOf: {
+      '@type': 'CollegeOrUniversity',
+      name: 'Anna University',
+      sameAs: 'https://www.annauniv.edu/',
+    },
     knowsAbout: KNOWS_ABOUT,
   }
   const website = {
@@ -96,9 +110,31 @@ function graphFor(path, APP_STRINGS, SERVERS) {
     '@id': `${ORIGIN}/#website`,
     url: `${ORIGIN}/`,
     name: APP_STRINGS.FULL_NAME,
+    inLanguage: 'en-CA',
     publisher: { '@id': PERSON_ID },
   }
   const graph = [person, website]
+  if (path === '/') {
+    graph.push({
+      '@type': 'ProfilePage',
+      '@id': `${ORIGIN}/#profile`,
+      url: `${ORIGIN}/`,
+      name: `${APP_STRINGS.FULL_NAME} — ${person.jobTitle}, Toronto`,
+      isPartOf: { '@id': `${ORIGIN}/#website` },
+      mainEntity: { '@id': PERSON_ID },
+      dateModified: new Date().toISOString().slice(0, 10),
+    })
+  }
+  if (path === '/repositories') {
+    graph.push({
+      '@type': 'CollectionPage',
+      '@id': `${ORIGIN}/repositories#page`,
+      url: `${ORIGIN}/repositories`,
+      name: `Repositories — ${APP_STRINGS.FULL_NAME}`,
+      isPartOf: { '@id': `${ORIGIN}/#website` },
+      about: { '@id': PERSON_ID },
+    })
+  }
   if (path === '/mcp-install') {
     graph.push({
       '@type': 'ItemList',
@@ -125,17 +161,22 @@ function graphFor(path, APP_STRINGS, SERVERS) {
 // ── sitemap + llms.txt ──────────────────────────────────────────────
 function buildSitemap() {
   const urls = [`${ORIGIN}/`, `${ORIGIN}/repositories`, `${ORIGIN}/mcp-install`]
+  const lastmod = new Date().toISOString().slice(0, 10)
   return (
     '<?xml version="1.0" encoding="UTF-8"?>\n' +
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    urls.map(u => `  <url><loc>${u}</loc></url>`).join('\n') +
+    urls.map(u => `  <url><loc>${u}</loc><lastmod>${lastmod}</lastmod></url>`).join('\n') +
     '\n</urlset>\n'
   )
 }
 
 function buildLlmsTxt(APP_STRINGS, SERVERS) {
   const S = APP_STRINGS
-  const out = [`# ${S.FULL_NAME}`, '', `> ${S.ROLE}. ${S.TAGLINE}`, '', '## About', '']
+  const out = [`# ${S.FULL_NAME}`, '', `> ${S.ROLE}. ${S.TAGLINE}`, '']
+  out.push('## Summary', '', S.LLMS_SUMMARY, '')
+  out.push('## Key facts', '')
+  for (const f of S.LLMS_KEY_FACTS) out.push(`- ${f}`)
+  out.push('', '## About', '')
   out.push(S.ABOUT_P1, '', S.ABOUT_P2, '', S.ABOUT_P3, '')
   out.push('## Capabilities', '')
   for (const c of S.CAPABILITIES) out.push(`- ${c.title}: ${c.body}`)
