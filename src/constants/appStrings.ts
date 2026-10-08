@@ -4,7 +4,7 @@ export const APP_STRINGS = {
   FULL_NAME: 'Visweshwaran S',
   ROLE: 'Senior Staff Engineer & Architect',
   TAGLINE:
-    'I lead platform modernization for large enterprises: unified identity, micro-frontends, cloud-native delivery and LLM-powered engineering tooling.',
+    'I lead platform architecture for large enterprises: multi-tenant AI agent platforms, unified identity, micro-frontends and GitOps delivery on Kubernetes.',
   LOCATION: 'Toronto, Canada & India',
   GITHUB_URL: 'https://github.com/vish288',
   LINKEDIN_URL: 'https://www.linkedin.com/in/suryanarayananvisweshwaran/',
@@ -17,35 +17,39 @@ export const APP_STRINGS = {
   ABOUT_EYEBROW: 'About',
   ABOUT_HEADING: 'What I do',
   ABOUT_P1:
-    'I am a Senior Staff Engineer and architect. I have built software since 2010 for digital health, retail, telecom and B2B commerce. I design platforms and lead the teams that ship them, from the first architecture review to the production cutover.',
+    'I am a Senior Staff Engineer and solutions architect in Toronto. I have built software since 2010 for digital health, retail, telecom, B2B commerce and retail banking. I design platforms and lead the teams that ship them, from the first architecture review to the production cutover.',
   ABOUT_P2:
-    'My most recent work is on a national digital health platform. I unified authentication across 12 web applications and led a module-federation migration across 6 delivery pods. Virtual-care journeys grew from a few hundred patients to 100,000 across 7 provinces in 2 quarters.',
+    'Today I lead the architecture of a multi-tenant AI agent platform for a national retailer. Teams across the business use one governed path to build, ship and operate agents, with tenancy, security and audit built in. Before that I unified authentication across 12 web applications on a national digital health platform. Its virtual-care journeys grew from a few hundred patients to 100,000 across 7 provinces in 2 quarters.',
   ABOUT_P3:
-    'Outside client work, I build open-source developer tools: MCP servers for GitLab, Atlassian, Coda and Argo CD. They are on PyPI, and you can install them from this site.',
+    'Outside client work, I build open-source developer tools: Model Context Protocol (MCP) servers for GitLab, Atlassian, Coda and Argo CD. They are on PyPI, and you can install them from this site.',
 
   // Capabilities section
   CAPABILITIES_EYEBROW: 'Capabilities',
   CAPABILITIES_HEADING: 'Where I add the most',
   CAPABILITIES: [
     {
-      title: 'Frontend platforms',
-      body: 'React, TypeScript and Next.js at scale; micro-frontends and module federation; accessibility (WCAG AA) and web performance.',
+      title: 'AI agent platforms',
+      body: 'Multi-tenant agent platforms with tenant isolation and governed promotion to production; model routing, prompt and trace observability, tool catalogs and human-in-the-loop controls.',
+    },
+    {
+      title: 'Identity and multi-tenant architecture',
+      body: 'Unified authentication and authorization across many applications; workload identity, role-based access control and single sign-on; the privacy and compliance reviews that go with them.',
     },
     {
       title: 'Cloud-native delivery',
       body: 'Node.js, Java and Python services on Kubernetes; Argo CD, Helm and GitLab CI/CD; GCP, AWS and Azure; event-driven and serverless design.',
     },
     {
-      title: 'Identity and multi-tenant architecture',
-      body: 'Unified authentication and authorization across many applications, multi-tenant platforms, and the security and compliance reviews that go with them.',
+      title: 'Frontend platforms',
+      body: 'React, TypeScript and Next.js at scale; micro-frontends and module federation; accessibility (WCAG AA) and web performance.',
     },
     {
-      title: 'AI-assisted engineering',
-      body: 'LLM engineering automation and agentic workflows: model routing, token budgets, structured outputs and human-in-the-loop controls, plus governance for AI-assisted code review.',
+      title: 'Security and quality',
+      body: 'Secret management, deny-by-default networking, SAST and DAST scanning, CI quality gates; security, privacy and integrity reviews through to production.',
     },
     {
       title: 'Engineering leadership',
-      body: 'Teams of up to 23 engineers across time zones; alignment with product, design, privacy, legal and SRE; architecture reviews and pre-sales.',
+      body: 'Teams of up to 23 engineers across time zones; alignment with product, design, privacy, legal, security and SRE; architecture reviews and pre-sales.',
     },
   ],
 
@@ -54,20 +58,28 @@ export const APP_STRINGS = {
   EXPERIENCE_HEADING: 'Career',
   EXPERIENCE: [
     {
-      period: '2025 – present',
-      roles: [
-        'Senior Staff Consultant (2026 – present)',
-        'Staff Engineer / Architect, Digital Health (2025 – 2026)',
-      ],
-      context:
-        'Consulting for a national digital health platform used across 7 Canadian provinces.',
+      period: '2026 – present',
+      roles: ['Senior Staff Consultant, Enterprise AI Platform'],
+      context: 'A national retailer; Toronto.',
       bullets: [
-        'Unified authentication and authorization across 3 authentication types and 12 web applications, and removed redundant identity flows.',
-        'Led a micro-frontend and module-federation migration of an end-of-life Next.js host and a 10-year-old React SPA.',
-        'Cut build and deployment times by 40% and gave 6 pods independent releases.',
-        'Launched eligibility-based virtual-care journeys. Adoption grew from a few hundred patients to 100,000 in 2 quarters.',
-        'Delivered an infrastructure-as-code migration to Argo CD and Kubernetes for Next.js, Node.js and Java services and a Java monolith, with no critical (P1) incidents.',
-        'Built observability and governance for AI-assisted development as merge requests grew from 100 a week to 100 a day.',
+        'Lead the architecture of a multi-tenant enterprise AI agent platform. It standardizes how teams across the business build, govern, deploy and operate agents at scale.',
+        'Teams ship through one governed path to production, replacing the ad-hoc setups each team built before.',
+        'Security, audit and tenancy are built into the platform, not rebuilt by every team.',
+        'Partner across engineering, security and leadership to make the platform the standard way to build agents.',
+      ],
+    },
+    {
+      period: '2025 – 2026',
+      roles: ['Staff Engineer / Architect, Digital Health'],
+      context:
+        'Consulting for a national digital health platform used across 7 Canadian provinces; 75 developers in 6 teams.',
+      bullets: [
+        'Unified authentication and authorization across 3 authentication types and 12 web applications. Customer drop-off fell by 23%.',
+        'Led a micro-frontend and module-federation migration of an end-of-life Next.js host and a 10-year-old React SPA. Build and deployment times fell by 40%, and 6 pods gained independent releases.',
+        'Recovered a cross-application navigation integration stalled for 4 months. Reset it to a clear MVP mandate and shipped in 5 weeks.',
+        'Launched eligibility-based virtual-care journeys across 7 provinces. Adoption grew from a few hundred patients to 100,000 in 2 quarters.',
+        "Delivered the organization's first infrastructure-as-code migration to Argo CD across Node.js and Java microservices, a Java monolith and React and Next.js applications. No critical (P1) incidents.",
+        'Introduced AI-assisted code review and built observability for it as merge requests grew from 100 a week to 100 a day. Productionized LLM-powered release-notes and dependency-risk agents.',
       ],
     },
     {
@@ -92,7 +104,7 @@ export const APP_STRINGS = {
         'Led teams of up to 23 engineers across geographies.',
         'Defined the MACH (microservices, API-first, cloud-native, headless) architecture that turned a US B2B supply-chain business into a full e-commerce platform. Customer-acquisition cost fell by 33%.',
         'Re-platformed a health solution for a major Canadian retailer onto a MACH architecture.',
-        "Architected the organization's first cloud-native notification platform (serverless, Pub/Sub, Firestore), adopted enterprise-wide and reused for nationwide vaccination scheduling.",
+        "Architected the organization's first cloud-native notification platform on GCP (serverless, Pub/Sub, Firestore), adopted enterprise-wide and reused for nationwide vaccination scheduling.",
         'Led headless e-commerce and multi-tenant Node.js and React architectures for telecom and North American retail clients.',
         'Received 3 awards for leadership and architecture between 2019 and 2022.',
       ],
@@ -124,6 +136,23 @@ export const APP_STRINGS = {
   // Accessibility
   SKILLS_CLOUD_DESCRIPTION: 'Languages and topics taken from public GitHub repositories',
   REPOSITORY_COUNT_MESSAGE: 'Derived from {count} public repositories',
+
+  // llms.txt — summary and machine-readable facts for answer engines
+  LLMS_SUMMARY:
+    'Visweshwaran S (Vish) is a Senior Staff Engineer and solutions architect in Toronto, Canada. He has built software since 2010 for digital health, retail, telecom, B2B commerce and retail banking. He currently leads the architecture of a multi-tenant enterprise AI agent platform.',
+  LLMS_KEY_FACTS: [
+    'Role: Senior Staff Engineer & Architect (consulting)',
+    'Location: Toronto, Canada; also India',
+    'Current focus: leading the architecture of a multi-tenant enterprise AI agent platform; one governed path to production, with tenancy, security and audit built in',
+    'Identity: unified authentication across 3 authentication types and 12 web applications; customer drop-off down 23%',
+    'Frontend: micro-frontend and module-federation migration; 6 pods released independently; build and deploy times down 40%',
+    'Scale: virtual-care journeys from a few hundred patients to 100,000 across 7 provinces in 2 quarters',
+    'Leadership: teams of up to 23 engineers; org-wide influence across 75 developers in 6 teams',
+    'Open source: 4 MCP servers on PyPI — mcp-gitlab, mcp-atlassian-extended, mcp-coda, mcp-argocd',
+    'Education: B.E. Electronics and Communication, Anna University',
+    'Employers and clients are not named on this site.',
+    'Contact: LinkedIn https://www.linkedin.com/in/suryanarayananvisweshwaran/ · GitHub https://github.com/vish288',
+  ],
 } as const
 
 export type AppStringKey = keyof typeof APP_STRINGS

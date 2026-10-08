@@ -40,7 +40,7 @@ describe('About Page', () => {
 
     expect(screen.getByText(/senior staff engineer & architect/i)).toBeInTheDocument()
     expect(
-      screen.getByText(/i lead platform modernization for large enterprises/i)
+      screen.getByText(/i lead platform architecture for large enterprises/i)
     ).toBeInTheDocument()
   })
 
@@ -59,9 +59,7 @@ describe('About Page', () => {
 
     expect(screen.getByRole('heading', { level: 2, name: /what i do/i })).toBeInTheDocument()
     expect(screen.getByText(/i have built software since 2010/i)).toBeInTheDocument()
-    expect(
-      screen.getByText(/mcp servers for gitlab, atlassian, coda and argo cd/i)
-    ).toBeInTheDocument()
+    expect(screen.getByText(/servers for gitlab, atlassian, coda and argo cd/i)).toBeInTheDocument()
   })
 
   it('renders the capabilities section', async () => {
@@ -103,8 +101,8 @@ describe('About Page', () => {
     })
 
     const h3s = screen.getAllByRole('heading', { level: 3 })
-    // 4 experience entries + 1 Skills card title
-    expect(h3s.length).toBe(5)
+    // 5 experience entries + 1 Skills card title
+    expect(h3s.length).toBe(6)
   })
 
   it('names no employer or client', async () => {
@@ -112,10 +110,21 @@ describe('About Page', () => {
       renderAbout()
     })
 
-    const banned = ['Loblaw', 'Shoppers', 'Publicis', 'Sapient', 'Virtusa', 'Infosys']
-    const text = document.body.textContent ?? ''
+    const banned = [
+      'Loblaw',
+      'Shoppers',
+      'Publicis',
+      'Sapient',
+      'Virtusa',
+      'Infosys',
+      'LCL',
+      'Capital One',
+      'AEGIS',
+    ]
+    // Cover both the rendered page and every string feeding llms.txt / JSON-LD.
+    const text = `${document.body.textContent ?? ''} ${JSON.stringify(APP_STRINGS)}`.toLowerCase()
     for (const name of banned) {
-      expect(text.toLowerCase()).not.toContain(name.toLowerCase())
+      expect(text).not.toContain(name.toLowerCase())
     }
   })
 
@@ -218,9 +227,13 @@ describe('STE-100 sentence length', () => {
   }
 
   const copy: [string, string][] = [
+    ['TAGLINE', APP_STRINGS.TAGLINE],
     ['ABOUT_P1', APP_STRINGS.ABOUT_P1],
     ['ABOUT_P2', APP_STRINGS.ABOUT_P2],
     ['ABOUT_P3', APP_STRINGS.ABOUT_P3],
+    ['LLMS_SUMMARY', APP_STRINGS.LLMS_SUMMARY],
+    ...APP_STRINGS.CAPABILITIES.map((c): [string, string] => [`CAPABILITIES.${c.title}`, c.body]),
+    ...APP_STRINGS.LLMS_KEY_FACTS.map((f, i): [string, string] => [`LLMS_KEY_FACTS[${i}]`, f]),
     ...APP_STRINGS.EXPERIENCE.flatMap((entry, ei) =>
       entry.bullets.map((b, bi): [string, string] => [`EXPERIENCE[${ei}].bullets[${bi}]`, b])
     ),

@@ -20,7 +20,7 @@ Personal site for Visweshwaran S ("Vish"). It proves engineering depth with work
 
 Two claims, both backed by work:
 
-1. Senior Staff Engineer & Architect: platform modernization for large enterprises (frontend platforms, cloud-native delivery, identity, AI-assisted engineering).
+1. Senior Staff Engineer & Architect: platform architecture for large enterprises (multi-tenant AI agent platforms, frontend platforms, cloud-native delivery, identity, security and quality).
 2. Builder of developer tooling: the GitLab, Atlassian Extended, Coda and Argo CD MCP servers, published on PyPI and installable from this site.
 
 The MCP servers are the evidence that sets this site apart from a generic "full stack developer" portfolio.
@@ -44,14 +44,14 @@ The MCP servers are the evidence that sets this site apart from a generic "full 
 - Name: "Vish" for display, "Visweshwaran S" in full. Monogram "VS".
 - Location as stated: Toronto, Canada & India.
 - Links: github.com/vish288, LinkedIn `suryanarayananvisweshwaran`.
-- Public site names no employers or clients; scale figures allowed; percentage claims limited to the two currently published; career break not published.
+- Public site names no employers or clients; scale figures allowed; percentage claims limited to the three currently published; career break not published.
 
 ## Evidence on Hand
 
 - Public GitHub repositories and star counts (live via API).
 - Four MCP servers with PyPI packages: `mcp-gitlab`, `mcp-atlassian-extended`, `mcp-coda`, `mcp-argocd`.
 - Open Graph image: `public/vis-creates.png`.
-- Private resume (Proton Drive, `Vetri Kodi/2026/next-reign/Resume/Visweshwaran Senior Staff Engineer.docx`, Sept 2026) is the source for experience copy.
+- Private resume (Proton Drive, `Vetri Kodi/2026/next-reign/Resume/Visweshwaran_Senior_Staff_Software_Engineer_CapitalOne.docx`, 13 Sep 2026) is the source for experience copy.
 - Anything not in the resume or public repos: never fabricate; ask first.
 
 ## Product Principles
