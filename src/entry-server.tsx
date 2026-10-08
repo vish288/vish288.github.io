@@ -18,4 +18,5 @@ export function render(url: string): string {
 // SSR bundle rather than reaching into individual source modules.
 export { APP_STRINGS } from './constants/appStrings'
 export { SERVERS } from './constants/mcpServers'
+export { CLIENTS } from './constants/mcpClients'
 export { ROUTE_META } from './constants/routeMeta'

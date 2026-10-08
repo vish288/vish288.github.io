@@ -79,7 +79,7 @@ const KNOWS_ABOUT = [
 ]
 const PERSON_ID = `${ORIGIN}/#person`
 
-function graphFor(path, APP_STRINGS, SERVERS) {
+function graphFor(path, APP_STRINGS, SERVERS, CLIENTS) {
   const person = {
     '@type': 'Person',
     '@id': PERSON_ID,
@@ -154,8 +154,38 @@ function graphFor(path, APP_STRINGS, SERVERS) {
         },
       })),
     })
+    // One HowTo for the whole page (not one per server): enough for AEO engines
+    // to answer "how do I install X in Y", with every client as a HowToTool.
+    graph.push({
+      '@type': 'HowTo',
+      name: 'Install an MCP server from this page',
+      step: [
+        { '@type': 'HowToStep', name: 'Choose a server', text: 'Pick the MCP server you want to install.' },
+        { '@type': 'HowToStep', name: 'Choose your client', text: 'Pick your editor, CLI agent or desktop app.' },
+        {
+          '@type': 'HowToStep',
+          name: 'Open the install link or copy the config',
+          text: 'Use the one-click install link, or copy the generated config or command into your client.',
+        },
+      ],
+      tool: CLIENTS.map(c => ({ '@type': 'HowToTool', name: c.name })),
+    })
   }
   return { '@context': 'https://schema.org', '@graph': graph }
+}
+
+// A client's config location for llms.txt: UI path, else first file path, else
+// the deep-link scheme.
+function clientTarget(c) {
+  if (typeof c.paths === 'string') return c.paths
+  if (c.paths && 'ui' in c.paths) return c.paths.ui
+  if (c.paths) {
+    const first = Object.values(c.paths)[0]
+    if (first) return first
+  }
+  const out = c.outputs[0]
+  if (out.kind === 'deeplink') return out.prefix
+  return c.docs
 }
 
 // ── sitemap + llms.txt ──────────────────────────────────────────────
@@ -170,8 +200,9 @@ function buildSitemap() {
   )
 }
 
-function buildLlmsTxt(APP_STRINGS, SERVERS) {
+function buildLlmsTxt(APP_STRINGS, SERVERS, CLIENTS) {
   const S = APP_STRINGS
+  const clientNames = CLIENTS.map(c => c.name).join(', ')
   const out = [`# ${S.FULL_NAME}`, '', `> ${S.ROLE}. ${S.TAGLINE}`, '']
   out.push('## Summary', '', S.LLMS_SUMMARY, '')
   out.push('## Key facts', '')
@@ -194,9 +225,16 @@ function buildLlmsTxt(APP_STRINGS, SERVERS) {
     out.push(s.description)
     out.push(`- GitHub: https://github.com/${s.githubRepo}`)
     out.push(`- PyPI: https://pypi.org/project/${s.pypiPackage}/`)
-    out.push(`- Install: ${ORIGIN}/mcp-install?server=${key}`, '')
+    out.push(`- Install: ${ORIGIN}/mcp-install?server=${key}`)
+    out.push(`- Clients: ${clientNames}`, '')
   }
-  out.push('## Links', '')
+  out.push('## MCP clients supported', '')
+  out.push(
+    `Each client installs the same server via ${ORIGIN}/mcp-install?server=<server-key>&install=<client-id>.`,
+    ''
+  )
+  for (const c of CLIENTS) out.push(`- ${c.name}: ${clientTarget(c)}`)
+  out.push('', '## Links', '')
   out.push(`- Website: ${ORIGIN}/`)
   out.push(`- GitHub: ${S.GITHUB_URL}`)
   out.push(`- LinkedIn: ${S.LINKEDIN_URL}`, '')
@@ -232,7 +270,7 @@ async function main() {
     },
   })
 
-  const { render, APP_STRINGS, SERVERS, ROUTE_META } = await import(
+  const { render, APP_STRINGS, SERVERS, CLIENTS, ROUTE_META } = await import(
     pathToFileURL(resolve(SSR_DIR, 'entry-server.mjs')).href
   )
 
@@ -254,7 +292,7 @@ async function main() {
       title: meta.title,
       description: meta.description,
       canonical,
-      ld: jsonLd(graphFor(route.path, APP_STRINGS, SERVERS)),
+      ld: jsonLd(graphFor(route.path, APP_STRINGS, SERVERS, CLIENTS)),
     })
     if (!html.includes(route.h1)) {
       failures.push(`${route.file}: rendered output is missing its h1 text "${route.h1}"`)
@@ -263,7 +301,7 @@ async function main() {
   }
 
   await writeFile(resolve(DIST, 'sitemap.xml'), buildSitemap(), 'utf8')
-  await writeFile(resolve(DIST, 'llms.txt'), buildLlmsTxt(APP_STRINGS, SERVERS), 'utf8')
+  await writeFile(resolve(DIST, 'llms.txt'), buildLlmsTxt(APP_STRINGS, SERVERS, CLIENTS), 'utf8')
 
   await removeTemp()
 
