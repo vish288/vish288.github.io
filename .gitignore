@@ -5,6 +5,7 @@ node_modules/
 
 # Production builds
 dist/
+dist-ssr/
 build/
 
 # Environment variables
@@ -35,6 +36,7 @@ coverage/
 # Editor directories and files
 .vscode/
 .idea/
+*.iml
 .DS_Store
 *.swp
 *.swo
