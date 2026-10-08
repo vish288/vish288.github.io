@@ -2,38 +2,32 @@
 
 ## [2.10.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.9.1...vish288-personal-website-v2.10.0) (2026-10-08)
 
-
 ### Features
 
-* **mcp:** data-driven client table with 20 clients ([6ac4288](https://github.com/vish288/vish288.github.io/commit/6ac4288d75a2fb9b5351c527cc3ddbb25726ea1c))
-* **seo:** richer structured data, head tags and llms.txt facts ([169fb60](https://github.com/vish288/vish288.github.io/commit/169fb608cc83618325a6c86fd5f069f4efd69ee2))
-
+- **mcp:** data-driven client table with 20 clients ([6ac4288](https://github.com/vish288/vish288.github.io/commit/6ac4288d75a2fb9b5351c527cc3ddbb25726ea1c))
+- **seo:** richer structured data, head tags and llms.txt facts ([169fb60](https://github.com/vish288/vish288.github.io/commit/169fb608cc83618325a6c86fd5f069f4efd69ee2))
 
 ### Documentation
 
-* add MCP clients spec ([d2c5c54](https://github.com/vish288/vish288.github.io/commit/d2c5c54fb7608046e4b32844bb42bd1d1e2c287e))
-
+- add MCP clients spec ([d2c5c54](https://github.com/vish288/vish288.github.io/commit/d2c5c54fb7608046e4b32844bb42bd1d1e2c287e))
 
 ### Tests
 
-* **mcp:** golden generator outputs and alias coverage ([8368761](https://github.com/vish288/vish288.github.io/commit/836876119f4a66b0086c005eed7a5d7f65c67865))
-
+- **mcp:** golden generator outputs and alias coverage ([8368761](https://github.com/vish288/vish288.github.io/commit/836876119f4a66b0086c005eed7a5d7f65c67865))
 
 ### Build System
 
-* drop redundant autoprefixer dependency ([ac0e6e8](https://github.com/vish288/vish288.github.io/commit/ac0e6e8aa15d89c652b9ef1184cdee23f1eea686))
-
+- drop redundant autoprefixer dependency ([ac0e6e8](https://github.com/vish288/vish288.github.io/commit/ac0e6e8aa15d89c652b9ef1184cdee23f1eea686))
 
 ### CI/CD
 
-* run build in CI and dedupe security-audit issues ([b45e363](https://github.com/vish288/vish288.github.io/commit/b45e363cfbff7d1a330ed46a36012ef5dc558144))
-
+- run build in CI and dedupe security-audit issues ([b45e363](https://github.com/vish288/vish288.github.io/commit/b45e363cfbff7d1a330ed46a36012ef5dc558144))
 
 ### Maintenance
 
-* add MIT LICENSE referenced by README and package.json ([3ff01dc](https://github.com/vish288/vish288.github.io/commit/3ff01dcf3c8c164b5a0874f9aed698824deff389))
-* **security:** replace SPA 404 redirect with a static 404 and tighten CSP ([9d9f0c5](https://github.com/vish288/vish288.github.io/commit/9d9f0c56847bd1578c8b23d5d983c6ffbb9a5532))
-* stop tracking editor config and remove dead files ([2eb6477](https://github.com/vish288/vish288.github.io/commit/2eb647717776aee92c32797ed2f1a13c0a510f82))
+- add MIT LICENSE referenced by README and package.json ([3ff01dc](https://github.com/vish288/vish288.github.io/commit/3ff01dcf3c8c164b5a0874f9aed698824deff389))
+- **security:** replace SPA 404 redirect with a static 404 and tighten CSP ([9d9f0c5](https://github.com/vish288/vish288.github.io/commit/9d9f0c56847bd1578c8b23d5d983c6ffbb9a5532))
+- stop tracking editor config and remove dead files ([2eb6477](https://github.com/vish288/vish288.github.io/commit/2eb647717776aee92c32797ed2f1a13c0a510f82))
 
 ## [2.9.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.9.0...vish288-personal-website-v2.9.1) (2026-10-07)
 
