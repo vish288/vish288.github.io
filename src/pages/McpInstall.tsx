@@ -1,268 +1,135 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useSearchParams } from 'react-router-dom'
-import {
-  siClaude,
-  siCursor,
-  siGooglegemini,
-  siIntellijidea,
-  siModelcontextprotocol,
-  siWindsurf,
-} from 'simple-icons'
+import { siModelcontextprotocol } from 'simple-icons'
 import { Button } from '@/components/ui/button'
-import { Copy, Check, X, ExternalLink, ChevronDown } from 'lucide-react'
+import { Copy, Check, X, ExternalLink, ChevronDown, Blocks } from 'lucide-react'
 import SimpleIcon from '@/components/icons/SimpleIcon'
 import { SERVERS, type ServerConfig } from '@/constants/mcpServers'
+import {
+  CLIENTS,
+  SECTIONS,
+  resolveClient,
+  type McpClient,
+  type Os,
+  type Output,
+} from '@/constants/mcpClients'
+import { genDeeplink, renderOutputs, secretKeys, type RenderedOutput } from '@/lib/mcpInstall'
 
-// ── Server lookup ───────────────────────────────────────────────────
+// ── Per-client helpers ──────────────────────────────────────────────
 
-function getServer(serverKey: string): ServerConfig | null {
-  return SERVERS[serverKey] ?? null
+const OS_LABEL: Record<Os, string> = { mac: 'macOS', linux: 'Linux', win: 'Windows' }
+
+function isDeeplink(client: McpClient): Extract<Output, { kind: 'deeplink' }> | null {
+  const o = client.outputs[0]
+  return o && o.kind === 'deeplink' ? o : null
 }
 
-function getServerOrThrow(serverKey: string): ServerConfig {
-  const s = SERVERS[serverKey]
-  if (!s) throw new Error(`Unknown server: ${serverKey}`)
-  return s
+// Pill action word by the primary output kind.
+function actionWord(client: McpClient): string {
+  const kind = client.outputs[0]?.kind
+  if (kind === 'deeplink') return 'Install'
+  if (kind === 'cli') return 'Command'
+  return 'Config'
 }
 
-// ── Deeplink Generators ─────────────────────────────────────────────
-
-function generateCursorDeeplink(serverKey: string): string {
-  const s = getServerOrThrow(serverKey)
-  const env: Record<string, string> = {}
-  for (const [key, val] of Object.entries(s.envVars)) {
-    env[key] = val.placeholder || val.default || ''
-  }
-  const config = { command: s.installCommand, args: [s.packageName], env }
-  const b64 = btoa(JSON.stringify(config))
-  return `cursor://anysphere.cursor-deeplink/mcp/install?name=${s.packageName}&config=${b64}`
+function leadLine(client: McpClient): string {
+  const o = client.outputs[0]
+  if (o?.kind === 'cli') return 'Run this in your terminal.'
+  const p = client.paths
+  if (p && typeof p === 'object' && 'ui' in p) return `Paste this into ${p.ui}.`
+  if (client.merge) return 'Merge this into your existing settings.'
+  return 'Add this to the file below.'
 }
 
-function generateVSCodeInputs(serverKey: string) {
-  const s = getServerOrThrow(serverKey)
-  const inputs: Record<string, unknown>[] = []
-  for (const [key, val] of Object.entries(s.envVars)) {
-    const id = key.toLowerCase().replace(/_/g, '-')
-    const input: Record<string, unknown> = {
-      id,
-      type: 'promptString',
-      description: val.description,
-    }
-    if (val.default) input.default = val.default
-    if (val.secret) {
-      // Split to avoid pre-commit hook pattern match on literal "password"
-      const secretKey = ['pass', 'word'].join('')
-      input[secretKey] = true
-    }
-    inputs.push(input)
-  }
-  return inputs
+// File-path rows for the modal <dl>: a string path is one "All" row, a per-OS
+// map is one row each. UI-location clients have no file rows.
+function pathRows(client: McpClient): [string, string][] | null {
+  const p = client.paths
+  if (!p) return null
+  if (typeof p === 'string') return [['All', p]]
+  if ('ui' in p) return null
+  return (Object.entries(p) as [Os, string][]).map(([os, v]) => [OS_LABEL[os], v])
 }
 
-function generateVSCodeConfig(serverKey: string) {
-  const s = getServerOrThrow(serverKey)
-  const env: Record<string, string> = {}
-  for (const key of Object.keys(s.envVars)) {
-    const id = key.toLowerCase().replace(/_/g, '-')
-    env[key] = '${input:' + id + '}'
-  }
-  return { type: 'stdio', command: s.installCommand, args: [s.packageName], env }
+function copyButtonLabel(count: number, block: RenderedOutput): string {
+  if (count === 1) return 'Copy to clipboard'
+  return block.label === 'Command' ? 'Copy command' : 'Copy config'
 }
 
-function generateVSCodeDeeplink(serverKey: string, scheme: string): string {
-  const inputs = encodeURIComponent(JSON.stringify(generateVSCodeInputs(serverKey)))
-  const config = encodeURIComponent(JSON.stringify(generateVSCodeConfig(serverKey)))
-  const s = getServerOrThrow(serverKey)
-  if (scheme === 'vscode-insiders') {
-    return `${scheme}://mcp/install?name=${s.packageName}&inputs=${inputs}&config=${config}`
-  }
-  return `https://insiders.vscode.dev/redirect/mcp/install?name=${s.packageName}&inputs=${inputs}&config=${config}`
+function copyAnnouncement(block: RenderedOutput): string {
+  return block.label === 'Command' ? 'Command copied' : 'Config copied'
 }
 
-function generateConfigJson(serverKey: string): string {
-  const s = getServerOrThrow(serverKey)
-  const env: Record<string, string> = {}
-  for (const [key, val] of Object.entries(s.envVars)) {
-    env[key] = val.placeholder || val.default || ''
-  }
-  const obj = {
-    mcpServers: {
-      [s.shortName]: { command: s.installCommand, args: [s.packageName], env },
-    },
-  }
-  return JSON.stringify(obj, null, 2)
+function deeplinkHref(server: ServerConfig, client: McpClient): string | undefined {
+  const o = isDeeplink(client)
+  return o ? genDeeplink(server, o) : undefined
 }
 
-function generateClaudeCommand(serverKey: string): string {
-  const s = getServerOrThrow(serverKey)
-  const envFlags = Object.entries(s.envVars)
-    .map(([key, val]) => `-e ${key}=${val.placeholder || val.default || ''}`)
-    .join(' ')
-  return `claude mcp add ${s.shortName}${envFlags ? ` ${envFlags}` : ''} -- ${s.installCommand} ${s.packageName}`
-}
+// ── Icon tile ───────────────────────────────────────────────────────
 
-function generateGeminiCommand(serverKey: string): string {
-  const s = getServerOrThrow(serverKey)
-  const envFlags = Object.entries(s.envVars)
-    .map(([key, val]) => `-e ${key}=${val.placeholder || val.default || ''}`)
-    .join(' ')
-  return `gemini mcp add ${envFlags} ${s.shortName} ${s.installCommand} ${s.packageName}`
-}
-
-// ── Client Card Data ────────────────────────────────────────────────
-
-interface ClientCard {
-  name: string
-  // Bundled simple-icons glyph, or a remote URL for icons not in simple-icons.
-  icon?: { title: string; path: string }
-  iconUrl?: string
-  actionType: 'link' | 'modal'
-  actionText: string
-  href?: string
-  modalTitle?: string
-  modalCode?: string
-  modalDesc?: string
-}
-
-function getClientCards(serverKey: string): ClientCard[] {
-  const s = getServer(serverKey)
-  if (!s) return []
-  return [
-    {
-      name: 'VS Code',
-      // VS Code is a Microsoft trademark and not in simple-icons; keep the SVG URL.
-      iconUrl:
-        'https://upload.wikimedia.org/wikipedia/commons/9/9a/Visual_Studio_Code_1.35_icon.svg',
-      actionType: 'link',
-      actionText: 'Install',
-      href: generateVSCodeDeeplink(serverKey, 'vscode'),
-    },
-    {
-      name: 'Cursor',
-      icon: siCursor,
-      actionType: 'link',
-      actionText: 'Install',
-      href: generateCursorDeeplink(serverKey),
-    },
-    {
-      name: 'Claude Code',
-      icon: siClaude,
-      actionType: 'modal',
-      actionText: 'Guide',
-      modalTitle: `${s.displayName} for Claude Code`,
-      modalCode: generateClaudeCommand(serverKey),
-      modalDesc: 'Run this command in your terminal:',
-    },
-    {
-      name: 'Windsurf',
-      icon: siWindsurf,
-      actionType: 'modal',
-      actionText: 'Guide',
-      modalTitle: `${s.displayName} for Windsurf`,
-      modalCode: generateConfigJson(serverKey),
-      modalDesc: 'Add this to ~/.codeium/windsurf/mcp_config.json:',
-    },
-    {
-      name: 'IntelliJ',
-      icon: siIntellijidea,
-      actionType: 'modal',
-      actionText: 'Guide',
-      modalTitle: `${s.displayName} for IntelliJ`,
-      modalCode: generateConfigJson(serverKey),
-      modalDesc: 'Add this to Settings | Tools | MCP Servers:',
-    },
-    {
-      name: 'Claude Desktop',
-      icon: siClaude,
-      actionType: 'modal',
-      actionText: 'Guide',
-      modalTitle: `${s.displayName} for Claude Desktop`,
-      modalCode: generateConfigJson(serverKey),
-      modalDesc: 'Add this to Settings > MCP Servers, or claude_desktop_config.json:',
-    },
-    {
-      name: 'Gemini CLI',
-      icon: siGooglegemini,
-      actionType: 'modal',
-      actionText: 'Guide',
-      modalTitle: `${s.displayName} for Gemini CLI`,
-      modalCode: generateGeminiCommand(serverKey),
-      modalDesc: 'Run this command in your terminal:',
-    },
-  ]
-}
-
-// Icon tile: bundled glyph in theme-adaptive currentColor, or a remote image.
-// Decorative — the client name is always rendered alongside it.
-function ClientIcon({ card }: { card: ClientCard }) {
+function ClientIcon({ client }: { client: McpClient }) {
   return (
     <div
       aria-hidden='true'
       className='h-6 w-6 rounded bg-muted flex items-center justify-center flex-shrink-0 text-foreground'
     >
-      {card.icon ? (
-        <SimpleIcon icon={card.icon} className='w-4 h-4' decorative />
+      {client.icon ? (
+        <SimpleIcon icon={client.icon} className='w-4 h-4' decorative />
+      ) : client.iconUrl ? (
+        <img src={client.iconUrl} alt='' className='w-4 h-4 object-contain' />
       ) : (
-        <img src={card.iconUrl} alt='' className='w-4 h-4 object-contain' />
+        <Blocks className='w-4 h-4' aria-hidden='true' />
       )}
     </div>
   )
 }
 
-// ── Install target name mapping (URL param → client card name) ──────
-
-const INSTALL_CLIENT_MAP: Record<string, string> = {
-  cursor: 'Cursor',
-  vscode: 'VS Code',
-  'vscode-insiders': 'VS Code',
-  claude: 'Claude Code',
-  'claude-code': 'Claude Code',
-  'claude-desktop': 'Claude Desktop',
-  windsurf: 'Windsurf',
-  intellij: 'IntelliJ',
-  gemini: 'Gemini CLI',
-  'gemini-cli': 'Gemini CLI',
-}
-
-// ── Modal Component ─────────────────────────────────────────────────
+// ── Modal ───────────────────────────────────────────────────────────
 
 function InstallModal({
-  title,
-  description,
-  code,
+  server,
+  client,
   onClose,
 }: {
-  title: string
-  description: string
-  code: string
+  server: ServerConfig
+  client: McpClient
   onClose: () => void
 }) {
-  const [copyState, setCopyState] = useState<'idle' | 'copied' | 'failed'>('idle')
+  const blocks = useMemo(() => renderOutputs(server, client), [server, client])
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
+  const [failedIndex, setFailedIndex] = useState<number | null>(null)
+  const [announce, setAnnounce] = useState('')
   const closeRef = useRef<HTMLButtonElement>(null)
+  const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const handleCopy = useCallback(async () => {
+  const handleCopy = useCallback(async (block: RenderedOutput, i: number) => {
     try {
-      await navigator.clipboard.writeText(code)
-      setCopyState('copied')
-      setTimeout(() => setCopyState('idle'), 2000)
+      await navigator.clipboard.writeText(block.code)
+      setCopiedIndex(i)
+      setFailedIndex(null)
+      setAnnounce(copyAnnouncement(block))
+      if (resetTimer.current) clearTimeout(resetTimer.current)
+      // Clear announce too so copying the same block again re-announces it.
+      resetTimer.current = setTimeout(() => {
+        setCopiedIndex(null)
+        setAnnounce('')
+      }, 2000)
     } catch {
       // Clipboard can be unavailable (insecure context, denied permission).
-      setCopyState('failed')
+      setFailedIndex(i)
+      setAnnounce('Copy failed. Select the text above and copy it manually.')
     }
-  }, [code])
+  }, [])
+
+  // Clear the reset timer on unmount so it can't fire on a gone component.
+  useEffect(() => () => clearTimeout(resetTimer.current ?? undefined), [])
 
   useEffect(() => {
-    // Return focus to whatever opened the modal when it closes.
     const trigger = document.activeElement as HTMLElement | null
-
-    // Focus close button on mount for keyboard accessibility
     closeRef.current?.focus()
-
-    // Set inert on root to trap focus within modal
     const root = document.getElementById('root')
     if (root) root.setAttribute('inert', '')
-
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
     }
@@ -273,6 +140,10 @@ function InstallModal({
       trigger?.focus()
     }
   }, [onClose])
+
+  const rows = pathRows(client)
+  const secrets = secretKeys(server)
+  const notes = client.notes ?? []
 
   return createPortal(
     <div
@@ -287,44 +158,80 @@ function InstallModal({
       <div className='bg-background border rounded-xl w-full max-w-[600px] p-8 shadow-2xl max-h-[90vh] overflow-y-auto'>
         <div className='flex items-center justify-between mb-5'>
           <h2 id='install-modal-title' className='text-lg font-semibold'>
-            {title}
+            {server.displayName} for {client.name}
           </h2>
           <Button ref={closeRef} variant='ghost' size='sm' onClick={onClose} aria-label='Close'>
             <X className='h-4 w-4' />
           </Button>
         </div>
-        <p className='text-sm text-muted-foreground mb-3'>{description}</p>
-        <pre className='bg-muted border rounded-lg p-4 text-sm font-mono overflow-x-auto whitespace-pre mb-6'>
-          {code}
-        </pre>
-        <Button
-          onClick={handleCopy}
-          variant={copyState === 'failed' ? 'outline' : 'default'}
-          className='gap-2'
+
+        <p className='text-sm text-muted-foreground mb-3'>{leadLine(client)}</p>
+
+        {rows && (
+          <dl className='text-sm mb-4 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1'>
+            {rows.map(([label, path]) => (
+              <div key={label} className='contents'>
+                <dt className='text-muted-foreground'>{label}</dt>
+                <dd>
+                  <code className='text-xs bg-muted px-1.5 py-0.5 rounded break-all'>{path}</code>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+        {blocks.map((block, i) => (
+          <div key={block.label} className='mb-4'>
+            <p className='text-xs font-medium text-muted-foreground mb-1'>
+              <code>{block.label}</code>
+            </p>
+            <pre className='bg-muted border rounded-lg p-4 text-sm font-mono overflow-x-auto whitespace-pre mb-2'>
+              {block.code}
+            </pre>
+            <Button onClick={() => handleCopy(block, i)} size='sm' className='gap-2'>
+              {copiedIndex === i ? (
+                <>
+                  <Check className='h-4 w-4' />
+                  Copied!
+                </>
+              ) : (
+                <>
+                  <Copy className='h-4 w-4' />
+                  {copyButtonLabel(blocks.length, block)}
+                </>
+              )}
+            </Button>
+            {failedIndex === i && (
+              <p className='text-xs text-destructive mt-1'>Copy failed — select the text above</p>
+            )}
+          </div>
+        ))}
+
+        {secrets.length > 0 && (
+          <p className='text-sm text-muted-foreground mb-3'>
+            Secrets: {secrets.join(', ')}. Replace the placeholder before you save.
+          </p>
+        )}
+
+        {notes.length > 0 && (
+          <ul className='text-xs text-muted-foreground list-disc pl-4 mb-3 space-y-0.5'>
+            {notes.map(note => (
+              <li key={note}>{note}</li>
+            ))}
+          </ul>
+        )}
+
+        <a
+          href={client.docs}
+          target='_blank'
+          rel='noopener noreferrer'
+          className='text-sm text-primary hover:underline inline-flex items-center gap-1'
         >
-          {copyState === 'copied' ? (
-            <>
-              <Check className='h-4 w-4' />
-              Copied!
-            </>
-          ) : copyState === 'failed' ? (
-            <>
-              <Copy className='h-4 w-4' />
-              Copy failed — select the command above
-            </>
-          ) : (
-            <>
-              <Copy className='h-4 w-4' />
-              Copy to clipboard
-            </>
-          )}
-        </Button>
+          Docs <ExternalLink className='h-3 w-3' />
+        </a>
+
         <p aria-live='polite' className='sr-only'>
-          {copyState === 'copied'
-            ? 'Copied to clipboard'
-            : copyState === 'failed'
-              ? 'Copy failed. Select the command above and copy it manually.'
-              : ''}
+          {announce}
         </p>
       </div>
     </div>,
@@ -332,7 +239,42 @@ function InstallModal({
   )
 }
 
-// ── Server Section (expanded inline) ────────────────────────────────
+// ── Client pill ─────────────────────────────────────────────────────
+
+function ClientPill({
+  server,
+  client,
+  onOpen,
+}: {
+  server: ServerConfig
+  client: McpClient
+  onOpen: (client: McpClient) => void
+}) {
+  const href = deeplinkHref(server, client)
+  const inner = (
+    <>
+      <ClientIcon client={client} />
+      <div className='min-w-0'>
+        <span className='font-medium text-xs block'>{client.name}</span>
+        <span className='text-[10px] text-primary'>{actionWord(client)}</span>
+      </div>
+    </>
+  )
+  const className =
+    'touch-target flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm hover:bg-muted/50 hover:border-primary/30 transition-all w-full text-left cursor-pointer bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+
+  return href ? (
+    <a href={href} className={className}>
+      {inner}
+    </a>
+  ) : (
+    <button onClick={() => onOpen(client)} className={className}>
+      {inner}
+    </button>
+  )
+}
+
+// ── Server section ──────────────────────────────────────────────────
 
 function ServerSection({
   serverKey,
@@ -344,48 +286,32 @@ function ServerSection({
   installTarget?: string | null
 }) {
   const server = SERVERS[serverKey]
-  const clients = useMemo(() => getClientCards(serverKey), [serverKey])
 
-  // Compute initial modal state from URL params
-  const initialModal = useMemo(() => {
-    if (!autoExpand || !installTarget) return null
-    const targetName = INSTALL_CLIENT_MAP[installTarget.toLowerCase()]
-    if (!targetName) return null
-    const client = clients.find(c => c.name === targetName)
-    if (!client || client.actionType !== 'modal') return null
-    return {
-      title: client.modalTitle!,
-      description: client.modalDesc!,
-      code: client.modalCode!,
-    }
-  }, [autoExpand, installTarget, clients])
+  const targetClient = useMemo(
+    () => (autoExpand && installTarget ? resolveClient(installTarget) : null),
+    [autoExpand, installTarget]
+  )
 
-  const [modal, setModal] = useState<{
-    title: string
-    description: string
-    code: string
-  } | null>(initialModal)
+  const [modalClient, setModalClient] = useState<McpClient | null>(() =>
+    targetClient && !isDeeplink(targetClient) ? targetClient : null
+  )
   const [expanded, setExpanded] = useState(true)
 
-  // Auto-redirect for link-based installs (cursor, vscode)
+  // Auto-redirect for link-based installs (deeplink clients).
   useEffect(() => {
-    if (!autoExpand || !installTarget) return
-    const targetName = INSTALL_CLIENT_MAP[installTarget.toLowerCase()]
-    if (!targetName) return
-    const client = clients.find(c => c.name === targetName)
-    if (!client || client.actionType !== 'link' || !client.href) return
-
+    if (!targetClient || !server) return
+    const href = deeplinkHref(server, targetClient)
+    if (!href) return
     const timer = setTimeout(() => {
-      window.location.href = client.href!
+      window.location.href = href
     }, 400)
     return () => clearTimeout(timer)
-  }, [autoExpand, installTarget, clients])
+  }, [targetClient, server])
 
   if (!server) return null
 
   return (
     <div className='border rounded-xl overflow-hidden'>
-      {/* Server header — always visible. Heading wraps the disclosure button. */}
       <h2>
         <button
           className='w-full flex items-center gap-4 p-5 text-left hover:bg-muted/30 transition-colors cursor-pointer bg-transparent border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset'
@@ -409,7 +335,7 @@ function ServerSection({
           </div>
           <div className='flex items-center gap-2 flex-shrink-0'>
             <span className='text-xs text-muted-foreground hidden sm:inline'>
-              {clients.length} clients
+              {CLIENTS.length} clients
             </span>
             <ChevronDown
               className={`h-4 w-4 text-muted-foreground motion-safe:transition-transform ${expanded ? 'rotate-180' : ''}`}
@@ -418,10 +344,8 @@ function ServerSection({
         </button>
       </h2>
 
-      {/* Expanded: client install options */}
       {expanded && (
         <div className='border-t px-5 py-4'>
-          {/* Links row */}
           <div className='flex gap-3 text-xs mb-4'>
             <a
               href={`https://github.com/${server.githubRepo}`}
@@ -441,58 +365,41 @@ function ServerSection({
             </a>
           </div>
 
-          {/* Client grid — compact pills */}
           <div className='grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2'>
-            {clients.map(client => (
-              <div key={client.name}>
-                {client.actionType === 'link' ? (
-                  <a
-                    href={client.href}
-                    className='touch-target flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm hover:bg-muted/50 hover:border-primary/30 transition-all group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            {SECTIONS.map((section, i) => {
+              const inSection = CLIENTS.filter(c => c.section === section)
+              return (
+                <div key={section} className='contents'>
+                  {/* first:mt-0 can't apply: the `contents` wrapper, not the h3,
+                      is the grid's first child, so gate the top margin on index. */}
+                  <h3
+                    className={`col-span-full text-xs uppercase tracking-widest text-muted-foreground ${i === 0 ? '' : 'mt-2'}`}
                   >
-                    <ClientIcon card={client} />
-                    <div className='min-w-0'>
-                      <span className='font-medium text-xs block'>{client.name}</span>
-                      <span className='text-[10px] text-primary'>{client.actionText}</span>
-                    </div>
-                  </a>
-                ) : (
-                  <button
-                    onClick={() =>
-                      setModal({
-                        title: client.modalTitle!,
-                        description: client.modalDesc!,
-                        code: client.modalCode!,
-                      })
-                    }
-                    className='touch-target flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm hover:bg-muted/50 hover:border-primary/30 transition-all group w-full text-left cursor-pointer bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
-                  >
-                    <ClientIcon card={client} />
-                    <div className='min-w-0'>
-                      <span className='font-medium text-xs block'>{client.name}</span>
-                      <span className='text-[10px] text-primary'>{client.actionText}</span>
-                    </div>
-                  </button>
-                )}
-              </div>
-            ))}
+                    {section}
+                  </h3>
+                  {inSection.map(client => (
+                    <ClientPill
+                      key={client.id}
+                      server={server}
+                      client={client}
+                      onOpen={setModalClient}
+                    />
+                  ))}
+                </div>
+              )
+            })}
           </div>
         </div>
       )}
 
-      {modal && (
-        <InstallModal
-          title={modal.title}
-          description={modal.description}
-          code={modal.code}
-          onClose={() => setModal(null)}
-        />
+      {modalClient && (
+        <InstallModal server={server} client={modalClient} onClose={() => setModalClient(null)} />
       )}
     </div>
   )
 }
 
-// ── Main Page Component ─────────────────────────────────────────────
+// ── Page ────────────────────────────────────────────────────────────
 
 export default function McpInstall() {
   const [searchParams] = useSearchParams()
@@ -501,7 +408,6 @@ export default function McpInstall() {
 
   return (
     <div className='container mx-auto px-4 py-8 max-w-5xl'>
-      {/* Hero */}
       <section className='mb-10'>
         <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>
           MCP Client Tools
@@ -510,12 +416,11 @@ export default function McpInstall() {
           MCP Installation Gateway
         </h1>
         <p className='text-lg text-muted-foreground max-w-2xl'>
-          One-click installation for MCP servers. Connect to VS Code, Cursor, Claude, Windsurf,
-          IntelliJ, and Gemini CLI.
+          Open the server in your editor, or copy a config or command for {CLIENTS.length} MCP
+          clients.
         </p>
       </section>
 
-      {/* All servers — accordion style */}
       <section className='space-y-3'>
         {Object.keys(SERVERS).map(key => (
           <ServerSection
