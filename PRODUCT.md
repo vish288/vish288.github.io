@@ -27,7 +27,7 @@ The MCP servers are the evidence that sets this site apart from a generic "full 
 
 ## Operating Context
 
-- Static SPA on GitHub Pages at `vish288.github.io`; `404.html` redirects deep links back into the app.
+- Static SPA on GitHub Pages at `vish288.github.io`; each route is prerendered to its own static HTML, so deep links are served directly with HTTP 200. Unknown paths fall through to a static `404.html`.
 - Routes: `/` About, `/repositories` live repo list, `/mcp-install` install gateway (`?server=` deep links, per-client config generation, copy to clipboard).
 - Repo data comes from the unauthenticated GitHub REST API at runtime, so rate limits and failures are normal and the UI must handle them.
 - Light, dark and system themes.
