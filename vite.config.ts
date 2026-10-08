@@ -12,10 +12,10 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'vis-creates.png', 'icon-512.png'],
       manifest: {
-        name: 'Visweshwaran S — Senior Staff Engineer & Architect',
+        name: 'Visweshwaran S — Senior Staff Engineer & Architect, Toronto',
         short_name: 'Vish',
         description:
-          'Senior Staff Engineer and architect in Toronto. Frontend platforms, cloud-native systems and LLM engineering tooling for enterprise health and commerce.',
+          'Senior Staff Engineer and architect in Toronto. Multi-tenant AI agent platforms, unified identity, micro-frontends and cloud-native delivery for enterprises.',
         theme_color: '#4a6b4a',
         background_color: '#ffffff',
         display: 'standalone',
