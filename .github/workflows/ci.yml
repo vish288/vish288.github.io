@@ -51,5 +51,8 @@ jobs:
       - name: Run tests
         run: pnpm run test
 
+      - name: Build site
+        run: pnpm run build:github
+
   # Deployment now handled by release-please workflow for releases
   # This job is kept for PR testing and validation
