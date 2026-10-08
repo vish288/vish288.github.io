@@ -5,6 +5,12 @@ on:
     - cron: '0 6 * * 1' # Weekly on Monday at 6 AM UTC
   workflow_dispatch:
 
+# Least privilege: the audit only reads the repo; the report step manages its
+# own dedup issue.
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   security-audit:
     name: Security Audit
@@ -29,24 +35,70 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run security audit
+        id: audit
         run: pnpm audit --audit-level=moderate
 
       - name: Check for outdated packages
-        run: pnpm outdated || exit 0
+        if: always()
+        run: pnpm outdated || true
 
-      - name: Create issue on failure
-        if: failure()
+      # One self-managed issue, identified by a hidden marker so this never
+      # touches issues opened by anything else. Failure updates/opens it;
+      # success closes it. (No new issue per run — that was the #136–#158 spam.)
+      - name: Report audit result
+        if: always()
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
-            github.rest.issues.create({
+            const MARKER = '<!-- security-audit-automated -->'
+            const failed = '${{ steps.audit.outcome }}' === 'failure'
+            const runUrl = `${context.payload.repository.html_url}/actions/runs/${context.runId}`
+
+            const open = await github.paginate(github.rest.issues.listForRepo, {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              title: '🔒 Security vulnerabilities detected',
-              body: `Security audit failed on ${new Date().toISOString()}.
-              
-              Please check the [workflow logs](${context.payload.repository.html_url}/actions/runs/${context.runId}) for details.
-              
-              This issue was created automatically by the security audit workflow.`,
-              labels: ['security', 'automated']
+              state: 'open',
+              labels: 'security',
+              per_page: 100,
             })
+            const managed = open.filter(i => i.body && i.body.includes(MARKER))
+
+            if (failed) {
+              const body = [
+                MARKER,
+                `\`pnpm audit --audit-level=moderate\` failed on ${new Date().toISOString()}.`,
+                '',
+                `Run log: ${runUrl}`,
+              ].join('\n')
+              if (managed.length) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: managed[0].number,
+                  body: `Still failing as of ${new Date().toISOString()}.\n\nRun log: ${runUrl}`,
+                })
+              } else {
+                await github.rest.issues.create({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  title: '🔒 Security vulnerabilities detected',
+                  body,
+                  labels: ['security', 'automated'],
+                })
+              }
+            } else {
+              for (const issue of managed) {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: `Resolved — \`pnpm audit\` is clean as of ${new Date().toISOString()}. Closing.\n\nRun log: ${runUrl}`,
+                })
+                await github.rest.issues.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  state: 'closed',
+                })
+              }
+            }
