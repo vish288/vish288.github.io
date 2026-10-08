@@ -8,7 +8,7 @@ Static personal site. **[vish288.github.io](https://vish288.github.io)**
 
 ## Stack
 
-React 19 · TypeScript 6 · Vite 8 · Tailwind CSS 4 · shadcn/ui + Radix · Vitest 4
+React 19 · TypeScript 6 · Vite 8 · Tailwind CSS 4 · shadcn/ui + Radix · Vitest 5
 
 ## Pages
 
