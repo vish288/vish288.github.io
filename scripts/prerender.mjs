@@ -160,8 +160,8 @@ function graphFor(path, APP_STRINGS, SERVERS, CLIENTS) {
       '@type': 'HowTo',
       name: 'Install an MCP server from this page',
       step: [
-        { '@type': 'HowToStep', name: 'Choose a server', text: 'Pick the MCP server you want to install.' },
         { '@type': 'HowToStep', name: 'Choose your client', text: 'Pick your editor, CLI agent or desktop app.' },
+        { '@type': 'HowToStep', name: 'Choose a server', text: 'Pick the MCP server you want to install.' },
         {
           '@type': 'HowToStep',
           name: 'Open the install link or copy the config',
