@@ -9,6 +9,9 @@ export interface EnvVar {
   default: string
   secret: boolean
   placeholder: string
+  tokenUrl?: string // where to create the token (secret vars only)
+  tokenLabel?: string // link text for tokenUrl
+  tokenHint?: string // scopes or caveats, one sentence
 }
 
 export interface ServerConfig {
@@ -50,6 +53,10 @@ export const SERVERS: Record<string, ServerConfig> = {
         default: '',
         secret: true,
         placeholder: 'glpat-xxxxxxxxxxxxxxxxxxxx',
+        tokenUrl: 'https://gitlab.com/-/user_settings/personal_access_tokens',
+        tokenLabel: 'your GitLab access tokens page',
+        tokenHint:
+          'Needs the `api` scope. On a self-hosted instance the page is under User settings, Access tokens.',
       },
     },
   },
@@ -81,6 +88,9 @@ export const SERVERS: Record<string, ServerConfig> = {
         default: '',
         secret: true,
         placeholder: 'your_api_token',
+        tokenUrl: 'https://id.atlassian.com/manage-profile/security/api-tokens',
+        tokenLabel: 'Atlassian API tokens',
+        tokenHint: 'One token covers Jira and Confluence on the same account.',
       },
       CONFLUENCE_URL: {
         description: 'Confluence URL',
@@ -99,6 +109,9 @@ export const SERVERS: Record<string, ServerConfig> = {
         default: '',
         secret: true,
         placeholder: 'your_api_token',
+        tokenUrl: 'https://id.atlassian.com/manage-profile/security/api-tokens',
+        tokenLabel: 'Atlassian API tokens',
+        tokenHint: 'Reuse the Jira token if both are on one account.',
       },
     },
   },
@@ -118,6 +131,9 @@ export const SERVERS: Record<string, ServerConfig> = {
         default: '',
         secret: true,
         placeholder: 'your_coda_api_token',
+        tokenUrl: 'https://coda.io/account#apiSettings',
+        tokenLabel: 'Coda account settings',
+        tokenHint: 'No scopes. The token sees every doc you can open.',
       },
     },
   },
@@ -145,6 +161,10 @@ export const SERVERS: Record<string, ServerConfig> = {
         default: '',
         secret: true,
         placeholder: 'your_argocd_token',
+        tokenUrl: 'https://github.com/vish288/mcp-argocd#getting-an-api-token',
+        tokenLabel: 'the mcp-argocd README',
+        tokenHint:
+          'Run `argocd account generate-token` for an account with the `apiKey` capability. Read-only needs `applications, get` and `logs, get`.',
       },
     },
   },
