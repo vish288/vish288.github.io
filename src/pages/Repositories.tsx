@@ -158,10 +158,15 @@ export default function Repositories() {
 
   const SortIcon = ({ option }: { option: SortOption }) => {
     if (sortBy !== option) return null
-    return sortDirection === 'asc' ? (
-      <SortAsc className='h-3 w-3' />
-    ) : (
-      <SortDesc className='h-3 w-3' />
+    return (
+      <>
+        {sortDirection === 'asc' ? (
+          <SortAsc className='h-3 w-3' aria-hidden='true' />
+        ) : (
+          <SortDesc className='h-3 w-3' aria-hidden='true' />
+        )}
+        <span className='sr-only'>{sortDirection === 'asc' ? '(ascending)' : '(descending)'}</span>
+      </>
     )
   }
 
@@ -188,12 +193,23 @@ export default function Repositories() {
   }
 
   if (error) {
+    // Keep the hero (and its h1) so the page keeps its title and heading
+    // outline even when the GitHub API is rate-limited — degrade quietly.
     return (
-      <div className='container mx-auto px-4 py-20 text-center'>
+      <div className='container mx-auto px-4 py-8 max-w-5xl'>
+        <section className='mb-10'>
+          <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>
+            Open Source
+          </p>
+          <h1 className='text-3xl sm:text-4xl font-bold tracking-tight mb-3'>Repositories</h1>
+          <p className='text-lg text-muted-foreground mb-6 max-w-2xl'>
+            Open source projects and contributions on GitHub.
+          </p>
+        </section>
         <p className='text-muted-foreground mb-5'>
           Couldn&apos;t load repositories from GitHub right now.
         </p>
-        <div className='flex flex-wrap items-center justify-center gap-3'>
+        <div className='flex flex-wrap items-center gap-3'>
           <Button onClick={retry}>Retry</Button>
           <Button variant='outline' asChild>
             <a
@@ -360,7 +376,7 @@ export default function Repositories() {
                   {repo.name}
                 </span>
                 {repo.fork && (
-                  <Badge variant='outline' className='text-[10px] px-1.5 py-0'>
+                  <Badge variant='outline' className='text-xs px-1.5 py-0'>
                     <GitFork className='h-2.5 w-2.5 mr-0.5' />
                     Fork
                   </Badge>
@@ -390,7 +406,7 @@ export default function Repositories() {
                     {prioritizeTopics(repo.topics)
                       .slice(0, 4)
                       .map(topic => (
-                        <Badge key={topic} variant='outline' className='text-[10px] px-1.5 py-0'>
+                        <Badge key={topic} variant='outline' className='text-xs px-1.5 py-0'>
                           {topic}
                         </Badge>
                       ))}

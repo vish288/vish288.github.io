@@ -4,23 +4,25 @@ description: Personal site for Visweshwaran S (Vish), with a live repository lis
 colors:
   primary: 'hsl(152 56% 32%)'
   primary-foreground: 'hsl(0 0% 99%)'
+  primary-hover: 'hsl(152 56% 28%)'
   background: 'hsl(0 0% 99%)'
   foreground: 'hsl(220 15% 12%)'
   card: 'hsl(0 0% 100%)'
   muted: 'hsl(220 14% 96%)'
-  muted-foreground: 'hsl(220 9% 46%)'
+  muted-foreground: 'hsl(220 9% 43%)'
   accent: 'hsl(152 30% 94%)'
   border: 'hsl(220 13% 91%)'
-  destructive: 'hsl(0 84% 60%)'
+  destructive: 'hsl(0 72% 42%)'
   dark-primary: 'hsl(152 50% 48%)'
   dark-primary-foreground: 'hsl(224 20% 6%)'
+  dark-primary-hover: 'hsl(152 50% 54%)'
   dark-background: 'hsl(224 20% 6%)'
   dark-foreground: 'hsl(210 20% 92%)'
   dark-card: 'hsl(224 18% 9%)'
   dark-muted: 'hsl(224 15% 14%)'
   dark-muted-foreground: 'hsl(215 14% 58%)'
   dark-border: 'hsl(224 12% 16%)'
-  dark-destructive: 'hsl(0 63% 51%)'
+  dark-destructive: 'hsl(0 70% 62%)'
 typography:
   display:
     fontSize: '3.75rem'
@@ -160,12 +162,13 @@ A neutral slate palette carrying a single green accent, tuned separately for lig
 ### Primary
 
 - **Workbench Green** (light `primary`, dark `dark-primary`): the only accent. Filled primary buttons, the active nav item, the VS monogram, inline links, focus rings (`--ring` equals `--primary` in both themes), list markers at 60% and icon wells at 10% tint. Light value was darkened for contrast: text on background and white-on-green both reach 4.83:1; dark green on dark ground reaches 7.69:1.
+- **Workbench Green, hover** (`primary-hover` / `dark-primary-hover`): the hover fill for filled primary buttons and the default badge. A solid token, not an opacity shift: darker in light (5.97:1 under white text), lighter in dark (8.85:1 under dark text), because alpha-lightening the rest green over a light ground dropped the hover to 4.0:1. Same hue — still the one green.
 
 ### Neutral
 
 - **Paper** (`background`, light) and **Graphite Night** (`dark-background`): page ground. A fixed radial wash sits behind content (green at 4% / 6% top-centre, blue at 3% / 4% bottom-right), visible only as a tint.
 - **Ink** (`foreground` / `dark-foreground`): headings and primary text. 16.45:1 light, 16.12:1 dark.
-- **Slate Note** (`muted-foreground` / `dark-muted-foreground`): secondary copy, metadata, captions. 4.71:1 on light background, 6.05:1 on dark.
+- **Slate Note** (`muted-foreground` / `dark-muted-foreground`): secondary copy, metadata, captions. Darkened in light to clear 4.5:1 on tinted surfaces too: 5.28:1 on background, 4.92:1 on `muted`; 6.05:1 on dark.
 - **Bench Grey** (`muted` / `dark-muted`): code blocks, inline code, secondary badges, icon wells, hover fills (usually at 30% or 50% alpha). `secondary` is the same value.
 - **Hairline** (`border` / `dark-border`): every border and divider; `--input` is the same value. Often drawn at 50 to 60% alpha for dividers.
 - **Card White** (`card` / `dark-card`): the shadcn Card surface only.
@@ -173,7 +176,7 @@ A neutral slate palette carrying a single green accent, tuned separately for lig
 
 ### Status
 
-- **Signal Red** (`destructive` / `dark-destructive`): copy-failure message only. It reaches 3.69:1 (light) and 3.89:1 (dark) on background, so it is valid for icons and large text but not for small body text.
+- **Signal Red** (`destructive` / `dark-destructive`): copy-failure message only. Retuned to pass small text in both themes: 6.31:1 (light) and 5.38:1 (dark) on background.
 
 ### Data
 
@@ -319,7 +322,7 @@ A full-width link row: 12px language dot, 14px semibold name that turns green on
 ### Don't:
 
 - **Don't** add a second accent hue or use the language-dot colours as UI colour.
-- **Don't** use Signal Red for small text; it is below 4.5:1 in both themes.
+- **Don't** reintroduce Signal Red below 4.5:1; keep both themes at or above it for the copy-failure message.
 - **Don't** set text below 12px.
 - **Don't** load icons, fonts or images from a CDN; any new origin needs a CSP change and a reason.
 - **Don't** add shadows to resting tiles, panels or rows.

@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { MapPin, Code2, Star, Blocks, FolderGit2, Loader2 } from 'lucide-react'
@@ -234,10 +234,12 @@ export default function About() {
         <section className='mb-12'>
           <Card>
             <CardHeader>
-              <CardTitle className='flex items-center gap-2'>
+              {/* h2 (not the default CardTitle h3) so the skills card is a peer
+                  of Career and its Languages/Topics stay h3 beneath it. */}
+              <h2 className='flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight'>
                 <Code2 className='h-5 w-5' />
                 {APP_STRINGS.SKILLS_TITLE}
-              </CardTitle>
+              </h2>
               <CardDescription>{APP_STRINGS.SKILLS_SUBTITLE}</CardDescription>
             </CardHeader>
             <CardContent>
