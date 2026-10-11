@@ -51,7 +51,7 @@ The MCP servers are the evidence that sets this site apart from a generic "full 
 - Public GitHub repositories and star counts (live via API).
 - Four MCP servers with PyPI packages: `mcp-gitlab`, `mcp-atlassian-extended`, `mcp-coda`, `mcp-argocd`.
 - Open Graph image: `public/vis-creates.png`.
-- Private resume (Proton Drive, `Vetri Kodi/2026/next-reign/Resume/Visweshwaran_Senior_Staff_Software_Engineer_REDACTED8.docx`, 13 Sep 2026) is the source for experience copy.
+- Private resume (Proton Drive, `Vetri Kodi/2026/next-reign/Resume/Visweshwaran_Senior_Staff_Software_Engineer.docx`, 13 Sep 2026) is the source for experience copy.
 - Anything not in the resume or public repos: never fabricate; ask first.
 
 ## Product Principles

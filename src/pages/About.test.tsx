@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import About from './About'
 import { resetGitHubCache } from '../hooks/useGitHubRepositories'
 import { APP_STRINGS } from '../constants/appStrings'
+import { bannedNames } from '../test/bannedNames'
 
 // Mock fetch
 const mockFetch = vi.fn()
@@ -101,8 +102,8 @@ describe('About Page', () => {
     })
 
     const h3s = screen.getAllByRole('heading', { level: 3 })
-    // 5 experience entries + 1 Skills card title
-    expect(h3s.length).toBe(6)
+    // 5 experience entries (the Skills card title is now an h2, peer of Career)
+    expect(h3s.length).toBe(5)
   })
 
   it('names no employer or client', async () => {
@@ -110,20 +111,9 @@ describe('About Page', () => {
       renderAbout()
     })
 
-    const banned = [
-      'REDACTED1',
-      'REDACTED2',
-      'REDACTED3',
-      'REDACTED4',
-      'REDACTED5',
-      'REDACTED6',
-      'REDACTED7',
-      'REDACTED8',
-      'REDACTED10',
-    ]
     // Cover both the rendered page and every string feeding llms.txt / JSON-LD.
     const text = `${document.body.textContent ?? ''} ${JSON.stringify(APP_STRINGS)}`.toLowerCase()
-    for (const name of banned) {
+    for (const name of bannedNames) {
       expect(text).not.toContain(name.toLowerCase())
     }
   })
