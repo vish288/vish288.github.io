@@ -10,7 +10,10 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'vis-creates.png', 'icon-512.png'],
+      // No extra precache: the OG image (602 KB), favicon and 512px icon are
+      // fetched directly by crawlers / the browser, never shown by a page, so
+      // precaching them wasted ~960 KB on first load.
+      includeAssets: [],
       manifest: {
         name: 'Visweshwaran S — Senior Staff Engineer & Architect, Toronto',
         short_name: 'Vish',

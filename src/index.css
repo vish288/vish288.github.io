@@ -13,13 +13,16 @@
     --popover-foreground: 220 15% 12%;
     --primary: 152 56% 32%;
     --primary-foreground: 0 0% 99%;
+    /* Darker green for hover on filled primary: keeps primary-foreground at
+       ≥4.5:1 (5.97:1), where lightening the fill dropped it to 4.0:1. */
+    --primary-hover: 152 56% 28%;
     --secondary: 220 14% 96%;
     --secondary-foreground: 220 15% 12%;
     --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted-foreground: 220 9% 43%;
     --accent: 152 30% 94%;
     --accent-foreground: 220 15% 12%;
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 42%;
     --destructive-foreground: 0 0% 99%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
@@ -37,17 +40,49 @@
     --popover-foreground: 210 20% 92%;
     --primary: 152 50% 48%;
     --primary-foreground: 224 20% 6%;
+    /* Lighter green for hover on filled primary (8.85:1 on dark text). */
+    --primary-hover: 152 50% 54%;
     --secondary: 224 15% 14%;
     --secondary-foreground: 210 20% 92%;
     --muted: 224 15% 14%;
     --muted-foreground: 215 14% 58%;
     --accent: 224 15% 14%;
     --accent-foreground: 210 20% 92%;
-    --destructive: 0 63% 51%;
+    --destructive: 0 70% 62%;
     --destructive-foreground: 210 20% 92%;
     --border: 224 12% 16%;
     --input: 224 12% 16%;
     --ring: 152 50% 48%;
+  }
+
+  /* No-JS / first-paint dark mode: apply the dark tokens before the theme
+     provider runs when the OS prefers dark and the user hasn't chosen light.
+     CSP forbids an inline script, so this CSS route is the only pre-JS option.
+     ponytail: dark values mirror .dark above; keep the two in sync by hand. */
+  @media (prefers-color-scheme: dark) {
+    :root:not(.light) {
+      color-scheme: dark;
+      --background: 224 20% 6%;
+      --foreground: 210 20% 92%;
+      --card: 224 18% 9%;
+      --card-foreground: 210 20% 92%;
+      --popover: 224 18% 9%;
+      --popover-foreground: 210 20% 92%;
+      --primary: 152 50% 48%;
+      --primary-foreground: 224 20% 6%;
+      --primary-hover: 152 50% 54%;
+      --secondary: 224 15% 14%;
+      --secondary-foreground: 210 20% 92%;
+      --muted: 224 15% 14%;
+      --muted-foreground: 215 14% 58%;
+      --accent: 224 15% 14%;
+      --accent-foreground: 210 20% 92%;
+      --destructive: 0 70% 62%;
+      --destructive-foreground: 210 20% 92%;
+      --border: 224 12% 16%;
+      --input: 224 12% 16%;
+      --ring: 152 50% 48%;
+    }
   }
 }
 
@@ -73,13 +108,7 @@
   }
 }
 
-/* Smooth theme transitions */
 @layer utilities {
-  .theme-transition {
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease,
-      box-shadow 0.3s ease;
-  }
-
   /* Keep compact controls visually small on desktop, but give them a 44px
      touch target on coarse pointers (WCAG 2.5.8). */
   @media (pointer: coarse) {
@@ -87,21 +116,6 @@
       min-height: 44px;
       min-width: 44px;
     }
-  }
-}
-
-/* Card glass effect */
-@layer components {
-  .glass-card {
-    background: hsl(var(--card) / 0.7);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid hsl(var(--border) / 0.5);
-  }
-
-  .dark .glass-card {
-    background: hsl(var(--card) / 0.5);
-    border-color: hsl(var(--border) / 0.3);
   }
 }
 
