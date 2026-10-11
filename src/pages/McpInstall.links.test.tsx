@@ -1,9 +1,10 @@
 import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeEach } from 'vitest'
 import McpInstall from './McpInstall'
 import { CLIENTS } from '@/constants/mcpClients'
+import { SERVERS } from '@/constants/mcpServers'
 
 /**
  * Link integrity tests for McpInstall — a merge gate against broken, placeholder
@@ -32,13 +33,30 @@ const BLOCKED_DOMAINS = [
 
 // Real hosts allowed in hrefs: static site hosts plus every modal "Docs" host,
 // derived from the data so a new client's docs host can't drift out of sync.
-const STATIC_HOSTS = ['github.com', 'pypi.org', 'vish288.github.io', 'upload.wikimedia.org']
-const ALLOWED_HOSTS = [...new Set([...STATIC_HOSTS, ...CLIENTS.map(c => new URL(c.docs).hostname)])]
+const STATIC_HOSTS = [
+  'github.com',
+  'pypi.org',
+  'vish288.github.io',
+  'upload.wikimedia.org',
+  'docs.astral.sh',
+]
+const TOKEN_HOSTS = Object.values(SERVERS)
+  .flatMap(s => Object.values(s.envVars))
+  .map(v => v.tokenUrl)
+  .filter((u): u is string => Boolean(u))
+  .map(u => new URL(u).hostname)
+const ALLOWED_HOSTS = [
+  ...new Set([...STATIC_HOSTS, ...TOKEN_HOSTS, ...CLIENTS.map(c => new URL(c.docs).hostname)]),
+]
 
 const EXPECTED_CLIENTS = CLIENTS.map(c => c.name)
 const EXPECTED_SERVERS = ['mcp-gitlab', 'mcp-atlassian-extended', 'mcp-coda', 'mcp-argocd']
 
 describe('McpInstall link integrity', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
   it('all http <a> hrefs use allowed domains', () => {
     renderPage()
     const hrefs = screen
@@ -77,11 +95,13 @@ describe('McpInstall link integrity', () => {
   })
 
   // Byte-level deeplink goldens live in src/lib/mcpInstall.test.ts; here we only
-  // smoke-test that a deeplink client renders as an <a> carrying its scheme.
-  it('a deeplink client renders as an anchor with its scheme', () => {
+  // smoke-test that a chosen deeplink client renders a row action <a> with its scheme.
+  it('a deeplink client renders as an anchor with its scheme', async () => {
+    const user = userEvent.setup()
     renderPage()
-    const cursor = screen.getAllByText('Cursor')[0].closest('a')!
-    expect(cursor.getAttribute('href')).toMatch(/^cursor:\/\//)
+    await user.click(screen.getByRole('radio', { name: 'Cursor' }))
+    const link = screen.getByRole('link', { name: 'Install GitLab for Cursor' })
+    expect(link.getAttribute('href')).toMatch(/^cursor:\/\//)
   })
 
   it('GitHub links point to correct repos', () => {
@@ -101,17 +121,21 @@ describe('McpInstall link integrity', () => {
     }
   })
 
-  it('every server section renders every client', () => {
+  it('the picker renders every client once', () => {
     renderPage()
     for (const name of EXPECTED_CLIENTS) {
-      expect(screen.getAllByText(name).length).toBe(EXPECTED_SERVERS.length)
+      expect(screen.getAllByText(name).length).toBe(1)
     }
   })
 
   it('Claude Code modal contains a valid CLI command', async () => {
     const user = userEvent.setup()
-    renderPage()
-    await user.click(screen.getAllByText('Claude Code')[0].closest('button')!)
+    render(
+      <MemoryRouter initialEntries={['/mcp-install?client=claude-code']}>
+        <McpInstall />
+      </MemoryRouter>
+    )
+    await user.click(screen.getByRole('button', { name: 'Command: GitLab for Claude Code' }))
     const modal = screen.getByRole('dialog')
     const pre = within(modal).getByText(/claude mcp add/)
     expect(pre.textContent).toMatch(
@@ -121,8 +145,14 @@ describe('McpInstall link integrity', () => {
 
   it('Devin Desktop modal contains a valid JSON config', async () => {
     const user = userEvent.setup()
-    renderPage()
-    await user.click(screen.getAllByText('Devin Desktop (Windsurf)')[0].closest('button')!)
+    render(
+      <MemoryRouter initialEntries={['/mcp-install?client=devin']}>
+        <McpInstall />
+      </MemoryRouter>
+    )
+    await user.click(
+      screen.getByRole('button', { name: 'Config: GitLab for Devin Desktop (Windsurf)' })
+    )
     const modal = screen.getByRole('dialog')
     const json = JSON.parse(modal.querySelector('pre')!.textContent!)
     const key = Object.keys(json.mcpServers)[0]
@@ -142,22 +172,23 @@ describe('McpInstall link integrity', () => {
     expect(github).toEqual(pypi)
   })
 
-  it('mcp-argocd exposes working Cursor, VS Code and Insiders deep links', () => {
-    render(
-      <MemoryRouter initialEntries={['/mcp-install?server=mcp-argocd&install=vscode-insiders']}>
-        <McpInstall />
-      </MemoryRouter>
-    )
-    const section = screen
-      .getByText('Argo CD MCP Server')
-      .closest('.border.rounded-xl') as HTMLElement
-    const cursorHref = within(section).getByText('Cursor').closest('a')!.getAttribute('href')!
+  it('mcp-argocd exposes working Cursor and Insiders deep links', () => {
+    const argoRow = (client: string) => {
+      const view = render(
+        <MemoryRouter initialEntries={[`/mcp-install?server=mcp-argocd&client=${client}`]}>
+          <McpInstall />
+        </MemoryRouter>
+      )
+      const li = view.getByRole('heading', { name: 'Argo CD MCP Server' }).closest('li')!
+      const href = within(li)
+        .getByRole('link', { name: /^Install Argo CD/ })
+        .getAttribute('href')!
+      view.unmount()
+      return href
+    }
+    const cursorHref = argoRow('cursor')
     expect(cursorHref).toMatch(/^cursor:\/\/anysphere\.cursor-deeplink\/mcp\/install/)
     expect(cursorHref).toContain('name=argocd')
-    const insidersHref = within(section)
-      .getByText('VS Code Insiders')
-      .closest('a')!
-      .getAttribute('href')!
-    expect(insidersHref.startsWith('vscode-insiders:mcp/install?')).toBe(true)
+    expect(argoRow('vscode-insiders').startsWith('vscode-insiders:mcp/install?')).toBe(true)
   })
 })

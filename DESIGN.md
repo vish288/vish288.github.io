@@ -220,7 +220,7 @@ A neutral slate palette carrying a single green accent, tuned separately for lig
 - **About:** centred hero, then a 5-column grid at md (3 columns narrative, 2 columns of 2x2 highlight tiles), a capability grid (1, 2, 3 columns at base, sm, lg), and a career timeline.
 - **Timeline:** an ordered list; each entry is a 2-column grid at md (8rem right-aligned period, then content), rows divided by a 60% hairline with 32px vertical padding.
 - **Tool grids:** MCP client pills in 2, 3, 4 columns (base, sm, lg) with 8px gaps; repository rows stack with 4px gaps and bleed 12px past the column so hover fills align with text.
-- **Breakpoints:** Tailwind defaults, sm 640px, md 768px, lg 1024px. Below sm, nav labels collapse to icons and text-heavy secondary metadata (package names, topic badges, client counts) hides.
+- **Breakpoints:** Tailwind defaults, sm 640px, md 768px, lg 1024px. Below sm, nav labels collapse to icons and text-heavy secondary metadata (topic badges) hides. The MCP server package name stays visible at every width; the row action drops below the links instead of sitting at the right edge.
 - **Sticky chrome:** a 64px top nav, translucent with backdrop blur; anchors use `scroll-margin-top` of 80px to clear it.
 
 ## Elevation & Depth
@@ -264,7 +264,7 @@ Compact and quiet; colour does the work, not size.
 
 - **Highlight tile:** 12px radius, Hairline border, Bench Grey at 30%, 16px (20px for capability tiles) padding, centred icon well (40px, 12px radius, green at 10%, green 20px icon), 14px semibold label and 12px Slate Note caption. Tiles that link get a 50% fill on hover and a focus ring.
 - **Card:** 10px radius, Card White, Rest shadow, 24px padding. Used once, for the skills panel.
-- **Server panel:** 12px radius, Hairline border, clipped. The header is a full-width button inside the h2 (`aria-expanded`, chevron rotates 180 degrees); content sits below a divider at 16 to 20px padding.
+- **Server row (MCP gateway):** 12px radius, Hairline border, 20px padding, listed in a `<ul>`. An `<h2>` of plain text (the server full name) with a package-name code chip beside it, a two-line clamped description, then a wrapping metadata row of GitHub, PyPI and the client-dependent action. The `?server=` target row sorts first, carries `aria-current` and a green left border, and the other rows collapse into a native `<details>` labelled "Other servers (N)".
 - **Feature banner:** 12px radius, green border at 20%, a left-to-right green 5% gradient to transparent. Used once, to route from Repositories to the MCP gateway.
 
 ### Inputs / Fields
@@ -284,13 +284,13 @@ Compact and quiet; colour does the work, not size.
 
 The brand mark is "VS" in bold on a green disc: 32px in the nav, 80px in the About hero. It is text, not an image.
 
-### Client Pill (MCP gateway)
+### Client Picker (MCP gateway)
 
-A full-width 10px radius bordered button or link: 24px icon well (4px radius, Bench Grey) holding the client's brand glyph, the client name at 12px medium, and the action word (Install, Command or Config) in green beneath. Hover fills Bench Grey at 50% and tints the border green at 30%. Deeplink clients are anchors; the rest open the install modal.
+One native radio group chosen once, not per server. A `<fieldset>` with a `<legend>` ("Which client do you use?", or "Install {server}: which client do you use?" on a `?server=` deep link) over a 2/3/4-column grid of radio tiles grouped under 12px uppercase labels. Each tile is a 10px radius bordered `<label>` driving an `sr-only` radio: 24px Bench Grey icon well plus the client name at 14px medium; the checked tile gets a green border and a Bench Grey 50% fill, and the focused radio shows the 2px green ring on its label. Once a client is chosen the group collapses to a "Client: {name}" summary with a "Change" button (`aria-expanded`, `aria-controls`); the choice persists to `localStorage` and `?client=`.
 
 ### Install Modal
 
-Portalled dialog, 600px max width, 90vh max height with scroll, 12px radius, 32px padding, Float shadow. Opening moves focus to Close and marks `#root` inert; Escape and a scrim click close it, and focus returns to the trigger. Code renders in a Bench Grey `pre` with a Hairline border; each block has its own copy button whose result is announced in a polite live region.
+Portalled dialog, 600px max width, 90vh max height with scroll, 12px radius, 32px padding, Float shadow. Opening moves focus to Close, marks `#root` inert and locks body scroll; Escape and a scrim click close it, and focus and scroll restore on the trigger. Body is an `<ol>`: a "Requires uv" prerequisite line, a Step 1 that names the command or the config file (or offers "Do one of these" with two options for a client that takes either), a per-secret "Replace the placeholder" step linking each token's source, and a "Check {client} lists {server}" step. Code renders in a Bench Grey `pre` with a Hairline border that wraps rather than scrolls; each block has its own copy button whose result ("Copied", or one failure wording in foreground text) is announced in a polite live region.
 
 ### Repository Row
 

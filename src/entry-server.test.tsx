@@ -19,4 +19,11 @@ describe('entry-server SSR render', () => {
       expect(html).toContain(name)
     }
   })
+
+  it('renders the mcp-install picker open with no stored client in SSR', () => {
+    const html = render('/mcp-install')
+    expect(html).toContain('Which client do you use?')
+    expect(html).not.toContain('Client: ')
+    expect(html).not.toContain('checked=""')
+  })
 })
