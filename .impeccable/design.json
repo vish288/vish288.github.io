@@ -1,0 +1,345 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-11T00:00:00Z",
+  "title": "Design System: vish288.github.io",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Workbench Green",
+        "canonical": "oklch(53.3% 0.108 158.6)",
+        "tonalRamp": [
+          "oklch(15% 0.108 158.6)",
+          "oklch(26% 0.108 158.6)",
+          "oklch(38% 0.108 158.6)",
+          "oklch(50% 0.108 158.6)",
+          "oklch(62% 0.108 158.6)",
+          "oklch(74% 0.108 158.6)",
+          "oklch(85% 0.108 158.6)",
+          "oklch(95% 0.108 158.6)"
+        ]
+      },
+      "dark-primary": {
+        "role": "primary",
+        "displayName": "Workbench Green (dark)",
+        "canonical": "oklch(69.9% 0.137 159.1)",
+        "tonalRamp": [
+          "oklch(15% 0.137 159.1)",
+          "oklch(26% 0.137 159.1)",
+          "oklch(38% 0.137 159.1)",
+          "oklch(50% 0.137 159.1)",
+          "oklch(62% 0.137 159.1)",
+          "oklch(74% 0.137 159.1)",
+          "oklch(85% 0.137 159.1)",
+          "oklch(95% 0.137 159.1)"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "oklch(99.2% 0 0)",
+        "tonalRamp": [
+          "oklch(15% 0 0)",
+          "oklch(26% 0 0)",
+          "oklch(38% 0 0)",
+          "oklch(50% 0 0)",
+          "oklch(62% 0 0)",
+          "oklch(74% 0 0)",
+          "oklch(85% 0 0)",
+          "oklch(95% 0 0)"
+        ]
+      },
+      "dark-background": {
+        "role": "neutral",
+        "displayName": "Graphite Night",
+        "canonical": "oklch(16.3% 0.010 269.5)",
+        "tonalRamp": [
+          "oklch(15% 0.010 269.5)",
+          "oklch(26% 0.010 269.5)",
+          "oklch(38% 0.010 269.5)",
+          "oklch(50% 0.010 269.5)",
+          "oklch(62% 0.010 269.5)",
+          "oklch(74% 0.010 269.5)",
+          "oklch(85% 0.010 269.5)",
+          "oklch(95% 0.010 269.5)"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "oklch(23.1% 0.013 264.3)",
+        "tonalRamp": [
+          "oklch(15% 0.013 264.3)",
+          "oklch(26% 0.013 264.3)",
+          "oklch(38% 0.013 264.3)",
+          "oklch(50% 0.013 264.3)",
+          "oklch(62% 0.013 264.3)",
+          "oklch(74% 0.013 264.3)",
+          "oklch(85% 0.013 264.3)",
+          "oklch(95% 0.013 264.3)"
+        ]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Slate Note",
+        "canonical": "oklch(55.0% 0.023 264.4)",
+        "tonalRamp": [
+          "oklch(15% 0.023 264.4)",
+          "oklch(26% 0.023 264.4)",
+          "oklch(38% 0.023 264.4)",
+          "oklch(50% 0.023 264.4)",
+          "oklch(62% 0.023 264.4)",
+          "oklch(74% 0.023 264.4)",
+          "oklch(85% 0.023 264.4)",
+          "oklch(95% 0.023 264.4)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Bench Grey",
+        "canonical": "oklch(96.8% 0.003 264.5)",
+        "tonalRamp": [
+          "oklch(15% 0.003 264.5)",
+          "oklch(26% 0.003 264.5)",
+          "oklch(38% 0.003 264.5)",
+          "oklch(50% 0.003 264.5)",
+          "oklch(62% 0.003 264.5)",
+          "oklch(74% 0.003 264.5)",
+          "oklch(85% 0.003 264.5)",
+          "oklch(95% 0.003 264.5)"
+        ]
+      },
+      "dark-muted": {
+        "role": "neutral",
+        "displayName": "Bench Grey (dark)",
+        "canonical": "oklch(24.9% 0.016 269.5)",
+        "tonalRamp": [
+          "oklch(15% 0.016 269.5)",
+          "oklch(26% 0.016 269.5)",
+          "oklch(38% 0.016 269.5)",
+          "oklch(50% 0.016 269.5)",
+          "oklch(62% 0.016 269.5)",
+          "oklch(74% 0.016 269.5)",
+          "oklch(85% 0.016 269.5)",
+          "oklch(95% 0.016 269.5)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "oklch(92.8% 0.006 264.5)",
+        "tonalRamp": [
+          "oklch(15% 0.006 264.5)",
+          "oklch(26% 0.006 264.5)",
+          "oklch(38% 0.006 264.5)",
+          "oklch(50% 0.006 264.5)",
+          "oklch(62% 0.006 264.5)",
+          "oklch(74% 0.006 264.5)",
+          "oklch(85% 0.006 264.5)",
+          "oklch(95% 0.006 264.5)"
+        ]
+      },
+      "destructive": {
+        "role": "status",
+        "displayName": "Signal Red",
+        "canonical": "oklch(63.6% 0.208 25.4)",
+        "tonalRamp": [
+          "oklch(15% 0.208 25.4)",
+          "oklch(26% 0.208 25.4)",
+          "oklch(38% 0.208 25.4)",
+          "oklch(50% 0.208 25.4)",
+          "oklch(62% 0.208 25.4)",
+          "oklch(74% 0.208 25.4)",
+          "oklch(85% 0.208 25.4)",
+          "oklch(95% 0.208 25.4)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero name on About only; 36px, 48px at sm, 60px at md."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Page h1 on Repositories and MCP; 30px, 36px at sm."
+      },
+      "title": { "displayName": "Title", "purpose": "Section h2 on About; 24px, 30px at sm." },
+      "lead": { "displayName": "Lead", "purpose": "Line under each h1, in Slate Note, max 42rem." },
+      "body": { "displayName": "Body", "purpose": "Prose paragraphs." },
+      "body-sm": {
+        "displayName": "Body Small",
+        "purpose": "Timeline bullets, capability text, metadata."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase group headings inside a component."
+      },
+      "mono": { "displayName": "Mono", "purpose": "Configs, commands, package names, file paths." }
+    },
+    "shadows": [
+      {
+        "name": "rest",
+        "value": "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)",
+        "purpose": "shadcn Card and the selected segment of a segmented control."
+      },
+      {
+        "name": "lift",
+        "value": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+        "purpose": "Skip link when focused."
+      },
+      {
+        "name": "float",
+        "value": "0 25px 50px -12px rgb(0 0 0 / 0.25)",
+        "purpose": "Install modal over a 70% black scrim with 8px blur."
+      }
+    ],
+    "motion": [
+      {
+        "name": "color-fade",
+        "value": "150ms cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default for hover and state colour changes."
+      },
+      {
+        "name": "theme-fade",
+        "value": "background-color 0.3s ease, color 0.3s ease",
+        "purpose": "Theme switch on body; only under prefers-reduced-motion: no-preference."
+      },
+      {
+        "name": "motion-safe-only",
+        "value": "motion-safe:",
+        "purpose": "Spinner rotation and chevron rotate run only when motion is allowed."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      {
+        "name": "touch",
+        "value": "(pointer: coarse)",
+        "note": "touch-target utility sets 44px min height and width"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Filled green action; GitHub CTA, copy, retry, active nav item.",
+      "html": "<button class=\"ds-btn-primary\">GitHub</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 40px; padding: 8px 16px; border: 0; border-radius: 8px; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); font-size: 14px; font-weight: 500; cursor: pointer; transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action beside a primary, such as LinkedIn or View on GitHub.",
+      "html": "<button class=\"ds-btn-outline\">LinkedIn</button>",
+      "css": ".ds-btn-outline { display: inline-flex; align-items: center; justify-content: center; height: 40px; padding: 8px 16px; border: 1px solid hsl(var(--input)); border-radius: 8px; background: hsl(var(--background)); color: hsl(var(--foreground)); font-size: 14px; font-weight: 500; cursor: pointer; transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-btn-outline:hover { background: hsl(var(--accent)); color: hsl(var(--accent-foreground)); } .ds-btn-outline:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); }"
+    },
+    {
+      "name": "Navigation",
+      "kind": "nav",
+      "refersTo": "nav",
+      "description": "Sticky translucent bar with monogram, name and ghost route buttons.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-brand\" href=\"#\"><span class=\"ds-mono\">VS</span>Vish</a><div class=\"ds-nav-links\"><a class=\"ds-nav-link ds-nav-current\" href=\"#\" aria-current=\"page\">About</a><a class=\"ds-nav-link\" href=\"#\">Repositories</a><a class=\"ds-nav-link\" href=\"#\">MCP</a></div></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; height: 64px; padding: 0 16px; border-bottom: 1px solid hsl(var(--border) / 0.5); background: hsl(var(--background) / 0.6); backdrop-filter: blur(16px); } .ds-nav-brand { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; color: hsl(var(--foreground)); text-decoration: none; } .ds-mono { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 9999px; background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); font-size: 14px; font-weight: 700; } .ds-nav-links { display: flex; gap: 4px; } .ds-nav-link { display: inline-flex; align-items: center; height: 36px; padding: 0 12px; border-radius: 8px; font-size: 14px; font-weight: 500; color: hsl(var(--foreground)); text-decoration: none; transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-nav-link:hover { background: hsl(var(--accent)); } .ds-nav-current, .ds-nav-current:hover { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); } .ds-nav-link:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--background)), 0 0 0 4px hsl(var(--ring)); }"
+    },
+    {
+      "name": "Badges",
+      "kind": "chip",
+      "refersTo": "badge-secondary",
+      "description": "Fully round chips: filled for language tallies, outline for topics.",
+      "html": "<span class=\"ds-badge ds-badge-secondary\">TypeScript <span class=\"ds-badge-count\">12</span></span> <span class=\"ds-badge ds-badge-outline\">mcp-server</span>",
+      "css": ".ds-badge { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 9999px; border: 1px solid transparent; font-size: 14px; font-weight: 500; } .ds-badge-secondary { background: hsl(var(--secondary)); color: hsl(var(--secondary-foreground)); } .ds-badge-count { font-variant-numeric: tabular-nums; } .ds-badge-outline { border-color: hsl(var(--border)); color: hsl(var(--foreground)); }"
+    },
+    {
+      "name": "Highlight Tile",
+      "kind": "card",
+      "refersTo": "tile",
+      "description": "Bordered, tinted tile with a green icon well; each one links to evidence.",
+      "html": "<a class=\"ds-tile\" href=\"#\"><span class=\"ds-tile-well\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><rect x=\"3\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"3\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/><rect x=\"14\" y=\"14\" width=\"7\" height=\"7\" rx=\"1\"/></svg></span><span class=\"ds-tile-title\">4 MCP servers</span><span class=\"ds-tile-caption\">GitLab · Atlassian · Coda · Argo CD</span></a>",
+      "css": ".ds-tile { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px; border: 1px solid hsl(var(--border)); border-radius: 12px; background: hsl(var(--muted) / 0.3); text-align: center; text-decoration: none; color: hsl(var(--foreground)); transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-tile:hover { background: hsl(var(--muted) / 0.5); } .ds-tile:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--ring)); } .ds-tile-well { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 12px; background: hsl(var(--primary) / 0.1); color: hsl(var(--primary)); } .ds-tile-title { font-size: 14px; font-weight: 600; } .ds-tile-caption { font-size: 12px; color: hsl(var(--muted-foreground)); }"
+    },
+    {
+      "name": "Client Pill",
+      "kind": "custom",
+      "refersTo": "client-pill",
+      "description": "MCP gateway entry: brand glyph, client name and a green action word.",
+      "html": "<button class=\"ds-pill\"><span class=\"ds-pill-icon\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><circle cx=\"12\" cy=\"12\" r=\"9\"/></svg></span><span><span class=\"ds-pill-name\">Cursor</span><span class=\"ds-pill-action\">Install</span></span></button>",
+      "css": ".ds-pill { display: flex; align-items: center; gap: 8px; width: 100%; min-height: 44px; padding: 10px 12px; border: 1px solid hsl(var(--border)); border-radius: 10px; background: transparent; color: hsl(var(--foreground)); text-align: left; cursor: pointer; transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-pill:hover { background: hsl(var(--muted) / 0.5); border-color: hsl(var(--primary) / 0.3); } .ds-pill:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--ring)); } .ds-pill-icon { display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; flex-shrink: 0; border-radius: 4px; background: hsl(var(--muted)); } .ds-pill-name { display: block; font-size: 12px; font-weight: 500; } .ds-pill-action { display: block; font-size: 12px; color: hsl(var(--primary)); }"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "input",
+      "refersTo": "segmented-active",
+      "description": "Repository filter; the selected segment lifts onto Paper.",
+      "html": "<div class=\"ds-seg\"><button class=\"ds-seg-item\" aria-pressed=\"true\">All <span class=\"ds-seg-count\">42</span></button><button class=\"ds-seg-item\" aria-pressed=\"false\">Original <span class=\"ds-seg-count\">30</span></button><button class=\"ds-seg-item\" aria-pressed=\"false\">Forked <span class=\"ds-seg-count\">12</span></button></div>",
+      "css": ".ds-seg { display: inline-flex; padding: 2px; border: 1px solid hsl(var(--border)); border-radius: 10px; background: hsl(var(--muted) / 0.3); } .ds-seg-item { padding: 6px 12px; border: 0; border-radius: 8px; background: transparent; color: hsl(var(--muted-foreground)); font-size: 12px; font-weight: 500; cursor: pointer; transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1); } .ds-seg-item:hover { color: hsl(var(--foreground)); } .ds-seg-item[aria-pressed=\"true\"] { background: hsl(var(--background)); color: hsl(var(--foreground)); box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1); } .ds-seg-item:focus-visible { outline: none; box-shadow: 0 0 0 2px hsl(var(--ring)); } .ds-seg-count { margin-left: 4px; color: hsl(var(--muted-foreground)); }"
+    },
+    {
+      "name": "Timeline Entry",
+      "kind": "custom",
+      "refersTo": "timeline",
+      "description": "Career row: right-aligned period column, role, context and bullets with green markers.",
+      "html": "<ol class=\"ds-tl\"><li class=\"ds-tl-row\"><p class=\"ds-tl-period\">2025 – 2026</p><div><h3 class=\"ds-tl-role\">Staff Engineer / Architect</h3><p class=\"ds-tl-ctx\">Consulting for a national digital health platform.</p><ul class=\"ds-tl-list\"><li>Unified authentication across 12 web applications.</li></ul></div></li></ol>",
+      "css": ".ds-tl { list-style: none; margin: 0; padding: 0; } .ds-tl-row { display: grid; grid-template-columns: 8rem 1fr; gap: 32px; padding: 32px 0; border-top: 1px solid hsl(var(--border) / 0.6); } .ds-tl-row:first-child { border-top: 0; padding-top: 0; } .ds-tl-period { margin: 0; text-align: right; font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; color: hsl(var(--muted-foreground)); } .ds-tl-role { margin: 0 0 12px; font-size: 16px; font-weight: 600; color: hsl(var(--foreground)); } .ds-tl-ctx { margin: 0 0 12px; font-size: 14px; color: hsl(var(--muted-foreground)); } .ds-tl-list { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.625; color: hsl(var(--muted-foreground)); } .ds-tl-list li::marker { color: hsl(var(--primary) / 0.6); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Open Workbench",
+    "overview": "A quiet, bench-lit workspace where every surface is something a visitor can pick up and check. The system is neutral and low-chroma by design: cool near-white (or near-black) ground, slate text, hairline borders, and one green that marks what is live, current, or clickable. Nothing is ornamental for its own sake; tiles link to repos, pills install servers, rows open GitHub.\n\nDensity is moderate. Long-form content sits in a single 1024px column with generous section breaks (64px), while tool surfaces (repository list, MCP gateway) tighten to 8 to 12px gaps so many items scan at once. Light and dark are equal citizens with their own tuned values, not an inversion of each other, and a system setting follows the OS.\n\nThe build is shadcn/ui on Tailwind 4: HSL custom properties on `:root` and `.dark`, consumed through `hsl(var(--token))`. That pipeline is the source of truth; new colors go in `src/index.css` as HSL triplets in both themes.",
+    "keyCharacteristics": [
+      "One accent (green) on neutral slate, in both themes.",
+      "Flat, bordered surfaces; shadow only for floating or selected layers.",
+      "System type stack throughout; hierarchy comes from size and weight, not a second face.",
+      "Every interactive element has a visible focus ring and a 44px touch target on coarse pointers.",
+      "Motion is short colour fades; anything that moves is gated on `prefers-reduced-motion`."
+    ],
+    "rules": [
+      {
+        "name": "The One Green Rule",
+        "body": "Green is the only hue that carries meaning. If an element is green, it is interactive, current, or the brand mark. Do not introduce a second accent.",
+        "section": "colors"
+      },
+      {
+        "name": "The Both-Themes Rule",
+        "body": "Every colour token exists in `:root` and `.dark` with its own value, and every text pairing is checked in both themes against 4.5:1 (3:1 for large text and UI boundaries).",
+        "section": "colors"
+      },
+      {
+        "name": "The No Second Face Rule",
+        "body": "The system ships no web font. A display face would need a CSP `font-src` entry and an explicit decision; until then, headings get their weight from 700 and size, not from a new family.",
+        "section": "typography"
+      },
+      {
+        "name": "The Tabular Numbers Rule",
+        "body": "Dates and counts that align in columns (timeline periods, language counts) use `tabular-nums`.",
+        "section": "typography"
+      },
+      {
+        "name": "The Border-First Rule",
+        "body": "A container is defined by a 1px Hairline border and, if needed, a tinted fill. Reach for a shadow only for an overlay or a selected state.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** take every colour from the HSL custom properties and define both themes when adding one.",
+      "**Do** keep text at 4.5:1 or better in both themes (3:1 for large text and UI boundaries); check by computing, not by eye.",
+      "**Do** give every interactive element a `focus-visible` 2px green ring and add the `touch-target` utility to any control under 44px.",
+      "**Do** gate any motion beyond a colour fade on `prefers-reduced-motion`.",
+      "**Do** bundle icons: lucide for UI, simple-icons for brands, inline SVG with `currentColor`.",
+      "**Do** make every tile, pill and row point at something a visitor can open, and keep a quiet fallback for API failure."
+    ],
+    "donts": [
+      "**Don't** add a second accent hue or use the language-dot colours as UI colour.",
+      "**Don't** use Signal Red for small text; it is below 4.5:1 in both themes.",
+      "**Don't** set text below 12px.",
+      "**Don't** load icons, fonts or images from a CDN; any new origin needs a CSP change and a reason.",
+      "**Don't** add shadows to resting tiles, panels or rows.",
+      "**Don't** put employer or client names in any visual asset; copy rules live in PRODUCT.md."
+    ]
+  }
+}
