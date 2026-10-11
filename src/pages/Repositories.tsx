@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react'
+import { useState, useEffect, useMemo, useCallback, useRef, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -61,6 +61,23 @@ const LANGUAGE_COLORS: Record<string, string> = {
 }
 
 const PAGE_SIZE = 10
+
+// Shared hero: keeps the <h1> and description identical across the loading,
+// error and loaded states so the page never loses its title/outline.
+function RepositoriesHero({ children }: { children?: ReactNode }) {
+  return (
+    <section className='mb-10'>
+      <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>
+        Open Source
+      </p>
+      <h1 className='text-3xl sm:text-4xl font-bold tracking-tight mb-3'>Repositories</h1>
+      <p className='text-lg text-muted-foreground mb-6 max-w-2xl'>
+        Open source projects and contributions on GitHub.
+      </p>
+      {children}
+    </section>
+  )
+}
 
 export default function Repositories() {
   const { repositories: repos, loading, error, retry } = useGitHubRepositories()
@@ -175,15 +192,7 @@ export default function Repositories() {
     // in the prerendered HTML; the list area shows the loading indicator.
     return (
       <div className='container mx-auto px-4 py-8 max-w-5xl'>
-        <section className='mb-10'>
-          <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>
-            Open Source
-          </p>
-          <h1 className='text-3xl sm:text-4xl font-bold tracking-tight mb-3'>Repositories</h1>
-          <p className='text-lg text-muted-foreground mb-6 max-w-2xl'>
-            Open source projects and contributions on GitHub.
-          </p>
-        </section>
+        <RepositoriesHero />
         <div role='status' className='flex items-center justify-center gap-3 py-16'>
           <Loader2 className='h-8 w-8 text-primary motion-safe:animate-spin' aria-hidden='true' />
           <span className='text-muted-foreground'>Loading repositories...</span>
@@ -197,15 +206,7 @@ export default function Repositories() {
     // outline even when the GitHub API is rate-limited — degrade quietly.
     return (
       <div className='container mx-auto px-4 py-8 max-w-5xl'>
-        <section className='mb-10'>
-          <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>
-            Open Source
-          </p>
-          <h1 className='text-3xl sm:text-4xl font-bold tracking-tight mb-3'>Repositories</h1>
-          <p className='text-lg text-muted-foreground mb-6 max-w-2xl'>
-            Open source projects and contributions on GitHub.
-          </p>
-        </section>
+        <RepositoriesHero />
         <p className='text-muted-foreground mb-5'>
           Couldn&apos;t load repositories from GitHub right now.
         </p>
@@ -229,17 +230,8 @@ export default function Repositories() {
 
   return (
     <div className='container mx-auto px-4 py-8 max-w-5xl'>
-      {/* Hero */}
-      <section className='mb-10'>
-        <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>
-          Open Source
-        </p>
-        <h1 className='text-3xl sm:text-4xl font-bold tracking-tight mb-3'>Repositories</h1>
-        <p className='text-lg text-muted-foreground mb-6 max-w-2xl'>
-          Open source projects and contributions on GitHub.
-        </p>
-
-        {/* Inline stats */}
+      {/* Hero + inline stats */}
+      <RepositoriesHero>
         <div className='flex flex-wrap gap-6 text-sm'>
           <div className='flex items-center gap-1.5'>
             <GitHubIcon className='h-4 w-4 text-muted-foreground' />
@@ -259,7 +251,7 @@ export default function Repositories() {
             <span className='text-muted-foreground'>forked</span>
           </div>
         </div>
-      </section>
+      </RepositoriesHero>
 
       {/* MCP featured banner */}
       <section className='mb-8 rounded-xl border border-primary/20 bg-gradient-to-r from-primary/5 to-transparent p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4'>
