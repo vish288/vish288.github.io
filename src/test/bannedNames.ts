@@ -17,9 +17,13 @@ const BANNED_BASE64 = [
 
 export const bannedNames = BANNED_BASE64.map(b => Buffer.from(b, 'base64').toString('utf8'))
 
-// Whole-word matcher per name (spaces allow any whitespace run), so short
-// tokens never match inside unrelated identifiers (e.g. "REDACTED7" in "modalClient").
-export const bannedPatterns = bannedNames.map(
-  name =>
-    new RegExp(`\\b${name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+')}\\b`, 'i')
-)
+// Match each name only when it is not glued to another alphanumeric character.
+// We can't use "\b": it counts "_" as a word char, so "\b...\b" would miss the
+// real leak shape "..._Engineer_<name>.docx" (underscore before) and camel/join
+// forms. "(?<![a-z0-9])...(?![a-z0-9])" (case-insensitive) treats "_", ".", "-"
+// and spaces as separators, so it still rejects a short token buried inside an
+// identifier (a made-up "qzx" would not match inside "fooQzxBar").
+export const bannedPatterns = bannedNames.map(name => {
+  const body = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\s+/g, '\\s+')
+  return new RegExp(`(?<![a-z0-9])${body}(?![a-z0-9])`, 'i')
+})
