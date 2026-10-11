@@ -10,10 +10,11 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      // No extra precache: the OG image (602 KB), favicon and 512px icon are
-      // fetched directly by crawlers / the browser, never shown by a page, so
-      // precaching them wasted ~960 KB on first load.
-      includeAssets: [],
+      // includeAssets left at its default (nothing extra). It used to force the
+      // 602 KB OG image and the 201 KB favicon into the precache even though no
+      // page displays them — crawlers and the browser fetch those directly.
+      // Dropping them saves ~785 KiB on first load. icon-512.png (~158 KB) is
+      // still precached because it is the PWA manifest icon.
       manifest: {
         name: 'Visweshwaran S — Senior Staff Engineer & Architect, Toronto',
         short_name: 'Vish',
