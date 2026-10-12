@@ -38,7 +38,7 @@ describe('dark tokens are identical in .dark and the prefers-color-scheme block'
   })
 
   it('actually carries the dark tokens (guards against an empty match)', () => {
-    expect(explicit['--background']).toBe('224 20% 6%')
+    expect(explicit['--background']).toBe('225 15.4% 5.1%')
     expect(Object.keys(explicit).length).toBeGreaterThan(15)
   })
 })

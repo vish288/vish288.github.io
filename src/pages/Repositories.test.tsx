@@ -86,10 +86,12 @@ describe('Repositories Page', () => {
 
     await waitFor(() => {
       expect(screen.getByText('test-repo-1')).toBeInTheDocument()
-      expect(screen.getByText('forked-repo')).toBeInTheDocument()
     })
-
     expect(screen.getByText('A test repository')).toBeInTheDocument()
+    // Forks are hidden by default (Original view, decision O10); All reveals them.
+    expect(screen.queryByText('forked-repo')).not.toBeInTheDocument()
+    await userEvent.setup().click(screen.getByText('All'))
+    expect(screen.getByText('forked-repo')).toBeInTheDocument()
     expect(screen.getByText('A forked repository')).toBeInTheDocument()
   })
 
@@ -102,12 +104,11 @@ describe('Repositories Page', () => {
     renderWithRouter(<Repositories />)
 
     await waitFor(() => {
-      expect(screen.getByText('repos')).toBeInTheDocument()
+      expect(screen.getByText('original')).toBeInTheDocument()
     })
 
     expect(screen.getByText('stars')).toBeInTheDocument()
-    expect(screen.getByText('original')).toBeInTheDocument()
-    expect(screen.getByText('forked')).toBeInTheDocument()
+    expect(screen.getByText('forks')).toBeInTheDocument()
   })
 
   it('handles API error gracefully with a calm message and recovery actions', async () => {
@@ -116,7 +117,7 @@ describe('Repositories Page', () => {
     renderWithRouter(<Repositories />)
 
     await waitFor(() => {
-      expect(screen.getByText(/couldn.t load repositories/i)).toBeInTheDocument()
+      expect(screen.getByText(/could not load repositories/i)).toBeInTheDocument()
     })
 
     // No raw error string is shown to visitors.
@@ -194,7 +195,8 @@ describe('Repositories Page', () => {
     expect(screen.getByText('TypeScript')).toBeInTheDocument()
     expect(screen.getByText('react')).toBeInTheDocument()
 
-    // Check fork badge for forked repository
+    // Fork badge lives on the forked repo, hidden in the default Original view.
+    await userEvent.setup().click(screen.getByText('All'))
     expect(screen.getByText('Fork')).toBeInTheDocument()
   })
 
@@ -225,7 +227,7 @@ describe('Repositories Page', () => {
     renderWithRouter(<Repositories />)
 
     await waitFor(() => {
-      expect(screen.getByText(/no repositories found/i)).toBeInTheDocument()
+      expect(screen.getByText(/no original repositories/i)).toBeInTheDocument()
     })
   })
 })

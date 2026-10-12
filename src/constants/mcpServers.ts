@@ -36,8 +36,7 @@ export const SERVERS: Record<string, ServerConfig> = {
     fullName: 'GitLab MCP Server',
     packageName: 'mcp-gitlab',
     shortName: 'gitlab',
-    description:
-      'Supports projects, MRs, pipelines, CI/CD variables, approvals, issues, code reviews, and more',
+    description: 'Projects, MRs, pipelines, CI/CD variables, approvals, issues and code reviews',
     githubRepo: `${ghUser()}/mcp-gitlab`,
     pypiPackage: 'mcp-gitlab',
     installCommand: 'uvx',
@@ -66,7 +65,7 @@ export const SERVERS: Record<string, ServerConfig> = {
     packageName: 'mcp-atlassian-extended',
     shortName: 'atlassian-extended',
     description:
-      'Supports Jira custom fields, issue links, attachments, agile boards, sprints, backlog, users, Confluence calendars, time-off tracking, and sprint capacity',
+      'Jira custom fields, issue links, attachments, agile boards, sprints, backlog, users, Confluence calendars, time-off tracking and sprint capacity',
     githubRepo: `${ghUser()}/mcp-atlassian-extended`,
     pypiPackage: 'mcp-atlassian-extended',
     installCommand: 'uvx',
@@ -121,7 +120,7 @@ export const SERVERS: Record<string, ServerConfig> = {
     packageName: 'mcp-coda',
     shortName: 'coda',
     description:
-      'Supports docs, pages, tables, rows, formulas, controls, permissions, folders, publishing, automations, and analytics',
+      'Docs, pages, tables, rows, formulas, controls, permissions, folders, publishing, automations and analytics',
     githubRepo: `${ghUser()}/mcp-coda`,
     pypiPackage: 'mcp-coda',
     installCommand: 'uvx',
@@ -142,8 +141,7 @@ export const SERVERS: Record<string, ServerConfig> = {
     fullName: 'Argo CD MCP Server',
     packageName: 'mcp-argocd',
     shortName: 'argocd',
-    description:
-      'Supports application status, sync, rollback, drift detection, logs, and ApplicationSets',
+    description: 'Application status, sync, rollback, drift detection, logs and ApplicationSets',
     githubRepo: `${ghUser()}/mcp-argocd`,
     pypiPackage: 'mcp-argocd',
     installCommand: 'uvx',
