@@ -5,6 +5,12 @@ name: Refresh PyPI Stats
 # snapshot is only the fallback; each build fetches fresh and deploys. The
 # shared "pages" concurrency group + github-pages environment serialize this
 # against the release-please deploy so the two can't race.
+#
+# It builds the latest RELEASE tag, not main HEAD: release-please only deploys
+# on an actual release, so main may carry merged-but-unreleased commits. Daily
+# redeploys must ship the released code (just with refreshed download numbers),
+# never unreleased work. Release-please tags are `vish288-personal-website-v*`;
+# we fetch tags and `git describe` to resolve the most recent one.
 
 on:
   schedule:
@@ -32,6 +38,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # need full history + tags for git describe
+
+      - name: Check out latest release tag
+        run: |
+          git fetch --tags --force
+          TAG=$(git describe --tags --abbrev=0 --match 'vish288-personal-website-v*')
+          echo "Building latest release tag: $TAG"
+          git checkout --detach "$TAG"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
