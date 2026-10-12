@@ -69,8 +69,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build && node scripts/prerender.mjs",
-    "build:github": "tsc && vite build && node scripts/prerender.mjs",
+    "build": "node scripts/pypi-stats.mjs && tsc && vite build && node scripts/prerender.mjs",
+    "build:github": "node scripts/pypi-stats.mjs && tsc && vite build && node scripts/prerender.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",

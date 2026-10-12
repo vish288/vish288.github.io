@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { ExternalLink, Blocks } from 'lucide-react'
 import SimpleIcon from '@/components/icons/SimpleIcon'
 import { InstallModal } from '@/components/InstallModal'
+import { PypiDownloads } from '@/components/PypiDownloads'
 import { SERVERS, type ServerConfig } from '@/constants/mcpServers'
 import { CLIENTS, SECTIONS, resolveClient, type McpClient } from '@/constants/mcpClients'
 import { genDeeplink } from '@/lib/mcpInstall'
@@ -386,6 +387,7 @@ export default function McpInstall() {
         <p className='text-lg text-muted-foreground max-w-2xl'>
           Pick your client once. Then install any server, or copy its config or command.
         </p>
+        <PypiDownloads className='mt-3' />
       </section>
 
       <section className='mb-8'>
