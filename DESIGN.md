@@ -290,7 +290,7 @@ One native radio group chosen once, not per server. A `<fieldset>` with a `<lege
 
 ### Install Modal
 
-Portalled dialog, 600px max width, 90vh max height with scroll, 12px radius, 32px padding, Float shadow. Opening moves focus to Close, marks `#root` inert and locks body scroll; Escape and a scrim click close it, and focus and scroll restore on the trigger. Body is an `<ol>`: a "Requires uv" prerequisite line, a Step 1 that names the command or the config file (or offers "Do one of these" with two options for a client that takes either), a per-secret "Replace the placeholder" step linking each token's source, and a "Check {client} lists {server}" step. Code renders in a Bench Grey `pre` with a Hairline border that wraps rather than scrolls; each block has its own copy button whose result ("Copied", or one failure wording in foreground text) is announced in a polite live region.
+Portalled dialog, 600px max width, 90vh max height with scroll, 12px radius, 32px padding, Float shadow. Opening moves focus to Close, marks `#root` inert and locks body scroll; Escape and a scrim click close it, and focus and scroll restore on the trigger. Body is an `<ol>`: a "Requires uv" prerequisite line, a Step 1 that names the command or the config file (or offers "Do one of these" with two options for a client that takes either), a per-secret "Replace the placeholder" step linking each token's source, and a "Check {client} lists {server}" step. Code renders in a Bench Grey `pre` with a Hairline border that wraps rather than scrolls; each block has its own copy button whose result ("Copied", or one failure wording in Signal Red) is announced in a polite live region.
 
 ### Repository Row
 

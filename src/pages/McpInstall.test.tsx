@@ -23,6 +23,12 @@ describe('McpInstall Page', () => {
     localStorage.clear()
   })
 
+  afterEach(() => {
+    // Tests that need it assign Element.prototype.scrollIntoView (jsdom lacks it);
+    // remove it so a mock can't leak into a later test.
+    Reflect.deleteProperty(Element.prototype, 'scrollIntoView')
+  })
+
   it('renders the heading and all four server names', () => {
     renderMcpInstall()
     expect(
@@ -107,6 +113,48 @@ describe('McpInstall Page', () => {
     expect(document.activeElement).toBe(cursor)
   })
 
+  it('arrow keys change and persist the client without collapsing the picker', async () => {
+    const user = userEvent.setup()
+    renderMcpInstall() // no client, picker open
+    const vscode = screen.getByRole('radio', { name: 'VS Code' }) as HTMLInputElement
+    vscode.focus()
+    await user.keyboard('{ArrowDown}')
+    // Selection moved to the next radio and was persisted...
+    expect(localStorage.getItem('mcp-client')).toBe('vscode-insiders')
+    // ...but the picker stays open (arrow navigation is not a commit).
+    expect(screen.getByRole('group', { name: /which client/i })).toBeInTheDocument()
+  })
+
+  it('Escape closes a reopened picker and returns focus to Change', async () => {
+    const user = userEvent.setup()
+    localStorage.setItem('mcp-client', 'cursor')
+    renderMcpInstall()
+    const change = screen.getByRole('button', { name: 'Change' })
+    await user.click(change)
+    expect(screen.getByRole('group', { name: /which client/i })).toBeInTheDocument()
+    await user.keyboard('{Escape}')
+    expect(screen.queryByRole('group', { name: /which client/i })).not.toBeInTheDocument()
+    expect(document.activeElement).toBe(change)
+  })
+
+  it('ignores a prototype key in ?server= instead of throwing', () => {
+    localStorage.setItem('mcp-client', 'cursor')
+    expect(() => renderMcpInstall('/mcp-install?server=constructor')).not.toThrow()
+    const headings = screen.getAllByRole('heading', { level: 2 }).map(h => h.textContent)
+    expect(headings).toEqual(FULL_NAMES)
+    expect(screen.queryByText(/other servers/i)).not.toBeInTheDocument()
+  })
+
+  it('returns focus to the target heading when the install modal closes', async () => {
+    const user = userEvent.setup()
+    Element.prototype.scrollIntoView = vi.fn()
+    renderMcpInstall('/mcp-install?server=mcp-gitlab&install=codex')
+    const modal = screen.getByRole('dialog')
+    await user.click(within(modal).getByRole('button', { name: /close/i }))
+    const heading = screen.getByRole('heading', { level: 2, name: 'GitLab MCP Server' })
+    expect(document.activeElement).toBe(heading)
+  })
+
   it('?server=mcp-coda puts Coda first and collapses the rest', () => {
     renderMcpInstall('/mcp-install?server=mcp-coda')
     const headings = screen.getAllByRole('heading', { level: 2 }).map(h => h.textContent)
@@ -125,15 +173,27 @@ describe('McpInstall Page', () => {
     ])
   })
 
-  it('?server=mcp-coda with a remembered client scrolls to and focuses the Coda row', () => {
+  it('?server=mcp-coda with a remembered client scrolls the li and focuses the Coda heading', () => {
     localStorage.setItem('mcp-client', 'cursor')
     const scrollSpy = vi.fn()
     Element.prototype.scrollIntoView = scrollSpy
     renderMcpInstall('/mcp-install?server=mcp-coda')
     expect(scrollSpy).toHaveBeenCalledTimes(1)
     const codaHeading = screen.getByRole('heading', { level: 2, name: 'Coda MCP Server' })
+    const codaLi = codaHeading.closest('li')!
+    // The <li> carries scroll-mt-20, so it (not the <h2>) must be scrolled.
+    expect(scrollSpy.mock.instances[0]).toBe(codaLi)
     expect(document.activeElement).toBe(codaHeading)
-    expect(codaHeading.closest('li')).toHaveAttribute('aria-current', 'true')
+    expect(codaLi).toHaveAttribute('aria-current', 'true')
+  })
+
+  it('?server= does not scroll when the client is chosen after mount', async () => {
+    const user = userEvent.setup()
+    const scrollSpy = vi.fn()
+    Element.prototype.scrollIntoView = scrollSpy
+    renderMcpInstall('/mcp-install?server=mcp-coda') // no client at mount
+    await user.click(screen.getByRole('radio', { name: 'Cursor' }))
+    expect(scrollSpy).not.toHaveBeenCalled()
   })
 
   it('?server=mcp-coda with no client names the server in the legend and does not scroll', () => {
@@ -245,7 +305,8 @@ describe('McpInstall Page', () => {
     // One visible line plus the polite live region carry the same wording.
     expect(matches.length).toBeGreaterThanOrEqual(2)
     const visible = matches.find(el => !el.classList.contains('sr-only'))!
-    expect(visible.classList.contains('text-destructive')).toBe(false)
+    // Signal Red is the copy-failure colour (DESIGN.md); #180 made it pass small text.
+    expect(visible.classList.contains('text-destructive')).toBe(true)
   })
 
   it('command block wraps instead of scrolling', async () => {
