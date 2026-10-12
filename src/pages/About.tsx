@@ -6,6 +6,7 @@ import { MapPin, Code2, Star, Blocks, FolderGit2, Loader2 } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
 import LinkedInIcon from '@/components/icons/LinkedInIcon'
 import SimpleWordCloud from '@/components/SimpleWordCloud'
+import { PypiDownloads } from '@/components/PypiDownloads'
 import { useGitHubRepositories } from '@/hooks/useGitHubRepositories'
 import { APP_STRINGS } from '@/constants/appStrings'
 
@@ -123,6 +124,7 @@ export default function About() {
                 </div>
                 <p className='font-semibold text-sm'>4 MCP servers</p>
                 <p className='text-xs text-muted-foreground'>GitLab · Atlassian · Coda · Argo CD</p>
+                <PypiDownloads />
               </Link>
 
               <Link to='/repositories' className={HIGHLIGHT_TILE}>
