@@ -39,6 +39,28 @@ describe('resolveStats', () => {
     expect(out.lastMonth).toBe(100) // keeps the snapshot's numbers
   })
 
+  it.each([
+    ['null', null],
+    ['a string', '19493'],
+    ['negative', -5],
+    ['a float', 19493.5],
+  ])('rejects %s external counts and falls back to the snapshot', async (_label, bad) => {
+    const existing = {
+      fetchedAt: '2026-01-01',
+      stale: false,
+      lastMonth: 100,
+      lastWeek: 20,
+      packages: { 'mcp-gitlab': { lastMonth: 100, lastWeek: 20 } },
+    }
+    const out = await resolveStats({
+      names: ['mcp-gitlab'],
+      fetchRecentImpl: async () => ({ lastMonth: bad, lastWeek: 10 }),
+      existing,
+    })
+    expect(out.stale).toBe(true)
+    expect(out.lastMonth).toBe(100)
+  })
+
   it('sums per-package totals on success', async () => {
     const out = await resolveStats({
       names,
