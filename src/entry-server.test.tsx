@@ -8,6 +8,15 @@ describe('entry-server SSR render', () => {
     expect(html).toContain('Career') // Experience section heading
   })
 
+  it('prerenders career bullets inside collapsed <details> and no "Consultant" title', () => {
+    const html = render('/')
+    // Native <details> ships every bullet in the static HTML, closed by default,
+    // so crawlers and llms.txt keep the full text (spec drift item 4).
+    expect(html).toContain('<details')
+    // D1: the current role is "Engineer & Architect", never "Consultant".
+    expect(html).not.toContain('Senior Staff Consultant')
+  })
+
   it('renders the mcp-install route with all four server names', () => {
     const html = render('/mcp-install')
     for (const name of [

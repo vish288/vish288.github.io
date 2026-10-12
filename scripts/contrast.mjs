@@ -28,6 +28,14 @@ function ratio(a, b) {
   const r = (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05)
   return Math.round(r * 100) / 100
 }
+// Composite an fg at alpha over an opaque bg → the effective opaque colour.
+// Models Tailwind's `/NN` opacity utilities so a translucent label/fill can be
+// contrast-checked as the colour that actually paints.
+function over(fg, alpha, bg) {
+  const F = hexToRgb(fg),
+    B = hexToRgb(bg)
+  return toHex([0, 1, 2].map(i => Math.round(F[i] * alpha + B[i] * (1 - alpha))))
+}
 
 // ── 1. Find an HSL triplet that round-trips to #847492 ──
 const TARGET = '#847492'
@@ -55,6 +63,9 @@ const C = {
   dark: '#0b0c0f',
   darkInk: '#e7ebef',
   primary: '#847492',
+  primaryHover: '#8d7e9a', // --primary-hover (272 12.3% 55%)
+  destructiveDark: '#e25a5a', // dark --destructive (0 70% 62%)
+  destructiveFg: '#0c0e12', // dark --destructive-foreground (224 20% 6%)
   inkLabel: '#0b0c0f',
   linkLight: '#5d5167',
   linkDark: '#aea4b7',
@@ -87,6 +98,19 @@ const pairs = [
   ['Code live marker #5ec997 on code surface', C.codeLive, C.code, 3],
   ['Focus ring #847492 on paper', C.primary, C.paper, 3],
   ['Focus ring #847492 on dark', C.primary, C.dark, 3],
+  // Review findings D (each failed before the fix — see the broken ratio in the
+  // comment; the shipping value now passes):
+  // 1. Repositories active-filter count: text-primary-foreground/70 on the
+  //    primary fill measured 3.22 (ink at 70% opacity); full ink restores 4.56.
+  ['Active-filter count: ink label on primary fill (full, not /70)', C.inkLabel, C.primary, 4.5],
+  // 2. Dark --destructive used two ways: as text on the dark bg, and as a fill
+  //    carrying the ink foreground. The regressed 0 63% 51% gave 3.94 / 4.14;
+  //    0 70% 62% with a 224 20% 6% foreground restores both.
+  ['Dark text-destructive on dark bg', C.destructiveDark, C.dark, 4.5],
+  ['Dark destructive-foreground on destructive fill', C.destructiveFg, C.destructiveDark, 4.5],
+  // 3. MCP install button hover:bg-primary/90 dropped the ink label to 3.91 on
+  //    the dark surface; hover:bg-primary-hover (#8d7e9a solid) gives 5.2.
+  ['Install button hover: ink label on primary-hover', C.inkLabel, C.primaryHover, 4.5],
 ]
 console.log('\nPAIR | ratio | floor | pass')
 let fail = 0

@@ -85,7 +85,7 @@ function graphFor(path, APP_STRINGS, SERVERS, CLIENTS) {
     '@id': PERSON_ID,
     name: APP_STRINGS.FULL_NAME,
     alternateName: ['Vish', 'Visweshwaran Suryanarayanan'],
-    jobTitle: 'Senior Staff Engineer & Architect',
+    jobTitle: APP_STRINGS.ROLE,
     description: APP_STRINGS.TAGLINE,
     url: `${ORIGIN}/`,
     image: `${ORIGIN}/vis-creates.png`,
@@ -208,7 +208,7 @@ function buildLlmsTxt(APP_STRINGS, SERVERS, CLIENTS) {
   out.push('## Key facts', '')
   for (const f of S.LLMS_KEY_FACTS) out.push(`- ${f}`)
   out.push('', '## About', '')
-  out.push(S.ABOUT_P1, '', S.ABOUT_P2, '', S.ABOUT_P3, '')
+  out.push(S.ABOUT_BODY, '')
   out.push('## Capabilities', '')
   for (const c of S.CAPABILITIES) out.push(`- ${c.title}: ${c.body}`)
   out.push('', '## Experience', '')

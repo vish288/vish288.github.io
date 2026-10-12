@@ -59,8 +59,8 @@
     --muted-foreground: 215.5 12% 63.9%; /* #98a1ae (7.49 on dark) */
     --accent: 255 14.3% 11%;
     --accent-foreground: 210 20% 92.2%;
-    --destructive: 0 63% 51%;
-    --destructive-foreground: 210 20% 92.2%;
+    --destructive: 0 70% 62%; /* #e25a5a — text-destructive 5.44 on #0b0c0f */
+    --destructive-foreground: 224 20% 6%; /* #0c0e12 ink — 5.38 on the fill */
     --border: 260 10% 16%;
     --input: 260 10% 16%;
     --ring: 272 12.3% 51.4%;
@@ -77,7 +77,7 @@
      provider runs when the OS prefers dark and the user has not chosen light.
      /theme-init.js (script-src 'self') sets the .dark/.light class before paint
      for the explicit case; this media block covers JS-disabled visitors.
-     Parity with .dark above is asserted by src/index.css.test.ts. */
+     Parity with .dark above is asserted by src/test/index-css-dark-parity.test.ts. */
   @media (prefers-color-scheme: dark) {
     :root:not(.light) {
       color-scheme: dark;
@@ -89,15 +89,15 @@
       --popover-foreground: 210 20% 92.2%;
       --primary: 272 12.3% 51.4%;
       --primary-foreground: 225 15.4% 5.1%;
-    --primary-hover: 272 12.3% 55%; /* #8d7e9a lighter hover, ink label 5.2 both themes */
+      --primary-hover: 272 12.3% 55%; /* #8d7e9a lighter hover, ink label 5.2 both themes */
       --secondary: 255 14.3% 11%;
       --secondary-foreground: 210 20% 92.2%;
       --muted: 255 14.3% 11%;
       --muted-foreground: 215.5 12% 63.9%;
       --accent: 255 14.3% 11%;
       --accent-foreground: 210 20% 92.2%;
-      --destructive: 0 63% 51%;
-      --destructive-foreground: 210 20% 92.2%;
+      --destructive: 0 70% 62%; /* #e25a5a — text-destructive 5.44 on #0b0c0f */
+      --destructive-foreground: 224 20% 6%; /* #0c0e12 ink — 5.38 on the fill */
       --border: 260 10% 16%;
       --input: 260 10% 16%;
       --ring: 272 12.3% 51.4%;

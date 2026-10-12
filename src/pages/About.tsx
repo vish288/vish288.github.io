@@ -72,7 +72,10 @@ function ProofCell({
     </span>
   )
   return (
-    <div className='flex flex-col-reverse'>
+    // justify-end pins the group to the top of the (stretched) grid cell, so the
+    // numerals align across cells even when a label wraps to a different line
+    // count (e.g. the −40% label at 1440).
+    <div className='flex h-full flex-col-reverse justify-end'>
       <dt className='mt-2 text-xs sm:text-sm text-muted-foreground'>{label}</dt>
       <dd>
         {internal ? (
@@ -182,7 +185,13 @@ export default function About() {
           </CodeSurface>
 
           {/* Proof strip — ruled, 64px tabular mono numerals in #847492. */}
-          <dl className='mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 border-y-2 border-foreground py-6'>
+          <h2 id='proof-heading' className='sr-only'>
+            {APP_STRINGS.PROOF_HEADING}
+          </h2>
+          <dl
+            aria-labelledby='proof-heading'
+            className='mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 border-y-2 border-foreground py-6'
+          >
             {PROOF.map(cell => (
               <ProofCell key={cell.label} {...cell} />
             ))}
@@ -264,26 +273,37 @@ export default function About() {
                   {entry.period}
                 </p>
                 <div className='space-y-3'>
-                  <h3 className='font-semibold text-foreground'>
-                    {entry.roles.map((role, i) => (
-                      <span
-                        key={role}
-                        className={
-                          i === 0
-                            ? 'block'
-                            : 'block text-sm font-normal text-muted-foreground mt-0.5'
-                        }
-                      >
-                        {role}
-                      </span>
-                    ))}
-                  </h3>
+                  {/* One title per h3 (the first role); later titles for the same
+                      entry are a plain paragraph, not more level-3 headings. */}
+                  <h3 className='font-semibold text-foreground'>{entry.roles[0]}</h3>
+                  {entry.roles.length > 1 && (
+                    <p className='text-sm font-normal text-muted-foreground'>
+                      {entry.roles.slice(1).join(' · ')}
+                    </p>
+                  )}
                   <p className='text-sm text-muted-foreground'>{entry.context}</p>
                   <ul className='list-disc space-y-2 pl-5 text-sm leading-relaxed text-muted-foreground marker:text-primary/60'>
-                    {entry.bullets.map(bullet => (
+                    {entry.bullets.slice(0, 2).map(bullet => (
                       <li key={bullet}>{bullet}</li>
                     ))}
                   </ul>
+                  {entry.bullets.length > 2 && (
+                    // Native <details>: no JS, and SSR prerenders every bullet
+                    // closed so crawlers and llms.txt keep the full text.
+                    <details className='text-sm'>
+                      <summary className='touch-target inline-flex cursor-pointer items-center font-medium text-link underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md'>
+                        {APP_STRINGS.EXPERIENCE_MORE.replace(
+                          '{count}',
+                          String(entry.bullets.length - 2)
+                        )}
+                      </summary>
+                      <ul className='mt-2 list-disc space-y-2 pl-5 leading-relaxed text-muted-foreground marker:text-primary/60'>
+                        {entry.bullets.slice(2).map(bullet => (
+                          <li key={bullet}>{bullet}</li>
+                        ))}
+                      </ul>
+                    </details>
+                  )}
                 </div>
               </li>
             ))}

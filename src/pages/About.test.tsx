@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect } from 'vitest'
 import About from './About'
@@ -82,6 +83,39 @@ describe('About — manifest ledger', () => {
       'href',
       APP_STRINGS.LINKEDIN_URL
     )
+  })
+
+  it('labels the proof strip with an sr-only "Key numbers" heading', () => {
+    renderAbout()
+    const heading = screen.getByRole('heading', { level: 2, name: /key numbers/i })
+    expect(heading).toHaveClass('sr-only')
+    expect(heading).toHaveAttribute('id', 'proof-heading')
+    expect(document.querySelector('dl[aria-labelledby="proof-heading"]')).not.toBeNull()
+  })
+
+  it('puts only the first role in each h3, with later titles in a paragraph', () => {
+    renderAbout()
+    const h3s = screen.getAllByRole('heading', { level: 3 })
+    // The 2015–2024 entry carries four titles; only the first is a heading.
+    const consultancy = h3s.find(h => /2023 – 2024/.test(h.textContent ?? ''))
+    expect(consultancy?.textContent).toBe('Senior Staff Engineer / Architect (2023 – 2024)')
+    // A later title for that entry is present, but not as a heading.
+    expect(screen.getByText(/Staff Engineer \/ Architect \(2021 – 2023\)/)).toBeInTheDocument()
+    expect(
+      screen.queryByRole('heading', { name: /staff engineer \/ architect \(2021 – 2023\)/i })
+    ).not.toBeInTheDocument()
+  })
+
+  it('shows two bullets per role and discloses the rest behind native details', async () => {
+    renderAbout()
+    const user = userEvent.setup()
+    // digital-health has six bullets: two visible, "4 more" reveals the other four.
+    const section = within(document.getElementById('digital-health')!)
+    const summary = section.getByText('4 more')
+    const hidden = section.getByText(/build and deployment times fell by 40%/i)
+    expect(hidden).not.toBeVisible()
+    await user.click(summary)
+    expect(hidden).toBeVisible()
   })
 
   it('makes LinkedIn the primary hero CTA alongside GitHub', () => {
