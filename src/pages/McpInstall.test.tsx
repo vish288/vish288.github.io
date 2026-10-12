@@ -422,6 +422,45 @@ describe('McpInstall Page', () => {
   })
 })
 
+// The links the four MCP repos ship in their READMEs, plus the legacy bare
+// ?install= form. These must keep landing on the right server/client so old
+// links in the wild never break. Deeplink redirects need a server to fire, so
+// the bare forms here resolve the client without navigating.
+describe('McpInstall gateway link back-compat', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
+  it('canonical gateway link (?server=<key>) puts that server first with the picker open', () => {
+    renderMcpInstall('/mcp-install?server=mcp-argocd')
+    const headings = screen.getAllByRole('heading', { level: 2 }).map(h => h.textContent)
+    expect(headings[0]).toBe(SERVERS['mcp-argocd']!.fullName)
+    expect(screen.getByRole('group', { name: /which client do you use/i })).toBeInTheDocument()
+  })
+
+  it('a legacy bare ?install=cursor selects Cursor and renders Install rows (no server, no modal)', () => {
+    renderMcpInstall('/mcp-install?install=cursor')
+    expect(screen.getByText('Client: Cursor')).toBeInTheDocument()
+    expect(screen.getAllByRole('link', { name: /^Install .* for Cursor$/ })).toHaveLength(
+      Object.keys(SERVERS).length
+    )
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+
+  it('?install=vscode-insiders resolves to VS Code Insiders', () => {
+    renderMcpInstall('/mcp-install?install=vscode-insiders')
+    expect(screen.getByText('Client: VS Code Insiders')).toBeInTheDocument()
+  })
+
+  it.each([
+    ['code', 'VS Code'],
+    ['windsurf', 'Devin Desktop (Windsurf)'],
+  ])('legacy install alias ?install=%s resolves to %s', (alias, name) => {
+    renderMcpInstall(`/mcp-install?install=${alias}`)
+    expect(screen.getByText(`Client: ${name}`)).toBeInTheDocument()
+  })
+})
+
 describe('McpInstall auto-redirect', () => {
   let originalLocation: Location
 
