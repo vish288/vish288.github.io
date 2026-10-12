@@ -28,7 +28,11 @@ export const APP_STRINGS = {
   // live PyPI-downloads snapshot, rendered from src/generated/pypi-stats.json).
   PROOF_HEADING: 'Key numbers',
   PROOF: [
-    { value: '100k', label: 'virtual-care patients in 2 quarters', href: '#digital-health' },
+    {
+      value: '100k',
+      label: 'patients, up from a few hundred in 2 quarters',
+      href: '#digital-health',
+    },
     { value: '−23%', label: 'drop-off after unifying authentication', href: '#digital-health' },
     {
       value: '−40%',
