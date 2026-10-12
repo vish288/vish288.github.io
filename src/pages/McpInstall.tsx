@@ -72,7 +72,6 @@ function ClientPicker({
   value,
   onChange,
   onCommit,
-  onBlurCommit,
   onEscape,
   legend,
   fieldsetRef,
@@ -81,8 +80,6 @@ function ClientPicker({
   onChange: (client: McpClient) => void
   // Deliberate commit (click, Enter/Space): collapse and move focus to Change.
   onCommit: () => void
-  // Focus left the fieldset: collapse without yanking focus back.
-  onBlurCommit: () => void
   // Escape while reopened: collapse and restore focus to Change.
   onEscape: () => void
   legend: string
@@ -92,11 +89,11 @@ function ClientPicker({
     <fieldset
       id='client-picker'
       ref={fieldsetRef}
-      // Arrow keys fire `change` but must NOT collapse the group; only a commit
-      // does. Guard the quiet collapses on `value` so an empty picker stays open.
-      onBlur={e => {
-        if (value && !e.currentTarget.contains(e.relatedTarget as Node | null)) onBlurCommit()
-      }}
+      // No collapse-on-blur: clicking an sr-only radio's label fires a transient
+      // focusout to an element outside the fieldset BEFORE the click reaches the
+      // new radio, so a blur-collapse here tears the picker down and discards the
+      // re-pick (every pick after the first would be lost). Collapse only on a
+      // deliberate commit (click / Enter / Space / Escape), handled below.
       onKeyDown={e => {
         if (e.key === 'Escape') {
           e.preventDefault()
@@ -357,10 +354,6 @@ export default function McpInstall() {
     justPicked.current = true
   }, [])
 
-  // Focus leaving the fieldset collapses it quietly (no focus move). The caller
-  // only fires this when a client already exists, so nothing disappears.
-  const collapsePicker = useCallback(() => setPickerOpen(false), [])
-
   const escapePicker = useCallback(() => {
     if (client) {
       setPickerOpen(false)
@@ -417,7 +410,6 @@ export default function McpInstall() {
             value={client}
             onChange={pick}
             onCommit={commitPicker}
-            onBlurCommit={collapsePicker}
             onEscape={escapePicker}
             legend={legend}
             fieldsetRef={fieldsetRef}

@@ -1,6 +1,6 @@
-import { render, screen, within, act } from '@testing-library/react'
+import { render, screen, within, act, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { MemoryRouter } from 'react-router-dom'
+import { MemoryRouter, useLocation } from 'react-router-dom'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import McpInstall from './McpInstall'
 import { CLIENTS, SECTIONS } from '@/constants/mcpClients'
@@ -13,6 +13,24 @@ function renderMcpInstall(initialEntry = '/mcp-install') {
     </MemoryRouter>
   )
 }
+
+// Mirrors the router's current search string into the DOM so a test can assert
+// what a pick writes to the URL (the ?client= contract from the gateway spec).
+function LocationProbe() {
+  const { search } = useLocation()
+  return <output data-testid='search'>{search}</output>
+}
+
+function renderWithLocation(initialEntry = '/mcp-install') {
+  return render(
+    <MemoryRouter initialEntries={[initialEntry]}>
+      <LocationProbe />
+      <McpInstall />
+    </MemoryRouter>
+  )
+}
+
+const search = () => screen.getByTestId('search').textContent ?? ''
 
 const FULL_NAMES = Object.values(SERVERS).map(s => s.fullName)
 
@@ -341,6 +359,66 @@ describe('McpInstall Page', () => {
     renderMcpInstall()
     expect(screen.getAllByRole('link', { name: /github/i })).toHaveLength(4)
     expect(screen.getAllByRole('link', { name: /pypi/i })).toHaveLength(4)
+  })
+
+  // ── client → URL contract (gateway-v2 §2.1: a pick writes ?client= with replace)
+
+  it('a click pick writes ?client= to the URL', async () => {
+    const user = userEvent.setup()
+    renderWithLocation()
+    expect(search()).toBe('')
+    await user.click(screen.getByRole('radio', { name: 'Cursor' }))
+    expect(search()).toContain('client=cursor')
+  })
+
+  it('an arrow-key pick writes ?client= to the URL', async () => {
+    const user = userEvent.setup()
+    renderWithLocation()
+    const vscode = screen.getByRole('radio', { name: 'VS Code' }) as HTMLInputElement
+    vscode.focus()
+    await user.keyboard('{ArrowDown}')
+    expect(search()).toContain('client=vscode-insiders')
+  })
+
+  it('a pick points every server row and deeplink at the selected client', async () => {
+    const user = userEvent.setup()
+    renderWithLocation()
+    await user.click(screen.getByRole('radio', { name: 'Cursor' }))
+    const links = screen.getAllByRole('link', { name: /^Install .* for Cursor$/ })
+    expect(links).toHaveLength(Object.keys(SERVERS).length)
+    for (const a of links) expect(a.getAttribute('href')).toMatch(/^cursor:\/\//)
+  })
+
+  // Regression for the live bug: re-picking a client via Change was discarded.
+  // Clicking an sr-only radio's label fires a focusout from the checked radio to
+  // an element OUTSIDE the fieldset BEFORE the click reaches the new radio (seen
+  // in a headless-Chromium capture: focusout client-cursor -> main-content). The
+  // old collapse-on-blur tore the picker down on that focusout, so the new pick
+  // never committed and every server kept the first client. Reproduce that exact
+  // focusout, then complete the pick, and assert it takes.
+  it('re-picking via Change survives the focusout fired during a label click', async () => {
+    const user = userEvent.setup()
+    localStorage.setItem('mcp-client', 'cursor')
+    renderWithLocation()
+    await user.click(screen.getByRole('button', { name: 'Change' }))
+    const fieldset = document.getElementById('client-picker')!
+    // React's onBlur is delegated to the bubbling `focusout`, not `blur`.
+    fireEvent.focusOut(fieldset, { relatedTarget: document.body })
+    // On the fixed code the picker is still open; the re-pick must commit.
+    await user.click(screen.getByRole('radio', { name: 'Zed' }))
+    expect(search()).toContain('client=zed')
+    expect(screen.getByText('Client: Zed')).toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: /^Config: .* for Zed$/ })).toHaveLength(
+      Object.keys(SERVERS).length
+    )
+  })
+
+  it('a direct ?client= load renders every row for that client', () => {
+    renderWithLocation('/mcp-install?client=codex')
+    expect(screen.getByText('Client: Codex')).toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: /^Command: .* for Codex$/ })).toHaveLength(
+      Object.keys(SERVERS).length
+    )
   })
 })
 
