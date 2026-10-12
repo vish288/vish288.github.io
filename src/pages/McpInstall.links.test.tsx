@@ -143,6 +143,27 @@ describe('McpInstall link integrity', () => {
     )
   })
 
+  it('modal token links resolve to allowed hosts', async () => {
+    const user = userEvent.setup()
+    render(
+      <MemoryRouter initialEntries={['/mcp-install?client=zed']}>
+        <McpInstall />
+      </MemoryRouter>
+    )
+    await user.click(screen.getByRole('button', { name: 'Config: GitLab for Zed' }))
+    const modal = screen.getByRole('dialog')
+    const hrefs = within(modal)
+      .getAllByRole('link')
+      .map(a => a.getAttribute('href')!)
+      .filter(h => h.startsWith('http'))
+    // The GitLab token link (a TOKEN_HOST) is present and every modal link is allowed.
+    expect(hrefs.some(h => new URL(h).hostname === 'gitlab.com')).toBe(true)
+    for (const href of hrefs) {
+      const host = new URL(href).hostname
+      expect(ALLOWED_HOSTS.some(d => host === d || host.endsWith('.' + d))).toBe(true)
+    }
+  })
+
   it('Devin Desktop modal contains a valid JSON config', async () => {
     const user = userEvent.setup()
     render(
