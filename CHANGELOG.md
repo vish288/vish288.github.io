@@ -1,5 +1,29 @@
 # Changelog
 
+## [2.12.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.11.0...vish288-personal-website-v2.12.0) (2026-10-12)
+
+
+### Features
+
+* **identity:** Manifest Ledger (combo D) — [#847492](https://github.com/vish288/vish288.github.io/issues/847492) brand, live PyPI proof ([462cb11](https://github.com/vish288/vish288.github.io/commit/462cb11e48a1f1984ab6df78ae2e9d87426c99b4))
+* **repos:** pin MCP server repos first; derive client counts ([ad1a2da](https://github.com/vish288/vish288.github.io/commit/ad1a2daae98f9d8116dc936bf51f5184254f0069))
+
+
+### Bug Fixes
+
+* commit client re-pick instead of dropping it on picker blur ([bdba28b](https://github.com/vish288/vish288.github.io/commit/bdba28bd389d99518b1f3dc34722aa7bf46b80c8))
+* **ui:** review findings — AA contrast, About distill, cleanups ([f21687a](https://github.com/vish288/vish288.github.io/commit/f21687a1930226d445d6b709a9d3d7e1c6ebc346))
+
+
+### Tests
+
+* pin the gateway deep-link contract for the 4 MCP repos ([789546a](https://github.com/vish288/vish288.github.io/commit/789546a821b6652fd19ba9b39500cb2c3b25c921))
+
+
+### Build System
+
+* github. ([462cb11](https://github.com/vish288/vish288.github.io/commit/462cb11e48a1f1984ab6df78ae2e9d87426c99b4))
+
 ## [2.11.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.10.0...vish288-personal-website-v2.11.0) (2026-10-12)
 
 ### Features
