@@ -38,7 +38,8 @@ export default function ThemeToggle() {
       className='h-8 w-8 p-0 touch-target'
     >
       {getIcon()}
-      <span className='sr-only'>Toggle theme</span>
+      {/* Accessible name states the outcome and matches the tooltip (copy N3). */}
+      <span className='sr-only'>{getTitle()}</span>
     </Button>
   )
 }

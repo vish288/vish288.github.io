@@ -5,10 +5,11 @@
 (function () {
   try {
     var stored = localStorage.getItem('theme')
+    // Unknown/absent values resolve to system, matching ThemeContext's guard.
+    var theme = stored === 'dark' || stored === 'light' ? stored : 'system'
     var dark =
-      stored === 'dark' ||
-      ((!stored || stored === 'system') &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
+      theme === 'dark' ||
+      (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
     var root = document.documentElement
     root.classList.remove('light', 'dark')
     root.classList.add(dark ? 'dark' : 'light')
