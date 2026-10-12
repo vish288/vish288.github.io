@@ -2,7 +2,7 @@
   "windowEnd": "2026-10-10",
   "fetchedAt": "2026-10-12",
   "stale": false,
-  "lastFifteenDays": 23303,
+  "lastFifteenDays": 23568,
   "packages": {
     "mcp-gitlab": {
       "lastFifteenDays": 18891
@@ -12,6 +12,9 @@
     },
     "mcp-coda": {
       "lastFifteenDays": 1467
+    },
+    "mcp-argocd": {
+      "lastFifteenDays": 265
     }
   }
 }
