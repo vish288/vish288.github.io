@@ -36,23 +36,57 @@ describe('resolveStats', () => {
     packages: { 'mcp-gitlab': { lastFifteenDays: 100 } },
   }
 
-  it('sums the 15 most recent daily rows per package and uses the newest date as the window end', async () => {
+  it('counts an old package over the full window and includes a young package in full', async () => {
     const out = await resolveStats({
-      names: ['mcp-gitlab', 'mcp-coda'],
+      names: ['mcp-gitlab', 'mcp-argocd'],
       fetchOverallImpl: async pkg =>
         pkg === 'mcp-gitlab'
-          ? // 20 rows of 1000; only the newest 15 count → 15000
+          ? // 20 days of history (older than the window); only the 15 in-window count → 15000
             rows(20, 1000, '2026-10-10')
-          : rows(15, 100, '2026-10-10'),
+          : // released 2026-10-06 → 5 rows, all inside the window; that is its complete total
+            rows(5, 100, '2026-10-10'),
       existing: null,
       now: () => new Date('2026-10-11T00:00:00Z'),
     })
     expect(out.stale).toBe(false)
     expect(out.windowEnd).toBe('2026-10-10')
     expect(out.fetchedAt).toBe('2026-10-11')
-    expect(out.lastFifteenDays).toBe(16500) // 15*1000 + 15*100
+    expect(out.lastFifteenDays).toBe(15500) // 15*1000 + 5*100 (young pkg contributes all 5)
     expect(out.packages['mcp-gitlab']).toEqual({ lastFifteenDays: 15000 })
-    expect(out.packages['mcp-coda']).toEqual({ lastFifteenDays: 1500 })
+    expect(out.packages['mcp-argocd']).toEqual({ lastFifteenDays: 500 })
+  })
+
+  it('takes the window end from the newest date seen across packages', async () => {
+    const out = await resolveStats({
+      names: ['mcp-gitlab', 'mcp-coda'],
+      // both young, different newest dates; window end is the latest (10-10)
+      fetchOverallImpl: async pkg =>
+        pkg === 'mcp-gitlab' ? rows(3, 100, '2026-10-10') : rows(2, 50, '2026-10-09'),
+      existing: null,
+      now: () => new Date('2026-10-11T00:00:00Z'),
+    })
+    expect(out.windowEnd).toBe('2026-10-10')
+    expect(out.lastFifteenDays).toBe(400) // 3*100 + 2*50
+  })
+
+  it('skips an old package with a real gap inside the window', async () => {
+    const out = await resolveStats({
+      names: ['mcp-gitlab', 'mcp-coda'],
+      fetchOverallImpl: async pkg =>
+        pkg === 'mcp-gitlab'
+          ? rows(15, 1000, '2026-10-10')
+          : // first seen long ago (old) but only 2 in-window rows → gap → skip
+            [
+              { category: 'without_mirrors', date: '2026-08-01', downloads: 5 },
+              { category: 'without_mirrors', date: '2026-10-10', downloads: 9 },
+              { category: 'without_mirrors', date: '2026-10-09', downloads: 9 },
+            ],
+      existing: null,
+      now: () => new Date('2026-10-11T00:00:00Z'),
+    })
+    expect(out.stale).toBe(false)
+    expect(out.lastFifteenDays).toBe(15000) // gapped old package excluded
+    expect(out.packages['mcp-coda']).toBeUndefined()
   })
 
   it.each([
@@ -73,27 +107,27 @@ describe('resolveStats', () => {
     expect(out.windowEnd).toBe('2026-01-01')
   })
 
-  it('skips a package without a full 15-day window rather than poisoning the total', async () => {
-    const out = await resolveStats({
-      names: ['mcp-gitlab', 'mcp-argocd'],
-      fetchOverallImpl: async pkg =>
-        pkg === 'mcp-gitlab' ? rows(15, 1000, '2026-10-10') : rows(5, 999, '2026-10-10'),
-      existing: null,
-      now: () => new Date('2026-10-11T00:00:00Z'),
-    })
-    expect(out.stale).toBe(false)
-    expect(out.lastFifteenDays).toBe(15000) // argocd's 5 partial days excluded
-    expect(out.packages['mcp-argocd']).toBeUndefined()
-  })
-
-  it('falls back to the snapshot when no package has a full 15-day window', async () => {
+  it('falls back to the snapshot when nothing can cover the window', async () => {
     const out = await resolveStats({
       names: ['mcp-gitlab'],
-      fetchOverallImpl: async () => rows(5, 999),
+      // old package (first seen long ago) with only a 2-day gapped remnant
+      fetchOverallImpl: async () => [
+        { category: 'without_mirrors', date: '2026-08-01', downloads: 5 },
+        { category: 'without_mirrors', date: '2026-10-10', downloads: 9 },
+      ],
       existing: snapshot,
     })
     expect(out.stale).toBe(true)
     expect(out.lastFifteenDays).toBe(100)
+  })
+
+  it('falls back when a package has no rows at all', async () => {
+    const out = await resolveStats({
+      names: ['mcp-gitlab'],
+      fetchOverallImpl: async () => [],
+      existing: snapshot,
+    })
+    expect(out.stale).toBe(true)
   })
 })
 
