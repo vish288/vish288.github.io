@@ -2,6 +2,7 @@ export const APP_STRINGS = {
   // Personal Information
   DISPLAY_NAME: 'Vish',
   FULL_NAME: 'Visweshwaran S',
+  HANDLE: 'vish288',
   ROLE: 'Senior Staff Engineer & Architect',
   TAGLINE:
     'I lead platform architecture for large enterprises: multi-tenant AI agent platforms, unified identity, micro-frontends and GitOps delivery on Kubernetes.',
@@ -12,20 +13,37 @@ export const APP_STRINGS = {
   // Navigation
   NAV_ABOUT: 'About',
   NAV_REPOSITORIES: 'Repositories',
+  NAV_MCP: 'MCP servers',
+
+  // Manifest hero
+  MANIFEST_LIVE: 'published on PyPI',
 
   // About section
   ABOUT_EYEBROW: 'About',
   ABOUT_HEADING: 'What I do',
-  ABOUT_P1:
-    'I am a Senior Staff Engineer and solutions architect in Toronto. I have built software since 2010 for digital health, retail, telecom, B2B commerce and retail banking. I design platforms and lead the teams that ship them, from the first architecture review to the production cutover.',
-  ABOUT_P2:
-    'Today I lead the architecture of a multi-tenant AI agent platform for a national retailer. Teams across the business use one governed path to build, ship and operate agents, with tenancy, security and audit built in. Before that I unified authentication across 12 web applications on a national digital health platform. Its virtual-care journeys grew from a few hundred patients to 100,000 across 7 provinces in 2 quarters.',
-  ABOUT_P3:
-    'Outside client work, I build open-source developer tools: Model Context Protocol (MCP) servers for GitLab, Atlassian, Coda and Argo CD. They are on PyPI, and you can install them from this site.',
+  ABOUT_BODY:
+    'I design platforms and lead the teams that ship them, from the first architecture review to the production cutover. I have built software since 2010 for digital health, retail, telecom, B2B commerce and retail banking. Today I lead the architecture of a multi-tenant AI agent platform for a national retailer. Outside client work I build open-source Model Context Protocol (MCP) servers for GitLab, Atlassian, Coda and Argo CD. They are on PyPI, and you can install them from this site.',
+
+  // Proof strip (first three cells link into Career; the fourth cell is the
+  // live PyPI-downloads snapshot, rendered from src/generated/pypi-stats.json).
+  PROOF_HEADING: 'Key numbers',
+  PROOF: [
+    { value: '100k', label: 'virtual-care patients in 2 quarters', href: '#digital-health' },
+    { value: '−23%', label: 'drop-off after unifying authentication', href: '#digital-health' },
+    {
+      value: '−40%',
+      label: 'build and deploy time after micro-frontend migration',
+      href: '#digital-health',
+    },
+  ],
+  // Fallback fourth cell when the downloads snapshot is empty/zero (never a guess).
+  PROOF_DOWNLOADS_LABEL: 'PyPI downloads',
+  PROOF_DOWNLOADS_FALLBACK_VALUE: '4',
+  PROOF_DOWNLOADS_FALLBACK_LABEL: 'MCP servers on PyPI',
 
   // Capabilities section
   CAPABILITIES_EYEBROW: 'Capabilities',
-  CAPABILITIES_HEADING: 'Where I add the most',
+  CAPABILITIES_HEADING: 'What I build',
   CAPABILITIES: [
     {
       title: 'AI agent platforms',
@@ -36,20 +54,12 @@ export const APP_STRINGS = {
       body: 'Unified authentication and authorization across many applications; workload identity, role-based access control and single sign-on; the privacy and compliance reviews that go with them.',
     },
     {
-      title: 'Cloud-native delivery',
-      body: 'Node.js, Java and Python services on Kubernetes; Argo CD, Helm and GitLab CI/CD; GCP, AWS and Azure; event-driven and serverless design.',
+      title: 'Cloud-native delivery and security',
+      body: 'Node.js, Java and Python services on Kubernetes; Argo CD, Helm and GitLab CI/CD on GCP, AWS and Azure. Secret management, deny-by-default networking, SAST and DAST scanning and CI quality gates.',
     },
     {
       title: 'Frontend platforms',
       body: 'React, TypeScript and Next.js at scale; micro-frontends and module federation; accessibility (WCAG AA) and web performance.',
-    },
-    {
-      title: 'Security and quality',
-      body: 'Secret management, deny-by-default networking, SAST and DAST scanning, CI quality gates; security, privacy and integrity reviews through to production.',
-    },
-    {
-      title: 'Engineering leadership',
-      body: 'Teams of up to 23 engineers across time zones; alignment with product, design, privacy, legal, security and SRE; architecture reviews and pre-sales.',
     },
   ],
 
@@ -58,9 +68,10 @@ export const APP_STRINGS = {
   EXPERIENCE_HEADING: 'Career',
   EXPERIENCE: [
     {
+      id: 'ai-platform',
       period: '2026 – present',
-      roles: ['Senior Staff Consultant, Enterprise AI Platform'],
-      context: 'A national retailer; Toronto.',
+      roles: ['Senior Staff Engineer & Architect, Enterprise AI Platform'],
+      context: 'Consulting engagement with a national retailer; Toronto.',
       bullets: [
         'Lead the architecture of a multi-tenant enterprise AI agent platform. It standardizes how teams across the business build, govern, deploy and operate agents at scale.',
         'Teams ship through one governed path to production, replacing the ad-hoc setups each team built before.',
@@ -69,29 +80,31 @@ export const APP_STRINGS = {
       ],
     },
     {
+      id: 'digital-health',
       period: '2025 – 2026',
       roles: ['Staff Engineer / Architect, Digital Health'],
       context:
         'Consulting for a national digital health platform used across 7 Canadian provinces; 75 developers in 6 teams.',
       bullets: [
         'Unified authentication and authorization across 3 authentication types and 12 web applications. Customer drop-off fell by 23%.',
-        'Led a micro-frontend and module-federation migration of an end-of-life Next.js host and a 10-year-old React SPA. Build and deployment times fell by 40%, and 6 pods gained independent releases.',
-        'Recovered a cross-application navigation integration stalled for 4 months. Reset it to a clear MVP mandate and shipped in 5 weeks.',
         'Launched eligibility-based virtual-care journeys across 7 provinces. Adoption grew from a few hundred patients to 100,000 in 2 quarters.',
+        'Led a micro-frontend and module-federation migration of an end-of-life Next.js host and a 10-year-old React SPA. Build and deployment times fell by 40%, and 6 pods gained independent releases.',
         "Delivered the organization's first infrastructure-as-code migration to Argo CD across Node.js and Java microservices, a Java monolith and React and Next.js applications. No critical (P1) incidents.",
-        'Introduced AI-assisted code review and built observability for it as merge requests grew from 100 a week to 100 a day. Productionized LLM-powered release-notes and dependency-risk agents.',
+        'Recovered a cross-application navigation integration stalled for 4 months. Reset it to a clear MVP mandate and shipped in 5 weeks.',
+        'Introduced AI-assisted code review and built observability for it as merge requests grew from 100 a week to 100 a day. Put LLM-powered release-notes and dependency-risk agents into production.',
       ],
     },
     {
+      id: 'llm-automation',
       period: '2025',
       roles: ['AI / Platform Engineer (contract)'],
       context: 'Remote engagement.',
       bullets: [
-        'Designed a reusable Python platform for LLM-powered engineering automation. It centralizes Git, Jira, OpenAI, Slack, configuration and monitoring integrations.',
-        'Applied prompt composition, token budgets, tiered model routing, structured-output validation and human-in-the-loop fallbacks to make agent output reliable and auditable.',
+        'Designed a reusable Python platform for LLM-powered engineering automation, with tiered model routing, structured-output validation and human-in-the-loop fallbacks.',
       ],
     },
     {
+      id: 'consultancy',
       period: '2015 – 2024',
       roles: [
         'Senior Staff Engineer / Architect (2023 – 2024)',
@@ -101,15 +114,16 @@ export const APP_STRINGS = {
       ],
       context: 'Global digital consultancy; Toronto, Calgary, Bangalore and London.',
       bullets: [
-        'Led teams of up to 23 engineers across geographies.',
         'Defined the MACH (microservices, API-first, cloud-native, headless) architecture that turned a US B2B supply-chain business into a full e-commerce platform. Customer-acquisition cost fell by 33%.',
-        'Re-platformed a health solution for a major Canadian retailer onto a MACH architecture.',
+        'Led teams of up to 23 engineers across geographies.',
         "Architected the organization's first cloud-native notification platform on GCP (serverless, Pub/Sub, Firestore), adopted enterprise-wide and reused for nationwide vaccination scheduling.",
+        'Re-platformed a health solution for a major Canadian retailer onto a MACH architecture.',
         'Led headless e-commerce and multi-tenant Node.js and React architectures for telecom and North American retail clients.',
         'Received 3 awards for leadership and architecture between 2019 and 2022.',
       ],
     },
     {
+      id: 'early-career',
       period: '2010 – 2015',
       roles: [
         'Associate Consultant, Technology (2013 – 2015)',
@@ -117,25 +131,17 @@ export const APP_STRINGS = {
       ],
       context: 'IT services; Chennai.',
       bullets: [
-        'Led a remote team of 7 developers that built a B2B white-label platform.',
-        'Built a JavaScript framework that merged multiple action flows into one process for retail banking clients.',
+        'Led a remote team of 7 developers on a B2B white-label platform, and built a JavaScript process framework for retail banking clients.',
       ],
     },
   ],
   EXPERIENCE_EDUCATION: 'B.E. Electronics and Communication, Anna University',
   EXPERIENCE_LINK: 'Full history on LinkedIn',
-  EXPERIENCE_CTA: 'Experience',
+  EXPERIENCE_MORE: '{count} more',
 
-  // Skills word cloud (repo-derived)
-  SKILLS_TITLE: 'From my public repos',
-  SKILLS_SUBTITLE: 'Languages and topics across my GitHub repositories',
-
-  // Loading States
-  LOADING_REPOSITORIES: 'Loading repositories...',
-
-  // Accessibility
-  SKILLS_CLOUD_DESCRIPTION: 'Languages and topics taken from public GitHub repositories',
-  REPOSITORY_COUNT_MESSAGE: 'Derived from {count} public repositories',
+  // Contact section
+  CONTACT_HEADING: 'Get in touch',
+  CONTACT_BODY: 'Send me a message on LinkedIn. The code is on GitHub.',
 
   // llms.txt — summary and machine-readable facts for answer engines
   LLMS_SUMMARY:
