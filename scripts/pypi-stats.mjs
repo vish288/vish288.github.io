@@ -66,33 +66,54 @@ function assertCount(value, pkg, field) {
   return value
 }
 
-// Sum the WINDOW_DAYS most recent daily rows. Returns null when the package
-// lacks a full window (e.g. a brand-new package) so the caller can skip it —
-// folding a short window into a "15-day" number would be dishonest. A bad
-// daily value throws (via assertCount), which is a hard data-integrity failure.
-function sumWindow(rows, pkg) {
-  const sorted = [...rows].sort((a, b) => (a.date < b.date ? 1 : -1))
-  const top = sorted.slice(0, WINDOW_DAYS)
-  if (top.length < WINDOW_DAYS) return null
-  let total = 0
-  for (const r of top) total += assertCount(r.downloads, pkg, 'daily downloads')
-  return { total, end: top[0].date }
+function addDays(iso, delta) {
+  const d = new Date(`${iso}T00:00:00Z`)
+  d.setUTCDate(d.getUTCDate() + delta)
+  return isoDate(d)
 }
 
-// Fetch every package, validate, and sum each 15-day window. Throws (→ snapshot
-// fallback) if no package has a full window or any daily value is invalid.
+// Sum a package's downloads within [windowStart, windowEnd]. Returns null when
+// the package can't honestly cover the window: an *older* package (its first
+// row predates the window) must have a row for all WINDOW_DAYS days — fewer
+// means a real gap, so skip it. A *young* package (first released inside the
+// window, e.g. a new package) contributes all its in-window rows: that IS its
+// complete 15-day total, not a partial. A bad daily value throws (via
+// assertCount), a hard data-integrity failure that falls back to the snapshot.
+function sumWindow(rows, pkg, windowStart, windowEnd) {
+  if (rows.length === 0) return null
+  const oldest = rows.reduce((min, r) => (r.date < min ? r.date : min), rows[0].date)
+  const inWindow = rows.filter(r => r.date >= windowStart && r.date <= windowEnd)
+  const bornInsideWindow = oldest >= windowStart
+  if (!bornInsideWindow && inWindow.length < WINDOW_DAYS) return null // gapped old package
+  if (inWindow.length === 0) return null
+  let total = 0
+  for (const r of inWindow) total += assertCount(r.downloads, pkg, 'daily downloads')
+  return { total }
+}
+
+// Fetch every package, then sum each one's 15-day window. The window is the 15
+// calendar days ending at the newest date seen across all packages. Throws
+// (→ snapshot fallback) if nothing is usable or any daily value is invalid.
 async function buildStats({ names, fetchOverallImpl, now }) {
+  const rowsByPkg = {}
+  for (const pkg of names) rowsByPkg[pkg] = await fetchOverallImpl(pkg)
+
+  let windowEnd = null
+  for (const rows of Object.values(rowsByPkg)) {
+    for (const r of rows) if (!windowEnd || r.date > windowEnd) windowEnd = r.date
+  }
+  if (!windowEnd) throw new Error('no download rows for any package')
+  const windowStart = addDays(windowEnd, -(WINDOW_DAYS - 1))
+
   const packages = {}
   let lastFifteenDays = 0
-  let windowEnd = null
   for (const pkg of names) {
-    const window = sumWindow(await fetchOverallImpl(pkg), pkg)
-    if (!window) continue // skip packages without a full 15-day window
+    const window = sumWindow(rowsByPkg[pkg], pkg, windowStart, windowEnd)
+    if (!window) continue // skip packages that can't honestly cover the window
     packages[pkg] = { lastFifteenDays: window.total }
     lastFifteenDays += window.total
-    if (!windowEnd || window.end > windowEnd) windowEnd = window.end
   }
-  if (!windowEnd) throw new Error('no package has a full 15-day window')
+  if (Object.keys(packages).length === 0) throw new Error('no package can cover the 15-day window')
   return { windowEnd, fetchedAt: isoDate(now()), stale: false, lastFifteenDays, packages }
 }
 
