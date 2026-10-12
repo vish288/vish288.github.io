@@ -1,177 +1,245 @@
 import { Link } from 'react-router-dom'
-import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { MapPin, Code2, Star, Blocks, FolderGit2, Loader2 } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
 import LinkedInIcon from '@/components/icons/LinkedInIcon'
-import SimpleWordCloud from '@/components/SimpleWordCloud'
-import { PypiDownloads } from '@/components/PypiDownloads'
-import { useGitHubRepositories } from '@/hooks/useGitHubRepositories'
+import SectionRule from '@/components/SectionRule'
+import CodeSurface from '@/components/CodeSurface'
 import { APP_STRINGS } from '@/constants/appStrings'
+import snapshot from '@/generated/pypi-stats.json'
+import { formatDownloads, type PypiStats } from '@/lib/pypiStats'
 
-// Evidenced by PRODUCT.md positioning and this repo's own stack; no unverified claims.
-const FALLBACK_SKILLS = ['React', 'TypeScript', 'JavaScript', 'Node.js', 'Python']
+const BUILDS = ['mcp-gitlab', 'mcp-atlassian-extended', 'mcp-coda', 'mcp-argocd']
 
-const HIGHLIGHT_TILE =
-  'rounded-xl border bg-muted/30 p-4 flex flex-col items-center text-center gap-2 transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+// Live 15-day PyPI total from the build-time snapshot (src/generated/pypi-stats.json,
+// written by scripts/pypi-stats.mjs). When the snapshot is empty/zero we never
+// invent a number: the strip falls back to the honest "4 MCP servers" count.
+const stats = snapshot as PypiStats
+const hasDownloads = stats.lastFifteenDays > 0
 
-function FallbackSkills() {
+// Proof strip under the manifest hero (C's ruled form, D's 64px numerals).
+// Cells 1–3 link to the Career entry that evidences them (#digital-health);
+// cell 4 is the live downloads figure linking to the gateway. Every number
+// traces to APP_STRINGS or the measured PyPI snapshot — no invented claims.
+const PROOF = [
+  ...APP_STRINGS.PROOF.map(cell => ({ ...cell, internal: false })),
+  hasDownloads
+    ? {
+        value: formatDownloads(stats.lastFifteenDays),
+        label: `${APP_STRINGS.PROOF_DOWNLOADS_LABEL}, last 15 days`,
+        href: '/mcp-install',
+        internal: true,
+      }
+    : {
+        value: APP_STRINGS.PROOF_DOWNLOADS_FALLBACK_VALUE,
+        label: APP_STRINGS.PROOF_DOWNLOADS_FALLBACK_LABEL,
+        href: '/mcp-install',
+        internal: true,
+      },
+]
+
+// aria-hidden manifest punctuation, so screen readers hear the values, not the
+// quote marks and brackets.
+function Punc({ children }: { children: string }) {
   return (
-    <div className='flex flex-wrap gap-2 justify-center'>
-      {FALLBACK_SKILLS.map(skill => (
-        <Badge key={skill} variant='secondary' className='text-sm'>
-          {skill}
-        </Badge>
-      ))}
+    <span aria-hidden className='text-code-muted'>
+      {children}
+    </span>
+  )
+}
+
+// builds/contact links: underlined (not colour alone — WCAG 1.4.1) in the
+// lavender code-link token (8.67 on the code surface).
+const CODE_LINK =
+  'text-code-link underline decoration-code-muted/70 underline-offset-4 hover:decoration-code-link focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-code-link rounded-sm'
+
+function ProofCell({
+  value,
+  label,
+  href,
+  internal,
+}: {
+  value: string
+  label: string
+  href: string
+  internal: boolean
+}) {
+  // flex-col-reverse: label (dt) before value (dd) in the DOM so a screen
+  // reader hears "PyPI downloads … 23.6k", while sighted users see the big
+  // numeral on top. No sr-only duplicate (fixes the double-announce).
+  const numeral = (
+    <span className='font-mono text-5xl sm:text-6xl font-semibold tabular-nums leading-none text-primary group-hover:underline underline-offset-8 decoration-2'>
+      {value}
+    </span>
+  )
+  return (
+    <div className='flex flex-col-reverse'>
+      <dt className='mt-2 text-xs sm:text-sm text-muted-foreground'>{label}</dt>
+      <dd>
+        {internal ? (
+          <Link
+            to={href}
+            className='group inline-block rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+          >
+            {numeral}
+          </Link>
+        ) : (
+          <a
+            href={href}
+            className='group inline-block rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+          >
+            {numeral}
+          </a>
+        )}
+      </dd>
     </div>
   )
 }
 
-function Eyebrow({ children }: { children: string }) {
-  return (
-    <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>{children}</p>
-  )
-}
-
 export default function About() {
-  const { repositories, loading, error } = useGitHubRepositories()
-
-  const owned = repositories.filter(r => !r.fork)
-  const totalStars = owned.reduce((sum, r) => sum + (r.stargazers_count || 0), 0)
-
   return (
     <div className='container mx-auto px-4 py-8'>
       <div className='max-w-5xl mx-auto'>
-        {/* Hero Section */}
-        <section className='relative py-12 md:py-20 mb-16'>
-          <div
-            className='absolute -top-20 left-1/2 -translate-x-1/2 w-[500px] h-[300px] rounded-full opacity-[0.07] blur-3xl pointer-events-none'
-            style={{ background: 'radial-gradient(circle, hsl(var(--primary)), transparent 70%)' }}
-          />
-
-          <div className='relative text-center'>
-            <div className='mx-auto mb-6 h-20 w-20 rounded-full bg-primary flex items-center justify-center shadow-lg shadow-primary/20'>
-              <span className='text-2xl font-bold text-primary-foreground tracking-tight'>VS</span>
-            </div>
-
-            <h1 className='text-4xl sm:text-5xl md:text-6xl font-bold mb-3 text-foreground'>
-              {APP_STRINGS.FULL_NAME}
-            </h1>
-
-            <p className='text-xl sm:text-2xl font-semibold text-foreground mb-4'>
-              {APP_STRINGS.ROLE}
+        {/* Hero — package manifest */}
+        <section className='py-8 md:py-12 mb-14'>
+          <CodeSurface className='text-sm sm:text-base leading-7'>
+            <p aria-hidden className='text-code-muted mb-2'>
+              # {APP_STRINGS.HANDLE}
             </p>
+            <dl className='grid grid-cols-[5rem_1fr] sm:grid-cols-[6rem_1fr] gap-x-4 gap-y-1'>
+              <dt className='text-code-muted'>name</dt>
+              <dd className='whitespace-nowrap'>
+                <Punc>= &quot;</Punc>
+                <h1 className='inline font-mono text-xl sm:text-3xl font-semibold text-code-foreground'>
+                  {APP_STRINGS.FULL_NAME}
+                </h1>
+                <Punc>&quot;</Punc>
+              </dd>
 
-            <p className='text-lg text-muted-foreground mb-4 max-w-2xl mx-auto leading-relaxed'>
-              {APP_STRINGS.TAGLINE}
-            </p>
+              <dt className='text-code-muted'>role</dt>
+              <dd className='text-code-foreground'>
+                <Punc>= &quot;</Punc>
+                {APP_STRINGS.ROLE}
+                <Punc>&quot;</Punc>
+              </dd>
 
-            <div className='flex items-center justify-center gap-1.5 text-sm text-muted-foreground mb-8'>
-              <MapPin className='h-3.5 w-3.5' />
-              <span>{APP_STRINGS.LOCATION}</span>
-            </div>
+              <dt className='text-code-muted'>location</dt>
+              <dd className='text-code-foreground'>
+                <Punc>= &quot;</Punc>
+                {APP_STRINGS.LOCATION}
+                <Punc>&quot;</Punc>
+              </dd>
 
-            <div className='flex flex-wrap items-center justify-center gap-3'>
-              <Button asChild size='lg'>
-                <a
-                  href={APP_STRINGS.GITHUB_URL}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='flex items-center gap-2'
-                >
-                  <GitHubIcon className='h-4 w-4' />
-                  GitHub
-                </a>
-              </Button>
-              <Button variant='outline' asChild size='lg'>
+              <dt className='text-code-muted'>builds</dt>
+              <dd className='text-code-foreground'>
+                <Punc>= [</Punc>
+                <span className='flex flex-col sm:inline'>
+                  {BUILDS.map((pkg, i) => (
+                    <span key={pkg} className='whitespace-nowrap'>
+                      <Punc>&quot;</Punc>
+                      <Link to={`/mcp-install?server=${pkg}`} className={CODE_LINK}>
+                        {pkg}
+                      </Link>
+                      <Punc>&quot;</Punc>
+                      {i < BUILDS.length - 1 && <Punc>, </Punc>}
+                    </span>
+                  ))}
+                </span>
+                <Punc>]</Punc>
+              </dd>
+
+              {/* contact row — puts a reachable action into the first phone
+                  viewport without a separate block (critique P1, copy H6). */}
+              <dt className='text-code-muted'>contact</dt>
+              <dd className='text-code-foreground'>
+                <Punc>= [</Punc>
+                <Punc>&quot;</Punc>
                 <a
                   href={APP_STRINGS.LINKEDIN_URL}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='flex items-center gap-2'
+                  className={CODE_LINK}
                 >
-                  <LinkedInIcon className='h-4 w-4' />
-                  LinkedIn
+                  linkedin
                 </a>
-              </Button>
-              <Button variant='ghost' asChild size='lg'>
-                <a href='#experience'>{APP_STRINGS.EXPERIENCE_CTA}</a>
-              </Button>
-            </div>
-          </div>
-        </section>
+                <Punc>&quot;, &quot;</Punc>
+                <a
+                  href={APP_STRINGS.GITHUB_URL}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className={CODE_LINK}
+                >
+                  github
+                </a>
+                <Punc>&quot;</Punc>
+                <Punc>]</Punc>
+              </dd>
+            </dl>
+            {/* Green = "published", and only inside the code surface. */}
+            <p className='mt-3 text-code-accent'>
+              <span aria-hidden>● </span>
+              {APP_STRINGS.MANIFEST_LIVE}
+            </p>
+          </CodeSurface>
 
-        {/* About — editorial layout */}
-        <section className='mb-16'>
-          <div className='grid md:grid-cols-5 gap-10 items-start'>
-            {/* Left: narrative (3/5) */}
-            <div className='md:col-span-3 space-y-5'>
-              <div>
-                <Eyebrow>{APP_STRINGS.ABOUT_EYEBROW}</Eyebrow>
-                <h2 className='text-2xl sm:text-3xl font-bold'>{APP_STRINGS.ABOUT_HEADING}</h2>
-              </div>
-              <p className='text-muted-foreground leading-relaxed'>{APP_STRINGS.ABOUT_P1}</p>
-              <p className='text-muted-foreground leading-relaxed'>{APP_STRINGS.ABOUT_P2}</p>
-              <p className='text-muted-foreground leading-relaxed'>{APP_STRINGS.ABOUT_P3}</p>
-            </div>
+          {/* Proof strip — ruled, 64px tabular mono numerals in #847492. */}
+          <dl className='mt-8 grid grid-cols-2 sm:grid-cols-4 gap-x-4 gap-y-6 border-y-2 border-foreground py-6'>
+            {PROOF.map(cell => (
+              <ProofCell key={cell.label} {...cell} />
+            ))}
+          </dl>
+          {hasDownloads && (
+            <p className='mt-3 text-xs text-link'>
+              Downloads from pypistats.org, without mirrors, as of {stats.windowEnd}.
+            </p>
+          )}
 
-            {/* Right: highlights — each points at something verifiable */}
-            <div className='md:col-span-2 grid grid-cols-2 gap-4'>
-              <Link to='/mcp-install' className={HIGHLIGHT_TILE}>
-                <div className='h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center'>
-                  <Blocks className='h-5 w-5 text-primary' />
-                </div>
-                <p className='font-semibold text-sm'>4 MCP servers</p>
-                <p className='text-xs text-muted-foreground'>GitLab · Atlassian · Coda · Argo CD</p>
-                <PypiDownloads />
-              </Link>
+          <p className='mt-6 text-lg text-foreground max-w-2xl leading-relaxed'>
+            {APP_STRINGS.TAGLINE}
+          </p>
 
-              <Link to='/repositories' className={HIGHLIGHT_TILE}>
-                <div className='h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center'>
-                  <FolderGit2 className='h-5 w-5 text-primary' />
-                </div>
-                <p className='font-semibold text-sm'>
-                  {owned.length > 0 ? `${owned.length} repos` : 'Public repos'}
-                </p>
-                <p className='text-xs text-muted-foreground'>Open source on GitHub</p>
-              </Link>
-
+          {/* A recruiter's next step is a message: LinkedIn primary, GitHub outline. */}
+          <div className='mt-6 flex flex-wrap items-center gap-3'>
+            <Button asChild size='lg'>
+              <a
+                href={APP_STRINGS.LINKEDIN_URL}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2'
+              >
+                <LinkedInIcon className='h-4 w-4' />
+                LinkedIn
+              </a>
+            </Button>
+            <Button variant='outline' asChild size='lg'>
               <a
                 href={APP_STRINGS.GITHUB_URL}
                 target='_blank'
                 rel='noopener noreferrer'
-                className={HIGHLIGHT_TILE}
+                className='flex items-center gap-2'
               >
-                <div className='h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center'>
-                  <GitHubIcon className='h-5 w-5 text-primary' />
-                </div>
-                <p className='font-semibold text-sm'>GitHub</p>
-                <p className='text-xs text-muted-foreground'>@vish288</p>
+                <GitHubIcon className='h-4 w-4' />
+                GitHub
               </a>
-
-              {totalStars > 0 && (
-                <div className='rounded-xl border bg-muted/30 p-4 flex flex-col items-center text-center gap-2'>
-                  <div className='h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center'>
-                    <Star className='h-5 w-5 text-primary' />
-                  </div>
-                  <p className='font-semibold text-sm'>{totalStars} stars</p>
-                  <p className='text-xs text-muted-foreground'>Across public repos</p>
-                </div>
-              )}
-            </div>
+            </Button>
           </div>
         </section>
 
-        {/* Capabilities */}
+        {/* 01 — What I do */}
         <section className='mb-16'>
-          <Eyebrow>{APP_STRINGS.CAPABILITIES_EYEBROW}</Eyebrow>
-          <h2 className='text-2xl sm:text-3xl font-bold mb-6'>
+          <SectionRule index='01' className='mb-6'>
+            {APP_STRINGS.ABOUT_HEADING}
+          </SectionRule>
+          <p className='max-w-3xl text-foreground leading-relaxed'>{APP_STRINGS.ABOUT_BODY}</p>
+        </section>
+
+        {/* 02 — What I build */}
+        <section className='mb-16'>
+          <SectionRule index='02' className='mb-6'>
             {APP_STRINGS.CAPABILITIES_HEADING}
-          </h2>
-          <dl className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+          </SectionRule>
+          <dl className='grid gap-4 sm:grid-cols-2'>
             {APP_STRINGS.CAPABILITIES.map(cap => (
-              <div key={cap.title} className='rounded-xl border bg-muted/30 p-5'>
+              <div key={cap.title} className='rounded border bg-muted/30 p-5'>
                 <dt className='font-semibold text-foreground'>{cap.title}</dt>
                 <dd className='mt-1.5 text-sm text-muted-foreground leading-relaxed'>{cap.body}</dd>
               </div>
@@ -179,16 +247,18 @@ export default function About() {
           </dl>
         </section>
 
-        {/* Experience */}
-        <section id='experience' className='mb-16 scroll-mt-20'>
-          <Eyebrow>{APP_STRINGS.EXPERIENCE_EYEBROW}</Eyebrow>
-          <h2 className='text-2xl sm:text-3xl font-bold mb-8'>{APP_STRINGS.EXPERIENCE_HEADING}</h2>
+        {/* 03 — Career */}
+        <section className='mb-16'>
+          <SectionRule index='03' className='mb-8'>
+            {APP_STRINGS.EXPERIENCE_HEADING}
+          </SectionRule>
 
           <ol className='space-y-0'>
             {APP_STRINGS.EXPERIENCE.map(entry => (
               <li
-                key={entry.period + entry.roles[0]}
-                className='grid gap-2 border-t border-border/60 py-8 first:border-t-0 first:pt-0 md:grid-cols-[8rem_1fr] md:gap-8'
+                key={entry.id}
+                id={entry.id}
+                className='scroll-mt-20 grid gap-2 border-t border-border/60 py-8 first:border-t-0 first:pt-0 md:grid-cols-[8rem_1fr] md:gap-8'
               >
                 <p className='text-sm font-medium text-muted-foreground tabular-nums md:text-right'>
                   {entry.period}
@@ -225,56 +295,43 @@ export default function About() {
               href={APP_STRINGS.LINKEDIN_URL}
               target='_blank'
               rel='noopener noreferrer'
-              className='font-medium text-primary underline-offset-4 hover:underline'
+              className='font-medium text-link underline underline-offset-4 decoration-link/40 hover:decoration-link'
             >
               {APP_STRINGS.EXPERIENCE_LINK}
             </a>
           </div>
         </section>
 
-        {/* Skills Word Cloud — from public repos */}
+        {/* 04 — Get in touch */}
         <section className='mb-12'>
-          <Card>
-            <CardHeader>
-              {/* h2 (not the default CardTitle h3) so the skills card is a peer
-                  of Career and its Languages/Topics stay h3 beneath it. */}
-              <h2 className='flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight'>
-                <Code2 className='h-5 w-5' />
-                {APP_STRINGS.SKILLS_TITLE}
-              </h2>
-              <CardDescription>{APP_STRINGS.SKILLS_SUBTITLE}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {loading && (
-                <div role='status' className='flex items-center justify-center h-64'>
-                  <Loader2
-                    className='h-8 w-8 text-primary motion-safe:animate-spin'
-                    aria-hidden='true'
-                  />
-                  <span className='ml-2 text-muted-foreground'>
-                    {APP_STRINGS.LOADING_REPOSITORIES}
-                  </span>
-                </div>
-              )}
-
-              {/* API failure degrades quietly to an evidenced fallback — no alarm copy. */}
-              {!loading && error && <FallbackSkills />}
-
-              {!loading && !error && owned.length > 0 && (
-                <div className='space-y-4'>
-                  <SimpleWordCloud repositories={owned} />
-                  <p className='text-sm text-muted-foreground'>
-                    {APP_STRINGS.REPOSITORY_COUNT_MESSAGE.replace(
-                      '{count}',
-                      owned.length.toString()
-                    )}
-                  </p>
-                </div>
-              )}
-
-              {!loading && !error && owned.length === 0 && <FallbackSkills />}
-            </CardContent>
-          </Card>
+          <SectionRule index='04' className='mb-6'>
+            {APP_STRINGS.CONTACT_HEADING}
+          </SectionRule>
+          <p className='max-w-2xl text-foreground leading-relaxed'>{APP_STRINGS.CONTACT_BODY}</p>
+          <div className='mt-5 flex flex-wrap items-center gap-3'>
+            <Button asChild>
+              <a
+                href={APP_STRINGS.LINKEDIN_URL}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2'
+              >
+                <LinkedInIcon className='h-4 w-4' />
+                Message me on LinkedIn
+              </a>
+            </Button>
+            <Button variant='outline' asChild>
+              <a
+                href={APP_STRINGS.GITHUB_URL}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='flex items-center gap-2'
+              >
+                <GitHubIcon className='h-4 w-4' />
+                Code on GitHub
+              </a>
+            </Button>
+          </div>
         </section>
       </div>
     </div>

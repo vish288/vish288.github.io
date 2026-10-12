@@ -67,13 +67,9 @@ const PAGE_SIZE = 10
 function RepositoriesHero({ children }: { children?: ReactNode }) {
   return (
     <section className='mb-10'>
-      <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>
-        Open Source
-      </p>
+      <p className='text-xs font-semibold uppercase tracking-widest text-link mb-2'>Open Source</p>
       <h1 className='text-3xl sm:text-4xl font-bold tracking-tight mb-3'>Repositories</h1>
-      <p className='text-lg text-muted-foreground mb-6 max-w-2xl'>
-        Open source projects and contributions on GitHub.
-      </p>
+      <p className='text-lg text-muted-foreground mb-6 max-w-2xl'>Projects I own on GitHub.</p>
       {children}
     </section>
   )
@@ -83,7 +79,7 @@ export default function Repositories() {
   const { repositories: repos, loading, error, retry } = useGitHubRepositories()
   const [sortBy, setSortBy] = useState<SortOption>('updated')
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
-  const [filter, setFilter] = useState<FilterOption>('all')
+  const [filter, setFilter] = useState<FilterOption>('original')
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE)
   const sentinelRef = useRef<HTMLDivElement>(null)
 
@@ -195,7 +191,7 @@ export default function Repositories() {
         <RepositoriesHero />
         <div role='status' className='flex items-center justify-center gap-3 py-16'>
           <Loader2 className='h-8 w-8 text-primary motion-safe:animate-spin' aria-hidden='true' />
-          <span className='text-muted-foreground'>Loading repositories...</span>
+          <span className='text-muted-foreground'>Loading repositories from GitHub…</span>
         </div>
       </div>
     )
@@ -207,9 +203,7 @@ export default function Repositories() {
     return (
       <div className='container mx-auto px-4 py-8 max-w-5xl'>
         <RepositoriesHero />
-        <p className='text-muted-foreground mb-5'>
-          Couldn&apos;t load repositories from GitHub right now.
-        </p>
+        <p className='text-muted-foreground mb-5'>Could not load repositories from GitHub.</p>
         <div className='flex flex-wrap items-center gap-3'>
           <Button onClick={retry}>Retry</Button>
           <Button variant='outline' asChild>
@@ -232,43 +226,36 @@ export default function Repositories() {
     <div className='container mx-auto px-4 py-8 max-w-5xl'>
       {/* Hero + inline stats */}
       <RepositoriesHero>
-        <div className='flex flex-wrap gap-6 text-sm'>
-          <div className='flex items-center gap-1.5'>
-            <GitHubIcon className='h-4 w-4 text-muted-foreground' />
-            <span className='font-semibold'>{repos.length}</span>
-            <span className='text-muted-foreground'>repos</span>
-          </div>
-          <div className='flex items-center gap-1.5'>
-            <Star className='h-4 w-4 text-muted-foreground' />
-            <span className='font-semibold'>{totalStars}</span>
-            <span className='text-muted-foreground'>stars</span>
-          </div>
-          <div className='flex items-center gap-1.5'>
-            <span className='font-semibold'>{originalRepos.length}</span>
-            <span className='text-muted-foreground'>original</span>
-            <span className='text-muted-foreground/50'>·</span>
-            <span className='font-semibold'>{forkedRepos.length}</span>
-            <span className='text-muted-foreground'>forked</span>
-          </div>
+        <div className='flex flex-wrap items-center gap-x-2 gap-y-1 text-sm'>
+          <span className='font-semibold'>{originalRepos.length}</span>
+          <span className='text-muted-foreground'>original</span>
+          <span className='text-muted-foreground/50'>·</span>
+          <span className='font-semibold'>{forkedRepos.length}</span>
+          <span className='text-muted-foreground'>forks</span>
+          <span className='text-muted-foreground/50'>·</span>
+          <span className='font-semibold'>{totalStars}</span>
+          <span className='text-muted-foreground'>stars</span>
         </div>
       </RepositoriesHero>
 
       {/* MCP featured banner */}
-      <section className='mb-8 rounded-xl border border-primary/20 bg-gradient-to-r from-primary/5 to-transparent p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4'>
+      <section className='mb-8 rounded border bg-muted/30 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4'>
         <div className='flex items-start gap-3'>
-          <div className='h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0'>
-            <Blocks className='h-4 w-4 text-primary' />
+          <div className='h-9 w-9 rounded bg-secondary flex items-center justify-center flex-shrink-0'>
+            <Blocks className='h-4 w-4 text-foreground' aria-hidden='true' />
           </div>
           <div>
-            <p className='font-semibold text-sm'>MCP Installation Gateway</p>
+            <p className='font-semibold text-sm'>
+              MCP servers: GitLab, Atlassian, Coda and Argo CD
+            </p>
             <p className='text-xs text-muted-foreground'>
-              One-click install for GitLab, Atlassian, Coda, and Argo CD MCP servers.
+              Install in VS Code or Cursor, or copy a config for 20 clients.
             </p>
           </div>
         </div>
         <Button asChild size='sm' variant='outline' className='flex-shrink-0'>
           <Link to='/mcp-install' className='flex items-center gap-1.5'>
-            Open <ArrowRight className='h-3.5 w-3.5' />
+            Install <ArrowRight className='h-3.5 w-3.5' aria-hidden='true' />
           </Link>
         </Button>
       </section>
@@ -277,7 +264,7 @@ export default function Repositories() {
       <section className='mb-6 pb-6 border-b'>
         <div className='flex flex-col sm:flex-row sm:items-center gap-4'>
           {/* Filter — segmented control */}
-          <div className='inline-flex rounded-lg border bg-muted/30 p-0.5'>
+          <div className='inline-flex rounded border bg-muted/30 p-0.5'>
             {(
               [
                 ['all', 'All', repos.length],
@@ -290,16 +277,20 @@ export default function Repositories() {
                 onClick={() => handleFilterChange(key)}
                 aria-pressed={filter === key}
                 className={`
-                  touch-target inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md transition-all cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
+                  touch-target inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-md transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring
                   ${
                     filter === key
-                      ? 'bg-background shadow-sm text-foreground'
+                      ? 'bg-primary text-primary-foreground'
                       : 'text-muted-foreground hover:text-foreground'
                   }
                 `}
               >
                 {label}
-                <span className='ml-1 text-muted-foreground'>{count}</span>
+                <span
+                  className={`ml-1 ${filter === key ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}
+                >
+                  {count}
+                </span>
               </button>
             ))}
           </div>
@@ -344,7 +335,7 @@ export default function Repositories() {
             href={repo.html_url}
             target='_blank'
             rel='noopener noreferrer'
-            className='group flex items-start gap-4 py-4 px-3 -mx-3 rounded-lg hover:bg-muted/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+            className='group flex items-start gap-4 py-4 px-3 -mx-3 rounded hover:bg-muted/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
           >
             {/* Language dot */}
             <div className='mt-1.5 flex-shrink-0'>
@@ -364,7 +355,7 @@ export default function Repositories() {
             {/* Content */}
             <div className='flex-1 min-w-0'>
               <div className='flex items-center gap-2 mb-1'>
-                <span className='font-semibold text-sm group-hover:text-primary transition-colors truncate'>
+                <span className='font-semibold text-sm group-hover:text-link transition-colors truncate'>
                   {repo.name}
                 </span>
                 {repo.fork && (
@@ -392,7 +383,7 @@ export default function Repositories() {
                     <GitFork className='h-3 w-3' /> {repo.forks_count}
                   </span>
                 )}
-                <span>Updated {new Date(repo.updated_at).toLocaleDateString()}</span>
+                <span>Updated {repo.updated_at.slice(0, 10)}</span>
                 {repo.topics.length > 0 && (
                   <span className='hidden sm:flex gap-1'>
                     {prioritizeTopics(repo.topics)
@@ -417,15 +408,22 @@ export default function Repositories() {
             onClick={loadMore}
             className='flex items-center gap-2 rounded-md px-2 py-1 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer bg-transparent border-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
           >
-            <ChevronDown className='h-4 w-4' />
-            Show more ({filteredAndSortedRepos.length - visibleCount} remaining)
+            <ChevronDown className='h-4 w-4' aria-hidden='true' />
+            Show {filteredAndSortedRepos.length - visibleCount} more
           </button>
         </div>
       )}
 
       {filteredAndSortedRepos.length === 0 && (
-        <div className='text-center py-16'>
-          <p className='text-muted-foreground'>No repositories found with the current filter.</p>
+        <div className='flex flex-col items-center gap-4 py-16 text-center'>
+          <p className='text-muted-foreground'>
+            {filter === 'all' ? 'No repositories found.' : `No ${filter} repositories.`}
+          </p>
+          {filter !== 'all' && (
+            <Button variant='outline' size='sm' onClick={() => handleFilterChange('all')}>
+              Show all
+            </Button>
+          )}
         </div>
       )}
     </div>

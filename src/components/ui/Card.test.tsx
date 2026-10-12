@@ -40,7 +40,7 @@ describe('Card Components', () => {
     const header = screen.getByTestId('header')
     const title = screen.getByTestId('title')
 
-    expect(card).toHaveClass('rounded-lg', 'border', 'bg-card', 'shadow-sm')
+    expect(card).toHaveClass('rounded-lg', 'border', 'bg-card')
     expect(header).toHaveClass('flex', 'flex-col', 'space-y-1.5', 'p-6')
     expect(title).toHaveClass('text-2xl', 'font-semibold', 'leading-none', 'tracking-tight')
   })

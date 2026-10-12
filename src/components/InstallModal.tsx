@@ -12,7 +12,7 @@ import { renderOutputs, secretKeys, type RenderedOutput } from '@/lib/mcpInstall
 
 const OS_LABEL: Record<Os, string> = { mac: 'macOS', linux: 'Linux', win: 'Windows' }
 
-const COPY_FAILED = 'Copy failed. Select the text above and copy it.'
+const COPY_FAILED = 'Could not copy. Select the text above and copy it.'
 
 // File-path rows for the modal <dl>: a string path is one "File" row, a per-OS
 // map is one row each. UI-location clients have no file rows.
@@ -24,8 +24,9 @@ function pathRows(client: McpClient): [string, string][] | null {
   return (Object.entries(p) as [Os, string][]).map(([os, v]) => [OS_LABEL[os], v])
 }
 
-function copyButtonLabel(count: number, block: RenderedOutput): string {
-  if (count === 1) return 'Copy to clipboard'
+// Name the object copied, for one block or two (so the label never changes
+// meaning between the single- and two-block layouts).
+function copyButtonLabel(_count: number, block: RenderedOutput): string {
   return block.label === 'Command' ? 'Copy command' : 'Copy config'
 }
 
@@ -50,7 +51,7 @@ function CodeBlock({
 }) {
   return (
     <div className='mt-2'>
-      <pre className='bg-muted border rounded-lg p-4 text-sm font-mono whitespace-pre-wrap [overflow-wrap:anywhere] mb-2'>
+      <pre className='bg-muted border rounded p-4 text-sm font-mono whitespace-pre-wrap [overflow-wrap:anywhere] mb-2'>
         {block.code}
       </pre>
       <Button onClick={() => onCopy(block, index)} size='sm' className='gap-2'>
@@ -163,7 +164,7 @@ export function InstallModal({
         if (e.target === e.currentTarget) onClose()
       }}
     >
-      <div className='bg-background border rounded-xl w-full max-w-[600px] p-8 shadow-2xl max-h-[90vh] overflow-y-auto'>
+      <div className='bg-background border-2 border-border rounded w-full max-w-[600px] p-8 max-h-[90vh] overflow-y-auto'>
         <div className='flex items-center justify-between mb-5'>
           <h2 id='install-modal-title' className='text-lg font-semibold'>
             {server.displayName} for {client.name}
@@ -180,7 +181,7 @@ export function InstallModal({
               href='https://docs.astral.sh/uv/getting-started/installation/'
               target='_blank'
               rel='noopener noreferrer'
-              className='text-primary hover:underline inline-flex items-center gap-1'
+              className='text-link hover:underline inline-flex items-center gap-1'
             >
               Install uv
               <ExternalLink aria-hidden='true' className='h-3 w-3' />
@@ -243,7 +244,7 @@ export function InstallModal({
                           href={v.tokenUrl}
                           target='_blank'
                           rel='noopener noreferrer'
-                          className='text-primary hover:underline inline-flex items-center gap-1'
+                          className='text-link hover:underline inline-flex items-center gap-1'
                         >
                           {v.tokenLabel}
                           <ExternalLink aria-hidden='true' className='h-3 w-3' />
@@ -277,9 +278,9 @@ export function InstallModal({
           href={client.docs}
           target='_blank'
           rel='noopener noreferrer'
-          className='mt-5 text-sm text-primary hover:underline inline-flex items-center gap-1'
+          className='mt-5 text-sm text-link hover:underline inline-flex items-center gap-1'
         >
-          Docs <ExternalLink aria-hidden='true' className='h-3 w-3' />
+          {client.name} MCP docs <ExternalLink aria-hidden='true' className='h-3 w-3' />
         </a>
 
         <p aria-live='polite' className='sr-only'>

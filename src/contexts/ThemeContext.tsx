@@ -61,6 +61,15 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem('theme', theme)
   }, [theme])
 
+  useEffect(() => {
+    // Enable the colour fade only after the first paint, so a dark load (class
+    // set pre-paint by /theme-init.js) never animates up from light.
+    const id = requestAnimationFrame(() => {
+      window.document.documentElement.classList.add('theme-ready')
+    })
+    return () => cancelAnimationFrame(id)
+  }, [])
+
   return (
     <ThemeContext.Provider value={{ theme, setTheme, actualTheme }}>
       {children}

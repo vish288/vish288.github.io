@@ -5,83 +5,109 @@
 @layer base {
   :root {
     color-scheme: light;
-    --background: 0 0% 99%;
-    --foreground: 220 15% 12%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 15% 12%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 15% 12%;
-    --primary: 152 56% 32%;
-    --primary-foreground: 0 0% 99%;
-    /* Darker green for hover on filled primary: keeps primary-foreground at
-       ≥4.5:1 (5.97:1), where lightening the fill dropped it to 4.0:1. */
-    --primary-hover: 152 56% 28%;
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 15% 12%;
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 43%;
-    --accent: 152 30% 94%;
-    --accent-foreground: 220 15% 12%;
+    --font-mono: 'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      'Liberation Mono', 'Courier New', monospace;
+    /* D — Manifest Ledger. #847492 is the single brand; green lives only
+       inside the code surface. Every triplet round-trips to the measured hex
+       (verified by scripts/contrast.mjs). */
+    --background: 40 20% 97.1%; /* #f9f8f6 paper */
+    --foreground: 218.2 21.6% 10%; /* #14181f ink */
+    --card: 40 20% 97.1%;
+    --card-foreground: 218.2 21.6% 10%;
+    --popover: 40 20% 97.1%;
+    --popover-foreground: 218.2 21.6% 10%;
+    --primary: 272 12.3% 51.4%; /* #847492 — exact round-trip (272 12% 51% renders #837391) */
+    --primary-foreground: 225 15.4% 5.1%; /* #0b0c0f ink label — never white (white=4.29 fails) */
+    --primary-hover: 272 12.3% 55%; /* #8d7e9a lighter hover, ink label 5.2 both themes */
+    --secondary: 276 12.2% 92%; /* #ebe8ed wash */
+    --secondary-foreground: 218.2 21.6% 10%;
+    --muted: 276 12.2% 92%;
+    --muted-foreground: 219 10.3% 38%; /* #575e6b (6.15 on paper) */
+    --accent: 276 12.2% 92%;
+    --accent-foreground: 218.2 21.6% 10%;
     --destructive: 0 72% 42%;
-    --destructive-foreground: 0 0% 99%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 152 56% 32%;
-    --radius: 0.625rem;
+    --destructive-foreground: 40 20% 97.1%;
+    --border: 273.3 11.7% 84.9%; /* #d9d4dd */
+    --input: 273.3 11.7% 84.9%;
+    --ring: 272 12.3% 51.4%; /* #847492 focus */
+    --radius: 0.25rem;
+    /* Link token — small link text off the brand fill (#847492 fails small). */
+    --link: 272.7 12% 36.1%; /* #5d5167 (6.97 on paper) */
+    /* Code surface — #15141a dark in both themes (D). */
+    --code: 250 13% 9%; /* #15141a */
+    --code-foreground: 210 20% 92.2%; /* #e7ebef */
+    --code-muted: 215.5 12% 63.9%; /* #98a1ae keys/punctuation */
+    --code-accent: 152 49.8% 57.8%; /* #5ec997 — "live" running marker only */
+    --code-link: 271.8 11.9% 72%; /* #b8afc0 lavender builds links */
+    --code-border: 255 10% 20%;
   }
 
   .dark {
     color-scheme: dark;
-    --background: 224 20% 6%;
-    --foreground: 210 20% 92%;
-    --card: 224 18% 9%;
-    --card-foreground: 210 20% 92%;
-    --popover: 224 18% 9%;
-    --popover-foreground: 210 20% 92%;
-    --primary: 152 50% 48%;
-    --primary-foreground: 224 20% 6%;
-    /* Lighter green for hover on filled primary (8.85:1 on dark text). */
-    --primary-hover: 152 50% 54%;
-    --secondary: 224 15% 14%;
-    --secondary-foreground: 210 20% 92%;
-    --muted: 224 15% 14%;
-    --muted-foreground: 215 14% 58%;
-    --accent: 224 15% 14%;
-    --accent-foreground: 210 20% 92%;
-    --destructive: 0 70% 62%;
-    --destructive-foreground: 224 20% 6%;
-    --border: 224 12% 16%;
-    --input: 224 12% 16%;
-    --ring: 152 50% 48%;
+    --background: 225 15.4% 5.1%; /* #0b0c0f — dark bg MUST be this (primary fails on #121117/#15141a) */
+    --foreground: 210 20% 92.2%; /* #e7ebef */
+    --card: 250 13% 9%;
+    --card-foreground: 210 20% 92.2%;
+    --popover: 250 13% 9%;
+    --popover-foreground: 210 20% 92.2%;
+    --primary: 272 12.3% 51.4%; /* #847492 (4.56 on #0b0c0f) */
+    --primary-foreground: 225 15.4% 5.1%; /* #0b0c0f ink label */
+    --primary-hover: 272 12.3% 55%; /* #8d7e9a lighter hover, ink label 5.2 both themes */
+    --secondary: 255 14.3% 11%; /* #1a1820 wash */
+    --secondary-foreground: 210 20% 92.2%;
+    --muted: 255 14.3% 11%;
+    --muted-foreground: 215.5 12% 63.9%; /* #98a1ae (7.49 on dark) */
+    --accent: 255 14.3% 11%;
+    --accent-foreground: 210 20% 92.2%;
+    --destructive: 0 63% 51%;
+    --destructive-foreground: 210 20% 92.2%;
+    --border: 260 10% 16%;
+    --input: 260 10% 16%;
+    --ring: 272 12.3% 51.4%;
+    --link: 271.6 11.7% 68%; /* #aea4b7 (8.19 on #0b0c0f) */
+    --code: 250 13% 9%;
+    --code-foreground: 210 20% 92.2%;
+    --code-muted: 215.5 12% 63.9%;
+    --code-accent: 152 49.8% 57.8%;
+    --code-link: 271.8 11.9% 72%;
+    --code-border: 255 10% 30%;
   }
 
   /* No-JS / first-paint dark mode: apply the dark tokens before the theme
-     provider runs when the OS prefers dark and the user hasn't chosen light.
-     CSP forbids an inline script, so this CSS route is the only pre-JS option.
-     ponytail: dark values mirror .dark above; keep the two in sync by hand. */
+     provider runs when the OS prefers dark and the user has not chosen light.
+     /theme-init.js (script-src 'self') sets the .dark/.light class before paint
+     for the explicit case; this media block covers JS-disabled visitors.
+     Parity with .dark above is asserted by src/index.css.test.ts. */
   @media (prefers-color-scheme: dark) {
     :root:not(.light) {
       color-scheme: dark;
-      --background: 224 20% 6%;
-      --foreground: 210 20% 92%;
-      --card: 224 18% 9%;
-      --card-foreground: 210 20% 92%;
-      --popover: 224 18% 9%;
-      --popover-foreground: 210 20% 92%;
-      --primary: 152 50% 48%;
-      --primary-foreground: 224 20% 6%;
-      --primary-hover: 152 50% 54%;
-      --secondary: 224 15% 14%;
-      --secondary-foreground: 210 20% 92%;
-      --muted: 224 15% 14%;
-      --muted-foreground: 215 14% 58%;
-      --accent: 224 15% 14%;
-      --accent-foreground: 210 20% 92%;
-      --destructive: 0 70% 62%;
-      --destructive-foreground: 224 20% 6%;
-      --border: 224 12% 16%;
-      --input: 224 12% 16%;
-      --ring: 152 50% 48%;
+      --background: 225 15.4% 5.1%;
+      --foreground: 210 20% 92.2%;
+      --card: 250 13% 9%;
+      --card-foreground: 210 20% 92.2%;
+      --popover: 250 13% 9%;
+      --popover-foreground: 210 20% 92.2%;
+      --primary: 272 12.3% 51.4%;
+      --primary-foreground: 225 15.4% 5.1%;
+    --primary-hover: 272 12.3% 55%; /* #8d7e9a lighter hover, ink label 5.2 both themes */
+      --secondary: 255 14.3% 11%;
+      --secondary-foreground: 210 20% 92.2%;
+      --muted: 255 14.3% 11%;
+      --muted-foreground: 215.5 12% 63.9%;
+      --accent: 255 14.3% 11%;
+      --accent-foreground: 210 20% 92.2%;
+      --destructive: 0 63% 51%;
+      --destructive-foreground: 210 20% 92.2%;
+      --border: 260 10% 16%;
+      --input: 260 10% 16%;
+      --ring: 272 12.3% 51.4%;
+      --link: 271.6 11.7% 68%;
+      --code: 250 13% 9%;
+      --code-foreground: 210 20% 92.2%;
+      --code-muted: 215.5 12% 63.9%;
+      --code-accent: 152 49.8% 57.8%;
+      --code-link: 271.8 11.9% 72%;
+      --code-border: 255 10% 30%;
     }
   }
 }
@@ -100,9 +126,12 @@
     @apply bg-background text-foreground;
   }
 
-  /* Fade the theme switch only when the user allows motion. */
+  /* Fade the theme switch only after first paint (html.theme-ready, added by
+     the ThemeProvider) and only when the user allows motion. Gating on
+     theme-ready keeps the first paint instant, so a dark load never fades up
+     from light. */
   @media (prefers-reduced-motion: no-preference) {
-    body {
+    html.theme-ready body {
       transition: background-color 0.3s ease, color 0.3s ease;
     }
   }
@@ -116,26 +145,6 @@
       min-height: 44px;
       min-width: 44px;
     }
-  }
-}
-
-/* Subtle page background gradient */
-@layer base {
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background:
-      radial-gradient(ellipse 80% 50% at 50% -20%, hsl(152 56% 32% / 0.04), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(220 60% 50% / 0.03), transparent);
-    pointer-events: none;
-  }
-
-  .dark body::before {
-    background:
-      radial-gradient(ellipse 80% 50% at 50% -20%, hsl(152 50% 48% / 0.06), transparent),
-      radial-gradient(ellipse 60% 40% at 100% 100%, hsl(220 60% 50% / 0.04), transparent);
   }
 }
 

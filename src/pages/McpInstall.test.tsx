@@ -32,7 +32,7 @@ describe('McpInstall Page', () => {
   it('renders the heading and all four server names', () => {
     renderMcpInstall()
     expect(
-      screen.getByRole('heading', { level: 1, name: /mcp installation gateway/i })
+      screen.getByRole('heading', { level: 1, name: /install an mcp server/i })
     ).toBeInTheDocument()
     for (const name of FULL_NAMES) expect(screen.getByText(name)).toBeInTheDocument()
   })
@@ -294,13 +294,13 @@ describe('McpInstall Page', () => {
     renderMcpInstall()
     await user.click(screen.getByRole('button', { name: 'Command: GitLab for Claude Code' }))
     const modal = screen.getByRole('dialog')
-    await user.click(within(modal).getByRole('button', { name: /copy to clipboard/i }))
+    await user.click(within(modal).getByRole('button', { name: /^copy command$/i }))
     expect(within(modal).getByRole('button', { name: /^copied$/i })).toBeInTheDocument()
 
     writeText.mockRejectedValueOnce(new Error('denied'))
     await user.click(within(modal).getByRole('button', { name: /^copied$/i }))
     const matches = await within(modal).findAllByText(
-      'Copy failed. Select the text above and copy it.'
+      'Could not copy. Select the text above and copy it.'
     )
     // One visible line plus the polite live region carry the same wording.
     expect(matches.length).toBeGreaterThanOrEqual(2)
