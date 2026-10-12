@@ -1,5 +1,28 @@
 # Changelog
 
+## [2.11.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.10.0...vish288-personal-website-v2.11.0) (2026-10-12)
+
+
+### Features
+
+* **mcp-install:** client-first gateway, 99 to 13 focusable elements ([bfb12bb](https://github.com/vish288/vish288.github.io/commit/bfb12bba311929acad108564a689bcc621716c12))
+* report a 15-day PyPI download window from the /overall feed ([08e3137](https://github.com/vish288/vish288.github.io/commit/08e3137c09522e4d9a3c98566e2242642c063d2b))
+* show live PyPI download totals on About and MCP install ([7e26972](https://github.com/vish288/vish288.github.io/commit/7e269720c45977eb2d03fcbd2079640304539e87))
+
+
+### Bug Fixes
+
+* build release tag in cron, validate PyPI counts, share deploy lock ([aefcdd8](https://github.com/vish288/vish288.github.io/commit/aefcdd8747d9d42a2b31b5dbb089478a3b490144))
+* count young packages in full over the 15-day window ([9b69e40](https://github.com/vish288/vish288.github.io/commit/9b69e404faf44a74c648cc8ea8709c84675f0fa3))
+* harden banned-name guard and finish audit review fixes ([4bf9d90](https://github.com/vish288/vish288.github.io/commit/4bf9d90d037e84c07aaf62ccd517a3cd86c4ad91))
+* **mcp-install:** review fixes — prototype keys, radio arrows, scroll target, focus ([af862ba](https://github.com/vish288/vish288.github.io/commit/af862ba43198654d0d916959fe0b3f82903d256c))
+* resolve audit a11y/perf findings and scrub employer name ([da0ba1f](https://github.com/vish288/vish288.github.io/commit/da0ba1fd385b67e50d4f5c84f1950eec212d5f45))
+
+
+### Documentation
+
+* add DESIGN.md recording the shipped design system ([2333bf5](https://github.com/vish288/vish288.github.io/commit/2333bf554f4cfa88d5604fe0ce7313e5a6d3df4f))
+
 ## [2.10.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.9.1...vish288-personal-website-v2.10.0) (2026-10-08)
 
 ### Features
