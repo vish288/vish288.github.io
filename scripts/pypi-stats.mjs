@@ -48,6 +48,16 @@ function isoDate(d) {
   return d.toISOString().slice(0, 10)
 }
 
+// External data is untrusted: a count must be a non-negative integer, else we
+// throw so resolveStats falls back to the committed snapshot rather than
+// writing a garbage number.
+function assertCount(value, pkg, field) {
+  if (!Number.isInteger(value) || value < 0) {
+    throw new Error(`invalid ${field} for ${pkg}: ${JSON.stringify(value)}`)
+  }
+  return value
+}
+
 // Fetch every package and sum the rolling-window totals. Throws if any fetch
 // fails so resolveStats can fall back as a whole (never a half-filled number).
 async function buildStats({ names, fetchRecentImpl, now }) {
@@ -56,9 +66,11 @@ async function buildStats({ names, fetchRecentImpl, now }) {
   let lastWeek = 0
   for (const pkg of names) {
     const r = await fetchRecentImpl(pkg)
-    packages[pkg] = { lastMonth: r.lastMonth, lastWeek: r.lastWeek }
-    lastMonth += r.lastMonth
-    lastWeek += r.lastWeek
+    const month = assertCount(r.lastMonth, pkg, 'last_month')
+    const week = assertCount(r.lastWeek, pkg, 'last_week')
+    packages[pkg] = { lastMonth: month, lastWeek: week }
+    lastMonth += month
+    lastWeek += week
   }
   return { fetchedAt: isoDate(now()), stale: false, lastMonth, lastWeek, packages }
 }
