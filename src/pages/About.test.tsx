@@ -1,14 +1,11 @@
-import { render, screen, waitFor, act } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import About from './About'
-import { resetGitHubCache } from '../hooks/useGitHubRepositories'
 import { APP_STRINGS } from '../constants/appStrings'
 import { bannedNames } from '../test/bannedNames'
-
-// Mock fetch
-const mockFetch = vi.fn()
-global.fetch = mockFetch
+import snapshot from '../generated/pypi-stats.json'
+import { formatDownloads } from '../lib/pypiStats'
 
 function renderAbout() {
   return render(
@@ -18,186 +15,94 @@ function renderAbout() {
   )
 }
 
-describe('About Page', () => {
-  beforeEach(() => {
-    mockFetch.mockClear()
-    mockFetch.mockRejectedValue(new Error('Test error'))
-    resetGitHubCache()
-  })
-
-  it('renders the main heading', async () => {
-    await act(async () => {
-      renderAbout()
-    })
-
-    const heading = screen.getByRole('heading', { level: 1, name: /visweshwaran s/i })
-    expect(heading).toBeInTheDocument()
-  })
-
-  it('displays the role line and tagline', async () => {
-    await act(async () => {
-      renderAbout()
-    })
-
-    expect(screen.getByText(/senior staff engineer & architect/i)).toBeInTheDocument()
-    expect(
-      screen.getByText(/i lead platform architecture for large enterprises/i)
-    ).toBeInTheDocument()
-  })
-
-  it('shows location information', async () => {
-    await act(async () => {
-      renderAbout()
-    })
-
+describe('About — manifest ledger', () => {
+  it('renders the manifest hero: name, role, location', () => {
+    renderAbout()
+    expect(screen.getByRole('heading', { level: 1, name: /visweshwaran s/i })).toBeInTheDocument()
+    expect(screen.getAllByText(/senior staff engineer & architect/i).length).toBeGreaterThan(0)
     expect(screen.getByText(/toronto, canada & india/i)).toBeInTheDocument()
   })
 
-  it('renders about section with narrative', async () => {
-    await act(async () => {
-      renderAbout()
-    })
-
-    expect(screen.getByRole('heading', { level: 2, name: /what i do/i })).toBeInTheDocument()
-    expect(screen.getByText(/i have built software since 2010/i)).toBeInTheDocument()
-    expect(screen.getByText(/servers for gitlab, atlassian, coda and argo cd/i)).toBeInTheDocument()
+  it('links each builds entry into the gateway', () => {
+    renderAbout()
+    for (const pkg of ['mcp-gitlab', 'mcp-atlassian-extended', 'mcp-coda', 'mcp-argocd']) {
+      expect(screen.getByRole('link', { name: pkg })).toHaveAttribute(
+        'href',
+        `/mcp-install?server=${pkg}`
+      )
+    }
   })
 
-  it('renders the capabilities section', async () => {
-    await act(async () => {
-      renderAbout()
-    })
-
-    expect(
-      screen.getByRole('heading', { level: 2, name: /where i add the most/i })
-    ).toBeInTheDocument()
-    expect(screen.getByText('Frontend platforms')).toBeInTheDocument()
-    expect(screen.getByText('Engineering leadership')).toBeInTheDocument()
-  })
-
-  it('renders the experience section with one h3 per entry', async () => {
-    await act(async () => {
-      renderAbout()
-    })
-
-    expect(screen.getByRole('heading', { level: 2, name: /^career$/i })).toBeInTheDocument()
-
-    // Each experience entry contributes exactly one h3 (the Skills card adds one more).
-    expect(screen.getByText(/senior staff consultant/i)).toBeInTheDocument()
-    expect(screen.getByText(/ai \/ platform engineer/i)).toBeInTheDocument()
-    expect(
-      screen.getByText(/b\.e\. electronics and communication, anna university/i)
-    ).toBeInTheDocument()
-
-    const fullHistory = screen.getByRole('link', { name: /full history on linkedin/i })
-    expect(fullHistory).toHaveAttribute(
+  it('puts a contact row in the manifest (linkedin + github)', () => {
+    renderAbout()
+    expect(screen.getByRole('link', { name: 'linkedin' })).toHaveAttribute(
       'href',
-      'https://www.linkedin.com/in/suryanarayananvisweshwaran/'
+      APP_STRINGS.LINKEDIN_URL
+    )
+    expect(screen.getByRole('link', { name: 'github' })).toHaveAttribute(
+      'href',
+      APP_STRINGS.GITHUB_URL
     )
   })
 
-  it('exposes experience entries as level-3 headings', async () => {
-    await act(async () => {
-      renderAbout()
-    })
-
-    const h3s = screen.getAllByRole('heading', { level: 3 })
-    // 5 experience entries (the Skills card title is now an h2, peer of Career)
-    expect(h3s.length).toBe(5)
+  it('shows the four-cell proof strip with the live downloads figure', () => {
+    renderAbout()
+    for (const cell of APP_STRINGS.PROOF) {
+      expect(screen.getByText(cell.value)).toBeInTheDocument()
+    }
+    // Fourth cell is the live 15-day downloads total from the snapshot.
+    expect(screen.getByText(formatDownloads(snapshot.lastFifteenDays))).toBeInTheDocument()
+    expect(screen.getByText(/pypistats\.org/i)).toBeInTheDocument()
+    expect(screen.getByText(new RegExp(snapshot.windowEnd))).toBeInTheDocument()
   })
 
-  it('names no employer or client', async () => {
-    await act(async () => {
-      renderAbout()
-    })
+  it('renders sections 01–04 with no 00 index', () => {
+    renderAbout()
+    expect(screen.getByRole('heading', { level: 2, name: /what i do/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: /what i build/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: /^career$/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: /get in touch/i })).toBeInTheDocument()
+    expect(screen.queryByText('00')).not.toBeInTheDocument()
+  })
 
-    // Cover both the rendered page and every string feeding llms.txt / JSON-LD.
+  it('renders the about body and a capability', () => {
+    renderAbout()
+    expect(screen.getByText(/i have built software since 2010/i)).toBeInTheDocument()
+    expect(screen.getByText('Frontend platforms')).toBeInTheDocument()
+  })
+
+  it('renders every experience entry as one h3, with education and a LinkedIn link', () => {
+    renderAbout()
+    const h3s = screen.getAllByRole('heading', { level: 3 })
+    expect(h3s.length).toBe(APP_STRINGS.EXPERIENCE.length)
+    expect(
+      screen.getByText(/b\.e\. electronics and communication, anna university/i)
+    ).toBeInTheDocument()
+    expect(screen.getByRole('link', { name: /full history on linkedin/i })).toHaveAttribute(
+      'href',
+      APP_STRINGS.LINKEDIN_URL
+    )
+  })
+
+  it('makes LinkedIn the primary hero CTA alongside GitHub', () => {
+    renderAbout()
+    const linkedin = screen
+      .getAllByRole('link', { name: /linkedin/i })
+      .find(l => /^linkedin$/i.test(l.textContent?.trim() ?? ''))
+    expect(linkedin).toHaveAttribute('href', APP_STRINGS.LINKEDIN_URL)
+    expect(linkedin).toHaveAttribute('target', '_blank')
+    const github = screen
+      .getAllByRole('link', { name: /github/i })
+      .find(l => /^github$/i.test(l.textContent?.trim() ?? ''))
+    expect(github).toHaveAttribute('href', APP_STRINGS.GITHUB_URL)
+  })
+
+  it('names no employer or client', () => {
+    renderAbout()
     const text = `${document.body.textContent ?? ''} ${JSON.stringify(APP_STRINGS)}`.toLowerCase()
     for (const name of bannedNames) {
       expect(text).not.toContain(name.toLowerCase())
     }
-  })
-
-  it('shows hero connect buttons with GitHub and LinkedIn links', async () => {
-    await act(async () => {
-      renderAbout()
-    })
-
-    const githubLinks = screen.getAllByRole('link', { name: /github/i })
-    const heroGithub = githubLinks.find(
-      l => l.getAttribute('href') === 'https://github.com/vish288'
-    )
-    expect(heroGithub).toBeDefined()
-    expect(heroGithub).toHaveAttribute('target', '_blank')
-
-    const linkedinLinks = screen.getAllByRole('link', { name: /linkedin/i })
-    const heroLinkedin = linkedinLinks.find(
-      l => l.getAttribute('target') === '_blank' && /^linkedin$/i.test(l.textContent?.trim() ?? '')
-    )
-    expect(heroLinkedin).toBeDefined()
-    expect(heroLinkedin).toHaveAttribute(
-      'href',
-      'https://www.linkedin.com/in/suryanarayananvisweshwaran/'
-    )
-  })
-
-  it('shows highlight cards', async () => {
-    await act(async () => {
-      renderAbout()
-    })
-
-    expect(screen.getByText('4 MCP servers')).toBeInTheDocument()
-    expect(screen.getByRole('link', { name: /4 mcp servers/i })).toHaveAttribute(
-      'href',
-      '/mcp-install'
-    )
-    expect(screen.getByText('Public repos')).toBeInTheDocument()
-  })
-
-  it('uses proper semantic structure', async () => {
-    await act(async () => {
-      renderAbout()
-    })
-
-    const h1 = screen.getByRole('heading', { level: 1 })
-    expect(h1).toBeInTheDocument()
-
-    const headings = screen.getAllByRole('heading')
-    expect(headings.length).toBeGreaterThan(1)
-  })
-
-  it.skip('displays word cloud with successful repository fetch', async () => {
-    const mockRepos = [
-      {
-        id: 1,
-        name: 'test-repo',
-        description: 'A test repository',
-        html_url: 'https://github.com/testuser/test-repo',
-        language: 'TypeScript',
-        stargazers_count: 5,
-        forks_count: 1,
-        topics: ['react', 'typescript'],
-        updated_at: '2025-01-01T00:00:00Z',
-        created_at: '2024-01-01T00:00:00Z',
-        fork: false,
-        pushed_at: '2025-01-01T00:00:00Z',
-      },
-    ]
-
-    mockFetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockRepos,
-    })
-
-    await act(async () => {
-      renderAbout()
-    })
-
-    expect(screen.getByText(/loading repositories/i)).toBeInTheDocument()
-
-    await waitFor(() => {
-      expect(screen.getByText(/showing .* skills from .* repositories/i)).toBeInTheDocument()
-    })
   })
 })
 
@@ -218,9 +123,8 @@ describe('STE-100 sentence length', () => {
 
   const copy: [string, string][] = [
     ['TAGLINE', APP_STRINGS.TAGLINE],
-    ['ABOUT_P1', APP_STRINGS.ABOUT_P1],
-    ['ABOUT_P2', APP_STRINGS.ABOUT_P2],
-    ['ABOUT_P3', APP_STRINGS.ABOUT_P3],
+    ['ABOUT_BODY', APP_STRINGS.ABOUT_BODY],
+    ['CONTACT_BODY', APP_STRINGS.CONTACT_BODY],
     ['LLMS_SUMMARY', APP_STRINGS.LLMS_SUMMARY],
     ...APP_STRINGS.CAPABILITIES.map((c): [string, string] => [`CAPABILITIES.${c.title}`, c.body]),
     ...APP_STRINGS.LLMS_KEY_FACTS.map((f, i): [string, string] => [`LLMS_KEY_FACTS[${i}]`, f]),

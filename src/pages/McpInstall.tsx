@@ -130,7 +130,7 @@ function ClientPicker({
               />
               <label
                 htmlFor={`client-${client.id}`}
-                className='touch-target flex items-center gap-2 rounded-lg border px-3 py-2.5 text-sm cursor-pointer transition-all hover:bg-muted/50 hover:border-primary/30 peer-checked:border-primary peer-checked:bg-muted/50 peer-focus-visible:ring-2 peer-focus-visible:ring-ring'
+                className='touch-target flex items-center gap-2 rounded border px-3 py-2.5 text-sm cursor-pointer transition-all hover:bg-muted/50 hover:border-primary/30 peer-checked:border-primary peer-checked:bg-muted/50 peer-focus-visible:ring-2 peer-focus-visible:ring-ring'
               >
                 <ClientIcon client={client} />
                 <span className='font-medium min-w-0 truncate'>{client.name}</span>
@@ -171,7 +171,7 @@ function ServerRow({
         <a
           href={href}
           aria-label={`Install ${server.displayName} for ${client.name}`}
-          className='touch-target sm:ml-auto inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 h-9 hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+          className='touch-target sm:ml-auto inline-flex items-center justify-center rounded bg-primary text-primary-foreground text-sm font-medium px-4 h-9 hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
         >
           Install
         </a>
@@ -183,7 +183,7 @@ function ServerRow({
           type='button'
           onClick={() => onOpen(server)}
           aria-label={`${word}: ${server.displayName} for ${client.name}`}
-          className='touch-target sm:ml-auto inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground text-sm font-medium px-4 h-9 cursor-pointer hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+          className='touch-target sm:ml-auto inline-flex items-center justify-center rounded bg-primary text-primary-foreground text-sm font-medium px-4 h-9 cursor-pointer hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
         >
           {word}
         </button>
@@ -195,7 +195,7 @@ function ServerRow({
     <li
       ref={liRef}
       aria-current={current ? 'true' : undefined}
-      className={`border rounded-xl p-5 scroll-mt-20 ${current ? 'border-l-4 border-l-primary' : ''}`}
+      className={`border rounded p-5 scroll-mt-20 ${current ? 'border-l-4 border-l-primary' : ''}`}
     >
       <div className='flex flex-wrap items-center gap-2'>
         <h2
@@ -378,14 +378,15 @@ export default function McpInstall() {
   return (
     <div className='container mx-auto px-4 py-8 max-w-5xl'>
       <section className='mb-10'>
-        <p className='text-xs font-semibold uppercase tracking-widest text-primary mb-2'>
+        <p className='text-xs font-semibold uppercase tracking-widest text-link mb-2'>
           MCP Client Tools
         </p>
         <h1 className='text-3xl sm:text-4xl font-bold tracking-tight mb-3'>
-          MCP Installation Gateway
+          Install an MCP server
         </h1>
         <p className='text-lg text-muted-foreground max-w-2xl'>
-          Pick your client once. Then install any server, or copy its config or command.
+          Pick your client once, then install any server. VS Code, VS Code Insiders and Cursor
+          install in one click; the other 17 clients get a config or command.
         </p>
         <PypiDownloads className='mt-3' />
       </section>
@@ -401,7 +402,7 @@ export default function McpInstall() {
               onClick={() => setPickerOpen(o => !o)}
               aria-expanded={pickerOpen}
               aria-controls={pickerOpen ? 'client-picker' : undefined}
-              className='text-sm text-primary hover:underline cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded'
+              className='text-sm text-link hover:underline cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded'
             >
               Change
             </button>
@@ -439,7 +440,7 @@ export default function McpInstall() {
         </ul>
 
         {targetKey && (
-          <details className='mt-3 border rounded-xl p-4'>
+          <details className='mt-3 border rounded p-4'>
             <summary className='cursor-pointer text-sm font-medium'>
               Other servers ({otherKeys.length})
             </summary>

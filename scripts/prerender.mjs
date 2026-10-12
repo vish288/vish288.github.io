@@ -277,7 +277,7 @@ async function main() {
   const routes = [
     { path: '/', file: 'index.html', h1: APP_STRINGS.FULL_NAME },
     { path: '/repositories', file: 'repositories.html', h1: 'Repositories' },
-    { path: '/mcp-install', file: 'mcp-install.html', h1: 'MCP Installation Gateway' },
+    { path: '/mcp-install', file: 'mcp-install.html', h1: 'Install an MCP server' },
   ]
 
   const template = await readFile(resolve(DIST, 'index.html'), 'utf8')

@@ -8,8 +8,9 @@ import {
   useLocation,
 } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { User, Blocks } from 'lucide-react'
+import { User, Blocks, FolderGit2 } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
+import LinkedInIcon from '@/components/icons/LinkedInIcon'
 import { cn } from '@/lib/utils'
 import Repositories from '@/pages/Repositories'
 import About from '@/pages/About'
@@ -29,18 +30,18 @@ function Navigation() {
     icon: ComponentType<{ className?: string }>
   }[] = [
     { path: '/', label: APP_STRINGS.NAV_ABOUT, icon: User },
-    { path: '/repositories', label: APP_STRINGS.NAV_REPOSITORIES, icon: GitHubIcon },
-    { path: '/mcp-install', label: 'MCP', icon: Blocks },
+    { path: '/repositories', label: APP_STRINGS.NAV_REPOSITORIES, icon: FolderGit2 },
+    { path: '/mcp-install', label: APP_STRINGS.NAV_MCP, icon: Blocks },
   ]
 
   return (
-    <nav className='border-b border-border/50 bg-background/80 backdrop-blur-lg supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50'>
+    <nav className='border-b border-border bg-background sticky top-0 z-50'>
       <div className='container mx-auto px-4'>
         <div className='flex h-16 items-center justify-between'>
-          {/* Logo */}
+          {/* Logo — code-surface monogram tile */}
           <Link to='/' className='flex items-center space-x-2'>
-            <div className='h-8 w-8 rounded-full bg-primary flex items-center justify-center'>
-              <span className='text-primary-foreground font-bold text-sm'>VS</span>
+            <div className='h-8 w-8 rounded bg-code border-2 border-code-border flex items-center justify-center'>
+              <span className='font-mono text-sm font-semibold text-code-foreground'>VS</span>
             </div>
             <span className='font-bold text-xl'>{APP_STRINGS.DISPLAY_NAME}</span>
           </Link>
@@ -78,21 +79,32 @@ function Navigation() {
 
 function Footer() {
   return (
-    <footer className='border-t border-border/50 bg-background/80 backdrop-blur-sm'>
+    <footer className='border-t border-border bg-background'>
       <div className='container mx-auto px-4 py-6'>
         <div className='flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0'>
           <p className='text-xs text-muted-foreground'>
-            © {new Date().getFullYear()} {APP_STRINGS.DISPLAY_NAME}.
+            © {new Date().getFullYear()} {APP_STRINGS.DISPLAY_NAME}
           </p>
-          <a
-            href={APP_STRINGS.GITHUB_URL}
-            target='_blank'
-            rel='noopener noreferrer'
-            aria-label='Vish on GitHub'
-            className='text-muted-foreground hover:text-foreground transition-colors'
-          >
-            <GitHubIcon className='h-4 w-4' />
-          </a>
+          <div className='flex items-center gap-1'>
+            <a
+              href={APP_STRINGS.LINKEDIN_URL}
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label='Vish on LinkedIn'
+              className='touch-target p-3 text-muted-foreground hover:text-foreground transition-colors'
+            >
+              <LinkedInIcon className='h-4 w-4' />
+            </a>
+            <a
+              href={APP_STRINGS.GITHUB_URL}
+              target='_blank'
+              rel='noopener noreferrer'
+              aria-label='Vish on GitHub'
+              className='touch-target p-3 text-muted-foreground hover:text-foreground transition-colors'
+            >
+              <GitHubIcon className='h-4 w-4' />
+            </a>
+          </div>
         </div>
       </div>
     </footer>

@@ -2,47 +2,67 @@
 name: vish288.github.io
 description: Personal site for Visweshwaran S (Vish), with a live repository list and an MCP install gateway.
 colors:
-  primary: 'hsl(152 56% 32%)'
-  primary-foreground: 'hsl(0 0% 99%)'
-  primary-hover: 'hsl(152 56% 28%)'
-  background: 'hsl(0 0% 99%)'
-  foreground: 'hsl(220 15% 12%)'
-  card: 'hsl(0 0% 100%)'
-  muted: 'hsl(220 14% 96%)'
-  muted-foreground: 'hsl(220 9% 43%)'
-  accent: 'hsl(152 30% 94%)'
-  border: 'hsl(220 13% 91%)'
+  primary: 'hsl(272 12.3% 51.4%)'
+  primary-foreground: 'hsl(225 15.4% 5.1%)'
+  primary-hover: 'hsl(272 12.3% 55%)'
+  background: 'hsl(40 20% 97.1%)'
+  foreground: 'hsl(218.2 21.6% 10%)'
+  card: 'hsl(40 20% 97.1%)'
+  secondary: 'hsl(276 12.2% 92%)'
+  muted: 'hsl(276 12.2% 92%)'
+  muted-foreground: 'hsl(219 10.3% 38%)'
+  accent: 'hsl(276 12.2% 92%)'
+  border: 'hsl(273.3 11.7% 84.9%)'
+  input: 'hsl(273.3 11.7% 84.9%)'
+  ring: 'hsl(272 12.3% 51.4%)'
   destructive: 'hsl(0 72% 42%)'
-  dark-primary: 'hsl(152 50% 48%)'
-  dark-primary-foreground: 'hsl(224 20% 6%)'
-  dark-primary-hover: 'hsl(152 50% 54%)'
-  dark-background: 'hsl(224 20% 6%)'
-  dark-foreground: 'hsl(210 20% 92%)'
-  dark-card: 'hsl(224 18% 9%)'
-  dark-muted: 'hsl(224 15% 14%)'
-  dark-muted-foreground: 'hsl(215 14% 58%)'
-  dark-border: 'hsl(224 12% 16%)'
-  dark-destructive: 'hsl(0 70% 62%)'
+  link: 'hsl(272.7 12% 36.1%)'
+  code: 'hsl(250 13% 9%)'
+  code-foreground: 'hsl(210 20% 92.2%)'
+  code-muted: 'hsl(215.5 12% 63.9%)'
+  code-accent: 'hsl(152 49.8% 57.8%)'
+  code-link: 'hsl(271.8 11.9% 72%)'
+  code-border: 'hsl(255 10% 20%)'
+  dark-primary: 'hsl(272 12.3% 51.4%)'
+  dark-primary-foreground: 'hsl(225 15.4% 5.1%)'
+  dark-primary-hover: 'hsl(272 12.3% 55%)'
+  dark-background: 'hsl(225 15.4% 5.1%)'
+  dark-foreground: 'hsl(210 20% 92.2%)'
+  dark-card: 'hsl(250 13% 9%)'
+  dark-secondary: 'hsl(255 14.3% 11%)'
+  dark-muted: 'hsl(255 14.3% 11%)'
+  dark-muted-foreground: 'hsl(215.5 12% 63.9%)'
+  dark-accent: 'hsl(255 14.3% 11%)'
+  dark-border: 'hsl(260 10% 16%)'
+  dark-destructive: 'hsl(0 63% 51%)'
+  dark-link: 'hsl(271.6 11.7% 68%)'
+  dark-code-border: 'hsl(255 10% 30%)'
 typography:
   display:
-    fontSize: '3.75rem'
-    fontWeight: 700
+    fontFamily: "'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace"
+    fontSize: '3rem'
+    fontSizeSm: '3.75rem'
+    fontWeight: 600
     lineHeight: 1
   headline:
-    fontSize: '2.25rem'
+    fontSize: '1.875rem'
+    fontSizeSm: '2.25rem'
     fontWeight: 700
-    lineHeight: 1.111
+    lineHeight: 1.1
     letterSpacing: '-0.025em'
   title:
-    fontSize: '1.875rem'
+    fontFamily: "'JetBrains Mono Variable' index + system sans heading"
+    fontSize: '1.5rem'
+    fontSizeSm: '1.875rem'
     fontWeight: 700
     lineHeight: 1.2
+    letterSpacing: '-0.025em'
   lead:
     fontSize: '1.125rem'
     fontWeight: 400
     lineHeight: 1.556
   body:
-    fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Noto Sans, Arial, sans-serif'
+    fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, sans-serif'
     fontSize: '1rem'
     fontWeight: 400
     lineHeight: 1.625
@@ -54,23 +74,23 @@ typography:
     fontSize: '0.75rem'
     fontWeight: 600
     lineHeight: 1.333
+    textTransform: 'uppercase'
     letterSpacing: '0.1em'
   mono:
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace'
+    fontFamily: "'JetBrains Mono Variable', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace"
     fontSize: '0.875rem'
     lineHeight: 1.429
 rounded:
-  xs: '4px'
-  md: '8px'
-  lg: '10px'
-  xl: '12px'
+  sm: '4px'
+  md: '4px'
+  lg: '4px'
+  DEFAULT: '4px'
   full: '9999px'
 spacing:
   xs: '4px'
   sm: '8px'
   md: '12px'
   lg: '16px'
-  tile: '20px'
   xl: '24px'
   2xl: '32px'
   3xl: '40px'
@@ -80,103 +100,118 @@ components:
     backgroundColor: '{colors.primary}'
     textColor: '{colors.primary-foreground}'
     rounded: '{rounded.md}'
-    padding: '8px 16px'
-    height: '40px'
+    padding: '0 16px'
+    height: '36px'
+    shadow: none
   button-primary-lg:
     backgroundColor: '{colors.primary}'
     textColor: '{colors.primary-foreground}'
     rounded: '{rounded.md}'
-    padding: '0 32px'
-    height: '44px'
+    height: '40px'
+    shadow: none
   button-outline:
     backgroundColor: '{colors.background}'
     textColor: '{colors.foreground}'
+    border: '1px solid {colors.border}'
     rounded: '{rounded.md}'
-    padding: '8px 16px'
-    height: '40px'
-  button-outline-hover:
-    backgroundColor: '{colors.accent}'
+    shadow: none
   button-ghost-hover:
     backgroundColor: '{colors.accent}'
-  badge-secondary:
-    backgroundColor: '{colors.muted}'
-    textColor: '{colors.foreground}'
-    rounded: '{rounded.full}'
-    padding: '2px 10px'
   badge-outline:
     textColor: '{colors.foreground}'
+    border: '1px solid {colors.border}'
     rounded: '{rounded.full}'
-    padding: '2px 10px'
-  card:
-    backgroundColor: '{colors.card}'
-    textColor: '{colors.foreground}'
-    rounded: '{rounded.lg}'
-    padding: '24px'
+    padding: '0 6px'
   tile:
-    rounded: '{rounded.xl}'
-    padding: '{spacing.lg}'
-  client-pill:
-    rounded: '{rounded.lg}'
-    padding: '10px 12px'
+    backgroundColor: '{colors.muted}/30'
+    border: '1px solid {colors.border}'
+    rounded: '{rounded.md}'
+    padding: '20px'
+    shadow: none
   segmented-active:
-    backgroundColor: '{colors.background}'
-    textColor: '{colors.foreground}'
+    backgroundColor: '{colors.primary}'
+    textColor: '{colors.primary-foreground}'
     rounded: '{rounded.md}'
     padding: '6px 12px'
   code-inline:
     backgroundColor: '{colors.muted}'
     typography: '{typography.mono}'
-    rounded: '{rounded.xs}'
+    rounded: '{rounded.sm}'
     padding: '2px 6px'
+  code-surface:
+    backgroundColor: '{colors.code}'
+    textColor: '{colors.code-foreground}'
+    border: '2px solid {colors.code-border}'
+    rounded: '{rounded.md}'
+    padding: '16px'
+    typography: '{typography.mono}'
+    theme: 'dark in both themes'
   modal:
     backgroundColor: '{colors.background}'
-    rounded: '{rounded.xl}'
-    padding: '{spacing.2xl}'
+    border: '2px solid {colors.border}'
+    rounded: '{rounded.md}'
+    padding: '32px'
     width: '600px'
+    scrim: 'black/70 + 4px blur'
+    shadow: none
 ---
 
 # Design System: vish288.github.io
 
 ## Overview
 
-**Creative North Star: "The Open Workbench"**
+**Creative North Star: "The Manifest Ledger"**
 
-A quiet, bench-lit workspace where every surface is something a visitor can pick up and check. The system is neutral and low-chroma by design: cool near-white (or near-black) ground, slate text, hairline borders, and one green that marks what is live, current, or clickable. Nothing is ornamental for its own sake; tiles link to repos, pills install servers, rows open GitHub.
+The site reads like a package the visitor can inspect: a manifest block at the top, a ruled proof strip of numbers under it, and numbered sections that run like a ledger. One muted violet carries every interactive and brand signal; one green exists, and only inside the code surface, to mark what is published and live. Everything else is ink on paper (or ink on near-black), separated by borders, never by shadow.
 
-Density is moderate. Long-form content sits in a single 1024px column with generous section breaks (64px), while tool surfaces (repository list, MCP gateway) tighten to 8 to 12px gaps so many items scan at once. Light and dark are equal citizens with their own tuned values, not an inversion of each other, and a system setting follows the OS.
+Density is moderate. Long-form content sits in a single 1024px column (`max-w-5xl`) with generous section breaks (56 to 64px), while tool surfaces (repository list, MCP gateway) tighten to 4 to 12px gaps so many items scan at once. Light and dark are equal citizens with their own tuned values, not an inversion of each other, and a system setting follows the OS.
 
-The build is shadcn/ui on Tailwind 4: HSL custom properties on `:root` and `.dark`, consumed through `hsl(var(--token))`. That pipeline is the source of truth; new colors go in `src/index.css` as HSL triplets in both themes.
+The build is shadcn/ui on Tailwind 4: HSL custom properties on `:root` and `.dark`, consumed through `hsl(var(--token))`. That pipeline is the source of truth; new colors go in `src/index.css` as HSL triplets in both themes. Every shipped text pairing is measured by `scripts/contrast.mjs`, which also verifies the brand round-trips exactly to its hex.
 
 **Key Characteristics:**
 
-- One accent (green) on neutral slate, in both themes.
-- Flat, bordered surfaces; shadow only for floating or selected layers.
-- System type stack throughout; hierarchy comes from size and weight, not a second face.
-- Every interactive element has a visible focus ring and a 44px touch target on coarse pointers.
-- Motion is short colour fades; anything that moves is gated on `prefers-reduced-motion`.
+- One brand hue (muted violet `#847492`) on neutral ink, in both themes; green appears only inside the code surface.
+- Flat, bordered surfaces; no shadows anywhere. Separation is by 1px borders, with 2px borders on the two heavy surfaces (code surface and modal).
+- A single self-hosted mono face (JetBrains Mono) is the display voice; body copy is the system sans. Hierarchy comes from the mono/sans contrast plus size and weight.
+- Every interactive element has a visible focus ring (`--ring` equals `--primary`) and a 44px touch target on coarse pointers.
+- Motion is short colour fades; the theme transition is gated on both `prefers-reduced-motion` and a post-first-paint `html.theme-ready` class, so a dark load never flashes up from light.
 
 ## Colors
 
-A neutral slate palette carrying a single green accent, tuned separately for light and dark.
+A near-neutral ink palette carrying a single muted-violet brand, tuned separately for light and dark. Ratios below are from `scripts/contrast.mjs`.
 
-### Primary
+### Brand
 
-- **Workbench Green** (light `primary`, dark `dark-primary`): the only accent. Filled primary buttons, the active nav item, the VS monogram, inline links, focus rings (`--ring` equals `--primary` in both themes), list markers at 60% and icon wells at 10% tint. Light value was darkened for contrast: text on background and white-on-green both reach 4.83:1; dark green on dark ground reaches 7.69:1.
-- **Workbench Green, hover** (`primary-hover` / `dark-primary-hover`): the hover fill for filled primary buttons and the default badge. A solid token, not an opacity shift: darker in light (5.97:1 under white text), lighter in dark (8.85:1 under dark text), because alpha-lightening the rest green over a light ground dropped the hover to 4.0:1. Same hue — still the one green.
+- **Brand Violet** `#847492` (`--primary`, HSL `272 12.3% 51.4%`): the one brand hue, identical in both themes. It round-trips exactly to its hex — the naive `hsl(272 12% 51%)` renders `#837391`, so the fractional triplet is load-bearing and asserted by the script. Used for filled buttons, the active nav item, the active segmented filter, the focus ring (`--ring` equals `--primary`), the proof numerals (48 to 60px), and list markers (`marker:text-primary/60`). As large text / UI boundary it clears 3:1: 4.04 on paper, 4.56 on near-black.
+- **Ink label** `#0b0c0f` (`--primary-foreground`): the label colour on every brand fill — always ink, never white. White on the brand is 4.29 and fails AA (recorded in the token comment); ink on the brand is **4.56** and passes. This is why primary buttons, the active nav pill and the active filter carry near-black labels, not white.
+- **Brand Violet, hover** `#8d7e9a` (`--primary-hover`, HSL `272 12.3% 55%`): a lighter solid hover fill for brand buttons, same hue. (Some controls instead hover at `bg-primary/90`.) The ink label clears AA on it in both themes.
+
+### Link
+
+- **Link Violet** (`--link`): dedicated small-text link colour, because the brand fails AA at small sizes. Light `#5d5167` reaches **6.97** on paper (6.09 on wash); dark `#aea4b7` reaches **8.19** on near-black (7.36 on wash). Every eyebrow and every small inline link uses `text-link`, underlined where it is a link.
 
 ### Neutral
 
-- **Paper** (`background`, light) and **Graphite Night** (`dark-background`): page ground. A fixed radial wash sits behind content (green at 4% / 6% top-centre, blue at 3% / 4% bottom-right), visible only as a tint.
-- **Ink** (`foreground` / `dark-foreground`): headings and primary text. 16.45:1 light, 16.12:1 dark.
-- **Slate Note** (`muted-foreground` / `dark-muted-foreground`): secondary copy, metadata, captions. Darkened in light to clear 4.5:1 on tinted surfaces too: 5.28:1 on background, 4.92:1 on `muted`; 6.05:1 on dark.
-- **Bench Grey** (`muted` / `dark-muted`): code blocks, inline code, secondary badges, icon wells, hover fills (usually at 30% or 50% alpha). `secondary` is the same value.
-- **Hairline** (`border` / `dark-border`): every border and divider; `--input` is the same value. Often drawn at 50 to 60% alpha for dividers.
-- **Card White** (`card` / `dark-card`): the shadcn Card surface only.
-- **Mint Wash** (`accent`, light only): hover fill for outline and ghost buttons. In dark, `accent` equals `dark-muted`.
+- **Paper** `#f9f8f6` (`background`, light) and **Near-Black** `#0b0c0f` (`dark-background`): the page ground. The dark ground must be `#0b0c0f` — the brand fails on the lighter `#121117`/`#15141a`, so those are reserved for the code/card surface only.
+- **Ink** `#14181f` / `#e7ebef` (`foreground`): headings and primary text. **16.76** on paper, **16.32** on near-black.
+- **Muted Ink** `#575e6b` / `#98a1ae` (`muted-foreground`): secondary copy, metadata, captions, markers. **6.15** on paper, **7.49** on near-black.
+- **Wash** `#ebe8ed` / `#1a1820` (`muted` = `secondary` = `accent`): tile fills (usually at 30%), inline-code and hover fills. One value serves all three roles in each theme.
+- **Hairline** (`border` = `input`): every border and divider; often drawn at 60% alpha (`border-border/60`) for timeline rows.
+- **Card** (`card`): light equals Paper; dark equals the code surface `#15141a`. The shadcn Card/popover surface.
+
+### Code Surface Palette
+
+A self-contained dark palette used only inside `CodeSurface` (see Components), dark in both themes.
+
+- **Surface** `#15141a` (`--code`) with **Code Ink** `#e7ebef` (`--code-foreground`, **15.28** on surface).
+- **Code Muted** `#98a1ae` (`--code-muted`): manifest keys and punctuation (**7.01**).
+- **Code Link** `#b8afc0` (`--code-link`): the lavender builds/contact links inside the manifest, always underlined, **8.66** on surface.
+- **Code Border** `255 10% 20%` light / `255 10% 30%` dark (`--code-border`): the 2px frame that keeps the surface visible against the near-black page.
+- **Live Green** `#5ec997` (`--code-accent`): the only green in the system, and only here — the "published / live" marker on the manifest (**8.96**).
 
 ### Status
 
-- **Signal Red** (`destructive` / `dark-destructive`): copy-failure message only. Retuned to pass small text in both themes: 6.31:1 (light) and 5.38:1 (dark) on background.
+- **Signal Red** (`destructive`): the copy-failure message only. `0 72% 42%` light, `0 63% 51%` dark.
 
 ### Data
 
@@ -184,146 +219,146 @@ A neutral slate palette carrying a single green accent, tuned separately for lig
 
 ### Named Rules
 
-**The One Green Rule.** Green is the only hue that carries meaning. If an element is green, it is interactive, current, or the brand mark. Do not introduce a second accent.
+**One Brand, Green Only In Code.** `#847492` is the single hue that carries interactive or brand meaning everywhere on the page. Green (`#5ec997`) is not a second accent: it exists only inside the code surface, where it means "published and live". Do not introduce green — or any other hue — outside that surface.
 
-**The Both-Themes Rule.** Every colour token exists in `:root` and `.dark` with its own value, and every text pairing is checked in both themes against 4.5:1 (3:1 for large text and UI boundaries).
+**The Ink-Label Rule.** Anything filled with the brand carries the ink label `#0b0c0f`, never white. White on the brand is 4.29 and fails; ink is 4.56 and passes. Small link text never uses the brand at all — it uses `--link`.
+
+**The Both-Themes Rule.** Every colour token exists in `:root` and `.dark` with its own value. The `.dark` block and the `@media (prefers-color-scheme: dark)` first-paint block are kept byte-identical (asserted by `src/test/index-css-dark-parity.test.ts`). Every text pairing is checked in both themes by `scripts/contrast.mjs` against 4.5:1 (3:1 for large text and UI boundaries).
 
 ## Typography
 
-**Display Font:** none chosen; headings use the body stack.
-**Body Font:** system sans (`-apple-system`, `Segoe UI`, `Roboto`, falling back to `Arial`).
-**Label/Mono Font:** system monospace (`ui-monospace`, `SFMono-Regular`, `Menlo`).
+**Display / Mono Font:** JetBrains Mono Variable, self-hosted via `@fontsource-variable/jetbrains-mono` (imported in `src/main.tsx`), exposed as `--font-mono` / `fontFamily.mono`. It is the display voice: the manifest hero, the numbered section indexes (01–04), the proof numerals, the monogram, and all code.
+**Body Font:** the Tailwind default system sans stack (`ui-sans-serif, system-ui, -apple-system, …`). No sans web font loads.
 
-**Character:** Plain, native, fast. No web fonts load, and the CSP has no font origin. Hierarchy is carried by weight (700 for headings, 600 for titles and labels) and a steep size step.
+**Character:** a ledger. Hierarchy is carried first by the mono/sans contrast — mono for anything that behaves like data (names, numbers, code, indexes), sans for prose — then by size and weight (700 for headings, 600 for titles, labels and numerals). Only one web font ships, mono; the CSP has no other font origin.
 
 ### Hierarchy
 
-- **Display** (700, 36px to 48px to 60px across sm/md, line-height 1): the hero name on About only.
-- **Headline** (700, 30px rising to 36px at sm, tracking -0.025em): the h1 on Repositories and MCP.
-- **Title** (700, 24px rising to 30px at sm): section h2s on About. Section h2s sit 24 to 32px above their content.
-- **Lead** (400, 18px, line-height 1.556, max 42rem): the line under each h1, in Slate Note. On About, the role line uses 20 to 24px at 600 in Ink.
-- **Body** (400, 16px, line-height 1.625): prose paragraphs, in Slate Note.
-- **Body Small** (400, 14px): timeline bullets, capability descriptions, metadata. Lists use `marker` in green at 60%.
-- **Label** (600, 12px, uppercase, 0.1em tracking): group headings inside a component (Languages, Topics, client categories on the MCP grid), in Slate Note.
-- **Mono** (14px blocks, 12px inline): configs, commands, package names, file paths.
+- **Manifest / Display** (JetBrains Mono, 600, line-height 1): the hero `name` value is mono `text-xl` rising to `text-3xl`; the proof numerals are mono `text-5xl` rising to `text-6xl` (48 to 60px), `tabular-nums`, `leading-none`, in Brand Violet.
+- **Headline** (system sans, 700, `text-3xl`→`text-4xl` = 30→36px, tracking -0.025em): the h1 on Repositories and MCP.
+- **Title** (system sans, 700, `text-2xl`→`text-3xl` = 24→30px, tracking tight): the About section h2s, rendered by `SectionRule` with a leading mono `tabular-nums` index.
+- **Lead** (400, `text-lg` = 18px): the line under each h1, in Muted Ink. The About tagline is `text-lg` in Ink.
+- **Body** (400, 16px, line-height ~1.6): prose paragraphs, in Ink.
+- **Body Small** (400, 14px): capability bodies, timeline bullets, metadata — in Muted Ink. Lists use `marker:text-primary/60`.
+- **Label / Eyebrow** (600, `text-xs` = 12px, uppercase, 0.1em+ tracking): in-component group headings (client-picker sections) in Muted Ink.
+- **Mono** (14px blocks, 12px inline): configs, commands, package names, section indexes, the manifest.
 
 ### Named Rules
 
-**The No Second Face Rule.** The system ships no web font. A display face would need a CSP `font-src` entry and an explicit decision; until then, headings get their weight from 700 and size, not from a new family.
+**The Mono-Is-Data Rule.** Anything that is a name, a number, a path, a command, an index, or code is set in JetBrains Mono. Prose is set in system sans. The contrast between the two faces is the primary hierarchy signal; do not set prose in mono to decorate it.
 
-**The Tabular Numbers Rule.** Dates and counts that align in columns (timeline periods, language counts) use `tabular-nums`.
+**The Tabular Numbers Rule.** Numbers that align in columns — the proof numerals, timeline periods, repository counts — use `tabular-nums`.
+
+**The No-Zero-Index Rule.** `SectionRule` indexes start at 01; there is no 00. The index is `aria-hidden` so the accessible heading name is exactly the text.
 
 ## Layout
 
-- **Container:** centred, 16px side padding, content capped at 1024px (`max-w-5xl`). Pages start with 32px top padding.
-- **Rhythm:** 64px between About sections; 40px under page headers; 24px between a control bar and the list it drives.
-- **About:** centred hero, then a 5-column grid at md (3 columns narrative, 2 columns of 2x2 highlight tiles), a capability grid (1, 2, 3 columns at base, sm, lg), and a career timeline.
-- **Timeline:** an ordered list; each entry is a 2-column grid at md (8rem right-aligned period, then content), rows divided by a 60% hairline with 32px vertical padding.
-- **Tool grids:** MCP client pills in 2, 3, 4 columns (base, sm, lg) with 8px gaps; repository rows stack with 4px gaps and bleed 12px past the column so hover fills align with text.
-- **Breakpoints:** Tailwind defaults, sm 640px, md 768px, lg 1024px. Below sm, nav labels collapse to icons and text-heavy secondary metadata (topic badges) hides. The MCP server package name stays visible at every width; the row action drops below the links instead of sitting at the right edge.
-- **Sticky chrome:** a 64px top nav, translucent with backdrop blur; anchors use `scroll-margin-top` of 80px to clear it.
+- **Container:** centred, 16px side padding (`px-4`), content capped at 1024px (`max-w-5xl`). Pages start with 32px top padding (`py-8`).
+- **Rhythm:** About sections run `mb-14`/`mb-16` (56–64px); the hero proof strip sits 32px below the manifest; page headers clear ~40px to their content.
+- **About:** a full-width manifest hero (code surface), a ruled 2/4-column proof strip, then four numbered sections — 01 narrative, 02 a 1/2-column capability grid, 03 a career timeline, 04 contact.
+- **Proof strip:** four cells (`grid-cols-2 sm:grid-cols-4`) bounded top and bottom by a 2px ink rule (`border-y-2 border-foreground`); each cell is a `flex-col-reverse` dt/dd so the label follows the numeral in the DOM while the big numeral shows on top; every cell links to its evidence.
+- **Timeline:** an ordered list; each entry is a 2-column grid at md (8rem right-aligned period, then content), rows divided by a 60% hairline (`border-t border-border/60`) with 32px vertical padding; `scroll-mt-20` clears the sticky nav.
+- **Tool grids:** MCP client tiles in 2/3/4 columns with 8px gaps; repository rows stack with 4px gaps and bleed 12px past the column (`-mx-3`) so hover fills align with text.
+- **Breakpoints:** Tailwind defaults — sm 640px, md 768px, lg 1024px. Below sm, nav labels collapse to icons and topic badges hide; the MCP package name and row action stay visible.
+- **Sticky chrome:** a 64px top nav with a bottom hairline, opaque `bg-background`; anchors use `scroll-margin-top` of 80px to clear it.
 
 ## Elevation & Depth
 
-Flat by default. Depth comes from hairline borders and tonal fills (Bench Grey at 30 to 50% alpha), with translucency and blur on chrome. Shadows appear only where a layer floats or a choice is selected.
+Flat. There are no shadows anywhere — not on tiles, cards, panels, rows, the modal or the code surface. Depth comes from borders and tonal fills.
 
-### Shadow Vocabulary
-
-- **Rest** (`0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)`): the shadcn Card and the selected segment in a segmented control.
-- **Lift** (`0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)`): the skip link when it appears.
-- **Float** (`0 25px 50px -12px rgb(0 0 0 / 0.25)`): the install modal, over a 70% black scrim with 8px blur.
+- **Default separation:** a 1px Hairline border, optionally over a Wash fill at ~30%.
+- **Heavy surfaces:** the two surfaces that must read as objects — the **code surface** and the **install modal** — use a **2px** border instead of a shadow. The code surface's 2px frame is what keeps `#15141a` legible against the near-black page.
+- **Overlay:** the modal sits over a `black/70` scrim with a 4px backdrop blur; the scrim, not a shadow, lifts it.
 
 ### Named Rules
 
-**The Border-First Rule.** A container is defined by a 1px Hairline border and, if needed, a tinted fill. Reach for a shadow only for an overlay or a selected state.
+**The Border-First Rule.** A container is defined by its border (1px, or 2px for the code surface and modal) and, if needed, a tonal fill. Never reach for a shadow — the system ships none.
 
 ## Shapes
 
-Gently rounded, with radius stepping up with container size: 4px for inline code and the small client icon well, 8px for buttons and segmented controls, 10px (the `--radius` root) for cards, pills, code blocks and list rows, 12px for tiles, server panels, the banner and the modal. Fully round for badges, the monogram and language dots. Borders are always 1px.
+One radius: **4px** everywhere (`--radius` is `0.25rem`, and `rounded-sm`/`md`/`lg` all map to it). Buttons, tiles, cards, code blocks, rows, the code surface and the modal are all 4px. Fully round (`rounded-full`) is reserved for badges and language dots. The VS monogram is a 4px tile, not a disc. Borders are 1px, except the 2px code surface and modal.
 
 ## Components
 
 ### Buttons
 
-Compact and quiet; colour does the work, not size.
+Compact and quiet; colour and the ink label do the work, not size or shadow.
 
-- **Shape:** gently rounded (8px).
-- **Primary:** green fill, near-white text, 14px medium, 40px tall (44px for `lg`, 36px for `sm`).
-- **Outline:** Hairline border on Paper; hover fills with Mint Wash.
-- **Ghost:** no fill; hover fills with Mint Wash. Used for nav items, the theme toggle and modal close.
-- **Link:** green text, underline on hover with 4px offset.
-- **Focus:** 2px ring in green, offset 2px from the background.
-- **Disabled:** 50% opacity, no pointer events.
+- **Shape:** 4px radius, no shadow.
+- **Primary:** Brand Violet fill with the **ink** label (`#0b0c0f`), 14px medium; `h-9` for the inline Install action, `size="lg"` on hero/contact CTAs. Hover is `bg-primary/90` or `--primary-hover`.
+- **Outline:** Hairline border on the page ground; ghost/outline hover fills with Wash (`accent`).
+- **Ghost:** no fill; used for nav items, the theme toggle and the modal close.
+- **Link:** `text-link`, underline on hover with a 4px offset.
+- **Focus:** 2px ring in Brand Violet (`ring-ring`), offset from the background.
+- **Disabled:** reduced opacity, no pointer events.
 
-### Chips
+### Code Surface (`CodeSurface`)
 
-- **Secondary badge:** fully round, Bench Grey fill, Ink text, 12 to 14px semibold. Language tallies, fallback skills.
-- **Outline badge:** fully round, Hairline border, Ink text. Topics and the Fork marker.
+The single dark surface in the build, dark in **both** themes (`bg-code` `#15141a`). A 4px-radius box with a **2px** `code-border` frame, mono text, `px-4 py-4`. It carries the About manifest hero: a `# handle` comment, a `name = "…"` block (the `<h1>` is mono inside the quotes), `role`, `location`, a `builds` array whose items are `?server=` links, and a `contact` array linking LinkedIn and GitHub. Its links use **Code Link** lavender, always underlined (colour is never the only signal — WCAG 1.4.1). The manifest closes with a Live Green `●` "published" line — the only green in the system. The 32px VS monogram in the nav is a miniature of this surface (mono "VS" on `bg-code` with the 2px frame).
+
+### Section Rule (`SectionRule`)
+
+Every About section h2: a flex-baseline row with a top Hairline, a leading `aria-hidden` mono `tabular-nums` index (01–04) in Muted Ink, then the sans heading at `text-2xl`→`text-3xl` bold. Indexes start at 01.
+
+### Proof Strip
+
+Four 48→60px mono `tabular-nums` numerals in Brand Violet on a 2px ink rule top and bottom, each a link to its evidence. The fourth cell is the live 15-day PyPI download total read from the build-time snapshot `src/generated/pypi-stats.json` (`PypiDownloads` / the `formatDownloads` helper); when the snapshot is zero/empty it falls back to the honest "4 MCP servers" count rather than inventing a number, and when present it carries a dated "as of {windowEnd}" footnote in `text-link`.
 
 ### Cards / Containers
 
-- **Highlight tile:** 12px radius, Hairline border, Bench Grey at 30%, 16px (20px for capability tiles) padding, centred icon well (40px, 12px radius, green at 10%, green 20px icon), 14px semibold label and 12px Slate Note caption. Tiles that link get a 50% fill on hover and a focus ring.
-- **Card:** 10px radius, Card White, Rest shadow, 24px padding. Used once, for the skills panel.
-- **Server row (MCP gateway):** 12px radius, Hairline border, 20px padding, listed in a `<ul>`. An `<h2>` of plain text (the server full name) with a package-name code chip beside it, a two-line clamped description, then a wrapping metadata row of GitHub, PyPI and the client-dependent action. The `?server=` target row sorts first, carries `aria-current` and a green left border, and the other rows collapse into a native `<details>` labelled "Other servers (N)".
-- **Feature banner:** 12px radius, green border at 20%, a left-to-right green 5% gradient to transparent. Used once, to route from Repositories to the MCP gateway.
+- **Capability tile:** 4px radius, 1px Hairline, Wash at 30% (`bg-muted/30`), 20px padding, a `dt` title and `dd` body. No shadow.
+- **Server row (MCP gateway):** 4px radius, 1px Hairline, 20px padding, in a `<ul>`. An `<h2>` of the server full name with a package-name code chip, a two-line clamped description, then a wrapping metadata row of GitHub, PyPI and the client-dependent action. The `?server=` target row sorts first, carries `aria-current` and a 4px Brand-Violet left border (`border-l-4 border-l-primary`), and the others collapse into a native `<details>` labelled "Other servers (N)".
+- **Feature banner (Repositories → MCP):** 4px radius, 1px Hairline, Wash at 30%, an icon tile plus a routing button. No shadow, no tinted border.
 
 ### Inputs / Fields
 
-- **Segmented control:** a 10px radius group with a Hairline border and Bench Grey at 30%, 2px inner padding. The selected segment is Paper with the Rest shadow; others are Slate Note and turn Ink on hover. State is `aria-pressed`.
-- **Sort toggles:** 8px radius text buttons; the active one fills with Bench Grey and turns medium weight, with a 12px direction icon.
-- There are no text inputs.
+- **Segmented filter (Repositories):** a 4px bordered group over Wash at 30% with 2px inner padding. The active segment is a **Brand-Violet fill with the ink label** (`bg-primary text-primary-foreground`), its count at 70% of the label; inactive segments are Muted Ink turning Ink on hover. State is `aria-pressed`.
+- **Sort toggles:** 4px text buttons; the active one fills with Wash and turns medium weight, with a 12px direction icon.
+- **Client picker (MCP):** one native radio group chosen once. A `<fieldset>`/`<legend>` over a 2/3/4-column grid of radio tiles grouped under uppercase labels; each tile is a 4px bordered `<label>` driving an `sr-only` radio, with a 24px Wash icon well and the name. The checked tile gets a Brand-Violet border and a Wash 50% fill; the focused radio shows the 2px ring. Once chosen, the group collapses to a "Client: {name}" summary with a Change button; the choice persists to `localStorage` and `?client=`.
+- There are no free-text inputs.
 
-### Navigation
+### Install Modal (`InstallModal`)
 
-- Sticky 64px bar with a bottom Hairline at 50%, background at 80% (60% where blur is supported) with 16px backdrop blur.
-- Left: 32px green monogram disc with "VS" in 14px bold, then "Vish" at 20px bold.
-- Right: small ghost buttons with a 16px icon and label (label hidden below sm); the current route uses the primary fill and `aria-current="page"`. The theme toggle cycles light, dark, system.
-- Footer: top Hairline at 50%, 12px Slate Note copyright, GitHub icon link.
-
-### Monogram
-
-The brand mark is "VS" in bold on a green disc: 32px in the nav, 80px in the About hero. It is text, not an image.
-
-### Client Picker (MCP gateway)
-
-One native radio group chosen once, not per server. A `<fieldset>` with a `<legend>` ("Which client do you use?", or "Install {server}: which client do you use?" on a `?server=` deep link) over a 2/3/4-column grid of radio tiles grouped under 12px uppercase labels. Each tile is a 10px radius bordered `<label>` driving an `sr-only` radio: 24px Bench Grey icon well plus the client name at 14px medium; the checked tile gets a green border and a Bench Grey 50% fill, and the focused radio shows the 2px green ring on its label. Once a client is chosen the group collapses to a "Client: {name}" summary with a "Change" button (`aria-expanded`, `aria-controls`); the choice persists to `localStorage` and `?client=`.
-
-### Install Modal
-
-Portalled dialog, 600px max width, 90vh max height with scroll, 12px radius, 32px padding, Float shadow. Opening moves focus to Close, marks `#root` inert and locks body scroll; Escape and a scrim click close it, and focus and scroll restore on the trigger. Body is an `<ol>`: a "Requires uv" prerequisite line, a Step 1 that names the command or the config file (or offers "Do one of these" with two options for a client that takes either), a per-secret "Replace the placeholder" step linking each token's source, and a "Check {client} lists {server}" step. Code renders in a Bench Grey `pre` with a Hairline border that wraps rather than scrolls; each block has its own copy button whose result ("Copied", or one failure wording in Signal Red) is announced in a polite live region.
+Portalled dialog over a `black/70` scrim with 4px blur: `bg-background`, a **2px** Hairline border, 4px radius, 32px padding, 600px max width, 90vh max height with scroll, **no shadow**. Opening moves focus to Close, marks `#root` inert and locks body scroll; Escape and a scrim click close it, and focus and scroll restore on the trigger. Body is an `<ol>`: a "Requires uv" line when applicable, a Step 1 that names the command or config file (or "Do one of these" with two options), a per-secret "Replace the placeholder" step linking each token's source, and a "Check {client} lists {server}" step. Code renders in a Wash `pre` with a 1px border that wraps rather than scrolls; each block has a copy button whose result ("Copied", or the Signal-Red failure line) is announced in a polite live region.
 
 ### Repository Row
 
-A full-width link row: 12px language dot, 14px semibold name that turns green on hover, an external-link icon that fades in on hover, then a 12px Slate Note line of description and a metadata row (language, stars, forks, updated date, up to four topic badges). Rows load in pages of 10 with an IntersectionObserver and a "Show more" fallback button.
+A full-width link row: 12px language dot, 14px semibold name that turns `text-link` on hover, an external-link icon that fades in on hover, then a 12px Muted-Ink description and a metadata row (language, stars, forks, updated date, up to four topic badges). Rows load in pages of 10 via an IntersectionObserver with a "Show more" fallback.
+
+### Navigation / Footer
+
+- Sticky 64px bar with a bottom Hairline, opaque `bg-background`. Left: the 32px code-surface monogram tile, then "Vish" at `text-xl` bold. Right: small ghost buttons with a 16px icon and label (label hidden below sm); the current route uses the Brand-Violet fill with the ink label and `aria-current="page"`. The theme toggle cycles light, dark, system.
+- Footer: top Hairline, 12px Muted-Ink copyright, LinkedIn and GitHub icon links.
 
 ### Icons
 
-- **UI icons:** `lucide-react`, 16px in buttons and nav, 20px in tile wells, 12px beside external links. Decorative icons sit next to a text label.
-- **Brand marks:** bundled `simple-icons` paths rendered as inline SVG with `currentColor`, so they follow the theme. A missing brand glyph falls back to lucide's `Blocks`.
-- **Remote images:** only `upload.wikimedia.org`, for the VS Code mark, which `simple-icons` does not carry. The CSP `img-src` allows nothing else off-site.
+- **UI icons:** `lucide-react`, 16px in buttons and nav, smaller beside external links. Decorative icons sit next to a text label.
+- **Brand marks:** bundled `simple-icons` paths as inline SVG with `currentColor`, so they follow the theme; a missing glyph falls back to lucide's `Blocks`.
+- **Remote images:** only `upload.wikimedia.org`, for the VS Code mark; the CSP `img-src` allows nothing else off-site.
 
 ### Motion
 
-- Colour changes use the 150ms `transition-colors` default.
-- The theme switch fades background and text over 0.3s only under `prefers-reduced-motion: no-preference`.
+- Colour changes use the default `transition-colors`.
+- The theme switch fades background and text over 0.3s only under `html.theme-ready` **and** `prefers-reduced-motion: no-preference`, so first paint (including a dark load) never fades. `public/theme-init.js` (`script-src 'self'`) sets the class before paint.
 - Spinners and the chevron rotation are `motion-safe` only. Nothing slides, scales or parallaxes.
 
 ## Do's and Don'ts
 
 ### Do:
 
-- **Do** take every colour from the HSL custom properties and define both themes when adding one.
-- **Do** keep text at 4.5:1 or better in both themes (3:1 for large text and UI boundaries); check by computing, not by eye.
-- **Do** give every interactive element a `focus-visible` 2px green ring and add the `touch-target` utility to any control under 44px.
-- **Do** gate any motion beyond a colour fade on `prefers-reduced-motion`.
-- **Do** bundle icons: lucide for UI, simple-icons for brands, inline SVG with `currentColor`.
-- **Do** make every tile, pill and row point at something a visitor can open, and keep a quiet fallback for API failure.
+- **Do** take every colour from the HSL custom properties and define both themes when adding one; keep the `.dark` and `@media prefers-color-scheme: dark` blocks byte-identical.
+- **Do** label every brand fill with the ink colour (`primary-foreground`), and use `--link` for small link text.
+- **Do** keep text at 4.5:1 or better in both themes (3:1 for large text and UI boundaries); verify with `scripts/contrast.mjs`, not by eye.
+- **Do** keep green inside the code surface only, as the "published/live" marker.
+- **Do** separate surfaces with borders — 1px by default, 2px for the code surface and modal.
+- **Do** give every interactive element a `focus-visible` 2px ring (`ring-ring`) and a 44px touch target on coarse pointers.
+- **Do** set names, numbers, paths, commands and indexes in JetBrains Mono; keep prose in system sans.
 
 ### Don't:
 
-- **Don't** add a second accent hue or use the language-dot colours as UI colour.
-- **Don't** reintroduce Signal Red below 4.5:1; keep both themes at or above it for the copy-failure message.
-- **Don't** set text below 12px.
-- **Don't** load icons, fonts or images from a CDN; any new origin needs a CSP change and a reason.
-- **Don't** add shadows to resting tiles, panels or rows.
-- **Don't** put employer or client names in any visual asset; copy rules live in PRODUCT.md.
+- **Don't** use white on the brand fill (4.29, fails); don't use the brand for small link text.
+- **Don't** introduce green — or any second hue — outside the code surface, and don't use the language-dot colours as UI colour.
+- **Don't** add a shadow to anything; use a border (2px for heavy surfaces) or the scrim instead.
+- **Don't** use any radius other than 4px (or `rounded-full` for badges and dots).
+- **Don't** load a second font or any CDN font/image/icon; a new origin needs a CSP change and a reason.
+- **Don't** set text below 12px, and don't let the proof strip show a number the snapshot does not back.
