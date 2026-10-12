@@ -24,9 +24,9 @@ function pathRows(client: McpClient): [string, string][] | null {
   return (Object.entries(p) as [Os, string][]).map(([os, v]) => [OS_LABEL[os], v])
 }
 
-// Name the object copied, for one block or two (so the label never changes
-// meaning between the single- and two-block layouts).
-function copyButtonLabel(_count: number, block: RenderedOutput): string {
+// Name the object copied (so the label never changes meaning between the
+// single- and two-block layouts).
+function copyButtonLabel(block: RenderedOutput): string {
   return block.label === 'Command' ? 'Copy command' : 'Copy config'
 }
 
@@ -37,14 +37,12 @@ function copyAnnouncement(block: RenderedOutput): string {
 function CodeBlock({
   block,
   index,
-  count,
   copiedIndex,
   failedIndex,
   onCopy,
 }: {
   block: RenderedOutput
   index: number
-  count: number
   copiedIndex: number | null
   failedIndex: number | null
   onCopy: (block: RenderedOutput, i: number) => void
@@ -63,7 +61,7 @@ function CodeBlock({
         ) : (
           <>
             <Copy className='h-4 w-4' />
-            {copyButtonLabel(count, block)}
+            {copyButtonLabel(block)}
           </>
         )}
       </Button>
@@ -196,7 +194,7 @@ export function InstallModal({
                 <p className='font-medium'>Do one of these</p>
                 <div className='mt-2'>
                   <p className='text-muted-foreground'>Option 1: run this command</p>
-                  <CodeBlock block={blocks[0]!} index={0} count={2} {...copyProps} />
+                  <CodeBlock block={blocks[0]!} index={0} {...copyProps} />
                 </div>
                 <div className='mt-4'>
                   <p className='text-muted-foreground'>
@@ -205,7 +203,7 @@ export function InstallModal({
                       {typeof client.paths === 'string' ? client.paths : ''}
                     </code>
                   </p>
-                  <CodeBlock block={blocks[1]!} index={1} count={2} {...copyProps} />
+                  <CodeBlock block={blocks[1]!} index={1} {...copyProps} />
                 </div>
               </>
             ) : (
@@ -225,7 +223,7 @@ export function InstallModal({
                     ))}
                   </dl>
                 )}
-                <CodeBlock block={blocks[0]!} index={0} count={1} {...copyProps} />
+                <CodeBlock block={blocks[0]!} index={0} {...copyProps} />
               </>
             )}
           </li>
