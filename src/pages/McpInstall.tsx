@@ -34,7 +34,12 @@ function deeplinkHref(server: ServerConfig, client: McpClient): string | undefin
 // localStorage client on load; null on the server (SSR shows the open picker).
 function readStoredClient(): McpClient | null {
   if (typeof window === 'undefined') return null
-  return resolveClient(localStorage.getItem(STORAGE_KEY) ?? '')
+  try {
+    return resolveClient(localStorage.getItem(STORAGE_KEY) ?? '')
+  } catch {
+    // Storage can throw (disabled cookies, sandboxed iframe).
+    return null
+  }
 }
 
 // ── Icon tile ───────────────────────────────────────────────────────
@@ -61,11 +66,20 @@ function ClientIcon({ client }: { client: McpClient }) {
 function ClientPicker({
   value,
   onChange,
+  onCommit,
+  onBlurCommit,
+  onEscape,
   legend,
   fieldsetRef,
 }: {
   value: McpClient | null
   onChange: (client: McpClient) => void
+  // Deliberate commit (click, Enter/Space): collapse and move focus to Change.
+  onCommit: () => void
+  // Focus left the fieldset: collapse without yanking focus back.
+  onBlurCommit: () => void
+  // Escape while reopened: collapse and restore focus to Change.
+  onEscape: () => void
   legend: string
   fieldsetRef: Ref<HTMLFieldSetElement>
 }) {
@@ -73,6 +87,19 @@ function ClientPicker({
     <fieldset
       id='client-picker'
       ref={fieldsetRef}
+      // Arrow keys fire `change` but must NOT collapse the group; only a commit
+      // does. Guard the quiet collapses on `value` so an empty picker stays open.
+      onBlur={e => {
+        if (value && !e.currentTarget.contains(e.relatedTarget as Node | null)) onBlurCommit()
+      }}
+      onKeyDown={e => {
+        if (e.key === 'Escape') {
+          e.preventDefault()
+          onEscape()
+        } else if ((e.key === 'Enter' || e.key === ' ') && value) {
+          onCommit()
+        }
+      }}
       className='min-w-0 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2'
     >
       <legend className='col-span-full text-base font-medium mb-3'>{legend}</legend>
@@ -92,6 +119,12 @@ function ClientPicker({
                 value={client.id}
                 checked={value?.id === client.id}
                 onChange={() => onChange(client)}
+                // Commit only on a genuine pointer click (detail > 0); keyboard
+                // navigation synthesises a click with detail 0, which must not
+                // collapse the picker. Enter/Space are handled on keydown.
+                onClick={e => {
+                  if (e.detail > 0) onCommit()
+                }}
                 className='sr-only peer'
               />
               <label
@@ -117,12 +150,14 @@ function ServerRow({
   current = false,
   onOpen,
   headingRef,
+  liRef,
 }: {
   server: ServerConfig
   client: McpClient | null
   current?: boolean
   onOpen: (server: ServerConfig) => void
   headingRef?: Ref<HTMLHeadingElement>
+  liRef?: Ref<HTMLLIElement>
 }) {
   const href = client ? deeplinkHref(server, client) : undefined
   const linkClass =
@@ -157,11 +192,16 @@ function ServerRow({
 
   return (
     <li
+      ref={liRef}
       aria-current={current ? 'true' : undefined}
       className={`border rounded-xl p-5 scroll-mt-20 ${current ? 'border-l-4 border-l-primary' : ''}`}
     >
       <div className='flex flex-wrap items-center gap-2'>
-        <h2 ref={headingRef} tabIndex={-1} className='font-semibold outline-none'>
+        <h2
+          ref={headingRef}
+          tabIndex={-1}
+          className='font-semibold outline-none rounded-sm focus-visible:ring-2 focus-visible:ring-ring'
+        >
           {server.fullName}
         </h2>
         <code className='text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded'>
@@ -200,16 +240,20 @@ export default function McpInstall() {
   const clientParam = searchParams.get('client')
   const installParam = searchParams.get('install')
 
-  const targetKey = serverParam && SERVERS[serverParam] ? serverParam : null
+  // hasOwnProperty, not truthiness: a bare `SERVERS[serverParam]` is also truthy
+  // for prototype keys like "constructor", which would later throw in genDeeplink.
+  const targetKey =
+    serverParam && Object.prototype.hasOwnProperty.call(SERVERS, serverParam) ? serverParam : null
   const installClient = useMemo(
     () => (installParam ? resolveClient(installParam) : null),
     [installParam]
   )
 
-  const [client, setClient] = useState<McpClient | null>(
-    () => installClient ?? (clientParam ? resolveClient(clientParam) : null) ?? readStoredClient()
-  )
-  const [pickerOpen, setPickerOpen] = useState(false)
+  const resolveInitial = () =>
+    installClient ?? (clientParam ? resolveClient(clientParam) : null) ?? readStoredClient()
+  const [client, setClient] = useState<McpClient | null>(resolveInitial)
+  // Picker is open when there is no client yet; collapses to a summary once set.
+  const [pickerOpen, setPickerOpen] = useState(() => resolveInitial() === null)
   const [modalServer, setModalServer] = useState<ServerConfig | null>(() =>
     targetKey && installClient && !deeplinkOutput(installClient) ? SERVERS[targetKey]! : null
   )
@@ -217,8 +261,12 @@ export default function McpInstall() {
   const fieldsetRef = useRef<HTMLFieldSetElement>(null)
   const changeRef = useRef<HTMLButtonElement>(null)
   const headingRef = useRef<HTMLHeadingElement>(null)
+  const targetLiRef = useRef<HTMLLIElement>(null)
   const justPicked = useRef(false)
-  const scrolled = useRef(false)
+  // Mount-time captures: whether a client and/or a modal existed at first render.
+  const hadClientAtMount = useRef(client !== null)
+  const modalAtMount = useRef(modalServer !== null)
+  const mountTargetKey = useRef(targetKey)
 
   // A README install link is a strong signal: remember the client (D4).
   useEffect(() => {
@@ -244,15 +292,25 @@ export default function McpInstall() {
     return () => clearTimeout(timer)
   }, [targetKey, installClient])
 
-  // Deep link with a chosen client: scroll the target row into view and focus
-  // its heading, once. jsdom lacks scrollIntoView, hence the optional call.
+  // Deep link that arrived WITH a client (and no modal): scroll the target row
+  // into view and focus its heading, once at mount only — never on a later pick.
+  // Scroll the <li> so its scroll-mt-20 clears the sticky header; focus the <h2>.
+  // jsdom lacks scrollIntoView, hence the optional call.
   useEffect(() => {
-    if (targetKey && client && !scrolled.current) {
-      scrolled.current = true
-      headingRef.current?.scrollIntoView?.({ block: 'start' })
+    if (mountTargetKey.current && hadClientAtMount.current && !modalAtMount.current) {
+      targetLiRef.current?.scrollIntoView?.({ block: 'start' })
       headingRef.current?.focus()
     }
-  }, [targetKey, client])
+  }, [])
+
+  // A modal opened straight from ?install= has no trigger button to restore to,
+  // so return focus to the target heading when it closes.
+  useEffect(() => {
+    if (modalServer === null && modalAtMount.current) {
+      modalAtMount.current = false
+      headingRef.current?.focus()
+    }
+  }, [modalServer])
 
   // Move focus to the checked radio when the picker is reopened via Change.
   useEffect(() => {
@@ -261,7 +319,7 @@ export default function McpInstall() {
     }
   }, [pickerOpen])
 
-  // After a pick, return focus to the summary Change button.
+  // After a commit, return focus to the summary Change button.
   useEffect(() => {
     if (justPicked.current && changeRef.current) {
       changeRef.current.focus()
@@ -269,7 +327,9 @@ export default function McpInstall() {
     }
   })
 
-  const choose = useCallback(
+  // Persist the choice on every change (including arrow-key navigation) WITHOUT
+  // collapsing the picker.
+  const pick = useCallback(
     (c: McpClient) => {
       setClient(c)
       try {
@@ -281,11 +341,29 @@ export default function McpInstall() {
       next.set('client', c.id)
       next.delete('install')
       setSearchParams(next, { replace: true })
-      setPickerOpen(false)
-      justPicked.current = true
     },
     [searchParams, setSearchParams]
   )
+
+  // A click/Enter/Space on a radio is a deliberate pick: collapse and focus
+  // Change. Unconditional — the same interaction also selects a client.
+  const commitPicker = useCallback(() => {
+    setPickerOpen(false)
+    justPicked.current = true
+  }, [])
+
+  // Focus leaving the fieldset collapses it quietly (no focus move). The caller
+  // only fires this when a client already exists, so nothing disappears.
+  const collapsePicker = useCallback(() => setPickerOpen(false), [])
+
+  const escapePicker = useCallback(() => {
+    if (client) {
+      setPickerOpen(false)
+      changeRef.current?.focus()
+    }
+  }, [client])
+
+  const closeModal = useCallback(() => setModalServer(null), [])
 
   const serverKeys = Object.keys(SERVERS)
   const otherKeys = targetKey ? serverKeys.filter(k => k !== targetKey) : []
@@ -294,7 +372,7 @@ export default function McpInstall() {
     ? `Install ${SERVERS[targetKey]!.fullName}: which client do you use?`
     : 'Which client do you use?'
 
-  const showPicker = client === null || pickerOpen
+  const showPicker = pickerOpen
 
   return (
     <div className='container mx-auto px-4 py-8 max-w-5xl'>
@@ -320,7 +398,7 @@ export default function McpInstall() {
               ref={changeRef}
               onClick={() => setPickerOpen(o => !o)}
               aria-expanded={pickerOpen}
-              aria-controls='client-picker'
+              aria-controls={pickerOpen ? 'client-picker' : undefined}
               className='text-sm text-primary hover:underline cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded'
             >
               Change
@@ -330,7 +408,10 @@ export default function McpInstall() {
         {showPicker && (
           <ClientPicker
             value={client}
-            onChange={choose}
+            onChange={pick}
+            onCommit={commitPicker}
+            onBlurCommit={collapsePicker}
+            onEscape={escapePicker}
             legend={legend}
             fieldsetRef={fieldsetRef}
           />
@@ -346,6 +427,7 @@ export default function McpInstall() {
               current
               onOpen={setModalServer}
               headingRef={headingRef}
+              liRef={targetLiRef}
             />
           ) : (
             serverKeys.map(key => (
@@ -374,7 +456,7 @@ export default function McpInstall() {
       </section>
 
       {modalServer && client && (
-        <InstallModal server={modalServer} client={client} onClose={() => setModalServer(null)} />
+        <InstallModal server={modalServer} client={client} onClose={closeModal} />
       )}
     </div>
   )

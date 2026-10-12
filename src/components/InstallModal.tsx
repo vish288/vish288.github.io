@@ -67,7 +67,7 @@ function CodeBlock({
         )}
       </Button>
       {failedIndex === index && (
-        <p className='text-sm text-foreground font-medium mt-1'>{COPY_FAILED}</p>
+        <p className='text-sm text-destructive font-medium mt-1'>{COPY_FAILED}</p>
       )}
     </div>
   )
