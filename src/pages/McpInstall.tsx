@@ -12,6 +12,10 @@ const STORAGE_KEY = 'mcp-client'
 
 // ── Per-client helpers ──────────────────────────────────────────────
 
+// Clients without a one-click deeplink (they install via a copied config or
+// command). Derived from the catalogue so the intro count never drifts.
+const CONFIG_CLIENT_COUNT = CLIENTS.filter(c => c.outputs[0]?.kind !== 'deeplink').length
+
 // A deeplink client's single output, or null for config/command clients.
 function deeplinkOutput(client: McpClient) {
   const o = client.outputs[0]
@@ -171,7 +175,7 @@ function ServerRow({
         <a
           href={href}
           aria-label={`Install ${server.displayName} for ${client.name}`}
-          className='touch-target sm:ml-auto inline-flex items-center justify-center rounded bg-primary text-primary-foreground text-sm font-medium px-4 h-9 hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+          className='touch-target sm:ml-auto inline-flex items-center justify-center rounded bg-primary text-primary-foreground text-sm font-medium px-4 h-9 hover:bg-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
         >
           Install
         </a>
@@ -183,7 +187,7 @@ function ServerRow({
           type='button'
           onClick={() => onOpen(server)}
           aria-label={`${word}: ${server.displayName} for ${client.name}`}
-          className='touch-target sm:ml-auto inline-flex items-center justify-center rounded bg-primary text-primary-foreground text-sm font-medium px-4 h-9 cursor-pointer hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
+          className='touch-target sm:ml-auto inline-flex items-center justify-center rounded bg-primary text-primary-foreground text-sm font-medium px-4 h-9 cursor-pointer hover:bg-primary-hover transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring'
         >
           {word}
         </button>
@@ -386,7 +390,7 @@ export default function McpInstall() {
         </h1>
         <p className='text-lg text-muted-foreground max-w-2xl'>
           Pick your client once, then install any server. VS Code, VS Code Insiders and Cursor
-          install in one click; the other 17 clients get a config or command.
+          install in one click; the other {CONFIG_CLIENT_COUNT} clients get a config or command.
         </p>
         <PypiDownloads className='mt-3' />
       </section>
