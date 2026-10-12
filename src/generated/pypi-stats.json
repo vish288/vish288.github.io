@@ -1,24 +1,17 @@
 {
+  "windowEnd": "2026-10-10",
   "fetchedAt": "2026-10-12",
   "stale": false,
-  "lastMonth": 24672,
-  "lastWeek": 10821,
+  "lastFifteenDays": 23303,
   "packages": {
     "mcp-gitlab": {
-      "lastMonth": 19493,
-      "lastWeek": 9401
+      "lastFifteenDays": 18891
     },
     "mcp-atlassian-extended": {
-      "lastMonth": 3303,
-      "lastWeek": 569
+      "lastFifteenDays": 2945
     },
     "mcp-coda": {
-      "lastMonth": 1876,
-      "lastWeek": 586
-    },
-    "mcp-argocd": {
-      "lastMonth": 0,
-      "lastWeek": 265
+      "lastFifteenDays": 1467
     }
   }
 }
