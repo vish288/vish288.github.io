@@ -1,10 +1,11 @@
 import type { ReactElement } from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import Repositories from './Repositories'
 import { resetGitHubCache } from '../hooks/useGitHubRepositories'
+import { CLIENTS } from '../constants/mcpClients'
 
 function renderWithRouter(ui: ReactElement) {
   return render(<MemoryRouter>{ui}</MemoryRouter>)
@@ -54,6 +55,22 @@ const mockRepositories = [
     created_at: '2024-06-01T00:00:00Z',
     fork: true,
     pushed_at: '2024-12-01T00:00:00Z',
+  },
+  {
+    // An MCP server repo, deliberately the oldest and least-starred so that
+    // pinning it first (not sort order) is observable.
+    id: 3,
+    name: 'mcp-coda',
+    description: 'Coda MCP server',
+    html_url: 'https://github.com/vish288/mcp-coda',
+    language: 'Python',
+    stargazers_count: 0,
+    forks_count: 0,
+    topics: ['mcp'],
+    updated_at: '2023-01-01T00:00:00Z',
+    created_at: '2023-01-01T00:00:00Z',
+    fork: false,
+    pushed_at: '2023-01-01T00:00:00Z',
   },
 ]
 
@@ -216,6 +233,43 @@ describe('Repositories Page', () => {
     const repoLink = screen.getByText('test-repo-1').closest('a')
     expect(repoLink).toHaveAttribute('href', 'https://github.com/testuser/test-repo-1')
     expect(repoLink).toHaveAttribute('target', '_blank')
+  })
+
+  it('pins MCP server repos first and badges them', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockRepositories,
+    })
+
+    renderWithRouter(<Repositories />)
+
+    await waitFor(() => {
+      expect(screen.getByText('mcp-coda')).toBeInTheDocument()
+    })
+
+    const rows = screen
+      .getAllByRole('link')
+      .filter(a => a.getAttribute('href')?.startsWith('https://github.com/'))
+    // mcp-coda is oldest and least-starred, yet pinned above test-repo-1.
+    expect(rows[0]).toHaveTextContent('mcp-coda')
+    expect(rows[0]).toHaveTextContent('MCP server')
+    expect(rows[1]).toHaveTextContent('test-repo-1')
+    expect(within(rows[1]!).queryByText('MCP server')).not.toBeInTheDocument()
+  })
+
+  it('derives the client count in the MCP banner', async () => {
+    mockFetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => mockRepositories,
+    })
+
+    renderWithRouter(<Repositories />)
+
+    await waitFor(() => {
+      expect(screen.getByText('mcp-coda')).toBeInTheDocument()
+    })
+
+    expect(screen.getByText(new RegExp(`config for ${CLIENTS.length} clients`))).toBeInTheDocument()
   })
 
   it('shows empty state when no repositories match filter', async () => {

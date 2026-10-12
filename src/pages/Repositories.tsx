@@ -15,7 +15,13 @@ import {
 } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
 import { APP_STRINGS } from '@/constants/appStrings'
+import { SERVERS } from '@/constants/mcpServers'
+import { CLIENTS } from '@/constants/mcpClients'
 import { useGitHubRepositories } from '@/hooks/useGitHubRepositories'
+
+// MCP server repos, pinned to the top of the list and badged. Derived from the
+// server catalogue so the set never drifts from what the gateway installs.
+const FEATURED = new Set(Object.keys(SERVERS))
 
 // Topics shown first on repo cards, in priority order
 const PRIORITY_TOPICS = [
@@ -88,7 +94,7 @@ export default function Repositories() {
     if (filter === 'original') filtered = repos.filter(repo => !repo.fork)
     else if (filter === 'forked') filtered = repos.filter(repo => repo.fork)
 
-    return [...filtered].sort((a, b) => {
+    const sorted = [...filtered].sort((a, b) => {
       let aValue: string | number
       let bValue: string | number
       switch (sortBy) {
@@ -117,6 +123,13 @@ export default function Repositories() {
       if (sortDirection === 'asc') return aValue < bValue ? -1 : aValue > bValue ? 1 : 0
       return aValue > bValue ? -1 : aValue < bValue ? 1 : 0
     })
+
+    // Pin MCP server repos first (keeping their relative sort order), so they
+    // sit above the rest whatever the sort. Nothing is featured under Forked.
+    return [
+      ...sorted.filter(r => FEATURED.has(r.name)),
+      ...sorted.filter(r => !FEATURED.has(r.name)),
+    ]
   }, [repos, filter, sortBy, sortDirection])
 
   const handleFilterChange = useCallback((next: FilterOption) => {
@@ -249,7 +262,7 @@ export default function Repositories() {
               MCP servers: GitLab, Atlassian, Coda and Argo CD
             </p>
             <p className='text-xs text-muted-foreground'>
-              Install in VS Code or Cursor, or copy a config for 20 clients.
+              Install in VS Code or Cursor, or copy a config for {CLIENTS.length} clients.
             </p>
           </div>
         </div>
@@ -287,7 +300,7 @@ export default function Repositories() {
               >
                 {label}
                 <span
-                  className={`ml-1 ${filter === key ? 'text-primary-foreground/70' : 'text-muted-foreground'}`}
+                  className={`ml-1 ${filter === key ? 'text-primary-foreground' : 'text-muted-foreground'}`}
                 >
                   {count}
                 </span>
@@ -358,6 +371,11 @@ export default function Repositories() {
                 <span className='font-semibold text-sm group-hover:text-link transition-colors truncate'>
                   {repo.name}
                 </span>
+                {FEATURED.has(repo.name) && (
+                  <Badge variant='secondary' className='text-xs'>
+                    MCP server
+                  </Badge>
+                )}
                 {repo.fork && (
                   <Badge variant='outline' className='text-xs px-1.5 py-0'>
                     <GitFork className='h-2.5 w-2.5 mr-0.5' />

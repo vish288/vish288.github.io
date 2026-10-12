@@ -45,6 +45,14 @@ describe('McpInstall Page', () => {
     for (const section of SECTIONS) expect(screen.getAllByText(section)).toHaveLength(1)
   })
 
+  it('derives the config-client count in the intro', () => {
+    renderMcpInstall()
+    const configCount = CLIENTS.filter(c => c.outputs[0]?.kind !== 'deeplink').length
+    expect(
+      screen.getByText(new RegExp(`the other ${configCount} clients get a config or command`))
+    ).toBeInTheDocument()
+  })
+
   it('renders no row actions until a client is chosen', () => {
     renderMcpInstall()
     expect(screen.queryAllByRole('link', { name: /^install /i })).toHaveLength(0)
