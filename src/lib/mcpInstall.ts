@@ -8,14 +8,21 @@ import type { McpClient, Output } from '@/constants/mcpClients'
 // Env var key → VS Code input id (lower-case, `_` → `-`).
 const inputId = (key: string): string => key.toLowerCase().replace(/_/g, '-')
 
+// The one env var the read-only toggle writes, as a literal "true" (never a
+// prompted input): the server hides its write tools when it is set.
+export const READ_ONLY_ENV = 'MCP_READ_ONLY'
+
 // ── env ─────────────────────────────────────────────────────────────
 
 // Plain-config env: placeholder, else default, else empty. Secrets stay as
-// placeholder literals the user edits.
-export function envLiteral(s: ServerConfig): Record<string, string> {
-  return Object.fromEntries(
+// placeholder literals the user edits. With readOnly, append MCP_READ_ONLY=true
+// last so a default (writes) config is byte-identical to before.
+export function envLiteral(s: ServerConfig, readOnly = false): Record<string, string> {
+  const env = Object.fromEntries(
     Object.entries(s.envVars).map(([key, val]) => [key, val.placeholder || val.default || ''])
   )
+  if (readOnly) env[READ_ONLY_ENV] = 'true'
+  return env
 }
 
 // VS Code `inputs` prompts: non-secret → promptString with default; secret →
@@ -35,18 +42,25 @@ export function vscodeInputs(s: ServerConfig): Record<string, unknown>[] {
 }
 
 // VS Code env values reference the prompted inputs rather than literal secrets.
-export function vscodeEnv(s: ServerConfig): Record<string, string> {
-  return Object.fromEntries(
+// MCP_READ_ONLY is a literal "true", not a prompt (hence no matching vscodeInput).
+export function vscodeEnv(s: ServerConfig, readOnly = false): Record<string, string> {
+  const env = Object.fromEntries(
     Object.keys(s.envVars).map(key => [key, '${input:' + inputId(key) + '}'])
   )
+  if (readOnly) env[READ_ONLY_ENV] = 'true'
+  return env
 }
 
 // ── server entry (shape per client) ─────────────────────────────────
 
 type Shape = Extract<Output, { kind: 'json' }>['shape']
 
-export function serverEntry(s: ServerConfig, shape: Shape): Record<string, unknown> {
-  const env = envLiteral(s)
+export function serverEntry(
+  s: ServerConfig,
+  shape: Shape,
+  readOnly = false
+): Record<string, unknown> {
+  const env = envLiteral(s, readOnly)
   switch (shape) {
     case 'cline':
       return {
@@ -72,9 +86,13 @@ export function serverEntry(s: ServerConfig, shape: Shape): Record<string, unkno
 
 // ── deeplink ────────────────────────────────────────────────────────
 
-export function genDeeplink(s: ServerConfig, out: Extract<Output, { kind: 'deeplink' }>): string {
+export function genDeeplink(
+  s: ServerConfig,
+  out: Extract<Output, { kind: 'deeplink' }>,
+  readOnly = false
+): string {
   if (out.encoding === 'b64') {
-    const cfg = serverEntry(s, 'standard')
+    const cfg = serverEntry(s, 'standard', readOnly)
     // Cursor's documented format is standard base64 in the config param. The
     // name is percent-encoded (btoa may emit +, / or =, but shortNames don't).
     return (
@@ -89,7 +107,7 @@ export function genDeeplink(s: ServerConfig, out: Extract<Output, { kind: 'deepl
     type: 'stdio',
     command: s.installCommand,
     args: [s.packageName],
-    env: vscodeEnv(s),
+    env: vscodeEnv(s, readOnly),
   }
   return out.prefix + encodeURIComponent(JSON.stringify(flat))
 }
@@ -103,8 +121,12 @@ function shellValue(v: string): string {
   return "'" + v.replace(/'/g, "'\\''") + "'"
 }
 
-export function genCli(s: ServerConfig, out: Extract<Output, { kind: 'cli' }>): string {
-  const envStr = Object.entries(envLiteral(s))
+export function genCli(
+  s: ServerConfig,
+  out: Extract<Output, { kind: 'cli' }>,
+  readOnly = false
+): string {
+  const envStr = Object.entries(envLiteral(s, readOnly))
     .map(([k, v]) => `${out.envFlag} ${k}=${shellValue(v)}`)
     .join(' ')
   const cmd = `${s.installCommand} ${s.packageName}`
@@ -121,10 +143,14 @@ export function genCli(s: ServerConfig, out: Extract<Output, { kind: 'cli' }>): 
 
 // ── json ────────────────────────────────────────────────────────────
 
-export function genJson(s: ServerConfig, out: Extract<Output, { kind: 'json' }>): string {
+export function genJson(
+  s: ServerConfig,
+  out: Extract<Output, { kind: 'json' }>,
+  readOnly = false
+): string {
   const obj: Record<string, unknown> = {}
   if (out.shape === 'opencode') obj.$schema = 'https://opencode.ai/config.json'
-  obj[out.topKey] = { [s.shortName]: serverEntry(s, out.shape) }
+  obj[out.topKey] = { [s.shortName]: serverEntry(s, out.shape, readOnly) }
   return JSON.stringify(obj, null, 2)
 }
 
@@ -136,14 +162,14 @@ function tomlStr(v: string): string {
   return '"' + v.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'
 }
 
-export function genToml(s: ServerConfig): string {
+export function genToml(s: ServerConfig, readOnly = false): string {
   const name = s.shortName
   const lines = [
     `[mcp_servers.${name}]`,
     `command = ${tomlStr(s.installCommand)}`,
     `args = [${tomlStr(s.packageName)}]`,
   ]
-  const env = Object.entries(envLiteral(s))
+  const env = Object.entries(envLiteral(s, readOnly))
   if (env.length) {
     lines.push('', `[mcp_servers.${name}.env]`)
     for (const [k, v] of env) lines.push(`${k} = ${tomlStr(v)}`)
@@ -158,15 +184,19 @@ export interface RenderedOutput {
   code: string
 }
 
-export function renderOutputs(s: ServerConfig, client: McpClient): RenderedOutput[] {
+export function renderOutputs(
+  s: ServerConfig,
+  client: McpClient,
+  readOnly = false
+): RenderedOutput[] {
   return client.outputs.map((out): RenderedOutput => {
     switch (out.kind) {
       case 'cli':
-        return { label: 'Command', code: genCli(s, out) }
+        return { label: 'Command', code: genCli(s, out, readOnly) }
       case 'json':
-        return { label: 'Config', code: genJson(s, out) }
+        return { label: 'Config', code: genJson(s, out, readOnly) }
       case 'toml':
-        return { label: '~/.codex/config.toml', code: genToml(s) }
+        return { label: '~/.codex/config.toml', code: genToml(s, readOnly) }
       case 'deeplink':
         throw new Error('deeplink clients render as a link, not through renderOutputs')
     }

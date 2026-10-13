@@ -209,6 +209,53 @@ describe('every server × every client', () => {
   }
 })
 
+// Decode a (server, client) pair to the plain text(s) a user ends up pasting —
+// deeplinks decoded back to JSON — so the read-only contract can assert on the
+// literal env the client will receive, across all four servers and every client.
+function renderedTexts(server: ServerConfig, client: McpClient, readOnly: boolean): string[] {
+  const first = client.outputs[0]
+  if (first.kind === 'deeplink') {
+    const code = genDeeplink(server, first, readOnly)
+    if (first.encoding === 'json-url') {
+      return [decodeURIComponent(code.slice(first.prefix.length))]
+    }
+    const b64 = new URLSearchParams(code.split('?')[1]).get('config')!
+    return [atob(b64)]
+  }
+  return renderOutputs(server, client, readOnly).map(b => b.code)
+}
+
+describe('read-only toggle writes MCP_READ_ONLY=true everywhere, only when on', () => {
+  for (const server of Object.values(SERVERS)) {
+    for (const client of CLIENTS) {
+      it(`${server.packageName} → ${client.id}`, () => {
+        // Off (default): no generated output mentions the var at all.
+        for (const text of renderedTexts(server, client, false)) {
+          expect(text).not.toContain('MCP_READ_ONLY')
+        }
+        // On: every generated output carries MCP_READ_ONLY set to true.
+        for (const text of renderedTexts(server, client, true)) {
+          expect(text).toContain('MCP_READ_ONLY')
+          expect(text).toMatch(/MCP_READ_ONLY["\s]*[:=]\s*"?true"?/)
+        }
+      })
+    }
+  }
+
+  it('VS Code deeplink carries MCP_READ_ONLY as a literal, not a prompted input', () => {
+    const out = deeplinkOut(byId('vscode'))
+    const url = genDeeplink(gitlab, out, true)
+    const payload = JSON.parse(decodeURIComponent(url.slice(out.prefix.length)))
+    expect(payload.env.MCP_READ_ONLY).toBe('true')
+    // It must not become a promptString the user has to answer.
+    expect(payload.inputs.some((i: { id: string }) => i.id === 'mcp-read-only')).toBe(false)
+  })
+
+  it('Claude Code command appends -e MCP_READ_ONLY=true when on', () => {
+    expect(genCli(gitlab, cliOut(byId('claude-code')), true)).toContain('-e MCP_READ_ONLY=true')
+  })
+})
+
 describe('aliases and sections', () => {
   it('every id and alias is unique and lower-case', () => {
     const all = CLIENTS.flatMap(c => [c.id, ...(c.aliases ?? [])])

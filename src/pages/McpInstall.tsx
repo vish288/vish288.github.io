@@ -31,9 +31,13 @@ function actionWord(client: McpClient): string {
   return 'Config'
 }
 
-function deeplinkHref(server: ServerConfig, client: McpClient): string | undefined {
+function deeplinkHref(
+  server: ServerConfig,
+  client: McpClient,
+  readOnly: boolean
+): string | undefined {
   const o = deeplinkOutput(client)
-  return o ? genDeeplink(server, o) : undefined
+  return o ? genDeeplink(server, o, readOnly) : undefined
 }
 
 // localStorage client on load; null on the server (SSR shows the open picker).
@@ -149,6 +153,7 @@ function ClientPicker({
 function ServerRow({
   server,
   client,
+  readOnly,
   current = false,
   onOpen,
   headingRef,
@@ -156,12 +161,13 @@ function ServerRow({
 }: {
   server: ServerConfig
   client: McpClient | null
+  readOnly: boolean
   current?: boolean
   onOpen: (server: ServerConfig) => void
   headingRef?: Ref<HTMLHeadingElement>
   liRef?: Ref<HTMLLIElement>
 }) {
-  const href = client ? deeplinkHref(server, client) : undefined
+  const href = client ? deeplinkHref(server, client, readOnly) : undefined
   const linkClass =
     'touch-target px-2 -mx-2 inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors'
 
@@ -234,6 +240,40 @@ function ServerRow({
   )
 }
 
+// ── Read-only toggle ────────────────────────────────────────────────
+
+// A labelled switch (role="switch", Enter/Space, announced on/off) that adds
+// MCP_READ_ONLY=true to every generated config, command and deep link. Default
+// off: a server runs with writes unless this is turned on.
+function ReadOnlyToggle({ on, onToggle }: { on: boolean; onToggle: (next: boolean) => void }) {
+  return (
+    <div className='flex items-start gap-3'>
+      <button
+        type='button'
+        role='switch'
+        aria-checked={on}
+        aria-labelledby='read-only-label'
+        aria-describedby='read-only-desc'
+        onClick={() => onToggle(!on)}
+        className={`relative mt-0.5 inline-flex h-6 w-10 flex-shrink-0 items-center rounded-full border transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${on ? 'bg-primary border-primary' : 'bg-muted border-border'}`}
+      >
+        <span
+          aria-hidden='true'
+          className={`inline-block h-4 w-4 rounded-full transition-transform ${on ? 'translate-x-[1.125rem] bg-primary-foreground' : 'translate-x-0.5 bg-foreground'}`}
+        />
+      </button>
+      <span className='min-w-0'>
+        <span id='read-only-label' className='font-medium'>
+          Read-only
+        </span>
+        <span id='read-only-desc' className='block text-sm text-muted-foreground'>
+          Hides the server&rsquo;s write tools; the assistant can only read.
+        </span>
+      </span>
+    </div>
+  )
+}
+
 // ── Page ────────────────────────────────────────────────────────────
 
 export default function McpInstall() {
@@ -259,6 +299,9 @@ export default function McpInstall() {
   const [modalServer, setModalServer] = useState<ServerConfig | null>(() =>
     targetKey && installClient && !deeplinkOutput(installClient) ? SERVERS[targetKey]! : null
   )
+  // Read-only mode writes MCP_READ_ONLY=true into every generated config and
+  // deep link. Off by default (servers run with writes).
+  const [readOnly, setReadOnly] = useState(false)
 
   const fieldsetRef = useRef<HTMLFieldSetElement>(null)
   const changeRef = useRef<HTMLButtonElement>(null)
@@ -287,12 +330,12 @@ export default function McpInstall() {
     if (!targetKey || !installClient) return
     const o = deeplinkOutput(installClient)
     if (!o) return
-    const href = genDeeplink(SERVERS[targetKey]!, o)
+    const href = genDeeplink(SERVERS[targetKey]!, o, readOnly)
     const timer = setTimeout(() => {
       window.location.href = href
     }, 400)
     return () => clearTimeout(timer)
-  }, [targetKey, installClient])
+  }, [targetKey, installClient, readOnly])
 
   // Deep link that arrived WITH a client (and no modal): scroll the target row
   // into view and focus its heading, once at mount only — never on a later pick.
@@ -418,11 +461,15 @@ export default function McpInstall() {
       </section>
 
       <section>
+        <div className='mb-6'>
+          <ReadOnlyToggle on={readOnly} onToggle={setReadOnly} />
+        </div>
         <ul className='space-y-3'>
           {targetKey ? (
             <ServerRow
               server={SERVERS[targetKey]!}
               client={client}
+              readOnly={readOnly}
               current
               onOpen={setModalServer}
               headingRef={headingRef}
@@ -430,7 +477,13 @@ export default function McpInstall() {
             />
           ) : (
             serverKeys.map(key => (
-              <ServerRow key={key} server={SERVERS[key]!} client={client} onOpen={setModalServer} />
+              <ServerRow
+                key={key}
+                server={SERVERS[key]!}
+                client={client}
+                readOnly={readOnly}
+                onOpen={setModalServer}
+              />
             ))
           )}
         </ul>
@@ -446,6 +499,7 @@ export default function McpInstall() {
                   key={key}
                   server={SERVERS[key]!}
                   client={client}
+                  readOnly={readOnly}
                   onOpen={setModalServer}
                 />
               ))}
@@ -455,7 +509,12 @@ export default function McpInstall() {
       </section>
 
       {modalServer && client && (
-        <InstallModal server={modalServer} client={client} onClose={closeModal} />
+        <InstallModal
+          server={modalServer}
+          client={client}
+          readOnly={readOnly}
+          onClose={closeModal}
+        />
       )}
     </div>
   )
