@@ -75,13 +75,15 @@ function CodeBlock({
 export function InstallModal({
   server,
   client,
+  readOnly = false,
   onClose,
 }: {
   server: ServerConfig
   client: McpClient
+  readOnly?: boolean
   onClose: () => void
 }) {
-  const blocks = useMemo(() => renderOutputs(server, client), [server, client])
+  const blocks = useMemo(() => renderOutputs(server, client, readOnly), [server, client, readOnly])
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
   const [failedIndex, setFailedIndex] = useState<number | null>(null)
   const [announce, setAnnounce] = useState('')
