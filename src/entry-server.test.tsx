@@ -35,4 +35,18 @@ describe('entry-server SSR render', () => {
     expect(html).not.toContain('Client: ')
     expect(html).not.toContain('checked=""')
   })
+
+  it('keeps Repositories out of the primary nav but linked from the footer', () => {
+    const html = render('/')
+    const nav = html.match(/<nav[\s\S]*?<\/nav>/)![0]
+    expect(nav).not.toContain('href="/repositories"')
+    expect(nav).toContain('href="/mcp-install"')
+    const footer = html.match(/<footer[\s\S]*?<\/footer>/)![0]
+    expect(footer).toContain('href="/repositories"')
+    expect(footer).toContain('>Repositories<')
+  })
+
+  it('keeps the /repositories route reachable with its copy', () => {
+    expect(render('/repositories')).toContain('Projects I own on GitHub.')
+  })
 })
