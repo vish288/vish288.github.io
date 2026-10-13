@@ -355,6 +355,53 @@ describe('McpInstall Page', () => {
     expect(document.body.style.overflow).toBe('')
   })
 
+  // ── read-only toggle (A-1) ─────────────────────────────────────────
+
+  it('exposes a labelled, off-by-default Read-only switch', () => {
+    renderMcpInstall()
+    const sw = screen.getByRole('switch', { name: /read-only/i })
+    expect(sw).toHaveAttribute('aria-checked', 'false')
+    expect(
+      screen.getByText(/Hides the server.s write tools; the assistant can only read\./)
+    ).toBeInTheDocument()
+  })
+
+  it('toggling Read-only on adds MCP_READ_ONLY=true to a deeplink Install href', async () => {
+    const user = userEvent.setup()
+    renderMcpInstall('/mcp-install?client=cursor')
+    const before = screen
+      .getByRole('link', { name: 'Install GitLab for Cursor' })
+      .getAttribute('href')!
+    const config = new URLSearchParams(before.split('?')[1]).get('config')!
+    expect(atob(config)).not.toContain('MCP_READ_ONLY')
+
+    await user.click(screen.getByRole('switch', { name: /read-only/i }))
+    const after = screen
+      .getByRole('link', { name: 'Install GitLab for Cursor' })
+      .getAttribute('href')!
+    const configOn = new URLSearchParams(after.split('?')[1]).get('config')!
+    expect(JSON.parse(atob(configOn)).env.MCP_READ_ONLY).toBe('true')
+  })
+
+  it('toggling Read-only on adds MCP_READ_ONLY to the modal config', async () => {
+    const user = userEvent.setup()
+    localStorage.setItem('mcp-client', 'zed')
+    renderMcpInstall()
+    await user.click(screen.getByRole('switch', { name: /read-only/i }))
+    await user.click(screen.getByRole('button', { name: 'Config: GitLab for Zed' }))
+    const json = JSON.parse(screen.getByRole('dialog').querySelector('pre')!.textContent!)
+    expect(json.context_servers.gitlab.env.MCP_READ_ONLY).toBe('true')
+  })
+
+  it('the Read-only switch toggles with the keyboard and announces its state', async () => {
+    const user = userEvent.setup()
+    renderMcpInstall()
+    const sw = screen.getByRole('switch', { name: /read-only/i })
+    sw.focus()
+    await user.keyboard(' ')
+    expect(sw).toHaveAttribute('aria-checked', 'true')
+  })
+
   it('renders GitHub and PyPI links for every server', () => {
     renderMcpInstall()
     expect(screen.getAllByRole('link', { name: /github/i })).toHaveLength(4)
