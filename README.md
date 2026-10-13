@@ -12,11 +12,11 @@ React 19 · TypeScript 6 · Vite 8 · Tailwind CSS 4 · shadcn/ui + Radix · Vit
 
 ## Pages
 
-| Route           | Description                                                        |
-| --------------- | ------------------------------------------------------------------ |
-| `/`             | About — profile, skills word cloud, highlight cards                |
-| `/repositories` | GitHub repos with filters, sorting, and infinite scroll            |
-| `/mcp-install`  | MCP server installation gateway (GitLab, Atlassian, Coda, Argo CD) |
+| Route           | Description                                                                                   |
+| --------------- | --------------------------------------------------------------------------------------------- |
+| `/`             | About — profile, skills word cloud, highlight cards                                           |
+| `/repositories` | GitHub repos with filters, sorting, and infinite scroll (footer link, not in the primary nav) |
+| `/mcp-install`  | MCP server installation gateway (GitLab, Atlassian, Coda, Argo CD)                            |
 
 ## Quick start
 
