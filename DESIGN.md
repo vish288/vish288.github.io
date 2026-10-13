@@ -327,8 +327,8 @@ A full-width link row: 12px language dot, 14px semibold name that turns `text-li
 
 ### Navigation / Footer
 
-- Sticky 64px bar with a bottom Hairline, opaque `bg-background`. Left: the 32px code-surface monogram tile, then "Vish" at `text-xl` bold. Right: small ghost buttons with a 16px icon and label (label hidden below sm); the current route uses the Brand-Violet fill with the ink label and `aria-current="page"`. The theme toggle cycles light, dark, system.
-- Footer: top Hairline, 12px Muted-Ink copyright, LinkedIn and GitHub icon links.
+- Sticky 64px bar with a bottom Hairline, opaque `bg-background`. Left: the 32px code-surface monogram tile, then "Vish" at `text-xl` bold. Right: two small ghost buttons — About and MCP servers — each a 16px icon and label (label hidden below sm); the current route uses the Brand-Violet fill with the ink label and `aria-current="page"`. The theme toggle cycles light, dark, system.
+- Footer: top Hairline, 12px Muted-Ink copyright, then a 12px underlined "Repositories" text link to `/repositories` (demoted from the nav), the LinkedIn and GitHub icon links.
 
 ### Icons
 

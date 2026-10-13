@@ -8,7 +8,7 @@ import {
   useLocation,
 } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { User, Blocks, FolderGit2 } from 'lucide-react'
+import { User, Blocks } from 'lucide-react'
 import GitHubIcon from '@/components/icons/GitHubIcon'
 import LinkedInIcon from '@/components/icons/LinkedInIcon'
 import { cn } from '@/lib/utils'
@@ -30,7 +30,6 @@ function Navigation() {
     icon: ComponentType<{ className?: string }>
   }[] = [
     { path: '/', label: APP_STRINGS.NAV_ABOUT, icon: User },
-    { path: '/repositories', label: APP_STRINGS.NAV_REPOSITORIES, icon: FolderGit2 },
     { path: '/mcp-install', label: APP_STRINGS.NAV_MCP, icon: Blocks },
   ]
 
@@ -86,6 +85,12 @@ function Footer() {
             © {new Date().getFullYear()} {APP_STRINGS.DISPLAY_NAME}
           </p>
           <div className='flex items-center gap-1'>
+            <Link
+              to='/repositories'
+              className='touch-target p-3 text-xs text-muted-foreground underline underline-offset-4 decoration-border hover:text-foreground hover:decoration-foreground transition-colors'
+            >
+              {APP_STRINGS.NAV_REPOSITORIES}
+            </Link>
             <a
               href={APP_STRINGS.LINKEDIN_URL}
               target='_blank'
