@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.13.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.12.0...vish288-personal-website-v2.13.0) (2026-10-13)
+
+
+### Features
+
+* **nav:** drop Repositories from the primary nav, link it from the footer ([056f46e](https://github.com/vish288/vish288.github.io/commit/056f46e382a7214d0e7ba31e848617c148eaafe8))
+
+
+### Bug Fixes
+
+* **copy:** proof strip says patients grew from a few hundred in 2 quarters ([a64a719](https://github.com/vish288/vish288.github.io/commit/a64a7192ab1f5cf434b5dc97abd5fc9e0ad1e9e1))
+
+
+### Build System
+
+* **deps:** bump actions/setup-node ([6972100](https://github.com/vish288/vish288.github.io/commit/697210017ddca6bd2cf16591cc0fb668cf300ad4))
+* **deps:** bump the npm-minor-patch group with 6 updates ([3c91a17](https://github.com/vish288/vish288.github.io/commit/3c91a17fd43432492e79cf52351eadf9de4e312e))
+
 ## [2.12.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.11.0...vish288-personal-website-v2.12.0) (2026-10-12)
 
 ### Features
