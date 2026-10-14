@@ -1,5 +1,22 @@
 # Changelog
 
+## [2.14.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.13.0...vish288-personal-website-v2.14.0) (2026-10-14)
+
+
+### Features
+
+* **mcp-install:** add a read-only toggle that writes MCP_READ_ONLY=true ([d22b4d1](https://github.com/vish288/vish288.github.io/commit/d22b4d151c80d46b3da3ec18f93a4015654ab690))
+
+
+### Bug Fixes
+
+* **mcp-install:** stop the read-only toggle re-opening a badge install ([aaf265a](https://github.com/vish288/vish288.github.io/commit/aaf265acf2d8b0ab61bfbf85220bb34a365d90cd))
+
+
+### Maintenance
+
+* repoint CHANGELOG links and release-please after history rewrite ([e002dd0](https://github.com/vish288/vish288.github.io/commit/e002dd0d1414c35b1760d856a34bbf2e2a1e5d71))
+
 ## [2.13.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.12.0+r1...vish288-personal-website-v2.13.0+r1) (2026-10-13)
 
 ### Features
