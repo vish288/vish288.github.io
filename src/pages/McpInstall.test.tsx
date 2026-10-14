@@ -355,7 +355,7 @@ describe('McpInstall Page', () => {
     expect(document.body.style.overflow).toBe('')
   })
 
-  // ── read-only toggle (A-1) ─────────────────────────────────────────
+  // ── read-only toggle ─────────────────────────────────────────
 
   it('exposes a labelled, off-by-default Read-only switch', () => {
     renderMcpInstall()
@@ -551,6 +551,29 @@ describe('McpInstall auto-redirect', () => {
         <McpInstall />
       </MemoryRouter>
     )
+    act(() => {
+      vi.advanceTimersByTime(400)
+    })
+    expect(window.location.href).toBe('')
+  })
+
+  it('does not re-redirect when Read-only is flipped after a badge arrival', () => {
+    render(
+      <MemoryRouter initialEntries={['/mcp-install?server=mcp-gitlab&install=vscode']}>
+        <McpInstall />
+      </MemoryRouter>
+    )
+    act(() => {
+      vi.advanceTimersByTime(400)
+    })
+    expect(window.location.href.startsWith('vscode:mcp/install?')).toBe(true)
+
+    // The visitor lands on the client, comes back, and flips the switch. The
+    // auto-redirect must not fire a second time and re-open the client.
+    window.location.href = ''
+    act(() => {
+      fireEvent.click(screen.getByRole('switch', { name: /read-only/i }))
+    })
     act(() => {
       vi.advanceTimersByTime(400)
     })
