@@ -325,17 +325,24 @@ export default function McpInstall() {
   }, [installClient])
 
   // Auto-redirect for link-based installs (deeplink clients), lifted from the
-  // old per-section effect and keyed on the resolved target.
+  // old per-section effect and keyed on the resolved target. readOnly is read
+  // through a ref so flipping the switch after arriving from a 1-click badge
+  // does not re-fire the redirect and re-open the client (it is off at mount,
+  // which is the value the one-time redirect uses).
+  const readOnlyRef = useRef(readOnly)
+  useEffect(() => {
+    readOnlyRef.current = readOnly
+  }, [readOnly])
   useEffect(() => {
     if (!targetKey || !installClient) return
     const o = deeplinkOutput(installClient)
     if (!o) return
-    const href = genDeeplink(SERVERS[targetKey]!, o, readOnly)
+    const href = genDeeplink(SERVERS[targetKey]!, o, readOnlyRef.current)
     const timer = setTimeout(() => {
       window.location.href = href
     }, 400)
     return () => clearTimeout(timer)
-  }, [targetKey, installClient, readOnly])
+  }, [targetKey, installClient])
 
   // Deep link that arrived WITH a client (and no modal): scroll the target row
   // into view and focus its heading, once at mount only — never on a later pick.
