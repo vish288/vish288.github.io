@@ -4,330 +4,330 @@
 
 ### Features
 
-- **mcp-install:** add a read-only toggle that writes MCP_READ_ONLY=true ([d22b4d1](https://github.com/vish288/vish288.github.io/commit/d22b4d151c80d46b3da3ec18f93a4015654ab690))
+- **mcp-install:** add a read-only toggle that writes MCP_READ_ONLY=true ([c505c11](https://github.com/vish288/vish288.github.io/commit/c505c11dc032af16e04c0a03be71f919def4b3d8))
 
 ### Bug Fixes
 
-- **mcp-install:** stop the read-only toggle re-opening a badge install ([aaf265a](https://github.com/vish288/vish288.github.io/commit/aaf265acf2d8b0ab61bfbf85220bb34a365d90cd))
+- **mcp-install:** stop the read-only toggle re-opening a badge install ([74af066](https://github.com/vish288/vish288.github.io/commit/74af066a61b8be13d0cfbcb46a6309bf61c099c5))
 
 ### Maintenance
 
-- repoint CHANGELOG links and release-please after history rewrite ([e002dd0](https://github.com/vish288/vish288.github.io/commit/e002dd0d1414c35b1760d856a34bbf2e2a1e5d71))
+- repoint CHANGELOG links and release-please after history rewrite ([778f01d](https://github.com/vish288/vish288.github.io/commit/778f01d00ce624a413eee602d4a167dbd1d5cddf))
 
 ## [2.13.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.12.0+r1...vish288-personal-website-v2.13.0+r1) (2026-10-13)
 
 ### Features
 
-- **nav:** drop Repositories from the primary nav, link it from the footer ([056f46e](https://github.com/vish288/vish288.github.io/commit/43d0460210396001a98aaac86542a05360ca1bfd))
+- **nav:** drop Repositories from the primary nav, link it from the footer ([3aae450](https://github.com/vish288/vish288.github.io/commit/3aae45024f3f7fbdf1bc28ed6994709124987eac))
 
 ### Bug Fixes
 
-- **copy:** proof strip says patients grew from a few hundred in 2 quarters ([a64a719](https://github.com/vish288/vish288.github.io/commit/be544d9e9e3476f5ee4faf0252b7877df6f00b24))
+- **copy:** proof strip says patients grew from a few hundred in 2 quarters ([a7aa9e0](https://github.com/vish288/vish288.github.io/commit/a7aa9e024bf7821c9d7a0c2111a04d1f46e8e101))
 
 ### Build System
 
-- **deps:** bump actions/setup-node ([6972100](https://github.com/vish288/vish288.github.io/commit/6dc78df6959ee8eef258c8f1c95fde9f4fd85d97))
-- **deps:** bump the npm-minor-patch group with 6 updates ([3c91a17](https://github.com/vish288/vish288.github.io/commit/4c4224d87bb1e1c6dc49aa8e3023419ebeee10e4))
+- **deps:** bump actions/setup-node ([d4d2130](https://github.com/vish288/vish288.github.io/commit/d4d21308c94c1aa1dc5c054c4a2414cc30f5bfd1))
+- **deps:** bump the npm-minor-patch group with 6 updates ([1fb0c84](https://github.com/vish288/vish288.github.io/commit/1fb0c84f63f4a42e51096168ed8bef44021aae6d))
 
 ## [2.12.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.11.0+r1...vish288-personal-website-v2.12.0+r1) (2026-10-12)
 
 ### Features
 
-- **identity:** Manifest Ledger (combo D) — [#847492](https://github.com/vish288/vish288.github.io/issues/847492) brand, live PyPI proof ([462cb11](https://github.com/vish288/vish288.github.io/commit/6cf1993bef90d86344b4b83d90333203ebdde240))
-- **repos:** pin MCP server repos first; derive client counts ([ad1a2da](https://github.com/vish288/vish288.github.io/commit/f39c3b306b8f33ea8348b520fb40ad7851227c41))
+- **identity:** Manifest Ledger (combo D) — [#847492](https://github.com/vish288/vish288.github.io/issues/847492) brand, live PyPI proof ([97b4534](https://github.com/vish288/vish288.github.io/commit/97b4534199c2c4831a000f583784d62268f2a96e))
+- **repos:** pin MCP server repos first; derive client counts ([b5639e4](https://github.com/vish288/vish288.github.io/commit/b5639e4cfa8a4fda13be1c68d6fbaf0c5ffb5539))
 
 ### Bug Fixes
 
-- commit client re-pick instead of dropping it on picker blur ([bdba28b](https://github.com/vish288/vish288.github.io/commit/53e0e2a69f02ac7c3fb4a10e7cb6af55021fd175))
-- **ui:** review findings — AA contrast, About distill, cleanups ([f21687a](https://github.com/vish288/vish288.github.io/commit/bf4339b6030411a91e9ae75ca5a880e6d7a937d9))
+- commit client re-pick instead of dropping it on picker blur ([a747c98](https://github.com/vish288/vish288.github.io/commit/a747c9842442ca145cb16247c6e14698959e1e6b))
+- **ui:** review findings — AA contrast, About distill, cleanups ([b8c37df](https://github.com/vish288/vish288.github.io/commit/b8c37df0929fa3128f93bbc54cc4ae6cce98572d))
 
 ### Tests
 
-- pin the gateway deep-link contract for the 4 MCP repos ([789546a](https://github.com/vish288/vish288.github.io/commit/834246edd69405d7dac9772803f725d89af5e579))
+- pin the gateway deep-link contract for the 4 MCP repos ([93f2974](https://github.com/vish288/vish288.github.io/commit/93f2974ceee76f6f5728131f6717c88b895e1036))
 
 ### Build System
 
-- github. ([462cb11](https://github.com/vish288/vish288.github.io/commit/6cf1993bef90d86344b4b83d90333203ebdde240))
+- github. ([97b4534](https://github.com/vish288/vish288.github.io/commit/97b4534199c2c4831a000f583784d62268f2a96e))
 
 ## [2.11.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.10.0+r1...vish288-personal-website-v2.11.0+r1) (2026-10-12)
 
 ### Features
 
-- **mcp-install:** client-first gateway, 99 to 13 focusable elements ([bfb12bb](https://github.com/vish288/vish288.github.io/commit/ebc1b42e52d243e2c260f3c009278d991dbb72f6))
-- report a 15-day PyPI download window from the /overall feed ([08e3137](https://github.com/vish288/vish288.github.io/commit/ade617e4d12628606ddf05376a1eb81351838d24))
-- show live PyPI download totals on About and MCP install ([7e26972](https://github.com/vish288/vish288.github.io/commit/45d3eeb9d36efabe2305ce06184fef5665d3d258))
+- **mcp-install:** client-first gateway, 99 to 13 focusable elements ([398a48d](https://github.com/vish288/vish288.github.io/commit/398a48dd8ea0c992243fe29881bc02a8f8bb295b))
+- report a 15-day PyPI download window from the /overall feed ([584b174](https://github.com/vish288/vish288.github.io/commit/584b1743b9e4f722b362e0bfc783aed6a5b1293a))
+- show live PyPI download totals on About and MCP install ([8cef3ec](https://github.com/vish288/vish288.github.io/commit/8cef3ec8799b53d05f75c29217c4a6366baa17f1))
 
 ### Bug Fixes
 
-- build release tag in cron, validate PyPI counts, share deploy lock ([aefcdd8](https://github.com/vish288/vish288.github.io/commit/4017a01de802145902e6f6935f6408de99519b64))
-- count young packages in full over the 15-day window ([9b69e40](https://github.com/vish288/vish288.github.io/commit/6e0c4ddf06912ccb27eaf2a2f419dd78fcc20ee2))
-- harden banned-name guard and finish audit review fixes ([4bf9d90](https://github.com/vish288/vish288.github.io/commit/6f18d2b5d31a02a8e66d2499887811fa098eac00))
-- **mcp-install:** review fixes — prototype keys, radio arrows, scroll target, focus ([af862ba](https://github.com/vish288/vish288.github.io/commit/e44fe4eb63de419acab3f79cc5771b063ac71f1f))
-- resolve audit a11y/perf findings and scrub employer name ([da0ba1f](https://github.com/vish288/vish288.github.io/commit/d1a433ba466df0c4da9fc0521c02b40e8c02dc14))
+- build release tag in cron, validate PyPI counts, share deploy lock ([fdd76b7](https://github.com/vish288/vish288.github.io/commit/fdd76b73134af27be155a52e215eaa1533045922))
+- count young packages in full over the 15-day window ([ddcd36f](https://github.com/vish288/vish288.github.io/commit/ddcd36f45cae662baf3e687d15384f2376ed67b9))
+- harden banned-name guard and finish audit review fixes ([6997b5c](https://github.com/vish288/vish288.github.io/commit/6997b5c3867940ddb1eefe1fa5360223c009064d))
+- **mcp-install:** review fixes — prototype keys, radio arrows, scroll target, focus ([6c14c0f](https://github.com/vish288/vish288.github.io/commit/6c14c0feded5abbf578ac91d96d92a4305f8bb87))
+- resolve audit a11y/perf findings and scrub employer name ([115c0c7](https://github.com/vish288/vish288.github.io/commit/115c0c7d0a1db09515025e5e82679a21f96f7ec7))
 
 ### Documentation
 
-- add DESIGN.md recording the shipped design system ([2333bf5](https://github.com/vish288/vish288.github.io/commit/4e56cac2013aa9914183c42aae1a9799d67669d1))
+- add DESIGN.md recording the shipped design system ([830bc05](https://github.com/vish288/vish288.github.io/commit/830bc0555897c90960a0b3008f14e33cc72f17fc))
 
 ## [2.10.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.9.1+r1...vish288-personal-website-v2.10.0+r1) (2026-10-08)
 
 ### Features
 
-- **mcp:** data-driven client table with 20 clients ([6ac4288](https://github.com/vish288/vish288.github.io/commit/0b7b1e857fe42551a1add338e17cfeb979ce0f05))
-- **seo:** richer structured data, head tags and llms.txt facts ([169fb60](https://github.com/vish288/vish288.github.io/commit/a30593d0dfe0afd745d7c388a8db78576b6e9857))
+- **mcp:** data-driven client table with 20 clients ([4bac609](https://github.com/vish288/vish288.github.io/commit/4bac609960f7152b7341edfea009d2352a8a8c1b))
+- **seo:** richer structured data, head tags and llms.txt facts ([2812167](https://github.com/vish288/vish288.github.io/commit/2812167ab779d44b8335f513504d9b15ee33edd5))
 
 ### Documentation
 
-- add MCP clients spec ([d2c5c54](https://github.com/vish288/vish288.github.io/commit/8204bc7e40bf3897149bfcfb2d53853ddb61bbb9))
+- add MCP clients spec ([5b6f299](https://github.com/vish288/vish288.github.io/commit/5b6f299ccbdc005654d8595a6347b159d109d1fc))
 
 ### Tests
 
-- **mcp:** golden generator outputs and alias coverage ([8368761](https://github.com/vish288/vish288.github.io/commit/c254e4efbf8515a304ab83fe4f9aa4b70cb3bd2e))
+- **mcp:** golden generator outputs and alias coverage ([8cf06d9](https://github.com/vish288/vish288.github.io/commit/8cf06d98e8bf0c869320c664554ffd9aac943deb))
 
 ### Build System
 
-- drop redundant autoprefixer dependency ([ac0e6e8](https://github.com/vish288/vish288.github.io/commit/b7593ad62ca7a497f5bae8be82d75906d2a42f53))
+- drop redundant autoprefixer dependency ([81ffeb0](https://github.com/vish288/vish288.github.io/commit/81ffeb00f2c55f4c9982b5c6c7f70f54f784c8a1))
 
 ### CI/CD
 
-- run build in CI and dedupe security-audit issues ([b45e363](https://github.com/vish288/vish288.github.io/commit/d4c271235dec1236f3984dc4832eddbc8100d8a9))
+- run build in CI and dedupe security-audit issues ([5ec3e2d](https://github.com/vish288/vish288.github.io/commit/5ec3e2d4148943c6abeb7da5d98c07920cbcb8cd))
 
 ### Maintenance
 
-- add MIT LICENSE referenced by README and package.json ([3ff01dc](https://github.com/vish288/vish288.github.io/commit/4cb80da97b28a2fd63e29a5ed5b53bd03f029afe))
-- **security:** replace SPA 404 redirect with a static 404 and tighten CSP ([9d9f0c5](https://github.com/vish288/vish288.github.io/commit/c22acf586e28f62b63030aa9d7104edd266d5b3e))
-- stop tracking editor config and remove dead files ([2eb6477](https://github.com/vish288/vish288.github.io/commit/67b3e680a338230f0002fcc83ed23ea2fff84ab4))
+- add MIT LICENSE referenced by README and package.json ([6773054](https://github.com/vish288/vish288.github.io/commit/67730543da607c1cd7d27902ad2987a7d677f242))
+- **security:** replace SPA 404 redirect with a static 404 and tighten CSP ([52037fe](https://github.com/vish288/vish288.github.io/commit/52037fecb748c161c7e9f433a18149967aa0d899))
+- stop tracking editor config and remove dead files ([99ade4e](https://github.com/vish288/vish288.github.io/commit/99ade4e9ac32ac6d56b421cd2263068fc9717c6a))
 
 ## [2.9.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.9.0+r1...vish288-personal-website-v2.9.1+r1) (2026-10-07)
 
 ### Build System
 
-- **deps:** bump the npm-minor-patch group with 16 updates ([69a4b0e](https://github.com/vish288/vish288.github.io/commit/1f5d5efab5d3164322e0ca5015e6631a26d85cf4))
+- **deps:** bump the npm-minor-patch group with 16 updates ([4b47583](https://github.com/vish288/vish288.github.io/commit/4b47583abb4576f7684fad528001dedc8fef02c8))
 
 ## [2.9.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.9+r1...vish288-personal-website-v2.9.0+r1) (2026-10-07)
 
 ### Features
 
-- **about:** add capabilities and experience sections ([0c23232](https://github.com/vish288/vish288.github.io/commit/8486963eb2967119d0f5af9f71fe9c02b40bc1e3))
-- **mcp:** add mcp-argocd server everywhere the siblings appear ([a5638e8](https://github.com/vish288/vish288.github.io/commit/ad9567aeec15b249c39022fa0562681e1dc1ec90))
-- **seo:** prerender routes, structured data, sitemap and llms.txt ([56679fc](https://github.com/vish288/vish288.github.io/commit/27c1286c3753652ab527b62ed49a917543888daf))
+- **about:** add capabilities and experience sections ([91051d7](https://github.com/vish288/vish288.github.io/commit/91051d7a2ae6bea295a2091ad3aca5a716bf947b))
+- **mcp:** add mcp-argocd server everywhere the siblings appear ([e7e7dbe](https://github.com/vish288/vish288.github.io/commit/e7e7dbe558ae241cc16f221b44fc3b598d924d6f))
+- **seo:** prerender routes, structured data, sitemap and llms.txt ([eabbac7](https://github.com/vish288/vish288.github.io/commit/eabbac7706b7b639288ebb2543092d188b74814d))
 
 ### Bug Fixes
 
-- **a11y:** 44px touch targets and full MCP client names on small screens ([82cc11b](https://github.com/vish288/vish288.github.io/commit/fe2a706f14e5b189c1383af8524ef94dd65a8529))
-- **a11y:** harden navigation, data fetching, and the MCP install flow ([c73c880](https://github.com/vish288/vish288.github.io/commit/e3b945c9ebe31f503190d4df427c62aee0c690ec))
-- **a11y:** honor prefers-reduced-motion ([ec4b629](https://github.com/vish288/vish288.github.io/commit/c298211fa70555269ba96c5818cc42cfa39b324a))
-- **a11y:** meet WCAG AA contrast in the light theme ([1fa7ecf](https://github.com/vish288/vish288.github.io/commit/913c6c59ae260ed40267431893702e4a3f593634))
+- **a11y:** 44px touch targets and full MCP client names on small screens ([d927e62](https://github.com/vish288/vish288.github.io/commit/d927e62c6a336871fcee56ca954202c7156f79dd))
+- **a11y:** harden navigation, data fetching, and the MCP install flow ([6f6de37](https://github.com/vish288/vish288.github.io/commit/6f6de37406689c491f5911cec0c8663bfb273bc0))
+- **a11y:** honor prefers-reduced-motion ([7450fce](https://github.com/vish288/vish288.github.io/commit/7450fcee0c8b0179490c87fd29621cf57efa6cab))
+- **a11y:** meet WCAG AA contrast in the light theme ([6bcb4ac](https://github.com/vish288/vish288.github.io/commit/6bcb4ac45e0171fc112033ad272612d42d2ac470))
 
 ### Documentation
 
-- add PRODUCT.md product context ([3db5d7c](https://github.com/vish288/vish288.github.io/commit/f9c34360d6436ef8b997cb4f99beb847afbfc3ef))
+- add PRODUCT.md product context ([0ce90ce](https://github.com/vish288/vish288.github.io/commit/0ce90ce087761014c562b47f94e83f2e3bae1226))
 
 ### Code Refactoring
 
-- **about:** derive skills from real repo data, not a fabricated map ([e03933e](https://github.com/vish288/vish288.github.io/commit/9181d00c0e953132e4b824f83b5fc59d475acada))
+- **about:** derive skills from real repo data, not a fabricated map ([eca7f44](https://github.com/vish288/vish288.github.io/commit/eca7f4476394c8c075b3ac1accf0e15678b9d526))
 
 ### Build System
 
-- **deps:** bump pnpm/action-setup ([de22a30](https://github.com/vish288/vish288.github.io/commit/f26d179c4339c140b594867435ed8b1260c2f2e2))
-- **deps:** bump the actions group across 1 directory with 4 updates ([ab6759c](https://github.com/vish288/vish288.github.io/commit/6e405b85e4ec0040e4b49b30c55ae23eba618e5d))
-- **deps:** bump the npm-minor-patch group across 1 directory with 25 updates ([63763e2](https://github.com/vish288/vish288.github.io/commit/0915d480f870a4cb36ca31b3cc6e8677ba1ec163))
-- **deps:** bump vite-plugin-pwa ([4e1dfd8](https://github.com/vish288/vish288.github.io/commit/7dff7e5a8a376fe4f4321d40c46fac7dfe4c7531))
-- **deps:** major upgrades and zero vulnerability alerts ([c685b01](https://github.com/vish288/vish288.github.io/commit/818278e03e3c67fe829cd4cb30bbe472048f3745))
+- **deps:** bump pnpm/action-setup ([0034c18](https://github.com/vish288/vish288.github.io/commit/0034c186af9dbfb5101225ad21cfbecca5a278c2))
+- **deps:** bump the actions group across 1 directory with 4 updates ([5b83d31](https://github.com/vish288/vish288.github.io/commit/5b83d319b25ab13d80da786ea91f4daa7f111cd8))
+- **deps:** bump the npm-minor-patch group across 1 directory with 25 updates ([00ab820](https://github.com/vish288/vish288.github.io/commit/00ab820dcb24f55296c14422ea376568f2102060))
+- **deps:** bump vite-plugin-pwa ([07700c0](https://github.com/vish288/vish288.github.io/commit/07700c021f0e012d6f0642df72d35232a7340a39))
+- **deps:** major upgrades and zero vulnerability alerts ([05437ef](https://github.com/vish288/vish288.github.io/commit/05437ef878664074740df24b715501344f517133))
 
 ### Maintenance
 
-- ignore .internal/ ([bd1e019](https://github.com/vish288/vish288.github.io/commit/74638ba6e3fb17b31cb90feccf048078e308d60d))
-- remove dead code, bundle icons, fix PWA icon, polish focus states ([e6ab48a](https://github.com/vish288/vish288.github.io/commit/547b271d7d77de4e39c4f2f68401688b0015376a))
+- ignore .internal/ ([c2e2732](https://github.com/vish288/vish288.github.io/commit/c2e27329d8f9962d42b4a8e4ce9dc965b99153e8))
+- remove dead code, bundle icons, fix PWA icon, polish focus states ([b20cb91](https://github.com/vish288/vish288.github.io/commit/b20cb915a4829595b7f7e6d746e2809096cf3c86))
 
 ## [2.8.9](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.8+r1...vish288-personal-website-v2.8.9+r1) (2026-06-17)
 
 ### Bug Fixes
 
-- allow MCP page icon CDNs in CSP and add SPA catch-all route ([24ef415](https://github.com/vish288/vish288.github.io/commit/042e87259ace8c18f8c6d8bb5c224caab51a1f4c))
+- allow MCP page icon CDNs in CSP and add SPA catch-all route ([b101129](https://github.com/vish288/vish288.github.io/commit/b1011297bc4de100c2522894bf3cddd593285733))
 
 ## [2.8.8](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.7+r1...vish288-personal-website-v2.8.8+r1) (2026-06-17)
 
 ### Bug Fixes
 
-- address react-hooks 7 violations and drop tsconfig baseUrl ([67da9ab](https://github.com/vish288/vish288.github.io/commit/022aefd34c3e76a011b4c9d1ae76445ab6315d3d))
+- address react-hooks 7 violations and drop tsconfig baseUrl ([d409fb7](https://github.com/vish288/vish288.github.io/commit/d409fb714691d1c23f295b8dabd113aeab49e35b))
 
 ### Code Refactoring
 
-- remove VITE_GITHUB_TOKEN surface — drop gratitude form and admin ([44544b1](https://github.com/vish288/vish288.github.io/commit/60a23f0f99e335729f8040c3c3f372d6b34de904))
+- remove VITE_GITHUB_TOKEN surface — drop gratitude form and admin ([bdd11f1](https://github.com/vish288/vish288.github.io/commit/bdd11f1a66b5bc7ea73d00d3b407afab3310dea9))
 
 ### Maintenance
 
-- **security:** add CSP, promote 404 to Vite entry, extract SPA scripts to TS ([b918aff](https://github.com/vish288/vish288.github.io/commit/628ce04b06168ed378a5a4937e7f4edc320acec3))
+- **security:** add CSP, promote 404 to Vite entry, extract SPA scripts to TS ([bdca40c](https://github.com/vish288/vish288.github.io/commit/bdca40c37bdbba6e080ee8ab60a9b2ca042df501))
 
 ## [2.8.7](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.6+r1...vish288-personal-website-v2.8.7+r1) (2026-06-17)
 
 ### Maintenance
 
-- move serialize-javascript override to pnpm-workspace.yaml ([1487df2](https://github.com/vish288/vish288.github.io/commit/5c826b2edd2790eea60ffcd27dd82c98d9a69896))
+- move serialize-javascript override to pnpm-workspace.yaml ([7f293fa](https://github.com/vish288/vish288.github.io/commit/7f293fa72bb649b1960f3977aecab7131a95a0d7))
 
 ## [2.8.6](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.5+r1...vish288-personal-website-v2.8.6+r1) (2026-06-17)
 
 ### Bug Fixes
 
-- **vite:** convert manualChunks object to function for vite 8/rolldown ([c35c4ab](https://github.com/vish288/vish288.github.io/commit/20398f141e2adaee0363b0496d1add72bbe4ea69))
+- **vite:** convert manualChunks object to function for vite 8/rolldown ([8594098](https://github.com/vish288/vish288.github.io/commit/85940984ed1c24543fc717028b5dc864399702c1))
 
 ## [2.8.5](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.4+r1...vish288-personal-website-v2.8.5+r1) (2026-06-17)
 
 ### Bug Fixes
 
-- pin lucide-react to 0.x, set ignoreDeprecations for TS 6 ([d99c37b](https://github.com/vish288/vish288.github.io/commit/b7df2ba0004889c06cdc1e04cd806a600f17c199))
+- pin lucide-react to 0.x, set ignoreDeprecations for TS 6 ([01c68ae](https://github.com/vish288/vish288.github.io/commit/01c68aefb74e1aa56632f2a3bd8c7493d80aa72a))
 
 ### Build System
 
-- **deps:** bump the actions group across 1 directory with 8 updates ([547a94d](https://github.com/vish288/vish288.github.io/commit/21d32e3d931e3f734348ffe095679b5280c91265))
-- **deps:** bump the npm-major group across 1 directory with 6 updates ([f32d97a](https://github.com/vish288/vish288.github.io/commit/dcbbb9270c056a3e224c144edc6d229199e28a1d))
-- **deps:** bump the npm-minor-patch group across 1 directory with 25 updates ([f35c699](https://github.com/vish288/vish288.github.io/commit/eb7932bce03e00f93953fdbb25b78a5a93655450))
+- **deps:** bump the actions group across 1 directory with 8 updates ([59b73dd](https://github.com/vish288/vish288.github.io/commit/59b73dda0c08d6d402a44eae3e057f2f3e912b2a))
+- **deps:** bump the npm-major group across 1 directory with 6 updates ([8f8e1a0](https://github.com/vish288/vish288.github.io/commit/8f8e1a0a75a7860fb838fbbff2787a1069fc9d3c))
+- **deps:** bump the npm-minor-patch group across 1 directory with 25 updates ([27e62fc](https://github.com/vish288/vish288.github.io/commit/27e62fc186d33bc9144848fe52b1e9a42ed1eb5e))
 
 ### Maintenance
 
-- **eslint:** downgrade new react-hooks compiler rules to warn ([3ffebc1](https://github.com/vish288/vish288.github.io/commit/4972d4657bd11871518493301371550ee099c8fc))
+- **eslint:** downgrade new react-hooks compiler rules to warn ([d1710f1](https://github.com/vish288/vish288.github.io/commit/d1710f1d989601720f136feba4af8de99f2eb0d6))
 
 ## [2.8.4](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.3+r1...vish288-personal-website-v2.8.4+r1) (2026-06-17)
 
 ### CI/CD
 
-- bump upload-pages-artifact to v4 (pins upload-artifact internally) ([27c457f](https://github.com/vish288/vish288.github.io/commit/2d75ed270d2331f814e908fc2866dc8b7d24b41b))
+- bump upload-pages-artifact to v4 (pins upload-artifact internally) ([390e05f](https://github.com/vish288/vish288.github.io/commit/390e05f9094742d36ecce172e4e117e185660957))
 
 ## [2.8.3](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.2...vish288-personal-website-v2.8.3+r1) (2026-06-17)
 
 ### CI/CD
 
-- format CHANGELOG in release PR, drop Node 20 ([8f5c4a9](https://github.com/vish288/vish288.github.io/commit/972abbd3d7f1653a5e255b35e61d0c67c97d004d))
-- group dependabot updates into batched PRs ([7792e28](https://github.com/vish288/vish288.github.io/commit/f8ad54d1d8871089ada0b868ec17819142027015))
-- pin all actions to commit SHA per repo policy ([1ddc92e](https://github.com/vish288/vish288.github.io/commit/3423d70b67cf349d73af77e3668fd2e3452b7262))
+- format CHANGELOG in release PR, drop Node 20 ([a648c53](https://github.com/vish288/vish288.github.io/commit/a648c5360ca3335384c2866b1ba464c9445fb7c0))
+- group dependabot updates into batched PRs ([f9c1647](https://github.com/vish288/vish288.github.io/commit/f9c16476afea171c6bd82fb494ee860e3ab16811))
+- pin all actions to commit SHA per repo policy ([f9001b1](https://github.com/vish288/vish288.github.io/commit/f9001b1d8a4eed707f20b510597bc03616959e20))
 
 ### Maintenance
 
-- format CHANGELOG.md ([40349ff](https://github.com/vish288/vish288.github.io/commit/71ec780390ee4a0043be418f54fe8e9d49e1e8b2))
+- format CHANGELOG.md ([bd76b6d](https://github.com/vish288/vish288.github.io/commit/bd76b6d7c36e0428bd08142f8bc0eba7c958938a))
 
 ## [2.8.2](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.1...vish288-personal-website-v2.8.2) (2026-03-03)
 
 ### Bug Fixes
 
-- **deps:** override serialize-javascript to &gt;=7.0.3 (CVE fix) ([c9eb69b](https://github.com/vish288/vish288.github.io/commit/ebd1aef74682a789f068dfbfcc870b692c9b600b))
-- format CHANGELOG.md for prettier ([0a7a411](https://github.com/vish288/vish288.github.io/commit/b396fb4da9a8df1eaa565eddc392f98577e48cc5))
+- **deps:** override serialize-javascript to &gt;=7.0.3 (CVE fix) ([2d25632](https://github.com/vish288/vish288.github.io/commit/2d256323a12bb827d30af25573fa5c0598564250))
+- format CHANGELOG.md for prettier ([ec39b12](https://github.com/vish288/vish288.github.io/commit/ec39b124e3e001e24dfc1ba13427db73db80c598))
 
 ## [2.8.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.8.0...vish288-personal-website-v2.8.1) (2026-02-27)
 
 ### Tests
 
-- add link integrity tests for MCP install page ([#64](https://github.com/vish288/vish288.github.io/issues/64)) ([ae5d5b4](https://github.com/vish288/vish288.github.io/commit/cc41a8cc67a4396ed91b9f51490258c062476c51))
+- add link integrity tests for MCP install page ([#64](https://github.com/vish288/vish288.github.io/issues/64)) ([f285176](https://github.com/vish288/vish288.github.io/commit/f285176a5293a38d98b50a2c40724c20d6313b86))
 
 ## [2.8.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.7.1...vish288-personal-website-v2.8.0) (2026-02-27)
 
 ### Features
 
-- add Gemini CLI client and expand all MCP servers by default ([#62](https://github.com/vish288/vish288.github.io/issues/62)) ([ef0710e](https://github.com/vish288/vish288.github.io/commit/41781239ad3db36f16941cb5a40013963a881ae6))
+- add Gemini CLI client and expand all MCP servers by default ([#62](https://github.com/vish288/vish288.github.io/issues/62)) ([3ad62c5](https://github.com/vish288/vish288.github.io/commit/3ad62c57dd3de046ce1281fe01415d9fb3e4c61f))
 
 ## [2.7.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.7.0...vish288-personal-website-v2.7.1) (2026-02-25)
 
 ### Bug Fixes
 
-- prioritize strategic topics on repository cards ([46c604a](https://github.com/vish288/vish288.github.io/commit/04b30de909f1745df9c40857acfa4951a3626695))
+- prioritize strategic topics on repository cards ([198c38c](https://github.com/vish288/vish288.github.io/commit/198c38ccc0400663585eccb19f51ff6168c99d44))
 
 ## [2.7.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.6.0...vish288-personal-website-v2.7.0) (2026-02-25)
 
 ### Features
 
-- add MCP Install link to nav bar and featured card on Repositories page ([adeaae6](https://github.com/vish288/vish288.github.io/commit/d42ae738fe47dc9dfe2f6a45b9aa341d7e42cf72))
-- add robust SEO keywords and auto-invoke routing based on query params ([#49](https://github.com/vish288/vish288.github.io/issues/49)) ([85405ea](https://github.com/vish288/vish288.github.io/commit/534ad9b2fd59200892cc36814ab259f40f4391b5))
-- add SEO metadata, header, and footer to MCP landing pages ([#44](https://github.com/vish288/vish288.github.io/issues/44)) ([4dbe470](https://github.com/vish288/vish288.github.io/commit/b926ea2a13358c27e0e299b802c4e11d13eeda86))
-- polish gateway layout and navigation for mcp-atlassian-extended-cursor-redirect.html ([7d1f8eb](https://github.com/vish288/vish288.github.io/commit/76825fa4774ee5c4b4181ea477b5860c09adb2bc))
-- polish gateway layout and navigation for mcp-gitlab-cursor-redirect.html ([18b842b](https://github.com/vish288/vish288.github.io/commit/2e8e4dede480429744b498a74676930e4d7b0ab2))
-- redesign all pages with editorial layout, infinite scroll, and MCP deep-links ([ffcc956](https://github.com/vish288/vish288.github.io/commit/c7e3d01a79aa4fca6bde18e0f3f825a017cdd353))
-- redesign elegant cursor gateway page for mcp-atlassian-extended-cursor-redirect.html ([77157e5](https://github.com/vish288/vish288.github.io/commit/212d96684090b869f8a66b62b63da57bf3d910e0))
-- redesign elegant cursor gateway page for mcp-gitlab-cursor-redirect.html ([5fc0e94](https://github.com/vish288/vish288.github.io/commit/7abe5c888c3f62aa9f98fccd82551de48c7fb43a))
-- redesign landing pages to mirror Figma MCP catalog style ([#43](https://github.com/vish288/vish288.github.io/issues/43)) ([b92a016](https://github.com/vish288/vish288.github.io/commit/1541682e19f7c3b0a9404950bd99d496a8362155))
-- redesign landing pages to mirror PyPI style ([#42](https://github.com/vish288/vish288.github.io/issues/42)) ([fee674e](https://github.com/vish288/vish288.github.io/commit/58c9ff386a7f176e09fff4345b68049a6bea1593))
-- unify MCP installation gateway into single data-driven page ([cfb63e0](https://github.com/vish288/vish288.github.io/commit/51e7a6a07fc44db88f6f7241b8a77f51781ae298))
+- add MCP Install link to nav bar and featured card on Repositories page ([0a93312](https://github.com/vish288/vish288.github.io/commit/0a93312fab48da9181fea672d55d48a9b321cfe9))
+- add robust SEO keywords and auto-invoke routing based on query params ([#49](https://github.com/vish288/vish288.github.io/issues/49)) ([3d8b82a](https://github.com/vish288/vish288.github.io/commit/3d8b82a0b91f155c24f00d2da4e1b3270e474538))
+- add SEO metadata, header, and footer to MCP landing pages ([#44](https://github.com/vish288/vish288.github.io/issues/44)) ([6543892](https://github.com/vish288/vish288.github.io/commit/6543892754e182da8f995989200ca99dc1e12738))
+- polish gateway layout and navigation for mcp-atlassian-extended-cursor-redirect.html ([55ece3a](https://github.com/vish288/vish288.github.io/commit/55ece3a2a5c38c255c7aee0d8869805ca276917b))
+- polish gateway layout and navigation for mcp-gitlab-cursor-redirect.html ([99077f0](https://github.com/vish288/vish288.github.io/commit/99077f0972007e7d242ed22874c0b96a5a38777b))
+- redesign all pages with editorial layout, infinite scroll, and MCP deep-links ([6a6e426](https://github.com/vish288/vish288.github.io/commit/6a6e4265bfdcfbbf0680a268a760ad4184d6e6cd))
+- redesign elegant cursor gateway page for mcp-atlassian-extended-cursor-redirect.html ([b76851a](https://github.com/vish288/vish288.github.io/commit/b76851ac9c784d4967713f53e117961d387f2a6f))
+- redesign elegant cursor gateway page for mcp-gitlab-cursor-redirect.html ([6270105](https://github.com/vish288/vish288.github.io/commit/6270105e50a390b6fe5105e77183d721454ee946))
+- redesign landing pages to mirror Figma MCP catalog style ([#43](https://github.com/vish288/vish288.github.io/issues/43)) ([436d9a5](https://github.com/vish288/vish288.github.io/commit/436d9a56b9bc7f63bb7b18b04aa6d629bd316775))
+- redesign landing pages to mirror PyPI style ([#42](https://github.com/vish288/vish288.github.io/issues/42)) ([cb3175a](https://github.com/vish288/vish288.github.io/commit/cb3175a21d3f656ea33321814112dc82bed92ab1))
+- unify MCP installation gateway into single data-driven page ([b9fb66b](https://github.com/vish288/vish288.github.io/commit/b9fb66b28417b84fe53c05c899842f82ca015b24))
 
 ### Bug Fixes
 
-- add 404.html for SPA routing on GitHub Pages and remove dead HTMLs ([b490374](https://github.com/vish288/vish288.github.io/commit/2a2aa84e2213062e9730f10bede3788b815a6742))
-- address review findings across all pages ([2c14add](https://github.com/vish288/vish288.github.io/commit/4cdb79d911579c339d7ff45afb611557e820e30f))
-- improve keyboard accessibility for modal and word cloud ([0a1b25d](https://github.com/vish288/vish288.github.io/commit/fe5138c1fad26913de51e0ea9b73fa3d93d43854))
-- preserve cursor auto-redirect in old URLs, fix stale text, consistent VS Code redirect ([4d61bae](https://github.com/vish288/vish288.github.io/commit/89aa9f870bcc25a5411edbe4febe1ec565e005b8))
-- resolve broken modal buttons, dropdown styling, footer pinning, and label corrections ([936a3ef](https://github.com/vish288/vish288.github.io/commit/6df74465bbdf303f210b5b679e4227d723268bd3))
-- simplify cursor deeplink payload shape for mcp-atlassian-extended-cursor-redirect.html ([2fd30ca](https://github.com/vish288/vish288.github.io/commit/bf227a7c94021788d09618b7c3b52c865d5703ff))
-- simplify cursor deeplink payload shape for mcp-gitlab-cursor-redirect.html ([4154131](https://github.com/vish288/vish288.github.io/commit/61dfaf7527af4ec1bb9b7f994d9616a4d1bf954f))
-- update descriptions, logos, and link redirects ([#45](https://github.com/vish288/vish288.github.io/issues/45)) ([6835f90](https://github.com/vish288/vish288.github.io/commit/bff892a603fc9e404e78dbd7be781b122b67d9a1))
-- update h1 and subtitle to reflect installation gateway ([#48](https://github.com/vish288/vish288.github.io/issues/48)) ([092b976](https://github.com/vish288/vish288.github.io/commit/985b92f0e4a9ffc2cc484db0bbb331724937db84))
-- update page titles and metadata ([#47](https://github.com/vish288/vish288.github.io/issues/47)) ([25ebf04](https://github.com/vish288/vish288.github.io/commit/4f5515e2df36df439488d865ff6877ec5689f7d8))
-- update security-settings ([edef6af](https://github.com/vish288/vish288.github.io/commit/04285906108689c0a2ac77ed6db175f49ba47a43))
-- update vscode and windsurf logos ([#46](https://github.com/vish288/vish288.github.io/issues/46)) ([d3231b5](https://github.com/vish288/vish288.github.io/commit/8d3f98afc3c8c8cec15ba614971ffb5f28c1fe28))
-- url-encode json to fix broken modals, rename Claude Desktop to Claude ([#51](https://github.com/vish288/vish288.github.io/issues/51)) ([5ef883f](https://github.com/vish288/vish288.github.io/commit/44876a55fe0d8e8da347de5cd0cfadbaeffda78b))
-- use click-based cursor deeplink redirect for mcp-atlassian-extended-cursor-redirect.html ([7077e04](https://github.com/vish288/vish288.github.io/commit/93eff2a4326f29bf9f10c4b7e818c6f6fba66117))
-- use click-based cursor deeplink redirect for mcp-gitlab-cursor-redirect.html ([d803629](https://github.com/vish288/vish288.github.io/commit/32b382ddd1dfce940dfe636005ce703a498fc578))
-- use direct vscode protocol to keep gateway open ([#50](https://github.com/vish288/vish288.github.io/issues/50)) ([0b50954](https://github.com/vish288/vish288.github.io/commit/aa37db4436e153c206a233bdd3761e1d6836c8e2))
-- use plain server config object in cursor deeplink for mcp-atlassian-extended-cursor-redirect.html ([6d0b754](https://github.com/vish288/vish288.github.io/commit/2bdd39123eb2e50857f7e497e27136d46be2dc0e))
-- use plain server config object in cursor deeplink for mcp-gitlab-cursor-redirect.html ([9dc6045](https://github.com/vish288/vish288.github.io/commit/c87eef5546b5f683f49284ac1e40b689f349f421))
+- add 404.html for SPA routing on GitHub Pages and remove dead HTMLs ([b75fc86](https://github.com/vish288/vish288.github.io/commit/b75fc8632fe6e1008806fdaf62540c28ba2e7cb1))
+- address review findings across all pages ([37b94d6](https://github.com/vish288/vish288.github.io/commit/37b94d63da6dc79ddfb6098166dc23f234ccfc3c))
+- improve keyboard accessibility for modal and word cloud ([3d327df](https://github.com/vish288/vish288.github.io/commit/3d327dfe8e997c49c35a6fd617aee6cf23fc9f47))
+- preserve cursor auto-redirect in old URLs, fix stale text, consistent VS Code redirect ([d51b706](https://github.com/vish288/vish288.github.io/commit/d51b706d93d77cea6ed2b7e07a8ccec8103002a7))
+- resolve broken modal buttons, dropdown styling, footer pinning, and label corrections ([2e911dc](https://github.com/vish288/vish288.github.io/commit/2e911dcfbadf328db67de5ce1e12536b2953753d))
+- simplify cursor deeplink payload shape for mcp-atlassian-extended-cursor-redirect.html ([7d79296](https://github.com/vish288/vish288.github.io/commit/7d79296b7c87e352b5eb0a5f2c8da9c7e9c048dc))
+- simplify cursor deeplink payload shape for mcp-gitlab-cursor-redirect.html ([5a22189](https://github.com/vish288/vish288.github.io/commit/5a22189e3740f315e1498ab68ef043a37522b267))
+- update descriptions, logos, and link redirects ([#45](https://github.com/vish288/vish288.github.io/issues/45)) ([812f899](https://github.com/vish288/vish288.github.io/commit/812f8999cfc16484711c7dd189f1c8fac0578559))
+- update h1 and subtitle to reflect installation gateway ([#48](https://github.com/vish288/vish288.github.io/issues/48)) ([e1cfd8b](https://github.com/vish288/vish288.github.io/commit/e1cfd8bb73f0f11cae799270dc4f29c1bf0fbbcf))
+- update page titles and metadata ([#47](https://github.com/vish288/vish288.github.io/issues/47)) ([47a7cdf](https://github.com/vish288/vish288.github.io/commit/47a7cdfbfad03c3ab16a914d4693ed83dece7655))
+- update security-settings ([71d2ef0](https://github.com/vish288/vish288.github.io/commit/71d2ef0c69baae1dd3da15a836ee89ede80a364a))
+- update vscode and windsurf logos ([#46](https://github.com/vish288/vish288.github.io/issues/46)) ([c504f22](https://github.com/vish288/vish288.github.io/commit/c504f229e604d9cabffbbf887162ad257df5f5f0))
+- url-encode json to fix broken modals, rename Claude Desktop to Claude ([#51](https://github.com/vish288/vish288.github.io/issues/51)) ([2e0753b](https://github.com/vish288/vish288.github.io/commit/2e0753b93aa5e8add7c239ab8bdffc42abb670ff))
+- use click-based cursor deeplink redirect for mcp-atlassian-extended-cursor-redirect.html ([f17a157](https://github.com/vish288/vish288.github.io/commit/f17a157261fc3e0c134fdddbc1015ba3daaf2a79))
+- use click-based cursor deeplink redirect for mcp-gitlab-cursor-redirect.html ([7e1e052](https://github.com/vish288/vish288.github.io/commit/7e1e0524b0d90333b45a159291715e005fa069a2))
+- use direct vscode protocol to keep gateway open ([#50](https://github.com/vish288/vish288.github.io/issues/50)) ([0046165](https://github.com/vish288/vish288.github.io/commit/004616576a4433dc8c719b6e6e5dd429a7e01854))
+- use plain server config object in cursor deeplink for mcp-atlassian-extended-cursor-redirect.html ([ff1ac4c](https://github.com/vish288/vish288.github.io/commit/ff1ac4c812b494ec8cbf6076a1d7b4205cb16d3e))
+- use plain server config object in cursor deeplink for mcp-gitlab-cursor-redirect.html ([dbc07ac](https://github.com/vish288/vish288.github.io/commit/dbc07ac294ba5ad2c05a10d2c97b7504bc3f5cb3))
 
 ### Documentation
 
-- add seo metadata to mcp-atlassian-extended-cursor-redirect.html ([1782c32](https://github.com/vish288/vish288.github.io/commit/da20db8cd9f8db07f7f0d352cf970cf2a37d5c34))
-- add seo metadata to mcp-gitlab-cursor-redirect.html ([b3eb3d5](https://github.com/vish288/vish288.github.io/commit/dfd7b644fbbe7eda459745fee449d676eaf1dc24))
-- streamline README and enrich DEVELOPMENT.md ([1899433](https://github.com/vish288/vish288.github.io/commit/e72c6ed67ad55e8a8f40acedcf61cdbd16801941))
+- add seo metadata to mcp-atlassian-extended-cursor-redirect.html ([7979cde](https://github.com/vish288/vish288.github.io/commit/7979cde49c14fc124586dafdb3bca0c410797535))
+- add seo metadata to mcp-gitlab-cursor-redirect.html ([77b7a0f](https://github.com/vish288/vish288.github.io/commit/77b7a0fba33dc5062a95e1de247b98664b0e5cff))
+- streamline README and enrich DEVELOPMENT.md ([1840eda](https://github.com/vish288/vish288.github.io/commit/1840eda303563e7dcc6b1b41899584302999e25a))
 
 ### Code Refactoring
 
-- rebrand to Vish, dynamic copyright year, redesign word cloud ([1102867](https://github.com/vish288/vish288.github.io/commit/b72134b3d515f4a00d377ee5cb7fd3fb84f83ab4))
+- rebrand to Vish, dynamic copyright year, redesign word cloud ([1ee3535](https://github.com/vish288/vish288.github.io/commit/1ee35357d2d44bbbb6d74105ddb1bf14ba81ed2d))
 
 ### Tests
 
-- add McpInstall tests (18 cases) and update docs ([86f64ca](https://github.com/vish288/vish288.github.io/commit/33b716bc901bd9ab26241eaca8834aa536bb5315))
+- add McpInstall tests (18 cases) and update docs ([10ad43d](https://github.com/vish288/vish288.github.io/commit/10ad43d4b110e899b62fdaa2fae481b54bec6679))
 
 ### CI/CD
 
-- test matrix on Node 20 and 24, drop Node 18 ([95d705e](https://github.com/vish288/vish288.github.io/commit/d569d44a29d7268348c70fe7299f6dd55add6ff5))
+- test matrix on Node 20 and 24, drop Node 18 ([b163b1b](https://github.com/vish288/vish288.github.io/commit/b163b1ba0789e0e43fd8870ad4ea794e044449de))
 
 ### Maintenance
 
-- add @vitest/coverage-v8 for test coverage reporting ([fc2c222](https://github.com/vish288/vish288.github.io/commit/a99943fc817ad9ee878ccb38a3ff1096e660069d))
-- add cursor redirect page for mcp-atlassian-extended badge ([9c4acd6](https://github.com/vish288/vish288.github.io/commit/bcba6c58733d238173f2794eba9a13cc4e46b86c))
-- add cursor redirect page for mcp-gitlab badge ([95391be](https://github.com/vish288/vish288.github.io/commit/bda57a520f34be5967d65fa8bcbbab0b92914ce2))
-- drop Node 18, upgrade CI to Node 24 ([d7d0d26](https://github.com/vish288/vish288.github.io/commit/dd8d632b1199a4a3923ddc91f05983a19ca4ed8b))
-- remove 15 unused dependencies and update all packages to latest ([dc6fc31](https://github.com/vish288/vish288.github.io/commit/efbc75a2f96dbe4222c287ee8eea616ec14f33a0))
+- add @vitest/coverage-v8 for test coverage reporting ([c25d6d3](https://github.com/vish288/vish288.github.io/commit/c25d6d34374167679b62153230d87ebcd97fc6c2))
+- add cursor redirect page for mcp-atlassian-extended badge ([5e91399](https://github.com/vish288/vish288.github.io/commit/5e91399f8bf658971fb7f97ba49c5b9d17a8ac6f))
+- add cursor redirect page for mcp-gitlab badge ([f4b88df](https://github.com/vish288/vish288.github.io/commit/f4b88df53f1aad3ea72a08701abaab98f90d9d6a))
+- drop Node 18, upgrade CI to Node 24 ([4b402f6](https://github.com/vish288/vish288.github.io/commit/4b402f66c24ee2e20cbd3767ec203e0232e2a8dd))
+- remove 15 unused dependencies and update all packages to latest ([6d64363](https://github.com/vish288/vish288.github.io/commit/6d643634a601c5662b25d9897dacc253c8763b52))
 
 ## [2.6.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.5.0...vish288-personal-website-v2.6.0) (2026-01-05)
 
 ### Features
 
-- update dependencies to latest versions ([#8](https://github.com/vish288/vish288.github.io/issues/8)) ([97f6eae](https://github.com/vish288/vish288.github.io/commit/61367a1713006ea7925c1d751676fccc175bf417))
+- update dependencies to latest versions ([#8](https://github.com/vish288/vish288.github.io/issues/8)) ([8b3b2ff](https://github.com/vish288/vish288.github.io/commit/8b3b2ff97397cf5996dfb481810341e580822d92))
 
 ### Bug Fixes
 
-- add pages and id-token permissions for deployment ([a2a6898](https://github.com/vish288/vish288.github.io/commit/12aa5356749161eae280054149ad75721153fdae))
+- add pages and id-token permissions for deployment ([fc9310a](https://github.com/vish288/vish288.github.io/commit/fc9310a2b4fb0dfc2a2975ce21bbe34d609b0376))
 
 ### Build System
 
-- **deps-dev:** bump vite from 7.1.3 to 7.1.11 ([#20](https://github.com/vish288/vish288.github.io/issues/20)) ([697a89d](https://github.com/vish288/vish288.github.io/commit/d83be21d6f937276b21369d946f6338ebde17f56))
+- **deps-dev:** bump vite from 7.1.3 to 7.1.11 ([#20](https://github.com/vish288/vish288.github.io/issues/20)) ([de9bc63](https://github.com/vish288/vish288.github.io/commit/de9bc63a3dee75388526e48854513eb184aaae52))
 
 ### Maintenance
 
-- remove duplicate deploy workflow ([39f849d](https://github.com/vish288/vish288.github.io/commit/8ac43fb370247a7eb4d302d360bbd441d98da46d))
+- remove duplicate deploy workflow ([5f68dad](https://github.com/vish288/vish288.github.io/commit/5f68dadff430898b983a7b205eaf7daca48d28b9))
 
 ## [2.5.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.4.0...vish288-personal-website-v2.5.0) (2025-08-22)
 
 ### Features
 
-- add release-please workflow for automated releases ([7b6f02c](https://github.com/vish288/vish288.github.io/commit/3adebb05fec13870d8682e9e2905de0e287730b3))
-- complete modernization to React 18 + TypeScript + Vite ([09879ea](https://github.com/vish288/vish288.github.io/commit/0162b4bc7e5ec28a25613a9f2eea0ff287ee4f6b))
-- Complete website modernization with shadcn/ui and advanced features ([bfab1bf](https://github.com/vish288/vish288.github.io/commit/097b630a2ab0827a772fb77f4c79bb4f52cbba7a))
-- enhance UX with constants management and improved accessibility ([1aaf8fd](https://github.com/vish288/vish288.github.io/commit/92913567e1302a4645b697edde8fb2d735fc0c6d))
+- add release-please workflow for automated releases ([9fcc36a](https://github.com/vish288/vish288.github.io/commit/9fcc36ae3a010c49786b0af88878e363e7acb7a5))
+- complete modernization to React 18 + TypeScript + Vite ([7cc3e73](https://github.com/vish288/vish288.github.io/commit/7cc3e73d9153297f0f10af57a995d790805f12a6))
+- Complete website modernization with shadcn/ui and advanced features ([29eaa84](https://github.com/vish288/vish288.github.io/commit/29eaa84046c247ca181ec56ba3c1c607b7174155))
+- enhance UX with constants management and improved accessibility ([75f738b](https://github.com/vish288/vish288.github.io/commit/75f738bfbda42cda2a0f1ee7e556157ea751b88f))
 
 ### Bug Fixes
 
-- Add environment variables to GitHub Actions build ([b92e04a](https://github.com/vish288/vish288.github.io/commit/d1ba3018c1ed438622b0c22de410c1e658fc27e1))
-- add required permissions for release-please workflow ([76a55b6](https://github.com/vish288/vish288.github.io/commit/a0d3ebe4e0b26166e005392f1d3078c8a35f1e0b))
-- format code to resolve CI pipeline issues ([d1b820b](https://github.com/vish288/vish288.github.io/commit/0fd8af3a689ba8253702ff615fc1f19b0aae36eb))
-- resolve GitHub Pages MIME type issues ([3c5a5c0](https://github.com/vish288/vish288.github.io/commit/fc92e95a856c18b8b3c282194548f76c134d6b7c))
+- Add environment variables to GitHub Actions build ([9591b26](https://github.com/vish288/vish288.github.io/commit/9591b26ea977c8295014a011591f06c85b0470db))
+- add required permissions for release-please workflow ([8cbe3e2](https://github.com/vish288/vish288.github.io/commit/8cbe3e2e45310b050e18b54f1f4c453dc429189a))
+- format code to resolve CI pipeline issues ([5c5148d](https://github.com/vish288/vish288.github.io/commit/5c5148dd8752c2800809a28930058ad9fa289c38))
+- resolve GitHub Pages MIME type issues ([03b10a9](https://github.com/vish288/vish288.github.io/commit/03b10a9c150879e7f945ec497b960dc76ad29952))
 
 ### Documentation
 
-- clean up documentation structure and update README ([#5](https://github.com/vish288/vish288.github.io/issues/5)) ([250d1e7](https://github.com/vish288/vish288.github.io/commit/4c78d645ff6b87ecab0902d39b7e9e2a1b8be478))
+- clean up documentation structure and update README ([#5](https://github.com/vish288/vish288.github.io/issues/5)) ([14e5060](https://github.com/vish288/vish288.github.io/commit/14e506061da15ef44950864200171439b02420db))
