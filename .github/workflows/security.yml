@@ -1,15 +1,16 @@
 name: Security Audit
 
 on:
+  pull_request:
   schedule:
     - cron: '0 6 * * 1' # Weekly on Monday at 6 AM UTC
   workflow_dispatch:
 
-# Least privilege: the audit only reads the repo; the report step manages its
-# own dedup issue.
+# Least privilege: the default token only reads the repo. The issue-reporting
+# job elevates to issues:write for itself, so pull_request runs (including
+# forks) never get write scope.
 permissions:
   contents: read
-  issues: write
 
 jobs:
   security-audit:
@@ -36,22 +37,32 @@ jobs:
 
       - name: Run security audit
         id: audit
-        run: pnpm audit --audit-level=moderate
+        run: pnpm audit --audit-level=high
 
       - name: Check for outdated packages
         if: always()
         run: pnpm outdated || true
 
-      # One self-managed issue, identified by a hidden marker so this never
-      # touches issues opened by anything else. Failure updates/opens it;
-      # success closes it. (No new issue per run — that was the #136–#158 spam.)
+  # One self-managed issue, identified by a hidden marker so this never touches
+  # issues opened by anything else. Failure updates/opens it; success closes it.
+  # (No new issue per run — that was the #136–#158 spam.) Skipped on
+  # pull_request: PRs surface the failure via the required check, not an issue.
+  report:
+    name: Report audit result
+    needs: security-audit
+    if: always() && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+
+    steps:
       - name: Report audit result
-        if: always()
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
           script: |
             const MARKER = '<!-- security-audit-automated -->'
-            const failed = '${{ steps.audit.outcome }}' === 'failure'
+            const failed = '${{ needs.security-audit.result }}' === 'failure'
             const runUrl = `${context.payload.repository.html_url}/actions/runs/${context.runId}`
 
             const open = await github.paginate(github.rest.issues.listForRepo, {
@@ -66,7 +77,7 @@ jobs:
             if (failed) {
               const body = [
                 MARKER,
-                `\`pnpm audit --audit-level=moderate\` failed on ${new Date().toISOString()}.`,
+                `\`pnpm audit --audit-level=high\` failed on ${new Date().toISOString()}.`,
                 '',
                 `Run log: ${runUrl}`,
               ].join('\n')
