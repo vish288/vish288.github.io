@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-- Node.js >= 24
-- pnpm >= 10 (this repo pins `packageManager: pnpm@10.14.0`)
+- Node.js >= 26
+- pnpm >= 12 (this repo pins `packageManager: pnpm@12.16.1`)
 
 Both are managed via [mise](https://mise.jdx.dev/) if you have it installed.
 

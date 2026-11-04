@@ -27,7 +27,7 @@ pnpm install
 pnpm dev
 ```
 
-Requires Node >= 24 and pnpm >= 10. See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for the full script reference, release flow, and contribution notes.
+Requires Node >= 26 and pnpm >= 12. See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) for the full script reference, release flow, and contribution notes.
 
 ## License
 

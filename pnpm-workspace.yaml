@@ -1,6 +1,6 @@
-onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - esbuild
+allowBuilds:
+  '@tailwindcss/oxide': true
+  esbuild: true
 
 overrides:
   # undici <8.12.2 (pnpm 12 no longer reads the package.json "pnpm" field; migrated from there)
