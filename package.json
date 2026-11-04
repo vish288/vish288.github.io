@@ -4,6 +4,11 @@
   "description": "Personal website of Vish - Full Stack Developer",
   "private": true,
   "type": "module",
+  "pnpm": {
+    "overrides": {
+      "undici": "^8.12.2"
+    }
+  },
   "keywords": [
     "portfolio",
     "personal-website",
