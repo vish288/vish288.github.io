@@ -3,6 +3,10 @@ onlyBuiltDependencies:
   - esbuild
 
 overrides:
+  # undici <8.12.2 (pnpm 12 no longer reads the package.json "pnpm" field; migrated from there)
+  undici: '^8.12.2'
+  # zod high advisory (migrated from the package.json "pnpm" overrides field upstream added)
+  zod: '>=4.6.6'
   # serialize-javascript <7.1.2 XSS (via vite-plugin-pwa>workbox-build>@rollup/plugin-terser); no direct bump reaches it
   serialize-javascript: '^7.1.2'
   # fast-uri <3.1.8 ReDoS (via vite-plugin-pwa>workbox-build>ajv)
