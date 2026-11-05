@@ -1,5 +1,37 @@
 # Changelog
 
+## [2.14.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.14.0...vish288-personal-website-v2.14.1) (2026-11-05)
+
+
+### Bug Fixes
+
+* **deps:** bump undici to &gt;=8.12.2 to clear security advisories ([8894fe7](https://github.com/vish288/vish288.github.io/commit/8894fe7412aa2c799253510f99a2166d9781e54d))
+* **release:** point release-please at the 2.14.0 release on the rewritten history ([4f064da](https://github.com/vish288/vish288.github.io/commit/4f064da09fabaa95b9b12737c0f8b413ffedd77b))
+* **security:** clear zod high advisory and gate audit at high severity ([af8ef92](https://github.com/vish288/vish288.github.io/commit/af8ef92255282b79481fc6dfc866c841e11a47d1))
+
+
+### Documentation
+
+* remap CHANGELOG commit links to re-signed history ([21596ba](https://github.com/vish288/vish288.github.io/commit/21596badc38a54c229b791afc490f98d592c5762))
+
+
+### Build System
+
+* **deps:** bump fast-uri from 3.1.8 to 3.1.9 ([d3861e3](https://github.com/vish288/vish288.github.io/commit/d3861e37aa7dd2f75e4671a772a6ee24da8dad4f))
+* **deps:** bump npm-minor-patch group across 17 packages ([0341a9e](https://github.com/vish288/vish288.github.io/commit/0341a9e973aaf89ba836f701bff9c39147d0a0d1)), closes [#201](https://github.com/vish288/vish288.github.io/issues/201)
+
+
+### CI/CD
+
+* let pnpm/action-setup read packageManager ([b4e652a](https://github.com/vish288/vish288.github.io/commit/b4e652a303b2177dbf28a3614531cb3cb19933a1))
+
+
+### Maintenance
+
+* build on Node 26 with pnpm 12.16.1 ([acfa4d8](https://github.com/vish288/vish288.github.io/commit/acfa4d8c664f0dc9437783846583b4e315c89bcd))
+* finish the pnpm 12 migration (engines, allowBuilds, docs) ([09612fa](https://github.com/vish288/vish288.github.io/commit/09612fade90323dad87fb4219e0fb8fe3fccf7cb))
+* format CHANGELOG.md ([a51c5b7](https://github.com/vish288/vish288.github.io/commit/a51c5b797762792be66f1a8722229a8cabe57ba9))
+
 ## [2.14.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.13.0...vish288-personal-website-v2.14.0) (2026-10-14)
 
 ### Features
