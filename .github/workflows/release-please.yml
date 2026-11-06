@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
 
+# One run at a time so two quick pushes to main cannot race on the release PR or tag.
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
 permissions:
   contents: write
   pull-requests: write
@@ -27,45 +32,6 @@ jobs:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
           token: ${{ secrets.GITHUB_TOKEN }}
-
-  format-release-pr:
-    name: Format Release PR
-    runs-on: ubuntu-latest
-    needs: release-please
-    if: ${{ needs.release-please.outputs.pr }}
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout release PR branch
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ fromJson(needs.release-please.outputs.pr).headBranchName }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
-        with:
-          node-version: 26
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Format CHANGELOG.md
-        run: pnpm prettier --write CHANGELOG.md
-
-      - name: Commit formatting fix
-        run: |
-          if ! git diff --quiet CHANGELOG.md; then
-            git config user.name 'github-actions[bot]'
-            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git add CHANGELOG.md
-            git commit -m 'chore: format CHANGELOG.md'
-            git push
-          fi
 
   build-and-deploy:
     name: Build and Deploy Release
