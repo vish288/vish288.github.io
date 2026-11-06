@@ -17,3 +17,7 @@ overrides:
   brace-expansion@1: '^1.1.21'
   brace-expansion@2: '^2.1.7'
   brace-expansion@5: '^5.0.12'
+  # glob AbortSignal bypass GHSA-3g3m-2fjr-6pw4 (via vite-plugin-pwa>workbox-build, which still pins ^11)
+  glob@>=9 <14.0.2: '^14.0.2'
+  # minimatch globparts DoS GHSA-g3hv-75wg-m249 (via eslint>@eslint/config-array, which pins ^10)
+  minimatch@>=7 <11.0.1: '^11.0.1'
