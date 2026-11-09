@@ -1,5 +1,23 @@
 # Changelog
 
+## [2.14.2](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.14.1...vish288-personal-website-v2.14.2) (2026-11-09)
+
+
+### Bug Fixes
+
+* **deps:** clear glob and minimatch advisories ([bc98c5c](https://github.com/vish288/vish288.github.io/commit/bc98c5c9d270833a2a2dcb548c7f23ec203e8ab8))
+
+
+### CI/CD
+
+* **release:** stop pushing unsigned CHANGELOG commits ([08b9f0e](https://github.com/vish288/vish288.github.io/commit/08b9f0e33a1d8ab163cff239cfbd6212fee42cb1))
+
+
+### Maintenance
+
+* **deps:** weekly patch 2026-11-06 ([4b85dea](https://github.com/vish288/vish288.github.io/commit/4b85dea9af342c3f8520d434b3c7f74e07efe49f))
+* **deps:** weekly patch 2026-11-08 ([05792c4](https://github.com/vish288/vish288.github.io/commit/05792c47e8f2e62ca1c2da776d11bff8a1f2806f))
+
 ## [2.14.1](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.14.0...vish288-personal-website-v2.14.1) (2026-11-05)
 
 ### Bug Fixes
