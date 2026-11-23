@@ -4,11 +4,27 @@ import { Button } from '@/components/ui/button'
 import { Copy, Check, X, ExternalLink } from 'lucide-react'
 import { type ServerConfig } from '@/constants/mcpServers'
 import { type McpClient, type Os } from '@/constants/mcpClients'
-import { renderOutputs, secretKeys, type RenderedOutput } from '@/lib/mcpInstall'
+import {
+  attestCommand,
+  pluginBlurb,
+  pluginCommands,
+  renderOutputs,
+  secretKeys,
+  type RenderedOutput,
+  type Runtime,
+} from '@/lib/mcpInstall'
 
-// The per-(server, client) install dialog: uv prerequisite, a stepped <ol>
-// (command or config, secrets, check), copy buttons and a polite live region.
+// The per-(server, client) install dialog: uv or Docker prerequisite, a stepped
+// <ol> (command or config, secrets, check), copy buttons and a polite live
+// region. Claude Code also gets an "Install as a plugin" block on top.
 // Split out of McpInstall.tsx to keep the page under the size budget (D9).
+
+const PREREQ: Record<Runtime, { name: string; href: string }> = {
+  uv: { name: 'uv', href: 'https://docs.astral.sh/uv/getting-started/installation/' },
+  docker: { name: 'Docker', href: 'https://docs.docker.com/get-started/get-docker/' },
+}
+
+const PLUGINS_DOCS = 'https://code.claude.com/docs/en/plugins'
 
 const OS_LABEL: Record<Os, string> = { mac: 'macOS', linux: 'Linux', win: 'Windows' }
 
@@ -26,12 +42,20 @@ function pathRows(client: McpClient): [string, string][] | null {
 
 // Name the object copied (so the label never changes meaning between the
 // single- and two-block layouts).
+// The plugin block says "plugin command" so the two copy buttons in the Claude
+// Code modal have distinct names.
+const COPY_NOUN: Record<string, string> = {
+  Command: 'command',
+  'Plugin command': 'plugin command',
+}
+
 function copyButtonLabel(block: RenderedOutput): string {
-  return block.label === 'Command' ? 'Copy command' : 'Copy config'
+  return `Copy ${COPY_NOUN[block.label] ?? 'config'}`
 }
 
 function copyAnnouncement(block: RenderedOutput): string {
-  return block.label === 'Command' ? 'Command copied' : 'Config copied'
+  const noun = `${COPY_NOUN[block.label] ?? 'config'} copied`
+  return noun.charAt(0).toUpperCase() + noun.slice(1)
 }
 
 function CodeBlock({
@@ -76,14 +100,19 @@ export function InstallModal({
   server,
   client,
   readOnly = false,
+  runtime = 'uv',
   onClose,
 }: {
   server: ServerConfig
   client: McpClient
   readOnly?: boolean
+  runtime?: Runtime
   onClose: () => void
 }) {
-  const blocks = useMemo(() => renderOutputs(server, client, readOnly), [server, client, readOnly])
+  const blocks = useMemo(
+    () => renderOutputs(server, client, readOnly, runtime),
+    [server, client, readOnly, runtime]
+  )
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
   const [failedIndex, setFailedIndex] = useState<number | null>(null)
   const [announce, setAnnounce] = useState('')
@@ -153,6 +182,8 @@ export function InstallModal({
   }
 
   const copyProps = { copiedIndex, failedIndex, onCopy: handleCopy }
+  const isPlugin = client.id === 'claude-code'
+  const prereq = PREREQ[runtime]
 
   return createPortal(
     <div
@@ -174,16 +205,45 @@ export function InstallModal({
           </Button>
         </div>
 
-        {server.installCommand === 'uvx' && (
-          <p className='text-sm text-muted-foreground mb-4'>
-            Requires uv.{' '}
+        {isPlugin && (
+          <section className='border rounded p-4 mb-5' aria-labelledby='plugin-title'>
+            <div className='flex flex-wrap items-center gap-2'>
+              <h3 id='plugin-title' className='text-sm font-semibold'>
+                Install as a plugin
+              </h3>
+              <span className='text-xs bg-primary text-primary-foreground rounded px-1.5 py-0.5'>
+                recommended
+              </span>
+            </div>
+            <p className='text-sm text-muted-foreground mt-1'>{pluginBlurb(server)}</p>
+            <CodeBlock
+              block={{ label: 'Plugin command', code: pluginCommands(server) }}
+              index={blocks.length}
+              {...copyProps}
+            />
             <a
-              href='https://docs.astral.sh/uv/getting-started/installation/'
+              href={PLUGINS_DOCS}
+              target='_blank'
+              rel='noopener noreferrer'
+              className='mt-3 text-sm text-link hover:underline inline-flex items-center gap-1'
+            >
+              Claude Code plugin docs <ExternalLink aria-hidden='true' className='h-3 w-3' />
+            </a>
+          </section>
+        )}
+
+        {isPlugin && <h3 className='text-sm font-semibold mb-3'>Or add it directly</h3>}
+
+        {(runtime === 'docker' || server.installCommand === 'uvx') && (
+          <p className='text-sm text-muted-foreground mb-4'>
+            Requires {prereq.name}.{' '}
+            <a
+              href={prereq.href}
               target='_blank'
               rel='noopener noreferrer'
               className='text-link hover:underline inline-flex items-center gap-1'
             >
-              Install uv
+              Install {prereq.name}
               <ExternalLink aria-hidden='true' className='h-3 w-3' />
             </a>
           </p>
@@ -273,6 +333,15 @@ export function InstallModal({
             )}
           </li>
         </ol>
+
+        {runtime === 'docker' && (
+          <p className='mt-5 text-sm text-muted-foreground'>
+            Verify the image provenance:{' '}
+            <code className='text-xs bg-muted px-1.5 py-0.5 rounded [overflow-wrap:anywhere]'>
+              {attestCommand(server)}
+            </code>
+          </p>
+        )}
 
         <a
           href={client.docs}

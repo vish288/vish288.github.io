@@ -508,6 +508,163 @@ describe('McpInstall gateway link back-compat', () => {
   })
 })
 
+describe('McpInstall Docker runtime and plugin', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
+  const modalCode = () =>
+    Array.from(screen.getByRole('dialog').querySelectorAll('pre')).map(p => p.textContent ?? '')
+
+  it('defaults to uv: the Run with control has uv pressed and no run param is written', () => {
+    renderWithLocation()
+    expect(screen.getByRole('button', { name: 'uv' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('button', { name: 'Docker' })).toHaveAttribute('aria-pressed', 'false')
+    expect(search()).toBe('')
+  })
+
+  it('choosing Docker writes ?run=docker, keeps other params, and uv removes it', async () => {
+    const user = userEvent.setup()
+    renderWithLocation('/mcp-install?client=zed')
+    await user.click(screen.getByRole('button', { name: 'Docker' }))
+    expect(search()).toContain('client=zed')
+    expect(search()).toContain('run=docker')
+    expect(screen.getByRole('button', { name: 'Docker' })).toHaveAttribute('aria-pressed', 'true')
+    await user.click(screen.getByRole('button', { name: 'uv' }))
+    expect(search()).toBe('?client=zed')
+  })
+
+  it('the Run with control works from the keyboard', async () => {
+    const user = userEvent.setup()
+    renderMcpInstall()
+    screen.getByRole('button', { name: 'Docker' }).focus()
+    await user.keyboard('{Enter}')
+    expect(screen.getByRole('button', { name: 'Docker' })).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('?run=docker round-trips: loads pressed and generates docker output', async () => {
+    const user = userEvent.setup()
+    renderMcpInstall('/mcp-install?client=zed&run=docker')
+    expect(screen.getByRole('button', { name: 'Docker' })).toHaveAttribute('aria-pressed', 'true')
+    await user.click(screen.getByRole('button', { name: 'Config: Coda for Zed' }))
+    const cfg = JSON.parse(modalCode()[0]!).context_servers.coda
+    expect(cfg.command).toBe('docker')
+    expect(cfg.args).toEqual([
+      'run',
+      '-i',
+      '--rm',
+      '-e',
+      'CODA_API_TOKEN',
+      '-e',
+      'MCP_READ_ONLY=false',
+      'ghcr.io/vish288/mcp-coda',
+    ])
+  })
+
+  it('an unknown ?run= value falls back to uv', () => {
+    renderMcpInstall('/mcp-install?client=zed&run=podman')
+    expect(screen.getByRole('button', { name: 'uv' })).toHaveAttribute('aria-pressed', 'true')
+  })
+
+  it('Docker mode: Read-only on drops the MCP_READ_ONLY flag', async () => {
+    const user = userEvent.setup()
+    renderMcpInstall('/mcp-install?client=zed&run=docker')
+    await user.click(screen.getByRole('switch', { name: /read-only/i }))
+    await user.click(screen.getByRole('button', { name: 'Config: Coda for Zed' }))
+    expect(modalCode()[0]).not.toContain('MCP_READ_ONLY')
+  })
+
+  it('Docker mode rewrites deeplink hrefs', () => {
+    renderMcpInstall('/mcp-install?client=cursor&run=docker')
+    const href = screen.getByRole('link', { name: 'Install Coda for Cursor' }).getAttribute('href')!
+    const cfg = JSON.parse(atob(new URLSearchParams(href.split('?')[1]).get('config')!))
+    expect(cfg.command).toBe('docker')
+  })
+
+  it('Docker modal says Requires Docker and shows the attestation command', async () => {
+    const user = userEvent.setup()
+    renderMcpInstall('/mcp-install?client=claude-desktop&run=docker')
+    await user.click(screen.getByRole('button', { name: 'Config: Coda for Claude Desktop' }))
+    const modal = screen.getByRole('dialog')
+    expect(within(modal).getByText(/Requires Docker\./)).toBeInTheDocument()
+    expect(within(modal).getByRole('link', { name: /install docker/i })).toHaveAttribute(
+      'href',
+      'https://docs.docker.com/get-started/get-docker/'
+    )
+    expect(within(modal).queryByText(/install uv/i)).not.toBeInTheDocument()
+    expect(
+      within(modal).getByText(
+        'gh attestation verify oci://ghcr.io/vish288/mcp-coda:latest -R vish288/mcp-coda --signer-repo vish288/.github'
+      )
+    ).toBeInTheDocument()
+  })
+
+  it('uv modal has no attestation line', async () => {
+    const user = userEvent.setup()
+    renderMcpInstall('/mcp-install?client=claude-desktop')
+    await user.click(screen.getByRole('button', { name: 'Config: Coda for Claude Desktop' }))
+    expect(screen.queryByText(/gh attestation verify/)).not.toBeInTheDocument()
+  })
+
+  it('Claude Code modal leads with the plugin block for one secret', async () => {
+    const user = userEvent.setup()
+    renderMcpInstall('/mcp-install?client=claude-code')
+    await user.click(screen.getByRole('button', { name: 'Command: Coda for Claude Code' }))
+    const modal = screen.getByRole('dialog')
+    expect(within(modal).getByText('Install as a plugin')).toBeInTheDocument()
+    expect(within(modal).getByText('recommended')).toBeInTheDocument()
+    expect(
+      within(modal).getByText(/Claude Code asks for CODA_API_TOKEN and keeps it in its credential/)
+    ).toBeInTheDocument()
+    expect(modalCode()[0]).toBe(
+      'claude plugin marketplace add vish288/.github\nclaude plugin install mcp-coda@vish288-mcp'
+    )
+    expect(within(modal).getByText('Or add it directly')).toBeInTheDocument()
+    expect(modalCode()[1]).toContain('-- uvx mcp-coda')
+    expect(within(modal).getByText(/Requires uv\./)).toBeInTheDocument()
+    expect(within(modal).getByRole('link', { name: /plugin docs/i })).toHaveAttribute(
+      'href',
+      'https://code.claude.com/docs/en/plugins'
+    )
+  })
+
+  it('plugin block names both Atlassian secrets and still shows in Docker mode', async () => {
+    const user = userEvent.setup()
+    renderMcpInstall('/mcp-install?client=claude-code&run=docker')
+    await user.click(
+      screen.getByRole('button', { name: 'Command: Atlassian Extended for Claude Code' })
+    )
+    const modal = screen.getByRole('dialog')
+    expect(
+      within(modal).getByText(/JIRA_API_TOKEN and CONFLUENCE_API_TOKEN, and keeps them/)
+    ).toBeInTheDocument()
+    expect(modalCode()[0]).toContain('install mcp-atlassian-extended@vish288-mcp')
+    expect(modalCode()[1]).toContain('-- docker run -i --rm -e JIRA_URL')
+    expect(within(modal).getByText(/Requires Docker\./)).toBeInTheDocument()
+  })
+
+  it('other clients get no plugin block', async () => {
+    const user = userEvent.setup()
+    renderMcpInstall('/mcp-install?client=zed')
+    await user.click(screen.getByRole('button', { name: 'Config: Coda for Zed' }))
+    expect(screen.queryByText('Install as a plugin')).not.toBeInTheDocument()
+  })
+
+  it('the plugin command copies on its own button', async () => {
+    const user = userEvent.setup()
+    const writeText = vi.fn().mockResolvedValue(undefined)
+    vi.stubGlobal('navigator', { ...navigator, clipboard: { writeText } })
+    renderMcpInstall('/mcp-install?client=claude-code')
+    await user.click(screen.getByRole('button', { name: 'Command: Coda for Claude Code' }))
+    await user.click(
+      within(screen.getByRole('dialog')).getByRole('button', { name: 'Copy plugin command' })
+    )
+    expect(writeText).toHaveBeenCalledWith(
+      'claude plugin marketplace add vish288/.github\nclaude plugin install mcp-coda@vish288-mcp'
+    )
+  })
+})
+
 describe('McpInstall auto-redirect', () => {
   let originalLocation: Location
 

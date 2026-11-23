@@ -8,7 +8,16 @@ import {
   type Output,
 } from '@/constants/mcpClients'
 import { ROUTE_META } from '@/constants/routeMeta'
-import { genDeeplink, genCli, genToml, renderOutputs } from './mcpInstall'
+import {
+  genDeeplink,
+  genCli,
+  genToml,
+  renderOutputs,
+  pluginCommands,
+  pluginBlurb,
+  attestCommand,
+  type Runtime,
+} from './mcpInstall'
 
 const gitlab = SERVERS['mcp-gitlab']
 const byId = (id: string): McpClient => {
@@ -212,17 +221,22 @@ describe('every server × every client', () => {
 // Decode a (server, client) pair to the plain text(s) a user ends up pasting —
 // deeplinks decoded back to JSON — so the read-only contract can assert on the
 // literal env the client will receive, across all four servers and every client.
-function renderedTexts(server: ServerConfig, client: McpClient, readOnly: boolean): string[] {
+function renderedTexts(
+  server: ServerConfig,
+  client: McpClient,
+  readOnly: boolean,
+  runtime: Runtime = 'uv'
+): string[] {
   const first = client.outputs[0]
   if (first.kind === 'deeplink') {
-    const code = genDeeplink(server, first, readOnly)
+    const code = genDeeplink(server, first, readOnly, runtime)
     if (first.encoding === 'json-url') {
       return [decodeURIComponent(code.slice(first.prefix.length))]
     }
     const b64 = new URLSearchParams(code.split('?')[1]).get('config')!
     return [atob(b64)]
   }
-  return renderOutputs(server, client, readOnly).map(b => b.code)
+  return renderOutputs(server, client, readOnly, runtime).map(b => b.code)
 }
 
 describe('read-only toggle writes MCP_READ_ONLY=true everywhere, only when on', () => {
@@ -253,6 +267,164 @@ describe('read-only toggle writes MCP_READ_ONLY=true everywhere, only when on', 
 
   it('Claude Code command appends -e MCP_READ_ONLY=true when on', () => {
     expect(genCli(gitlab, cliOut(byId('claude-code')), true)).toContain('-e MCP_READ_ONLY=true')
+  })
+})
+
+describe('docker runtime', () => {
+  const coda = SERVERS['mcp-coda']
+  const image = 'ghcr.io/vish288/mcp-coda'
+  const dockerArgs = (readOnly: boolean) => [
+    'run',
+    '-i',
+    '--rm',
+    '-e',
+    'CODA_API_TOKEN',
+    ...(readOnly ? [] : ['-e', 'MCP_READ_ONLY=false']),
+    image,
+  ]
+  const env = { CODA_API_TOKEN: 'your_coda_api_token' }
+
+  it('uv mode is the default and unchanged', () => {
+    expect(renderOutputs(coda, byId('zed'))).toEqual(renderOutputs(coda, byId('zed'), false, 'uv'))
+    expect(genCli(coda, cliOut(byId('claude-code')), true, 'uv')).toBe(
+      'claude mcp add coda --scope user -e CODA_API_TOKEN=your_coda_api_token -e MCP_READ_ONLY=true -- uvx mcp-coda'
+    )
+  })
+
+  it('Claude Code command passes each var through and reads from the image', () => {
+    expect(genCli(coda, cliOut(byId('claude-code')), true, 'docker')).toBe(
+      `claude mcp add coda --scope user -e CODA_API_TOKEN=your_coda_api_token -- docker run -i --rm -e CODA_API_TOKEN ${image}`
+    )
+  })
+
+  it('Codex command uses --env and ends with docker run', () => {
+    expect(genCli(coda, cliOut(byId('codex')), false, 'docker')).toBe(
+      `codex mcp add coda --env CODA_API_TOKEN=your_coda_api_token -- docker run -i --rm -e CODA_API_TOKEN -e MCP_READ_ONLY=false ${image}`
+    )
+  })
+
+  it('Gemini CLI puts docker args after -- so its own -e does not take them', () => {
+    expect(genCli(coda, cliOut(byId('gemini-cli')), true, 'docker')).toBe(
+      `gemini mcp add -s user -e CODA_API_TOKEN=your_coda_api_token coda docker -- run -i --rm -e CODA_API_TOKEN ${image}`
+    )
+  })
+
+  it('every client kind launches docker with matching args and env', () => {
+    for (const readOnly of [true, false]) {
+      const args = dockerArgs(readOnly)
+      const entry = (id: string, key: string) =>
+        JSON.parse(renderOutputs(coda, byId(id), readOnly, 'docker')[0].code)[key].coda
+      expect(entry('claude-desktop', 'mcpServers')).toEqual({ command: 'docker', args, env })
+      expect(entry('zed', 'context_servers')).toEqual({ command: 'docker', args, env })
+      expect(entry('visualstudio', 'servers')).toEqual({
+        type: 'stdio',
+        command: 'docker',
+        args,
+        env,
+      })
+      expect(entry('cline', 'mcpServers')).toEqual({
+        command: 'docker',
+        args,
+        env,
+        disabled: false,
+        autoApprove: [],
+      })
+      expect(entry('opencode', 'mcp')).toEqual({
+        type: 'local',
+        command: ['docker', ...args],
+        enabled: true,
+        environment: env,
+      })
+    }
+  })
+
+  it('Codex TOML lists every docker arg and keeps the env table', () => {
+    expect(genToml(coda, true, 'docker')).toBe(
+      [
+        '[mcp_servers.coda]',
+        'command = "docker"',
+        `args = ["run", "-i", "--rm", "-e", "CODA_API_TOKEN", "${image}"]`,
+        '',
+        '[mcp_servers.coda.env]',
+        'CODA_API_TOKEN = "your_coda_api_token"',
+      ].join('\n')
+    )
+    expect(genToml(coda, false, 'docker')).toContain('"-e", "MCP_READ_ONLY=false", "' + image)
+  })
+
+  it('both deeplink kinds launch docker; VS Code keeps its prompted inputs', () => {
+    for (const readOnly of [true, false]) {
+      const cursor = deeplinkOut(byId('cursor'))
+      const b64 = new URLSearchParams(
+        genDeeplink(coda, cursor, readOnly, 'docker').split('?')[1]
+      ).get('config')!
+      expect(JSON.parse(atob(b64))).toEqual({ command: 'docker', args: dockerArgs(readOnly), env })
+
+      const vs = deeplinkOut(byId('vscode'))
+      const payload = JSON.parse(
+        decodeURIComponent(genDeeplink(coda, vs, readOnly, 'docker').slice(vs.prefix.length))
+      )
+      expect(payload.command).toBe('docker')
+      expect(payload.args).toEqual(dockerArgs(readOnly))
+      expect(payload.env).toEqual({ CODA_API_TOKEN: '${input:coda-api-token}' })
+      expect(payload.inputs).toHaveLength(1)
+    }
+  })
+
+  it('read-only on adds nothing; off unlocks writes with a literal flag', () => {
+    const on = renderOutputs(coda, byId('claude-desktop'), true, 'docker')[0].code
+    const off = renderOutputs(coda, byId('claude-desktop'), false, 'docker')[0].code
+    expect(on).not.toContain('MCP_READ_ONLY')
+    expect(off).toContain('"MCP_READ_ONLY=false"')
+  })
+
+  it('passes one -e per var for a multi-var server (atlassian)', () => {
+    const atl = SERVERS['mcp-atlassian-extended']
+    const cmd = genCli(atl, cliOut(byId('claude-code')), true, 'docker')
+    const tail = cmd.split(' -- ')[1]
+    expect(tail).toBe(
+      'docker run -i --rm -e JIRA_URL -e JIRA_USERNAME -e JIRA_API_TOKEN -e CONFLUENCE_URL -e CONFLUENCE_USERNAME -e CONFLUENCE_API_TOKEN ghcr.io/vish288/mcp-atlassian-extended'
+    )
+  })
+
+  it('every server × client yields docker output with its image', () => {
+    for (const server of Object.values(SERVERS)) {
+      for (const client of CLIENTS) {
+        const text = renderedTexts(server, client, false, 'docker').join('\n')
+        expect(text).toContain(`ghcr.io/vish288/${server.packageName}`)
+        expect(text).not.toContain('uvx')
+      }
+    }
+  })
+
+  it('attestation command verifies the image against its repo and the org signer', () => {
+    expect(attestCommand(coda)).toBe(
+      'gh attestation verify oci://ghcr.io/vish288/mcp-coda:latest -R vish288/mcp-coda --signer-repo vish288/.github'
+    )
+  })
+})
+
+describe('Claude Code plugin', () => {
+  it('commands add the marketplace and install the package from it', () => {
+    expect(pluginCommands(SERVERS['mcp-coda'])).toBe(
+      'claude plugin marketplace add vish288/.github\nclaude plugin install mcp-coda@vish288-mcp'
+    )
+  })
+
+  it('names the single secret', () => {
+    expect(pluginBlurb(SERVERS['mcp-coda'])).toBe(
+      'Claude Code asks for CODA_API_TOKEN and keeps it in its credential store, never in a config file. The server stays updated. No uv needed.'
+    )
+  })
+
+  it('names every secret for atlassian and pluralises', () => {
+    expect(pluginBlurb(SERVERS['mcp-atlassian-extended'])).toBe(
+      'Claude Code asks for JIRA_API_TOKEN and CONFLUENCE_API_TOKEN, and keeps them in its credential store, never in a config file. The server stays updated. No uv needed.'
+    )
+  })
+
+  it('drops the secrets clause when a server has none', () => {
+    expect(pluginBlurb({ ...gitlab, envVars: {} })).toBe('The server stays updated. No uv needed.')
   })
 })
 

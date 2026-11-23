@@ -1,9 +1,14 @@
-import type { ServerConfig } from '@/constants/mcpServers'
+import { ghUser, type ServerConfig } from '@/constants/mcpServers'
 import type { McpClient, Output } from '@/constants/mcpClients'
 
 // Pure (server, output) → string generators for every MCP client kind. No
 // React, no DOM: the page renders the output and the prerender script reuses
 // none of it. The install/config name is always the server's shortName.
+
+// How a client launches the server: `uv` runs the PyPI package with uvx, `docker`
+// runs the published container image. Every generator takes it as its last
+// argument and defaults to `uv`, so existing callers are unchanged.
+export type Runtime = 'uv' | 'docker'
 
 // Env var key → VS Code input id (lower-case, `_` → `-`).
 const inputId = (key: string): string => key.toLowerCase().replace(/_/g, '-')
@@ -12,16 +17,40 @@ const inputId = (key: string): string => key.toLowerCase().replace(/_/g, '-')
 // prompted input): the server hides its write tools when it is set.
 export const READ_ONLY_ENV = 'MCP_READ_ONLY'
 
+// ── launch (command + args per runtime) ─────────────────────────────
+
+// The container image is published next to the source repo.
+export const dockerImage = (s: ServerConfig): string => `ghcr.io/${s.githubRepo}`
+
+// uv: `uvx <package>`. docker: `docker run -i --rm`, one `-e VAR` passthrough per
+// env var (the client's env block carries the value), then the image. The image
+// defaults to MCP_READ_ONLY=true, so read-only needs no flag and unlocking writes
+// adds a literal `-e MCP_READ_ONLY=false`; the env block never carries it.
+function launch(s: ServerConfig, readOnly: boolean, runtime: Runtime) {
+  if (runtime !== 'docker') return { command: s.installCommand, args: [s.packageName] }
+  const passthrough = Object.keys(s.envVars).flatMap(key => ['-e', key])
+  const writes = readOnly ? [] : ['-e', `${READ_ONLY_ENV}=false`]
+  return {
+    command: 'docker',
+    args: ['run', '-i', '--rm', ...passthrough, ...writes, dockerImage(s)],
+  }
+}
+
 // ── env ─────────────────────────────────────────────────────────────
 
 // Plain-config env: placeholder, else default, else empty. Secrets stay as
-// placeholder literals the user edits. With readOnly, append MCP_READ_ONLY=true
-// last so a default (writes) config is byte-identical to before.
-export function envLiteral(s: ServerConfig, readOnly = false): Record<string, string> {
+// placeholder literals the user edits. With readOnly (uv only), append
+// MCP_READ_ONLY=true last so a default (writes) config is byte-identical to
+// before. Docker expresses read-only in the args instead (see launch).
+export function envLiteral(
+  s: ServerConfig,
+  readOnly = false,
+  runtime: Runtime = 'uv'
+): Record<string, string> {
   const env = Object.fromEntries(
     Object.entries(s.envVars).map(([key, val]) => [key, val.placeholder || val.default || ''])
   )
-  if (readOnly) env[READ_ONLY_ENV] = 'true'
+  if (readOnly && runtime === 'uv') env[READ_ONLY_ENV] = 'true'
   return env
 }
 
@@ -43,11 +72,15 @@ export function vscodeInputs(s: ServerConfig): Record<string, unknown>[] {
 
 // VS Code env values reference the prompted inputs rather than literal secrets.
 // MCP_READ_ONLY is a literal "true", not a prompt (hence no matching vscodeInput).
-export function vscodeEnv(s: ServerConfig, readOnly = false): Record<string, string> {
+export function vscodeEnv(
+  s: ServerConfig,
+  readOnly = false,
+  runtime: Runtime = 'uv'
+): Record<string, string> {
   const env = Object.fromEntries(
     Object.keys(s.envVars).map(key => [key, '${input:' + inputId(key) + '}'])
   )
-  if (readOnly) env[READ_ONLY_ENV] = 'true'
+  if (readOnly && runtime === 'uv') env[READ_ONLY_ENV] = 'true'
   return env
 }
 
@@ -58,29 +91,20 @@ type Shape = Extract<Output, { kind: 'json' }>['shape']
 export function serverEntry(
   s: ServerConfig,
   shape: Shape,
-  readOnly = false
+  readOnly = false,
+  runtime: Runtime = 'uv'
 ): Record<string, unknown> {
-  const env = envLiteral(s, readOnly)
+  const env = envLiteral(s, readOnly, runtime)
+  const { command, args } = launch(s, readOnly, runtime)
   switch (shape) {
     case 'cline':
-      return {
-        command: s.installCommand,
-        args: [s.packageName],
-        env,
-        disabled: false,
-        autoApprove: [],
-      }
+      return { command, args, env, disabled: false, autoApprove: [] }
     case 'opencode':
-      return {
-        type: 'local',
-        command: [s.installCommand, s.packageName],
-        enabled: true,
-        environment: env,
-      }
+      return { type: 'local', command: [command, ...args], enabled: true, environment: env }
     case 'typed':
-      return { type: 'stdio', command: s.installCommand, args: [s.packageName], env }
+      return { type: 'stdio', command, args, env }
     default:
-      return { command: s.installCommand, args: [s.packageName], env }
+      return { command, args, env }
   }
 }
 
@@ -89,10 +113,11 @@ export function serverEntry(
 export function genDeeplink(
   s: ServerConfig,
   out: Extract<Output, { kind: 'deeplink' }>,
-  readOnly = false
+  readOnly = false,
+  runtime: Runtime = 'uv'
 ): string {
   if (out.encoding === 'b64') {
-    const cfg = serverEntry(s, 'standard', readOnly)
+    const cfg = serverEntry(s, 'standard', readOnly, runtime)
     // Cursor's documented format is standard base64 in the config param. The
     // name is percent-encoded (btoa may emit +, / or =, but shortNames don't).
     return (
@@ -101,13 +126,14 @@ export function genDeeplink(
     )
   }
   // json-url is always the VS Code shape: one flat object with prompted inputs.
+  const { command, args } = launch(s, readOnly, runtime)
   const flat = {
     name: s.shortName,
     inputs: vscodeInputs(s),
     type: 'stdio',
-    command: s.installCommand,
-    args: [s.packageName],
-    env: vscodeEnv(s, readOnly),
+    command,
+    args,
+    env: vscodeEnv(s, readOnly, runtime),
   }
   return out.prefix + encodeURIComponent(JSON.stringify(flat))
 }
@@ -124,12 +150,17 @@ function shellValue(v: string): string {
 export function genCli(
   s: ServerConfig,
   out: Extract<Output, { kind: 'cli' }>,
-  readOnly = false
+  readOnly = false,
+  runtime: Runtime = 'uv'
 ): string {
-  const envStr = Object.entries(envLiteral(s, readOnly))
+  const envStr = Object.entries(envLiteral(s, readOnly, runtime))
     .map(([k, v]) => `${out.envFlag} ${k}=${shellValue(v)}`)
     .join(' ')
-  const cmd = `${s.installCommand} ${s.packageName}`
+  const { command, args } = launch(s, readOnly, runtime)
+  // Gemini has no `--` before {cmd} and its own `-e` would swallow docker's, so
+  // docker args follow a `--` after the command (the form its docs show).
+  const guard = runtime === 'docker' && !out.template.includes('-- {cmd}')
+  const cmd = [command, ...(guard ? ['--'] : []), ...args].join(' ')
   // Collapse spacing on the TEMPLATE (never on substituted values) so an empty
   // {env} leaves no double space; then substitute {env} LAST with function
   // replacers so $-sequences and a literal {cmd}/{name} in a value stay literal.
@@ -146,11 +177,12 @@ export function genCli(
 export function genJson(
   s: ServerConfig,
   out: Extract<Output, { kind: 'json' }>,
-  readOnly = false
+  readOnly = false,
+  runtime: Runtime = 'uv'
 ): string {
   const obj: Record<string, unknown> = {}
   if (out.shape === 'opencode') obj.$schema = 'https://opencode.ai/config.json'
-  obj[out.topKey] = { [s.shortName]: serverEntry(s, out.shape, readOnly) }
+  obj[out.topKey] = { [s.shortName]: serverEntry(s, out.shape, readOnly, runtime) }
   return JSON.stringify(obj, null, 2)
 }
 
@@ -162,14 +194,15 @@ function tomlStr(v: string): string {
   return '"' + v.replace(/\\/g, '\\\\').replace(/"/g, '\\"') + '"'
 }
 
-export function genToml(s: ServerConfig, readOnly = false): string {
+export function genToml(s: ServerConfig, readOnly = false, runtime: Runtime = 'uv'): string {
   const name = s.shortName
+  const { command, args } = launch(s, readOnly, runtime)
   const lines = [
     `[mcp_servers.${name}]`,
-    `command = ${tomlStr(s.installCommand)}`,
-    `args = [${tomlStr(s.packageName)}]`,
+    `command = ${tomlStr(command)}`,
+    `args = [${args.map(tomlStr).join(', ')}]`,
   ]
-  const env = Object.entries(envLiteral(s, readOnly))
+  const env = Object.entries(envLiteral(s, readOnly, runtime))
   if (env.length) {
     lines.push('', `[mcp_servers.${name}.env]`)
     for (const [k, v] of env) lines.push(`${k} = ${tomlStr(v)}`)
@@ -187,16 +220,17 @@ export interface RenderedOutput {
 export function renderOutputs(
   s: ServerConfig,
   client: McpClient,
-  readOnly = false
+  readOnly = false,
+  runtime: Runtime = 'uv'
 ): RenderedOutput[] {
   return client.outputs.map((out): RenderedOutput => {
     switch (out.kind) {
       case 'cli':
-        return { label: 'Command', code: genCli(s, out, readOnly) }
+        return { label: 'Command', code: genCli(s, out, readOnly, runtime) }
       case 'json':
-        return { label: 'Config', code: genJson(s, out, readOnly) }
+        return { label: 'Config', code: genJson(s, out, readOnly, runtime) }
       case 'toml':
-        return { label: '~/.codex/config.toml', code: genToml(s, readOnly) }
+        return { label: '~/.codex/config.toml', code: genToml(s, readOnly, runtime) }
       case 'deeplink':
         throw new Error('deeplink clients render as a link, not through renderOutputs')
     }
@@ -208,4 +242,33 @@ export function secretKeys(s: ServerConfig): string[] {
   return Object.entries(s.envVars)
     .filter(([, v]) => v.secret)
     .map(([k]) => k)
+}
+
+// ── Claude Code plugin and image provenance ─────────────────────────
+
+// The marketplace lives in the owner's `.github` repo and is named `<user>-mcp`.
+export function pluginCommands(s: ServerConfig): string {
+  const user = ghUser()
+  return [
+    `claude plugin marketplace add ${user}/.github`,
+    `claude plugin install ${s.packageName}@${user}-mcp`,
+  ].join('\n')
+}
+
+// One line under "Install as a plugin": the plugin asks for the secret env vars
+// and keeps them in Claude Code's credential store.
+export function pluginBlurb(s: ServerConfig): string {
+  const keys = secretKeys(s)
+  const many = keys.length > 1
+  const list = many ? `${keys.slice(0, -1).join(', ')} and ${keys[keys.length - 1]}` : keys[0]
+  const asks = keys.length
+    ? `Claude Code asks for ${list}${many ? ',' : ''} and keeps ${many ? 'them' : 'it'} in its credential store, never in a config file. `
+    : ''
+  return `${asks}The server stays updated. No uv needed.`
+}
+
+// Verifies the image's build attestation against the repo that built it.
+export function attestCommand(s: ServerConfig): string {
+  const image = dockerImage(s)
+  return `gh attestation verify oci://${image}:latest -R ${s.githubRepo} --signer-repo ${ghUser()}/.github`
 }

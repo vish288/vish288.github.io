@@ -6,7 +6,7 @@ import { InstallModal } from '@/components/InstallModal'
 import { PypiDownloads } from '@/components/PypiDownloads'
 import { SERVERS, type ServerConfig } from '@/constants/mcpServers'
 import { CLIENTS, SECTIONS, resolveClient, type McpClient } from '@/constants/mcpClients'
-import { genDeeplink } from '@/lib/mcpInstall'
+import { genDeeplink, type Runtime } from '@/lib/mcpInstall'
 
 const STORAGE_KEY = 'mcp-client'
 
@@ -34,10 +34,11 @@ function actionWord(client: McpClient): string {
 function deeplinkHref(
   server: ServerConfig,
   client: McpClient,
-  readOnly: boolean
+  readOnly: boolean,
+  runtime: Runtime
 ): string | undefined {
   const o = deeplinkOutput(client)
-  return o ? genDeeplink(server, o, readOnly) : undefined
+  return o ? genDeeplink(server, o, readOnly, runtime) : undefined
 }
 
 // localStorage client on load; null on the server (SSR shows the open picker).
@@ -154,6 +155,7 @@ function ServerRow({
   server,
   client,
   readOnly,
+  runtime,
   current = false,
   onOpen,
   headingRef,
@@ -162,12 +164,13 @@ function ServerRow({
   server: ServerConfig
   client: McpClient | null
   readOnly: boolean
+  runtime: Runtime
   current?: boolean
   onOpen: (server: ServerConfig) => void
   headingRef?: Ref<HTMLHeadingElement>
   liRef?: Ref<HTMLLIElement>
 }) {
-  const href = client ? deeplinkHref(server, client, readOnly) : undefined
+  const href = client ? deeplinkHref(server, client, readOnly, runtime) : undefined
   const linkClass =
     'touch-target px-2 -mx-2 inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors'
 
@@ -274,6 +277,57 @@ function ReadOnlyToggle({ on, onToggle }: { on: boolean; onToggle: (next: boolea
   )
 }
 
+// ── Run-with control ────────────────────────────────────────────────
+
+const RUNTIMES: { id: Runtime; label: string }[] = [
+  { id: 'uv', label: 'uv' },
+  { id: 'docker', label: 'Docker' },
+]
+
+// A two-option segmented control (aria-pressed buttons: Tab, Enter and Space)
+// choosing how the generated configs launch the server. The choice lives in the
+// URL (?run=docker), so it is shareable.
+function RunWithControl({
+  value,
+  onChange,
+}: {
+  value: Runtime
+  onChange: (next: Runtime) => void
+}) {
+  return (
+    <div className='flex items-start gap-3'>
+      <div
+        role='group'
+        aria-labelledby='run-with-label'
+        aria-describedby='run-with-desc'
+        className='mt-0.5 inline-flex flex-shrink-0 rounded border bg-muted p-0.5'
+      >
+        {RUNTIMES.map(r => (
+          <button
+            key={r.id}
+            type='button'
+            aria-pressed={value === r.id}
+            onClick={() => onChange(r.id)}
+            className={`rounded-sm px-3 py-1 text-sm font-medium cursor-pointer transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${value === r.id ? 'bg-primary text-primary-foreground' : 'text-muted-foreground hover:text-foreground'}`}
+          >
+            {r.label}
+          </button>
+        ))}
+      </div>
+      <span className='min-w-0'>
+        <span id='run-with-label' className='font-medium'>
+          Run with
+        </span>
+        <span id='run-with-desc' className='block text-sm text-muted-foreground'>
+          {value === 'docker'
+            ? 'Runs the published container image; needs Docker, no uv.'
+            : 'Runs the PyPI package with uvx; needs uv.'}
+        </span>
+      </span>
+    </div>
+  )
+}
+
 // ── Page ────────────────────────────────────────────────────────────
 
 export default function McpInstall() {
@@ -281,6 +335,8 @@ export default function McpInstall() {
   const serverParam = searchParams.get('server')
   const clientParam = searchParams.get('client')
   const installParam = searchParams.get('install')
+  // ?run=docker switches every output to the container image; absent = uv.
+  const runtime: Runtime = searchParams.get('run') === 'docker' ? 'docker' : 'uv'
 
   // hasOwnProperty, not truthiness: a bare `SERVERS[serverParam]` is also truthy
   // for prototype keys like "constructor", which would later throw in genDeeplink.
@@ -330,14 +386,16 @@ export default function McpInstall() {
   // does not re-fire the redirect and re-open the client (it is off at mount,
   // which is the value the one-time redirect uses).
   const readOnlyRef = useRef(readOnly)
+  const runtimeRef = useRef(runtime)
   useEffect(() => {
     readOnlyRef.current = readOnly
-  }, [readOnly])
+    runtimeRef.current = runtime
+  }, [readOnly, runtime])
   useEffect(() => {
     if (!targetKey || !installClient) return
     const o = deeplinkOutput(installClient)
     if (!o) return
-    const href = genDeeplink(SERVERS[targetKey]!, o, readOnlyRef.current)
+    const href = genDeeplink(SERVERS[targetKey]!, o, readOnlyRef.current, runtimeRef.current)
     const timer = setTimeout(() => {
       window.location.href = href
     }, 400)
@@ -411,6 +469,16 @@ export default function McpInstall() {
     }
   }, [client])
 
+  const setRuntime = useCallback(
+    (next: Runtime) => {
+      const params = new URLSearchParams(searchParams)
+      if (next === 'docker') params.set('run', 'docker')
+      else params.delete('run')
+      setSearchParams(params, { replace: true })
+    },
+    [searchParams, setSearchParams]
+  )
+
   const closeModal = useCallback(() => setModalServer(null), [])
 
   const serverKeys = Object.keys(SERVERS)
@@ -468,7 +536,8 @@ export default function McpInstall() {
       </section>
 
       <section>
-        <div className='mb-6'>
+        <div className='mb-6 space-y-4'>
+          <RunWithControl value={runtime} onChange={setRuntime} />
           <ReadOnlyToggle on={readOnly} onToggle={setReadOnly} />
         </div>
         <ul className='space-y-3'>
@@ -477,6 +546,7 @@ export default function McpInstall() {
               server={SERVERS[targetKey]!}
               client={client}
               readOnly={readOnly}
+              runtime={runtime}
               current
               onOpen={setModalServer}
               headingRef={headingRef}
@@ -489,6 +559,7 @@ export default function McpInstall() {
                 server={SERVERS[key]!}
                 client={client}
                 readOnly={readOnly}
+                runtime={runtime}
                 onOpen={setModalServer}
               />
             ))
@@ -507,6 +578,7 @@ export default function McpInstall() {
                   server={SERVERS[key]!}
                   client={client}
                   readOnly={readOnly}
+                  runtime={runtime}
                   onOpen={setModalServer}
                 />
               ))}
@@ -520,6 +592,7 @@ export default function McpInstall() {
           server={modalServer}
           client={client}
           readOnly={readOnly}
+          runtime={runtime}
           onClose={closeModal}
         />
       )}

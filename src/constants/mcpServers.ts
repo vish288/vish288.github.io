@@ -26,7 +26,7 @@ export interface ServerConfig {
   envVars: Record<string, EnvVar>
 }
 
-function ghUser(): string {
+export function ghUser(): string {
   return APP_STRINGS.GITHUB_URL.split('/').pop() || ''
 }
 
