@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.15.0](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.14.2...vish288-personal-website-v2.15.0) (2026-11-23)
+
+
+### Features
+
+* **mcp-install:** Docker runtime and Claude Code plugin block ([60d27f4](https://github.com/vish288/vish288.github.io/commit/60d27f45c838e4b245a0d9240b31d667bab6b6b3))
+
 ## [2.14.2](https://github.com/vish288/vish288.github.io/compare/vish288-personal-website-v2.14.1...vish288-personal-website-v2.14.2) (2026-11-09)
 
 
